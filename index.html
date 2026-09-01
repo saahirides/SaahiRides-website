@@ -9,7 +9,7 @@
 :root{--navy:#06152b;--orange:#ff6a00;--green:#27c46a;--ink:#10213b;--soft:#eef7f5}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff}
 a{text-decoration:none;color:inherit}.nav{position:absolute;z-index:5;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:18px 5%;color:#fff}
-.logo{font-weight:800;font-size:25px}.logo span{color:var(--orange)}.navlinks{display:flex;gap:26px;font-weight:600;font-size:14px}.wa{background:var(--orange);color:#fff;padding:13px 20px;border-radius:28px;font-weight:800}
+.logo-img{display:block;width:190px;height:auto;max-height:58px;object-fit:contain;object-position:left center}.footer-logo{width:190px;max-height:58px;margin-bottom:12px}.navlinks{display:flex;gap:26px;font-weight:600;font-size:14px}.wa{background:var(--orange);color:#fff;padding:13px 20px;border-radius:28px;font-weight:800}
 .hero{min-height:590px;background:linear-gradient(90deg,rgba(3,15,31,.88),rgba(3,15,31,.35)),url('hero.png') center top/cover;display:flex;align-items:center;padding:115px 7% 80px;color:#fff}
 .hero h1{font-size:clamp(45px,7vw,82px);line-height:.98;margin:0 0 20px;max-width:720px}.hero h1 span{color:var(--orange)}.hero p{font-size:22px;margin:0 0 28px}.buttons{display:flex;gap:14px;flex-wrap:wrap}.btn{padding:15px 24px;border-radius:9px;font-weight:800}.primary{background:var(--green);color:#041326}.secondary{background:#fff;color:var(--ink)}
 section{padding:65px 7%}.eyebrow{color:var(--orange);font-weight:800;letter-spacing:.08em}.title{font-size:38px;margin:8px 0 14px}.sub{max-width:720px;color:#536174;line-height:1.6}
@@ -18,12 +18,12 @@ section{padding:65px 7%}.eyebrow{color:var(--orange);font-weight:800;letter-spac
 .rates{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:28px}.rate{text-align:center;padding:22px;border-radius:12px;background:#f7f9fb}.price{color:var(--orange);font-weight:800;font-size:20px}
 .route{background:linear-gradient(110deg,#06152b,#0c294b);color:#fff;border-radius:18px;padding:40px;margin-top:40px}.route .btn{display:inline-block;border:1px solid var(--orange);color:#fff;margin-top:12px}
 .cta{background:var(--soft);display:flex;justify-content:space-between;align-items:center;gap:25px}.footer{background:#031126;color:#dce5f0;padding:45px 7%;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:35px}.footer small{color:#91a0b3;line-height:1.5}
-@media(max-width:850px){.navlinks{display:none}.pillars,.rates{grid-template-columns:1fr 1fr}.steps{grid-template-columns:repeat(3,1fr)}.footer{grid-template-columns:1fr 1fr}.hero{padding-top:130px}}
-@media(max-width:520px){.pillars,.rates,.steps,.footer{grid-template-columns:1fr}.hero h1{font-size:48px}.cta{display:block}}
+@media(max-width:850px){.navlinks{display:none}.pillars,.rates{grid-template-columns:1fr 1fr}.steps{grid-template-columns:repeat(3,1fr)}.footer{grid-template-columns:1fr 1fr}.hero{padding-top:130px}.logo-img{width:170px}}
+@media(max-width:520px){.pillars,.rates,.steps,.footer{grid-template-columns:1fr}.hero h1{font-size:48px}.cta{display:block}.logo-img{width:155px}}
 </style>
 </head>
 <body>
-<nav class="nav"><div class="logo">Saahi<span>Rides</span></div><div class="navlinks"><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides & Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a></div><a class="wa" href="https://wa.me/919347946026">Book on WhatsApp</a></nav>
+<nav class="nav"><a href="/" aria-label="SaahiRides home"><img class="logo-img" src="logo.jpg" alt="SaahiRides — SafeRide @ SaahiPrice"></a><div class="navlinks"><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides & Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a></div><a class="wa" href="https://wa.me/919347946026">Book on WhatsApp</a></nav>
 
 <header class="hero">
 <div><div class="eyebrow">SAFERIDE @ SAAHIPRICE</div>
@@ -62,5 +62,5 @@ section{padding:65px 7%}.eyebrow{color:var(--orange);font-weight:800;letter-spac
 
 <section class="cta"><div><div class="eyebrow">READY TO RIDE?</div><h2 class="title">SafeRide @ SaahiPrice.</h2><p>Book your SaahiRide directly on WhatsApp.</p></div><a class="btn primary" href="https://wa.me/919347946026">Book your ride on WhatsApp</a></section>
 
-<footer class="footer"><div><div class="logo">Saahi<span>Rides</span></div><small>SafeRide @ SaahiPrice<br>Predictable pricing, safety and driver-first economics.</small></div><div><b>Company</b><br><br>About Us<br>Our Vision<br>Safety<br>Contact Us</div><div><b>Riders</b><br><br>How It Works<br>Rides & Rates<br>Route-Lock<br>Premium Rides</div><div><b>Drivers</b><br><br>Why Drive With Us<br>Driver Benefits<br>Join as a Driver</div><div></div><small style="grid-column:1/-1;text-align:center">© 2026 SaahiRides. All rights reserved.</small></footer>
+<footer class="footer"><div><img class="logo-img footer-logo" src="logo.jpg" alt="SaahiRides — SafeRide @ SaahiPrice"><small>SafeRide @ SaahiPrice<br>Predictable pricing, safety and driver-first economics.</small></div><div><b>Company</b><br><br>About Us<br>Our Vision<br>Safety<br>Contact Us</div><div><b>Riders</b><br><br>How It Works<br>Rides & Rates<br>Route-Lock<br>Premium Rides</div><div><b>Drivers</b><br><br>Why Drive With Us<br>Driver Benefits<br>Join as a Driver</div><div></div><small style="grid-column:1/-1;text-align:center">© 2026 SaahiRides. All rights reserved.</small></footer>
 </body></html>
