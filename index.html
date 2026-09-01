@@ -8,7 +8,6 @@
 <style>
 :root{--navy:#07182b;--orange:#ff6a00;--green:#20d878;--white:#fff;--cream:#fff7df;--ink:#14243a}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff}a{text-decoration:none;color:inherit}
-/* CLEAN TWO-ROW HEADER — deliberately no animation, no sticky/floating logo */
 .site-header{position:absolute;top:0;left:0;right:0;z-index:50;color:#fff;padding:18px 4.5% 0;background:linear-gradient(rgba(2,10,20,.82),rgba(2,10,20,.18));}
 .brand-row{height:76px;display:flex;align-items:center;gap:22px;border-bottom:1px solid rgba(255,255,255,.28)}
 .logo{width:112px;height:64px;object-fit:contain;object-position:left center;display:block;flex:0 0 auto}
@@ -35,22 +34,10 @@ section{padding:72px 7%}.light{background:#fff}.dark{background:var(--navy);colo
 </head>
 <body>
 <header class="site-header">
-  <div class="brand-row">
-    <a href="#home" aria-label="SaahiRides home"><img class="logo" src="logo.jpg" alt="SaahiRides logo"></a>
-    <div class="company">SAAHIRIDES TRANSIT PVT. LTD.</div>
-  </div>
-  <nav class="nav-row" aria-label="Main navigation">
-    <a href="#about">About Us</a><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides &amp; Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a><a class="signin" href="#signin">Sign In</a>
-  </nav>
+  <div class="brand-row"><a href="#home" aria-label="SaahiRides home"><img class="logo" src="logo.jpg" alt="SaahiRides logo"></a><div class="company">SAAHIRIDES TRANSIT PVT. LTD.</div></div>
+  <nav class="nav-row" aria-label="Main navigation"><a href="#about">About Us</a><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides &amp; Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a><a class="signin" href="#signin">Sign In</a></nav>
 </header>
-
-<header class="hero" id="home"><div class="hero-inner">
-  <div class="hero-brand">SaahiRides - SafeRides @ SaahiPrice</div>
-  <h1 class="hero-title"><span class="route">Your Route.</span> <span class="price">Your Price.</span> <span class="ride">Your Ride.</span></h1>
-  <div class="hero-actions"><a class="btn book" href="https://wa.me/919347946026">Book on WhatsApp</a><a class="btn see" href="#rates">See our rides</a></div>
-  <p class="hero-tagline">SAFE RIDE. RELIABLE DRIVERS. PREDICTABLE PRICES. ALWAYS AVAILABLE.</p>
-</div></header>
-
+<header class="hero" id="home"><div class="hero-inner"><div class="hero-brand">SaahiRides - SafeRides @ SaahiPrice</div><h1 class="hero-title"><span class="route">Your Route.</span> <span class="price">Your Price.</span> <span class="ride">Your Ride.</span></h1><div class="hero-actions"><a class="btn book" href="https://wa.me/919347946026">Book on WhatsApp</a><a class="btn see" href="#rates">See our rides</a></div><p class="hero-tagline">SAFE RIDE. RELIABLE DRIVERS. PREDICTABLE PRICES. ALWAYS AVAILABLE.</p></div></header>
 <section id="about" class="launch"><div class="launch-head"><div class="eyebrow">SAAHIRIDES • 1 SEPTEMBER 2026</div><h2>The dream is <span>live today.</span></h2><p>1 September 2026 &nbsp;•&nbsp; Just as Rome was not built in a day.</p></div><img class="launch-img" src="launch%20day%20image.png" alt="SaahiRides Launch Day — 1 September 2026"></section>
 <section id="founder-message" class="message"><div class="eyebrow">A NOTE FROM THE OWNER &amp; CO-FOUNDER</div><h2 class="title">The beginning of SaahiRides.</h2><img class="message-img" src="SaahiRides%20Directors%20Message.png" alt="A note from the Owner and Co-founder of SaahiRides Transit Pvt. Ltd."></section>
 <section id="live-milestone" class="dark"><div class="eyebrow">1 SEPTEMBER 2026</div><h2 class="title">The day the dream company went live.</h2><img class="milestone-img" src="dream%20come%20live.jpeg" alt="SaahiRides — The dream comes live"><p class="sub">SaahiRides is publicly live with its own website and domain — beginning the journey without outside funding and building the platform one step at a time.</p></section>
@@ -60,5 +47,6 @@ section{padding:72px 7%}.light{background:#fff}.dark{background:var(--navy);colo
 <section id="drivers"><div class="eyebrow">FOR DRIVERS</div><h2 class="title">Drivers are our partners.</h2><p class="sub">A driver-first proposition built around fairer economics, transparent policies and growth opportunities.</p><a class="btn book" href="https://wa.me/919347946026?text=I%20want%20to%20join%20SaahiRides%20as%20a%20driver">Join SaahiRides</a></section>
 <section id="signin" class="cta"><div><div class="eyebrow">READY TO RIDE?</div><h2 class="title">SafeRide @ SaahiPrice.</h2><p>Book your SaahiRide directly on WhatsApp.</p></div><a class="btn book" href="https://wa.me/919347946026">Book your ride on WhatsApp</a></section>
 <footer class="footer"><div><img class="logo footer-logo" src="logo.jpg" alt="SaahiRides logo"><br><small>SAAHIRIDES TRANSIT PVT. LTD.<br>SafeRides @ SaahiPrice<br>Predictable pricing, safety and driver-first economics.</small></div><div><b>Company</b><br><br>About Us<br>Our Vision<br>Safety<br>Contact Us</div><div><b>Riders</b><br><br>How It Works<br>Rides &amp; Rates<br>Route-Lock<br>Premium Rides</div><div><b>Drivers</b><br><br>Why Drive With Us<br>Driver Benefits<br>Join as a Driver</div><small style="grid-column:1/-1;text-align:center">© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved.</small></footer>
+<script src="bots.js"></script>
 </body>
 </html>
