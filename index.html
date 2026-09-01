@@ -3,82 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SaahiRides Transit Pvt. Ltd. | SafeRides @ SaahiPrice</title>
+<title>SaahiRides Transit Pvt. Ltd.</title>
 <style>
-:root{--orange:#ff8a00;--green:#20d878;--purple:#5B21B6;--navy:#07182b}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{
-  margin:0;font-family:Arial,Helvetica,sans-serif;color:#fff;
-  background: linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.72)), url('hero.png');
-  background-size:cover;background-position:center;background-attachment:fixed;background-repeat:no-repeat;
-  background-color:#000;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:#0a0a0a;color:#fff;scroll-behavior:smooth}
 a{text-decoration:none;color:inherit}
+section{padding:70px 5%;max-width:1300px;margin:auto}
+.header{position:fixed;top:0;left:0;right:0;z-index:999;height:64px;background:#000;border-bottom:1px solid rgba(255,138,0,.35);display:flex;align-items:center;justify-content:space-between;padding:0 3%}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo{width:54px;height:48px;object-fit:contain;background:#fff;border-radius:4px}
+.company{font-weight:900;font-size:18px}
+.nav{display:flex;align-items:center;gap:20px;font-size:13px;font-weight:700}
+.nav a:hover{color:#ff8a00}
+.signin{background:#5B21B6;color:#fff!important;padding:9px 18px;border-radius:8px;font-weight:800;cursor:pointer;border:0}
+.hero{min-height:100vh;padding-top:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.75)),url('hero-bg.jpeg');background-size:cover;background-position:center}
+.brand{color:#ff8a00;font-size:30px;font-weight:900;margin-top:28px}
+.divider{display:flex;align-items:center;gap:14px;width:78%;max-width:600px;margin:14px auto 20px}
+.divider span{height:1px;background:linear-gradient(90deg,transparent,#ff8a00,transparent);flex:1}
+.eagle{width:28px;height:20px;background:#ff8a00;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.h1{font-size:56px;font-weight:950;line-height:1.05;margin-bottom:24px}
+.h1 .w{color:#fff}.h1 .o{color:#ff8a00}.h1 .g{color:#22c55e}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.btn{padding:12px 22px;border-radius:10px;font-weight:900;font-size:14px}
+.b-green{background:#16a34a;color:#fff}.b-outline{border:1.5px solid #ff8a00;background:rgba(0,0,0,.3)}
+.tag{font-size:11px;font-weight:800;letter-spacing:.12em;opacity:.85;margin-bottom:30px}
+.bookbar{width:92%;max-width:1120px;background:#fff;border-radius:14px;display:flex;align-items:center;padding:8px;color:#111}
+.col{flex:1;display:flex;align-items:center;gap:10px;padding:10px 14px;border-right:1px solid #e5e7eb}
+.col:last-of-type{border-right:none}
+.col b{font-size:10px;color:#6b7280;text-transform:uppercase;display:block}
+.col span{font-size:13.5px;font-weight:800}
+.now{background:#5B21B6;color:#fff;border:0;padding:12px 26px;border-radius:10px;font-weight:900}
+.sec-title{text-align:center;font-size:36px;font-weight:900;margin-bottom:12px}
+.sec-sub{text-align:center;color:#9ca3af;max-width:700px;margin:0 auto 40px;font-size:14px}
+.orange{color:#ff8a00}.green{color:#22c55e}
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center;background:#111;border:1px solid #222;border-radius:16px;padding:30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#111;border:1px solid #222;border-radius:14px;padding:22px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:center}
+.step{background:#111;border:1px solid #222;border-radius:14px;padding:22px}
+.step .num{width:40px;height:40px;background:#ff8a00;color:#000;font-weight:900;border-radius:50%;display:grid;place-items:center;margin:0 auto 12px}
+.rate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.rate{background:#fff;color:#111;border-radius:14px;padding:20px;text-align:center}
+.rate .price{font-size:28px;font-weight:900;color:#16a34a;margin:10px 0}
+.driver{background:#16a34a;color:#fff;border-radius:16px;padding:30px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+.route{background:linear-gradient(135deg,#111,#000);border:1px solid #ff8a00;border-radius:16px;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+footer{background:#000;border-top:1px solid #222;padding:30px 5%;text-align:center;color:#6b7280;font-size:12px}
 
-/* HEADER */
-.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:#000;border-bottom:1px solid rgba(255,138,0,.35);display:flex;align-items:center;justify-content:space-between;padding:10px 2.5%}
-.left{display:flex;align-items:center;gap:12px}.logo{width:60px;height:54px;object-fit:contain}
-.company{font-weight:900;letter-spacing:.06em;font-size:clamp(16px,2vw,28px);white-space:nowrap}
-.nav{display:flex;gap:22px;align-items:center;font-size:13px;font-weight:700}.signin{background:var(--purple);padding:9px 18px;border-radius:10px;font-weight:800}
+/* SIGN IN MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);display:none;place-items:center;z-index:10000}
+.modal.open{display:grid}
+.box{background:#fff;color:#111;border-radius:16px;padding:28px;width:92%;max-width:380px;text-align:center;position:relative}
+.box h2{font-size:22px;font-weight:900;margin-bottom:6px}
+.box p{font-size:13px;color:#6b7280;margin-bottom:18px}
+.box input{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #e5e7eb;font-size:14px;font-weight:700;margin-bottom:12px}
+.box button{width:100%;padding:12px;background:#5B21B6;color:#fff;border:0;border-radius:10px;font-weight:900;cursor:pointer}
+.close{position:absolute;top:10px;right:12px;background:#f3f4f6;border:0;width:32px;height:32px;border-radius:50%;cursor:pointer;font-weight:900}
 
-/* HERO */
-.hero{min-height:100vh;padding:140px 4% 50px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.hero-brand{color:var(--orange);font-size:clamp(20px,2.8vw,42px);font-weight:900;margin-bottom:14px}
-.divider{display:flex;align-items:center;gap:16px;width:85%;max-width:700px;margin:0 auto 24px}.divider span{height:1px;background:rgba(255,138,0,.5);flex:1}.divider .eagle{width:36px;height:24px;background:var(--orange);clip-path:polygon(50% 0,100% 100%,0 100%);opacity:.9}
-.hero-title{font-size:clamp(32px,4.5vw,62px);font-weight:950;margin:0 0 28px;line-height:1.05}.hero-title .w{color:#fff}.hero-title .o{color:var(--orange)}.hero-title .g{color:var(--green)}
-.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:28px}
-.btn{padding:13px 20px;border-radius:10px;font-weight:900;display:inline-flex;gap:8px}.book{background:#16a34a;color:#fff}.see{border:1px solid var(--orange);color:#fff;background:transparent}
-.tagline{font-size:13px;font-weight:800;letter-spacing:.05em;opacity:.9;margin-bottom:34px}
-
-/* BOOKING BAR - EXACT AS YOUR PHOTO */
-.booking-bar{
-  width:94%;max-width:1100px;background:#f1f2f4;border-radius:16px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 10px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:#111
-}
-.b-col{display:flex;align-items:center;gap:10px;flex:1;padding:4px 18px;border-right:1px solid #e5e7eb}
-.b-col:last-of-type{border:0}
-.b-icon{width:28px;height:28px;display:grid;place-items:center;font-size:20px;border-radius:50%}
-.b-col b{font-size:12px;color:#6b7280;font-weight:600;display:block}.b-col span{font-size:14px;font-weight:800}
-.book-now{background:var(--purple);color:#fff;border:0;padding:13px 22px;border-radius:12px;font-weight:900;white-space:nowrap}
-
-/* SECTIONS - ab ye same background ke upar transparent cards ki tarah baithega */
-section{padding:70px 6%;background:rgba(7,24,43,.72);backdrop-filter:blur(6px);border-top:1px solid rgba(255,255,255,.08);margin-top:2px}
-section.light{background:rgba(255,255,255,.94);color:#14243a}
-section.light .sub{color:#5b6675}
-.eyebrow{color:var(--orange);font-weight:900;letter-spacing:.08em;font-size:12px}.title{font-size:clamp(26px,3vw,42px);margin:8px 0 12px}.sub{line-height:1.6;max-width:800px}
-.launch-img,.message-img,.milestone-img{width:100%;max-width:1000px;border-radius:16px;margin:20px auto;display:block}
-
-@media(max-width:850px){.nav{display:none}.booking-bar{flex-direction:column;align-items:stretch}.b-col{border-right:none;border-bottom:1px solid #e5e7eb;padding:14px}.b-col:last-of-type{border-bottom:none}.book-now{width:100%;justify-content:center}}
+@media(max-width:900px){.nav{display:none}.h1{font-size:34px}.bookbar{flex-direction:column;align-items:stretch}.col{border-right:none;border-bottom:1px solid #e5e7eb}.about-grid,.route,.driver,.cards,.steps,.rate-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header class="site-header">
-  <div class="left"><img class="logo" src="logo.jpg" alt="logo"><div class="company">SAAHIRIDES TRANSIT PVT. LTD.</div></div>
-  <nav class="nav"><a href="#about">About Us</a><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides & Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a><a class="signin" href="#signin">Sign In</a></nav>
-</header>
 
-<div class="hero" id="home">
-  <div class="hero-brand">SaahiRides - SafeRides @ SaahiPrice</div>
-  <div class="divider"><span></span><div class="eagle"></div><span></span></div>
-  <h1 class="hero-title"><span class="w">Your Route.</span> <span class="o">Your Price.</span> <span class="g">Your Ride.</span></h1>
-  <div class="actions"><a class="btn book" href="https://wa.me/919347946026">Book on WhatsApp</a><a class="btn see" href="#rates">See our rides</a></div>
-  <p class="tagline">SAFE RIDE. RELIABLE DRIVERS. PREDICTABLE PRICES. ALWAYS AVAILABLE.</p>
-
-  <!-- TERA WALA BOOKING BAR -->
-  <div class="booking-bar">
-    <div class="b-col"><div class="b-icon" style="color:#16a34a">📍</div><div><b>From</b><span>Drop location</span></div></div>
-    <div class="b-col"><div class="b-icon" style="color:#f59e0b">📍</div><div><b>To</b><span>Drop location</span></div></div>
-    <div class="b-col"><div class="b-icon" style="color:#16a34a">📅</div><div><b>When</b><span>Pickup time</span></div></div>
-    <div class="b-col"><div class="b-icon">🚗</div><div><b>Vehicle</b><span>Select vehicle</span></div></div>
-    <button class="book-now">Book Now →</button>
+<div class="header">
+  <div class="logo-wrap"><img class="logo" src="logo.jpg"><div class="company">SAAHIRIDES TRANSIT PVT. LTD.</div></div>
+  <div class="nav">
+    <a href="#about">About Us</a><a href="#why">Why Us</a><a href="#how">How It Works</a><a href="#rates">Rides & Rates</a><a href="#route">Route-Lock</a><a href="#drivers">For Drivers</a>
+    <button class="signin" onclick="openLogin()">👤 Sign In</button>
   </div>
 </div>
 
-<section id="about" class="light"><div class="eyebrow">SAAHIRIDES • 1 SEPTEMBER 2026</div><h2 class="title">The dream is <span style="color:var(--orange)">live today.</span></h2><img class="launch-img" src="launch%20day%20image.png"></section>
-<section><div class="eyebrow">A NOTE FROM THE OWNER & CO-FOUNDER</div><h2 class="title">The beginning of SaahiRides.</h2><img class="message-img" src="SaahiRides%20Directors%20Message.png"></section>
-<section class="light"><div class="eyebrow">WHY SAAHIRIDES?</div><h2 class="title">Built for daily commuters. Designed for India.</h2><p class="sub">SaahiPrice, SafeRide, Insurance, No Cancellation, Driver-First, Route-Lock.</p></section>
-<section id="how"><div class="eyebrow">HOW IT WORKS</div><h2 class="title">Simple from booking to feedback.</h2><p class="sub">Need → Book → Match → Ride → Complete → Feedback</p></section>
-<section id="rates" class="light"><div class="eyebrow">RIDES & RATES</div><h2 class="title">Rides for every need. Prices you can trust.</h2><p class="sub">Bike ₹50 | Scooty ₹65 | Auto ₹115 | Non AC Cab ₹125 | AC Cab ₹150</p></section>
+<div class="hero">
+  <div class="brand">SaahiRides - SafeRides @ SaahiPrice</div>
+  <div class="divider"><span></span><div class="eagle"></div><span></span></div>
+  <h1 class="h1"><span class="w">Your Route.</span> <span class="o">Your Price.</span> <span class="g">Your Ride.</span></h1>
+  <div class="btns"><a class="btn b-green" href="https://wa.me/919347946026">🟢 Book on WhatsApp</a><a class="btn b-outline" href="#rates">See our rides</a></div>
+  <div class="tag">SAFE RIDE. RELIABLE DRIVERS. PREDICTABLE PRICES.</div>
+  <div class="bookbar">
+    <div class="col">📍<div><b>From</b><span>Pickup</span></div></div>
+    <div class="col">📍<div><b>To</b><span>Drop</span></div></div>
+    <div class="col">📅<div><b>When</b><span>Now</span></div></div>
+    <div class="col">🚗<div><b>Vehicle</b><span>Select</span></div></div>
+    <button class="now" onclick="openLogin()">Book Now →</button>
+  </div>
+</div>
+
+<section id="about"><h2 class="sec-title">About <span class="orange">Us</span></h2><div class="about-grid"><div><p><b>SaahiRides Transit Pvt. Ltd.</b> - SafeRides @ SaahiPrice</p><p>Hyderabad's trusted ride platform. Fixed price, verified drivers, no surge.</p></div><div style="background:#000;border-radius:12px;padding:20px;border:1px solid #222">✔ No surge<br>✔ Verified drivers<br>✔ 24/7 WhatsApp support</div></div></section>
+<section id="why"><h2 class="sec-title">Why <span class="green">Us</span></h2><div class="cards"><div class="card"><h3>💰 Fixed Price</h3><p>No surge.</p></div><div class="card"><h3>🛡️ Safe</h3><p>Verified drivers.</p></div><div class="card"><h3>📍 Route-Lock</h3><p>Price + Route locked.</p></div></div></section>
+<section id="how"><h2 class="sec-title">How It <span class="orange">Works</span></h2><div class="steps"><div class="step"><div class="num">1</div>Enter Route</div><div class="step"><div class="num">2</div>Get Price</div><div class="step"><div class="num">3</div>Route Locked</div><div class="step"><div class="num">4</div>Safe Ride</div></div></section>
+<section id="rates"><h2 class="sec-title">Rides & <span class="green">Rates</span></h2><div class="rate-grid"><div class="rate"><h3>Mini</h3><div class="price">₹12/km</div></div><div class="rate" style="border:2px solid #16a34a"><h3>Prime</h3><div class="price">₹14/km</div></div><div class="rate"><h3>SUV</h3><div class="price">₹19/km</div></div></div></section>
+<section id="route"><div class="route"><div><h3 style="color:#ff8a00">Route-Lock Tech</h3><p>Driver cannot change route or price after booking.</p></div><div style="background:#000;padding:16px;border-radius:10px;border:1px dashed #ff8a00">Kapra → Airport = ₹588 Fixed</div></div></section>
+<section id="drivers"><div class="driver"><div><h2>For Drivers</h2><p>Join SaahiRides - Daily payment</p><br><a class="btn" style="background:#fff;color:#16a34a" href="https://wa.me/919347946026">Join Now →</a></div><div style="background:#fff;color:#111;padding:20px;border-radius:12px;text-align:center">Helpline<br><b style="font-size:22px">+91 93479 46026</b></div></div></section>
+
+<footer>© 2025 SaahiRides Transit Pvt. Ltd. | saahirides.co.in</footer>
+
+<!-- LOGIN POPUP -->
+<div class="modal" id="loginModal">
+  <div class="box">
+    <button class="close" onclick="closeLogin()">✕</button>
+    <h2>Welcome to SaahiRides</h2>
+    <p>Sign in to get your SaahiPrice</p>
+    <input type="tel" placeholder="Enter mobile number - 93479 46026">
+    <input type="password" placeholder="Password (demo - anything)">
+    <button onclick="doLogin()">Sign In →</button>
+    <p style="margin-top:12px;font-size:11px">Demo login - No OTP needed right now<br>Future me OTP ayega</p>
+  </div>
+</div>
+
+<script>
+function openLogin(){document.getElementById('loginModal').classList.add('open')}
+function closeLogin(){document.getElementById('loginModal').classList.remove('open')}
+function doLogin(){alert('Login Successful! Welcome to SaahiRides 🙏');closeLogin()}
+</script>
+
 </body>
 </html>
