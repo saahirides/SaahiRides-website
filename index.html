@@ -6,42 +6,59 @@
 <title>SaahiRides Transit Pvt. Ltd.</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui,sans-serif;background:#1a1040;color:white}
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;
-background:radial-gradient(120% 120% at 50% 0%, #6d28d9 0%, #3b1f8a 25%, #25135e 50%, #1a1040 100%)}
-.logo-box{background:white;padding:14px 18px;border-radius:22px;margin-bottom:22px;box-shadow:0 15px 40px rgba(0,0,0,.5)}
-.logo-box img{width:220px;display:block;image-rendering:-webkit-optimize-contrast}
-h1{font-size:clamp(28px,4.5vw,54px);font-weight:900;color:#ff7a00;letter-spacing:-1px;text-shadow:0 2px 10px rgba(0,0,0,.4)}
-.sub{margin-top:12px;color:#e9d5ff;font-size:clamp(14px,2vw,18px);line-height:1.5;max-width:760px}
-.pricing{margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:10px 20px;border-radius:999px;font-weight:700;color:#fff;backdrop-filter:blur(10px)}
-.btns{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.btn{padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:800;display:inline-block;transition:.2s}
-.btn-green{background:#16a34a;color:white;box-shadow:0 8px 20px rgba(22,163,74,.4)}
-.btn-green:hover{transform:translateY(-2px);background:#15803d}
-.btn-dark{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.5);color:white}
-.btn-light{background:white;color:#25135e}
-.social{margin-top:28px;display:flex;gap:12px}
-.social a{width:44px;height:44px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:50%;display:grid;place-items:center;text-decoration:none;font-weight:800;color:white;backdrop-filter:blur(10px)}
-.social a:hover{background:white;color:#25135e}
+body{font-family:system-ui, -apple-system, sans-serif;background:#1a1040;color:white}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;
+background:radial-gradient(120% 120% at 50% 0%, #6d28d9 0%, #3b1f8a 30%, #25135e 65%, #1a1040 100%)}
+/* 1. Original Logo + Orange */
+.logo-box{background:#fff;padding:14px 20px;border-radius:20px;margin-bottom:22px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.logo-box img{width:230px;display:block}
+h1{color:#ff7a00;font-size:clamp(26px,4.5vw,52px);font-weight:900;letter-spacing:-1px}
+.tagline{margin-top:12px;color:#e9d5ff;font-size:clamp(13px,1.8vw,18px);max-width:800px;line-height:1.5}
+/* 3. Pricing */
+.pricing{margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);padding:10px 22px;border-radius:999px;font-weight:700;backdrop-filter:blur(12px);letter-spacing:.3px}
+/* 4,6,7 Buttons */
+.btns{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{padding:14px 28px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;transition:.2s}
+.btn-green{background:#16a34a;color:#fff;box-shadow:0 8px 20px rgba(22,163,74,.4)}
+.btn-green:hover{background:#15803d;transform:translateY(-2px)}
+.btn-login{background:rgba(255,255,255,.12);border:1.5px solid #fff;color:#fff}
+.btn-explore{background:#fff;color:#25135e}
+/* 5. Social */
+.social{margin-top:30px;display:flex;gap:12px}
+.icon{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center;color:#fff;text-decoration:none;font-weight:900;backdrop-filter:blur(10px)}
+.icon:hover{background:#fff;color:#25135e;transform:translateY(-2px)}
 </style>
 </head>
 <body>
 <div class="hero">
-<div class="logo-box"><img src="logo.png" alt="SaahiRides HD"></div>
+<div class="logo-box"><img src="logo.png" alt="SaahiRides Logo"></div>
+
 <h1>SaahiRides Transit Pvt. Ltd.</h1>
-<p class="sub">SaahiRides - SaafeRides @ SaahiPrice - Hyderabad Fleet mobility Service | Har Har Mahadev</p>
+
+<p class="tagline">SaahiRides - SaafeRides @ SaahiPrice - Hyderabad Fleet mobility Service | Har Har Mahadev</p>
+
 <div class="pricing">Pricing - On demand & Route locked</div>
+
 <div class="btns">
-<a class="btn btn-green" href="https://wa.me/919347946026">Book Your Ride</a>
-<a class="btn btn-dark" href="/login">Login</a>
-<a class="btn btn-light" href="#explore">Explore ↓</a>
+<a class="btn btn-green" href="https://wa.me/919347946026?text=Hi%20SaahiRides" target="_blank" rel="noopener">Book Your Ride</a>
+<a class="btn btn-login" href="/login">Login</a>
+<a class="btn btn-explore" href="#explore">Explore</a>
 </div>
+
 <div class="social">
-<a href="https://wa.me/919347946026">W</a>
-<a href="https://facebook.com" target="_blank">f</a>
-<a href="https://instagram.com" target="_blank">IG</a>
-<a href="https://saahirides.co.in">🌐</a>
+<a class="icon" href="https://wa.me/919347946026" target="_blank" rel="noopener" title="WhatsApp">W</a>
+<a class="icon" href="https://www.facebook.com/" target="_blank" rel="noopener" title="Facebook">f</a>
+<a class="icon" href="https://www.instagram.com/" target="_blank" rel="noopener" title="Instagram">IG</a>
+<a class="icon" href="https://www.saahirides.co.in" target="_blank" rel="noopener" title="Website">🌐</a>
 </div>
+
+<p style="margin-top:30px;opacity:.5;font-size:12px">© SaahiRides Transit Pvt. Ltd. | SafeRide @ SaahiPrice</p>
 </div>
+
+<div id="explore" style="padding:70px 20px;background:#150e33;text-align:center">
+<h2>Explore Our Fleet</h2>
+<p style="color:#a8a0ff;margin-top:8px">On demand & Route locked pricing for Hyderabad</p>
+</div>
+
 </body>
 </html>
