@@ -38,6 +38,12 @@ section{padding:80px 5%;max-width:1250px;margin:auto}
 .sec-title{text-align:center;font-size:34px;font-weight:900;margin-bottom:10px}
 .sec-title::after{content:"";display:block;width:60px;height:3px;background:#ff8a00;margin:10px auto 0;border-radius:2px}
 .sec-sub{text-align:center;color:#9ca3af;max-width:700px;margin:12px auto 40px;font-size:14px;line-height:1.6}
+.category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:40px}
+.category{background:#111;border:1px solid #ff8a00;border-radius:14px;padding:22px 12px;text-align:center;transition:.2s}
+.category:hover{background:#171717;transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,138,0,.15)}
+.category-icon{font-size:30px;margin-bottom:10px}
+.category h3{font-size:16px;font-weight:900}
+.category p{font-size:11px;color:#9ca3af;margin-top:7px;line-height:1.5}
 .about-box{background:#111;border:1px solid #222;border-radius:16px;padding:32px;display:grid;grid-template-columns:1.2fr .8fr;gap:30px}
 .about-box p{color:#cbd5e1;line-height:1.8;margin-bottom:12px;font-size:14px}
 .promise{background:#000;border-radius:12px;padding:20px;border:1px solid #222;line-height:2;font-size:13px}
@@ -67,6 +73,7 @@ footer{background:#000;border-top:1px solid #222;padding:30px 5%;text-align:cent
 .bookbar{width:94%;grid-template-columns:1fr 1fr}
 .now{grid-column:1/-1;height:44px}
 .about-box,.cards,.steps,.rate-grid,.route-box,.driver-box{grid-template-columns:1fr}
+.category-grid{grid-template-columns:1fr 1fr}
 section{padding:50px 5%}
 .social-links{width:94%;gap:7px}
 .social-link{font-size:11px;padding:8px 11px}
@@ -80,6 +87,7 @@ section{padding:50px 5%}
 </div>
 <div class="menu-bar">
   <div class="menu-links">
+    <a href="#categories">Vehicle Categories</a>
     <a href="#about">About Us</a>
     <a href="#why">Why Us</a>
     <a href="#how">How It Works</a>
@@ -109,6 +117,17 @@ section{padding:50px 5%}
     <a class="social-link" href="https://saahirides.co.in/" target="_blank" rel="noopener">🌐 saahirides.co.in</a>
   </div>
 </div>
+<section id="categories">
+  <h2 class="sec-title">Vehicle Categories</h2>
+  <p class="sec-sub">Choose the ride that fits your journey</p>
+  <div class="category-grid">
+    <div class="category"><div class="category-icon">🏍️</div><h3>Bikes</h3><p>Quick & economical rides</p></div>
+    <div class="category"><div class="category-icon">🛵</div><h3>Scooty</h3><p>Easy city mobility</p></div>
+    <div class="category"><div class="category-icon">🛺</div><h3>Auto</h3><p>Comfortable everyday rides</p></div>
+    <div class="category"><div class="category-icon">🚗</div><h3>Non-AC Cars</h3><p>Affordable car rides</p></div>
+    <div class="category"><div class="category-icon">🚘</div><h3>AC Cabs</h3><p>Cool & comfortable travel</p></div>
+  </div>
+</section>
 <section id="about">
   <h2 class="sec-title">About Us</h2>
   <p class="sec-sub">Hyderabad's trusted fixed price ride platform</p>
