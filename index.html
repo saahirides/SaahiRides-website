@@ -14,11 +14,10 @@ display:flex;flex-direction:column;align-items:left;
 padding:15px 14px 35px;text-align:center;min-height:100vh;
 }
 .logo{width:280px;margin-top:10px;filter:drop-shadow(0 0 28px rgba(255,20,20,.45))}
-h1{font-size:36px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 4px 20px rgba(0,0,0,.8)}
+h1{font-size:26px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 4px 20px rgba(0,0,0,.8)}
 .gap{height:26px}
 .t1{color:#ff8c28;font-size:18px;font-weight:800}
 .t2{color:#e8e8ff;font-size:13.5px;font-weight:700;margin-top:6px}
-.t3{color:#2eff7a;font-size:12.5px;font-weight:800;margin-top:6px}
 .moto{font-size:13px;font-weight:800;margin-top:6px;opacity:.9}
 .one-line{width:100%;max-width:900px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between}
 .book{flex:1.2;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;box-shadow:0 10px 25px rgba(0,230,118,.4)}
@@ -26,9 +25,13 @@ h1{font-size:36px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;
 .mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;text-align:center}
 .mid a.blue{background:#2a7fff;border:0;box-shadow:0 8px 20px rgba(42,127,255,.55)}
 .founder{flex:.9;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
-.socials{display:flex;gap:10px;margin-top:22px}
-.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800}
-@media(max-width:700px){.one-line{flex-direction:column}.book,.mid,.founder{width:100%} h1{font-size:26px}}
+.socials{display:flex;gap:10px;margin-top:22px; flex-wrap:wrap;}
+.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800; font-size:12px;}
+/* Naye buttons ke liye */
+.socials a.offer{background:gold; color:#001a33; width:auto; padding:0 14px; border:none;}
+.socials a.rates{background:#001a33; color:gold; width:auto; padding:0 14px; border:1px solid gold;}
+.socials a.vision{background:#fff; color:#001a33; width:auto; padding:0 14px; border:none;}
+@media(max-width:700px){.one-line{flex-direction:column}.book,.mid,.founder{width:100%} h1{font-size:20px; white-space:normal;}}
 </style>
 </head>
 <body>
@@ -36,17 +39,9 @@ h1{font-size:36px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;
 <div class="gap"></div>
 <div class="gap"></div>
 <div class="gap"></div>
-<h1
-{
-font-size:32px;
-font-weight:900;
-color:#ffffff;
-white-space:nowrap;
-margin-top:16px;
-letter-spacing:.04em;
-text-transform:uppercase;
-text-shadow:0 2px 10px rgba(0,0,0,.5);
-}>SAAHIRIDES TRANSIT PVT.LTD.</h1>
+
+<h1>SAAHIRIDES TRANSIT PVT.LTD.</h1>
+
 <div class="gap"></div>
 <div class="gap"></div>
 <div class="t1">SaahiRides - SafeRide @ SaahiPrice</div>
@@ -64,11 +59,19 @@ text-shadow:0 2px 10px rgba(0,0,0,.5);
 <a class="blue" href="login.html">Login</a>
 <a href="explore.html">Explore</a>
 </div>
-<a href="founder.html" class="founder-btn" style="background:rgba(255,255,255,0.15); color:white; padding:10px 20px; border-radius:20px; text-decoration:none; margin-top:15px; display:inline-block;">Message from Founder</a>
+<a href="founder.html" class="founder" style="flex:.9;">Message from Founder</a>
 </div>
 
 <div class="socials">
-<a href="https://wa.me/919347946026">W</a><a href="#">f</a><a href="#">IG</a><a href="#">🌐</a>
+<a href="https://wa.me/919347946026">W</a>
+<a href="#">f</a>
+<a href="#">IG</a>
+<a href="#">🌐</a>
+<!-- NAYE 3 BUTTONS - AAPKE KAHE HISAB SE -->
+<a href="janmashtami-offer.jpg" target="_blank" class="offer">🦚 Offer</a>
+<a href="janmashtami-offer-rates.jpg" target="_blank" class="rates">💰 Rates</a>
+<a href="SaahiRidesvision.jpg" target="_blank" class="vision">👁️ Vision</a>
 </div>
+
 </body>
 </html>
