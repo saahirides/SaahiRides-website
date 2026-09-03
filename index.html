@@ -2,42 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SaahiRides - SafeRide @ SaahiPrice</title>
+<title>SaahiRides</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#020e2a;color:#fff;font-family:Inter,system-ui;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 30px}
-.top{width:100%;max-width:480px;padding:26px 0 12px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.logo{width:118px;height:118px;object-fit:contain;filter:drop-shadow(0 10px 28px rgba(59,130,246,.45))}
-.brand{margin-top:14px;line-height:1}
-.brand b{font-size:31px;font-weight:800;letter-spacing:.04em;display:block}
-.brand span{font-size:15.5px;color:#ff8c00;font-weight:700}
-.brand small{display:block;font-size:11.5px;opacity:.7;margin-top:7px;letter-spacing:.06em;line-height:1.4}
-.card{width:100%;max-width:480px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:20px;margin-top:20px;backdrop-filter:blur(10px)}
-.row{display:flex;gap:12px;margin-top:12px}
-.btn{flex:1;display:flex;justify-content:center;align-items:center;padding:14px;border-radius:999px;text-decoration:none;font-weight:700;font-size:14.5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#fff}
-.btn.primary{background:linear-gradient(135deg,#ff8c00,#ff6a00);border:0}
-.btn.blue{background:linear-gradient(135deg,#1e3a8a,#2563eb);border:0}
-.btn.light{background:#fff;color:#020e2a}
-.btn.small{padding:10px 16px;font-size:12.5px}
-.founder-wrap{margin-top:14px;display:flex;justify-content:center}
+body{background:#0a1931;color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;padding:10px 16px 20px;text-align:center}
+.logo{width:165px;height:165px;object-fit:contain;filter:drop-shadow(0 10px 25px rgba(0,0,0,.5));margin-top:20px} /* 1. WHITE BG HATA + BADA */
+h1{font-size:22px;font-weight:800;letter-spacing:.03em;color:#8ec8ff;white-space:nowrap;margin-top:18px} /* 2. ONE LINE + COLOR */
+.gap2{height:28px}
+.tag1{color:#ff8c28;font-size:17px;font-weight:700} /* 4. ORANGE */
+.tag2{color:#ffffff;font-size:14px;font-weight:600;margin-top:6px;letter-spacing:.02em} /* WHITE */
+.tag3{color:#2eff7a;font-size:13px;font-weight:700;margin-top:6px;letter-spacing:.05em} /* GREEN */
+.lastline{font-size:13.5px;font-weight:700;opacity:.95;letter-spacing:.06em} /* 6. LITTLE BIGGER */
+.card{width:100%;max-width:420px;margin-top:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:16px}
+.btn{border-radius:999px;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;justify-content:center;transition:.2s}
+.btn.book{background:linear-gradient(90deg,#1ecb6a,#0faa52);color:#fff;font-size:16px;padding:15px 26px;width:78%;margin-left:0;float:left;box-shadow:0 8px 20px rgba(30,203,106,.35)} /* 8. GREEN + LEFT + BIG */
+.clear{clear:both}
+.row3{display:flex;gap:8px;margin-top:14px}
+.row3 .b{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:#fff;padding:12px 6px;font-size:12.5px}
+.row3 .b.blue{background:linear-gradient(90deg,#1e4bd8,#2a7fff);border:0}
+.founder{margin:14px auto 0;background:linear-gradient(90deg,#2d4de0,#7b5cff);color:#fff;padding:9px 16px;font-size:11.5px;display:flex;gap:6px;width:fit-content}
+.socials{display:flex;gap:8px;margin-top:16px;justify-content:center}
+.socials a{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;color:#fff}
+.foot{opacity:.4;font-size:9px;margin-top:12px}
 </style>
 </head>
 <body>
-<div class="top">
-<!-- BLUE EAGLE FRONT PAGE -->
-<img class="logo" src="blue-eagle.png" alt="SaahiRides Blue Eagle" onerror="this.src='logo-blue.png'">
-<div class="brand">
-<b>SaahiRides Transit Pvt.Ltd.</b>
-<span>SaahiRides - SafeRide @ SaahiPrice</span>
-<small>SaahiRides @ HYDERABAD'S OWN FLEET @ ROME WAS NOT BUILT IN A DAY</small>
-</div>
-</div>
+
+<img class="logo" src="logo.png" alt="Eagle">
+
+<h1>SAAHIRIDES TRANSIT PVT.LTD.</h1>
+
+<div class="gap2"></div>
+
+<div class="tag1">SafeRide @ SaahiPrice</div>
+<div class="tag2">SaahiRides • HYDERABAD'S OWN FLEET</div>
+<div class="tag3">ROME WAS NOT BUILT IN A DAY</div>
+
+<div class="gap2"></div>
+<div class="lastline">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
+<div class="gap2"></div>
 
 <div class="card">
-<a class="btn primary" href="https://wa.me/919347946026" target="_blank" style="width:100%">Book Your Ride</a>
-<div class="row"><a class="btn" href="rate-chart.html">Pricing</a><a class="btn" href="/">W F IG Website</a></div>
-<div class="row"><a class="btn blue" href="login.html">Login</a><a class="btn light" href="explore.html">Explore</a></div>
-<div class="founder-wrap"><a class="btn small" href="founder.html" style="background:linear-gradient(135deg,#1e3a8a,#4f46e5);border:0;color:#fff">💬 Message from Founder</a></div>
+<a class="btn book" href="https://wa.me/919347946026" target="_blank">Book Your Ride →</a>
+<div class="clear"></div>
+
+<div class="row3">
+<a class="btn b" href="rate-chart.html">Pricing</a>
+<a class="btn b blue" href="login.html">Login</a>
+<a class="btn b" href="explore.html">Explore</a>
 </div>
-<p style="opacity:.4;font-size:11px;margin-top:18px;text-align:center">© SaahiRides Transit Pvt Ltd</p>
-</body></html>
+
+<a class="btn founder" href="founder.html">💬 Message from Founder</a>
+
+<div class="socials">
+<a href="https://wa.me/919347946026" target="_blank">W</a>
+<a href="https://www.facebook.com/" target="_blank">f</a>
+<a href="https://www.instagram.com/" target="_blank">IG</a>
+<a href="https://saahirides.com" target="_blank">🌐</a>
+</div>
+
+<div class="foot">© SaahiRides Transit Pvt Ltd</div>
+</div>
+
+</body>
+</html>
