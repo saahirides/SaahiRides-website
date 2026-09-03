@@ -3,67 +3,74 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SaahiRides</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a1931;color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;padding:10px 16px 20px;text-align:center}
-.logo{width:165px;height:165px;object-fit:contain;filter:drop-shadow(0 10px 25px rgba(0,0,0,.5));margin-top:20px} /* 1. WHITE BG HATA + BADA */
-h1{font-size:22px;font-weight:800;letter-spacing:.03em;color:#8ec8ff;white-space:nowrap;margin-top:18px} /* 2. ONE LINE + COLOR */
-.gap2{height:28px}
-.tag1{color:#ff8c28;font-size:17px;font-weight:700} /* 4. ORANGE */
-.tag2{color:#ffffff;font-size:14px;font-weight:600;margin-top:6px;letter-spacing:.02em} /* WHITE */
-.tag3{color:#2eff7a;font-size:13px;font-weight:700;margin-top:6px;letter-spacing:.05em} /* GREEN */
-.lastline{font-size:13.5px;font-weight:700;opacity:.95;letter-spacing:.06em} /* 6. LITTLE BIGGER */
-.card{width:100%;max-width:420px;margin-top:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:16px}
-.btn{border-radius:999px;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;justify-content:center;transition:.2s}
-.btn.book{background:linear-gradient(90deg,#1ecb6a,#0faa52);color:#fff;font-size:16px;padding:15px 26px;width:78%;margin-left:0;float:left;box-shadow:0 8px 20px rgba(30,203,106,.35)} /* 8. GREEN + LEFT + BIG */
-.clear{clear:both}
-.row3{display:flex;gap:8px;margin-top:14px}
-.row3 .b{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:#fff;padding:12px 6px;font-size:12.5px}
-.row3 .b.blue{background:linear-gradient(90deg,#1e4bd8,#2a7fff);border:0}
-.founder{margin:14px auto 0;background:linear-gradient(90deg,#2d4de0,#7b5cff);color:#fff;padding:9px 16px;font-size:11.5px;display:flex;gap:6px;width:fit-content}
-.socials{display:flex;gap:8px;margin-top:16px;justify-content:center}
-.socials a{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;color:#fff}
-.foot{opacity:.4;font-size:9px;margin-top:12px}
+body{background:#0a1931;color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;padding:12px 12px 25px;text-align:center}
+.logo{width:175px;margin-top:15px}
+h1{font-size:20px;font-weight:800;color:#7ec8ff;white-space:nowrap;margin-top:14px}
+.gap{height:26px}
+.t1{color:#ff8c28;font-size:17px;font-weight:800}
+.t2{color:#fff;font-size:13px;font-weight:700;margin-top:5px}
+.t3{color:#2eff7a;font-size:12px;font-weight:800;margin-top:5px}
+.moto{font-size:12.5px;font-weight:800}
+
+/* ONE LINE - NO BBOX */
+.one-line{width:100%;max-width:980px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.book{flex:1.2;min-width:160px;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;text-align:center;box-shadow:0 8px 20px rgba(0,230,118,.35)}
+.mid{display:flex;gap:8px;flex:1.5;min-width:220px;justify-content:center}
+.mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;text-align:center}
+.mid a.blue{background:#2a7fff;border:0}
+.founder{flex:0.9;min-width:150px;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px 10px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
+
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;font-weight:800;font-size:12px}
+.foot{opacity:.35;font-size:9px;margin-top:12px}
+
+@media(max-width:700px){
+.one-line{flex-direction:column;align-items:stretch}
+.book{order:1}
+.mid{order:2;width:100%}
+.founder{order:3;width:100%}
+}
 </style>
 </head>
 <body>
+<img class="logo" src="logo.png">
+<h1{
+font-size:32px;
+font-weight:900;
+color:#ffffff;
+white-space:nowrap;
+margin-top:16px;
+letter-spacing:.04em;
+text-transform:uppercase;
+text-shadow:0 2px 10px rgba(0,0,0,.5);
+}>SAAHIRIDES TRANSIT PVT.LTD.</h1>
+<div class="gap"></div>
+<div class="t1">SafeRide @ SaahiPrice</div>
+<div class="t2">SaahiRides • HYDERABAD'S OWN FLEET</div>
+<div class="t3">ROME WAS NOT BUILT IN A DAY</div>
+<div class="gap"></div>
+<div class="moto">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
 
-<img class="logo" src="logo.png" alt="Eagle">
-
-<h1>SAAHIRIDES TRANSIT PVT.LTD.</h1>
-
-<div class="gap2"></div>
-
-<div class="tag1">SafeRide @ SaahiPrice</div>
-<div class="tag2">SaahiRides • HYDERABAD'S OWN FLEET</div>
-<div class="tag3">ROME WAS NOT BUILT IN A DAY</div>
-
-<div class="gap2"></div>
-<div class="lastline">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
-<div class="gap2"></div>
-
-<div class="card">
-<a class="btn book" href="https://wa.me/919347946026" target="_blank">Book Your Ride →</a>
-<div class="clear"></div>
-
-<div class="row3">
-<a class="btn b" href="rate-chart.html">Pricing</a>
-<a class="btn b blue" href="login.html">Login</a>
-<a class="btn b" href="explore.html">Explore</a>
+<!-- LEFT + MIDDLE + RIGHT IN ONE LINE + NO BOX -->
+<div class="one-line">
+<a class="book" href="https://wa.me/919347946026">Book Your Ride →</a>
+<div class="mid">
+<a href="rate-chart.html">Pricing</a>
+<a class="blue" href="login.html">Login</a>
+<a href="explore.html">Explore</a>
 </div>
-
-<a class="btn founder" href="founder.html">💬 Message from Founder</a>
+<a class="founder" href="founder.html">💬 Message from Founder</a>
+</div>
 
 <div class="socials">
-<a href="https://wa.me/919347946026" target="_blank">W</a>
-<a href="https://www.facebook.com/" target="_blank">f</a>
-<a href="https://www.instagram.com/" target="_blank">IG</a>
-<a href="https://saahirides.com" target="_blank">🌐</a>
+<a href="https://wa.me/919347946026">W</a>
+<a href="#">f</a>
+<a href="#">IG</a>
+<a href="#">🌐</a>
 </div>
-
 <div class="foot">© SaahiRides Transit Pvt Ltd</div>
-</div>
-
 </body>
 </html>
