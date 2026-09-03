@@ -3,41 +3,41 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SaahiRides</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a1931;color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;padding:12px 12px 25px;text-align:center}
-.logo{width:175px;margin-top:15px}
-h1{font-size:20px;font-weight:800;color:#7ec8ff;white-space:nowrap;margin-top:14px}
-.gap{height:26px}
-.t1{color:#ff8c28;font-size:17px;font-weight:800}
-.t2{color:#fff;font-size:13px;font-weight:700;margin-top:5px}
-.t3{color:#2eff7a;font-size:12px;font-weight:800;margin-top:5px}
-.moto{font-size:12.5px;font-weight:800}
-
-/* ONE LINE - NO BBOX */
-.one-line{width:100%;max-width:980px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.book{flex:1.2;min-width:160px;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;text-align:center;box-shadow:0 8px 20px rgba(0,230,118,.35)}
-.mid{display:flex;gap:8px;flex:1.5;min-width:220px;justify-content:center}
-.mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;text-align:center}
-.mid a.blue{background:#2a7fff;border:0}
-.founder{flex:0.9;min-width:150px;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px 10px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
-
-.socials{display:flex;gap:10px;margin-top:22px}
-.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;font-weight:800;font-size:12px}
-.foot{opacity:.35;font-size:9px;margin-top:12px}
-
-@media(max-width:700px){
-.one-line{flex-direction:column;align-items:stretch}
-.book{order:1}
-.mid{order:2;width:100%}
-.founder{order:3;width:100%}
+body{
+background: radial-gradient(125% 125% at 50% 0%, #2a3a8c 0%, #1a2456 45%, #0e1535 100%);
+color:#fff;
+font-family:'Inter',sans-serif;
+display:flex;flex-direction:column;align-items:center;
+padding:15px 14px 35px;text-align:center;min-height:100vh;
 }
+.logo{width:280px;margin-top:10px;filter:drop-shadow(0 0 28px rgba(255,20,20,.45))}
+h1{font-size:36px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 4px 20px rgba(0,0,0,.8)}
+.gap{height:26px}
+.t1{color:#ff8c28;font-size:18px;font-weight:800}
+.t2{color:#e8e8ff;font-size:13.5px;font-weight:700;margin-top:6px}
+.t3{color:#2eff7a;font-size:12.5px;font-weight:800;margin-top:6px}
+.moto{font-size:13px;font-weight:800;margin-top:6px;opacity:.9}
+.one-line{width:100%;max-width:900px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.book{flex:1.2;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;box-shadow:0 10px 25px rgba(0,230,118,.4)}
+.mid{display:flex;gap:8px;flex:1.4}
+.mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;text-align:center}
+.mid a.blue{background:#2a7fff;border:0;box-shadow:0 8px 20px rgba(42,127,255,.55)}
+.founder{flex:.9;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800}
+@media(max-width:700px){.one-line{flex-direction:column}.book,.mid,.founder{width:100%} h1{font-size:26px}}
 </style>
 </head>
 <body>
 <img class="logo" src="logo.png">
-<h1{
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="gap"></div>
+<h1
+{
 font-size:32px;
 font-weight:900;
 color:#ffffff;
@@ -48,13 +48,15 @@ text-transform:uppercase;
 text-shadow:0 2px 10px rgba(0,0,0,.5);
 }>SAAHIRIDES TRANSIT PVT.LTD.</h1>
 <div class="gap"></div>
-<div class="t1">SafeRide @ SaahiPrice</div>
-<div class="t2">SaahiRides • HYDERABAD'S OWN FLEET</div>
-<div class="t3">ROME WAS NOT BUILT IN A DAY</div>
+<div class="gap"></div>
+<div class="t1">SaahiRides - SafeRide @ SaahiPrice</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="t2">SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY</div>
+<div class="gap"></div>
 <div class="gap"></div>
 <div class="moto">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
 
-<!-- LEFT + MIDDLE + RIGHT IN ONE LINE + NO BOX -->
 <div class="one-line">
 <a class="book" href="https://wa.me/919347946026">Book Your Ride →</a>
 <div class="mid">
@@ -66,11 +68,7 @@ text-shadow:0 2px 10px rgba(0,0,0,.5);
 </div>
 
 <div class="socials">
-<a href="https://wa.me/919347946026">W</a>
-<a href="#">f</a>
-<a href="#">IG</a>
-<a href="#">🌐</a>
+<a href="https://wa.me/919347946026">W</a><a href="#">f</a><a href="#">IG</a><a href="#">🌐</a>
 </div>
-<div class="foot">© SaahiRides Transit Pvt Ltd</div>
 </body>
 </html>
