@@ -2,50 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SaahiRides</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+<title>SaahiRides - SafeRide @ SaahiPrice</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-background: radial-gradient(125% 125% at 50% 0%, #2a3a8c 0%, #1a2456 45%, #0e1535 100%);
-color:#fff;
-font-family:'Inter',sans-serif;
-display:flex;flex-direction:column;align-items:center;
-padding:15px 14px 35px;text-align:center;min-height:100vh;
-}
-.logo{width:280px;margin-top:10px;filter:drop-shadow(0 0 28px rgba(255,20,20,.45))}
-h1{font-size:26px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;letter-spacing:.03em;text-transform:uppercase;text-shadow:0 4px 20px rgba(0,0,0,.8)}
-.gap{height:26px}
-.t1{color:#ff8c28;font-size:18px;font-weight:800}
-.t2{color:#e8e8ff;font-size:13.5px;font-weight:700;margin-top:6px}
-.moto{font-size:13px;font-weight:800;margin-top:6px;opacity:.9}
-.one-line{width:100%;max-width:900px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between}
-.book{flex:1.2;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;box-shadow:0 10px 25px rgba(0,230,118,.4)}
-.mid{display:flex;gap:8px;flex:1.4}
+body{background: radial-gradient(125% 125% at 50% 0%, #2a3a8c 0%, #1a2456 45%, #0e1535 100%);color:#fff;font-family:'Inter',sans-serif;display:flex;flex-direction:column;align-items:center;padding:15px 14px 35px;text-align:center;min-height:100vh;overflow-x:hidden}
+.logo{width:280px;max-width:80%;margin-top:10px;filter:drop-shadow(0 0 28px rgba(255,20,20,.45))}
+h1{font-size:26px;font-weight:900;margin-top:14px;letter-spacing:.02em;text-transform:uppercase;text-shadow:0 4px 20px rgba(0,0,0,.8);line-height:1.2}
+.t1{color:#ff8c28;font-size:18px;font-weight:800;margin-top:18px}
+.t2{color:#e8e8ff;font-size:13px;font-weight:700;margin-top:10px;max-width:900px}
+.moto{font-size:13px;font-weight:800;margin-top:10px;opacity:.9;letter-spacing:0.5px}
+.one-line{width:100%;max-width:900px;margin-top:28px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.book{flex:1.2;min-width:180px;background:#00e676;color:#fff;padding:14px 18px;border-radius:999px;text-decoration:none;font-weight:800;font-size:15px;box-shadow:0 10px 25px rgba(0,230,118,.4);display:inline-block}
+.mid{display:flex;gap:8px;flex:1.4;min-width:200px}
 .mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;text-align:center}
 .mid a.blue{background:#2a7fff;border:0;box-shadow:0 8px 20px rgba(42,127,255,.55)}
-.founder{flex:.9;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
-.socials{display:flex;gap:10px;margin-top:22px; flex-wrap:wrap; justify-content:center;}
-.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800; font-size:12px;}
-.socials a.offer{background:gold; color:#001a33; width:auto; padding:0 14px; border:none;}
-.socials a.rates{background:#001a33; color:gold; width:auto; padding:0 14px; border:1px solid gold;}
-.socials a.vision{background:#fff; color:#001a33; width:auto; padding:0 14px; border:none;}
-@media(max-width:700px){.one-line{flex-direction:column}.book,.mid,.founder{width:100%} h1{font-size:20px; white-space:normal;}}
+.founder{flex:.9;min-width:180px;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:12px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
+.socials{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center;max-width:900px}
+.socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800;font-size:12px}
+.socials a.offer{background:gold;color:#001a33;width:auto;padding:0 14px;border:none}
+.socials a.rates{background:#001a33;color:gold;width:auto;padding:0 14px;border:1px solid gold}
+.socials a.vision{background:#fff;color:#001a33;width:auto;padding:0 14px;border:none}
+.map-section{width:100%;max-width:900px;margin-top:35px;background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,0.15)}
+.map-section h2{color:#ff8c28;font-size:18px;margin-bottom:12px}
+#saahi-map{height:400px;width:100%;border-radius:12px;z-index:1}
+.map-btns{display:flex;gap:12px;justify-content:center;margin-top:15px;flex-wrap:wrap}
+.map-btns a{padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:800;font-size:13px;display:inline-block}
+.btn-map{background:#fff;color:#1a2456}
+.btn-book{background:#00e676;color:#fff;box-shadow:0 6px 15px rgba(0,230,118,.4)}
+@media(max-width:700px){h1{font-size:20px} .one-line{flex-direction:column} .book,.mid,.founder{width:100%}}
 </style>
 </head>
 <body>
-<img class="logo" src="logo.png">
-<div class="gap"></div>
+<img class="logo" src="logo.png" onerror="this.style.display='none'">
 <h1>SAAHIRIDES TRANSIT PVT.LTD.</h1>
-<div class="gap"></div>
-<div class="gap"></div>
 <div class="t1">SaahiRides - SafeRide @ SaahiPrice</div>
-<div class="gap"></div>
-<div class="gap"></div>
 <div class="t2">SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY</div>
-<div class="gap"></div>
-<div class="gap"></div>
 <div class="moto">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
+
 <div class="one-line">
 <a class="book" href="https://wa.me/919347946026">Book Your Ride →</a>
 <div class="mid">
@@ -53,8 +48,9 @@ h1{font-size:26px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;
 <a class="blue" href="login.html">Login</a>
 <a href="explore.html">Explore</a>
 </div>
-<a href="founder.html" class="founder" style="flex:.9;">Message from Founder</a>
+<a href="founder.html" class="founder">Message from Founder</a>
 </div>
+
 <div class="socials">
 <a href="https://wa.me/919347946026">W</a>
 <a href="#">FB</a>
@@ -64,5 +60,22 @@ h1{font-size:26px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;
 <a href="rates.html" class="rates">💰 Janmaashtami Rates</a>
 <a href="vision.html" class="vision">👁️ SaahiRidesvision</a>
 </div>
+
+<div class="map-section">
+<h2>📍 Find Us - Nagaram, Hyderabad</h2>
+<div id="saahi-map"></div>
+<div class="map-btns">
+<a class="btn-map" href="https://www.google.com/maps/search/?api=1&query=17.4845,78.5905" target="_blank">📍 Open in Google Maps</a>
+<a class="btn-book" href="https://wa.me/919347946026?text=Hi%20SaahiRides,%20I%20want%20to%20book%20from%20Nagaram">🚖 Book From Nagaram</a>
+</div>
+<p style="margin-top:12px;font-size:12px;opacity:0.7">We cover all over Hyderabad | Nagaram to Anywhere</p>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+var map = L.map('saahi-map').setView([17.4845, 78.5905], 14);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© SaahiRides'}).addTo(map);
+L.marker([17.4845, 78.5905]).addTo(map).bindPopup("<b>SaahiRides Transit Pvt. Ltd.</b><br>Nagaram, Hyderabad").openPopup();
+</script>
 </body>
 </html>
