@@ -4,13 +4,14 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SaahiRides</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 background: radial-gradient(125% 125% at 50% 0%, #2a3a8c 0%, #1a2456 45%, #0e1535 100%);
 color:#fff;
 font-family:'Inter',sans-serif;
-display:flex;flex-direction:column;align-items:left;
+display:flex;flex-direction:column;align-items:center;
 padding:15px 14px 35px;text-align:center;min-height:100vh;
 }
 .logo{width:280px;margin-top:10px;filter:drop-shadow(0 0 28px rgba(255,20,20,.45))}
@@ -25,45 +26,9 @@ h1{font-size:26px;font-weight:900;color:#fff;white-space:nowrap;margin-top:14px;
 .mid a{flex:1;padding:12px 0;border-radius:999px;text-decoration:none;font-weight:700;font-size:12px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;text-align:center}
 .mid a.blue{background:#2a7fff;border:0;box-shadow:0 8px 20px rgba(42,127,255,.55)}
 .founder{flex:.9;background:linear-gradient(90deg,#3b5bdb,#8a5cff);color:#fff;padding:11px;border-radius:999px;text-decoration:none;font-weight:700;font-size:11px;text-align:center}
-.socials{display:flex;gap:10px;margin-top:22px; flex-wrap:wrap;}
+.socials{display:flex;gap:10px;margin-top:22px; flex-wrap:wrap; justify-content:center;}
 .socials a{width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-weight:800; font-size:12px;}
 .socials a.offer{background:gold; color:#001a33; width:auto; padding:0 14px; border:none;}
 .socials a.rates{background:#001a33; color:gold; width:auto; padding:0 14px; border:1px solid gold;}
 .socials a.vision{background:#fff; color:#001a33; width:auto; padding:0 14px; border:none;}
-@media(max-width:700px){.one-line{flex-direction:column}.book,.mid,.founder{width:100%} h1{font-size:20px; white-space:normal;}}
-</style>
-</head>
-<body>
-<img class="logo" src="logo.png">
-<div class="gap"></div>
-<h1>SAAHIRIDES TRANSIT PVT.LTD.</h1>
-<div class="gap"></div>
-<div class="gap"></div>
-<div class="t1">SaahiRides - SafeRide @ SaahiPrice</div>
-<div class="gap"></div>
-<div class="gap"></div>
-<div class="t2">SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY</div>
-<div class="gap"></div>
-<div class="gap"></div>
-<div class="moto">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
-<div class="one-line">
-<a class="book" href="https://wa.me/919347946026">Book Your Ride →</a>
-<div class="mid">
-<a href="rate-chart.html">Pricing</a>
-<a class="blue" href="login.html">Login</a>
-<a href="explore.html">Explore</a>
-</div>
-<a href="founder.html" class="founder" style="flex:.9;">Message from Founder</a>
-</div>
-<div class="socials">
-<a href="https://wa.me/919347946026">W</a>
-<a href="#">FB</a>
-<a href="#">IG</a>
-<a href="#">🌐</a>
-<!-- FIXED BUTTONS - AB 404 NAHI AAYEGA -->
-<a href="offer.html" class="offer">🦚 Janmaashtami offer</a>
-<a href="rates.html" class="rates">💰 Janmaashtami Rates</a>
-<a href="vision.html" class="vision">👁️ SaahiRidesvision</a>
-</div>
-</body>
-</html>
+.map-section{width:100%;max-width:900px;margin-top:35px;background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);border-radius:18px;padding:18px;border:1px solid rgba
