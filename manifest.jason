@@ -1,0 +1,16 @@
+{
+  "name": "SaahiRides - Subodh Driver",
+  "short_name": "SaahiRides",
+  "description": "SaahiRides Driver App for Subodh OR 14 B 8659",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#00e676",
+  "theme_color": "#00e676",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3774/3774090.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
