@@ -1,14 +1,19 @@
 {
-  "name": "SaahiRides - Subodh Driver",
+  "name": "SaahiRides - SaferRide @ SaahiPrice",
   "short_name": "SaahiRides",
-  "description": "SaahiRides Driver App for Subodh OR 14 B 8659",
-  "start_url": "/",
+  "description": "Book safe and affordable rides in Odisha. Driver Subodh OR 14 B 8659 is ready.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#00e676",
+  "background_color": "#ffffff",
   "theme_color": "#00e676",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3774/3774090.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3774/3774083.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3774/3774083.png",
       "sizes": "512x512",
       "type": "image/png"
     }
