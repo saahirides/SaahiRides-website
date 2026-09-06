@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaahiRides - Customer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:radial-gradient(120% 120% at 0% 0%, #e8ffe8, #ffffff);min-height:100vh;padding:20px}
+.card{width:100%;max-width:500px;margin:20px auto;background:white;border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+h1{font-size:26px;font-weight:900;text-align:center}
+.sub{color:#ff6b28;text-align:center;font-size:14px;font-weight:700;margin-bottom:20px}
+input{width:100%;padding:16px;border:2px solid #eee;border-radius:12px;margin:10px 0;font-size:16px;font-weight:700}
+button{width:100%;padding:18px;background:#00e676;color:white;border:none;border-radius:12px;font-size:18px;font-weight:900;margin-top:15px;cursor:pointer}
+#status{margin-top:20px;padding:15px;border-radius:12px;background:#f5f5f5;text-align:center;font-weight:800;display:none}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>SaahiRides</h1>
+<div class="sub">SaferRide @ SaahiPrice</div>
+
+<input id="name" placeholder="Aapka Naam">
+<input id="pickup" placeholder="Pickup Location - Yahan se jana hai">
+<input id="drop" placeholder="Drop Location - Yahan jana hai">
+
+<button onclick="bookRide()">BOOK RIDE NOW</button>
+
+<div id="status"></div>
+<button onclick="window.location.href='index.html'" style="background:#111;margin-top:10px;">Back to Home</button>
+</div>
+
+<script type="module">
+// Firebase Setup - aapka wala config yahan aayega
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSy...YOUR_KEY",
+  authDomain: "saahirides.firebaseapp.com",
+  projectId: "saahirides",
+  storageBucket: "saahirides.appspot.com",
+  messagingSenderId: "123456",
+  appId: "1:123456:web:abcdef"
+};
+
+let db;
+try {
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+} catch(e){ console.log("Firebase not configured, using local mode"); }
+
+window.bookRide = async function(){
+  const name = document.getElementById('name').value;
+  const pickup = document.getElementById('pickup').value;
+  const drop = document.getElementById('drop').value;
+  
+  if(!name || !pickup || !drop){ alert("Saare details bharo bhaiya!"); return; }
+
+  const rideData = {
+    customerName: name,
+    pickup: pickup,
+    drop: drop,
+    status: "searching",
+    driver: "OR 14 B 8659 - Subodh",
+    time: new Date().toISOString()
+  };
+
+  document.getElementById('status').style.display='block';
+  document.getElementById('status').innerHTML = "🔍 Driver dhoondh rahe hain...<br>Subodh (OR 14 B 8659) ko request bheji!";
+  
+  // Local backup
+  localStorage.setItem("currentRide", JSON.stringify(rideData));
+  
+  // Firebase pe bhejne ki koshish
+  if(db){
+    try { await addDoc(collection(db, "rides"), rideData); } catch(e){}
+  }
+  
+  setTimeout(()=>{
+    document.getElementById('status').innerHTML = "✅ Ride Booked! <br> Driver: Subodh - OR 14 B 8659 jaldi aayenge!";
+  }, 2000);
+}
+</script>
+</body>
+</html>
