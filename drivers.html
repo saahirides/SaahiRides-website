@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides Driver - Subodh</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{background:#0e1535;color:#fff;padding:15px}
+.header{background:#fff;color:#0e1535;padding:15px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+.bike{font-weight:900;font-size:18px}.name{font-size:13px;opacity:.7}
+.online{margin-top:15px;background:#00e676;padding:18px;border-radius:999px;text-align:center;font-weight:900;font-size:18px}
+.card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:18px;margin-top:20px}
+.ride-pulse{animation:pulse 1.5s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,230,118,.7)}70%{box-shadow:0 0 0 15px rgba(0,230,118,0)}100%{box-shadow:0 0 0 0 rgba(0,230,118,0)}}
+.btn{padding:16px;border-radius:999px;border:none;font-weight:800;font-size:16px;width:100%;margin-top:12px}
+.accept{background:#00e676;color:#fff}.reject{background:rgba(255,255,255,.15);color:#fff}
+.earn{display:flex;gap:10px;margin-top:15px}
+.earn div{flex:1;background:rgba(255,255,255,.08);padding:12px;border-radius:10px;text-align:center}
+</style>
+</head>
+<body>
+<div class="header">
+<div><div class="bike">OR 14 B 8659</div><div class="name">Subodh - SaahiRides Driver</div></div>
+<div style="font-size:12px">⭐4.9</div>
+</div>
+<div class="online">● ONLINE - Ready for Rides</div>
+
+<div class="earn">
+<div><b>₹850</b><br><span style="font-size:11px">Aaj Ki Kamai</span></div>
+<div><b>12</b><br><span style="font-size:11px">Rides</span></div>
+<div><b>42 km</b><br><span style="font-size:11px">Distance</span></div>
+</div>
+
+<div id="rideCard" class="card ride-pulse">
+<h3>🔔 New Ride Request!</h3>
+<p style="margin-top:10px;font-size:14px">📍 Nagaram → Secunderabad<br>👤 Customer: Near Dammaiguda<br>💰 Fare: ₹180 - 6.5km</p>
+<button class="btn accept" onclick="acceptRide()">✅ ACCEPT RIDE - ₹180</button>
+<button class="btn reject" onclick="rejectRide()">❌ Reject</button>
+</div>
+
+<div id="tripCard" class="card" style="display:none">
+<h3>🏍️ Trip Started - Subodh</h3>
+<p style="margin-top:10px">Customer ko pick kar liya?</p>
+<button class="btn accept" onclick="endTrip()">🏁 Trip End Karo</button>
+<a class="btn reject" style="display:block;text-align:center;text-decoration:none" href="https://www.google.com/maps/dir/?api=1&destination=17.4399,78.4983" target="_blank">📍 Map Kholo</a>
+</div>
+
+<script>
+function acceptRide(){
+document.getElementById('rideCard').style.display='none';
+document.getElementById('tripCard').style.display='block';
+alert('Ride Accept! Customer ko call karo');
+window.open('https://wa.me/919347946026?text=Subodh OR14B8659 ne ride accept ki','_blank');
+}
+function rejectRide(){alert('Ride Reject ki');document.getElementById('rideCard').innerHTML='<p>No rides. Waiting...</p>'}
+function endTrip(){alert('Trip Complete! ₹180 aapke wallet me add hua');location.reload()}
+</script>
+</body>
+</html>
