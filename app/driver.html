@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaahiRides Driver</title>
+<style>
+body{background:#0A1931;color:#FFD700;font-family:Arial;text-align:center;padding:20px}
+.btn{padding:15px 30px;margin:10px;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
+.gold{background:linear-gradient(#FFD700,#FFB700);color:#0A1931;border:none}
+.blue{background:#0A1931;color:#FFD700;border:2px solid #FFD700}
+.card{background:#102542;padding:20px;border-radius:15px;border:1px solid #FFD700;margin-top:20px;text-align:left}
+input{width:90%;padding:12px;margin:8px;border-radius:8px;border:none}
+</style>
+</head>
+<body>
+
+<img src="https://www.saahirides.co.in/logo.png" width="80">
+<h2>SaahiRides - I AM A DRIVER</h2>
+<p>0% Commission | Daily Payouts | Captive Garage</p>
+
+<div id="main">
+  <button class="btn gold" onclick="show('new')">NEW DRIVER</button>
+  <button class="btn blue" onclick="show('exist')">EXISTING DRIVER</button>
+</div>
+
+<!-- NEW DRIVER FORM -->
+<div id="new" class="card" style="display:none">
+  <h3>New Driver Registration (Scan QR Form)</h3>
+  <input id="n_name" placeholder="Full Name">
+  <input id="n_mobile" placeholder="Mobile Number">
+  <input id="n_aadhaar" placeholder="Aadhaar Last 4 Digit">
+  <input id="n_license" placeholder="License No">
+  <input id="n_rc" placeholder="RC No">
+  <input id="n_vehicle" placeholder="Vehicle No - TS09 AB 1234">
+  <input id="n_bank" placeholder="Bank A/c for Payouts">
+  <label><input type="checkbox"> I consent as per DPDP Act</label><br>
+  <button class="btn gold" onclick="registerNew()">Submit & Verify</button>
+</div>
+
+<!-- EXISTING DRIVER LOGIN -->
+<div id="exist" class="card" style="display:none">
+  <h3>Existing Driver Login</h3>
+  <input id="e_aadhaar" placeholder="Enter Aadhaar Number (12 digit)">
+  <button class="btn blue" onclick="sendOTP()">Send OTP to Linked Mobile</button>
+  <div id="otpBox" style="display:none">
+    <input id="e_otp" placeholder="Enter OTP">
+    <button class="btn gold" onclick="verifyOTP()">Verify & Go to Portal</button>
+  </div>
+</div>
+
+<!-- PORTAL DASHBOARD -->
+<div id="dashboard" class="card" style="display:none">
+  <h3>Welcome <span id="dName">Rohit</span> - <span id="dRating">4.8⭐</span></h3>
+  <p>Vehicle: <span id="dVehicle">TS09 AB 1234</span> | Status: VERIFIED</p>
+  <hr>
+  <p><b>Rides:</b> Daily: 6 | Weekly: 38 | Monthly: 142</p>
+  <p><b>Earnings:</b> Today ₹1,240 | Week ₹8,950 | Month ₹36,200</p>
+  <p><b>Bonus:</b> ₹500 | <b>Leaves:</b> 4 Available</p>
+  <p><b>Conduct Issues:</b> 0 | <b>Docs:</b> Insurance expiring 25 Nov 2025</p>
+  <button class="btn blue" onclick="location.reload()">Logout</button>
+</div>
+
+<script>
+function show(type){
+  document.getElementById('main').style.display='none';
+  document.getElementById(type).style.display='block';
+}
+function registerNew(){
+  alert('Registration Submitted! Aapka data Supabase me save hoga Mamu!');
+  // Yaha Supabase insert logic ayega
+}
+function sendOTP(){
+  document.getElementById('otpBox').style.display='block';
+  alert('OTP sent to Aadhaar linked mobile - ****026');
+}
+function verifyOTP(){
+  document.getElementById('exist').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+}
+</script>
+
+<p style="margin-top:30px;font-size:12px">www.saahirides.co.in | www.saahirides.co.in/app | 9347946026</p>
+</body>
+</html>
