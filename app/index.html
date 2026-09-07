@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaahiRides - Choose Access</title>
-<link rel="manifest" href="/manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaahiRides App</title>
 <style>
-body{margin:0;background:#0F2A52;color:white;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;padding:25px;min-height:100vh}
-.logo{font-size:28px;font-weight:bold;margin-top:40px}
-.logo span{color:#FF2D2D}
-.card{width:100%;max-width:360px;margin-top:30px}
-.btn{display:flex;align-items:center;gap:15px;padding:20px;border-radius:18px;font-size:17px;font-weight:700;text-decoration:none;margin-bottom:18px}
-.cust{background:#00C950;color:white}
-.driv{background:#1E88E5;color:white}
-.web{background:transparent;border:2px solid white;color:white}
+body { background:#0F2A44; color:white; font-family: sans-serif; text-align:center; padding: 30px 20px; }
+.header { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:20px; }
+.logo { font-size: 36px; }
+.brand { color: #FF6B00; font-size: 20px; font-weight: bold; white-space: nowrap; }
+.tagline { color: #FFB066; font-size: 14px; margin-top:6px; letter-spacing: 0.5px; font-weight: 600; }
+h2 { font-size:28px; margin-top:30px; margin-bottom:10px; }
+p { color:#9CA3AF; margin-bottom:30px; }
+.btn { display:block; width:100%; padding:18px; border-radius:12px; margin:15px 0; font-size:18px; font-weight:bold; text-decoration:none; border:none; box-sizing:border-box; }
+.green { background:#22C55E; color:white; }
+.blue { background:#0E7490; color:white; }
+.white { background:transparent; color:white; border:2px solid white; }
 </style>
 </head>
 <body>
-<div class="logo">🚩 SaahiRides</div>
-<p>Transit Pvt Ltd</p>
-<h2 style="margin-top:30px">Choose Your Access</h2>
-<p style="opacity:0.7">Select how you'd like to continue</p>
 
-<div class="card">
-<a class="btn cust" onclick="localStorage.setItem('saahi_role','customer')" href="/">👤 Customer - Book Your Ride</a>
-<a class="btn driv" onclick="localStorage.setItem('saahi_role','driver')" href="/driver">🚕 Driver - Driver Login</a>
-<a class="btn web" href="/">🌐 Visit Full Website</a>
+<div class="header">
+  <span class="logo">🚩</span>
+  <span class="brand">SaahiRides Transit Pvt Ltd</span>
 </div>
+<div class="tagline">SaahiRide - SaafeRide @ SaahiPrice</div>
 
-<script>
-// PWA install ke baad /app se khulega
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js'); }
-</script>
+<h2>Choose Your Access</h2>
+<p>Select how you'd like to continue</p>
+
+<a href="/" class="btn green">Customer - Book Your Ride</a>
+<a href="/driver" class="btn blue">Driver - Driver Login</a>
+<a href="/" class="btn white">Visit Full Website</a>
+
 </body>
 </html>
