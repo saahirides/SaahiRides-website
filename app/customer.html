@@ -131,8 +131,17 @@ function registerCustomer(){
 }
 
 function paymentDone(){
- alert('Payment Verified! ✅\nRefresh & Go to Home to Book Ride');
- window.location.href='index.html';
+ let mob=localStorage.getItem('current_mob');
+ let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
+ if(all[mob]){ all[mob].paid=true; localStorage.setItem('all_saahi_customers',JSON.stringify(all)); }
+ alert('Payment Verified! ✅\nHome pe le ja raha hu...');
+ window.location.href = 'customer.html?book=true&paid='+Date.now();
+}
+function goToBooking(){
+ document.getElementById('found').style.display='none';
+ document.getElementById('reg').style.display='none';
+ document.getElementById('book').style.display='block';
+}
 }
 
 function goToBooking(){
