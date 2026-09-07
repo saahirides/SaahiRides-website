@@ -4,33 +4,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SaahiRides App</title>
 <style>
-body { background:#0F2A44; color:white; font-family: sans-serif; text-align:center; padding: 30px 20px; }
-.header { display:flex; align-items:center; justify-content:center; gap:12px; margin-top:20px; }
-.logo { font-size: 36px; }
-.brand { color: #FF6B00; font-size: 20px; font-weight: bold; white-space: nowrap; }
-.tagline { color: #FFB066; font-size: 14px; margin-top:6px; letter-spacing: 0.5px; font-weight: 600; }
-h2 { font-size:28px; margin-top:30px; margin-bottom:10px; }
-p { color:#9CA3AF; margin-bottom:30px; }
-.btn { display:block; width:100%; padding:18px; border-radius:12px; margin:15px 0; font-size:18px; font-weight:bold; text-decoration:none; border:none; box-sizing:border-box; }
-.green { background:#22C55E; color:white; }
-.blue { background:#0E7490; color:white; }
-.white { background:transparent; color:white; border:2px solid white; }
+body { background:#0A2342; color:white; font-family: sans-serif; text-align:center; padding:20px; margin:0; }
+.wrapper { max-width:380px; margin:0 auto; }
+.top { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:20px; }
+.top img { height:45px; } /* Logo bada */
+.top b { color:#FF8C00; font-size:23px; white-space:nowrap; font-weight:800; letter-spacing:0.3px; } /* YEH BADA KIYA */
+.tagline { color:#FFC06E; font-size:13px; margin-top:6px; font-weight:600; }
+h2 { font-size:24px; margin-top:30px; margin-bottom:6px; }
+.sub { color:#9CA3AF; font-size:13px; margin-bottom:25px; }
+.btn { display:block; width:100%; padding:14px 10px; border-radius:12px; font-size:15px; font-weight:bold; text-decoration:none; margin:12px 0; box-sizing:border-box; }
+.g { background:#22C55E; color:white; }
+.b { background:#0E9CBF; color:white; }
+.w { background:transparent; color:white; border:1.5px solid white; }
 </style>
 </head>
 <body>
+<div class="wrapper">
+  <div class="top">
+    <img src="logo.png" alt="logo">
+    <b>SaahiRides Transit Pvt Ltd</b>
+  </div>
+  <div class="tagline">SaahiRide - SaafeRide @ SaahiPrice</div>
 
-<div class="header">
-  <span class="logo">🚩</span>
-  <span class="brand">SaahiRides Transit Pvt Ltd</span>
+  <h2>Choose Your Access</h2>
+  <div class="sub">Select how you'd like to continue</div>
+
+  <a href="/" class="btn g">Customer - Book Your Ride</a>
+  <a href="/driver" class="btn b">Driver - Driver Login</a>
+  <a href="/" class="btn w">Visit Full Website</a>
 </div>
-<div class="tagline">SaahiRide - SaafeRide @ SaahiPrice</div>
-
-<h2>Choose Your Access</h2>
-<p>Select how you'd like to continue</p>
-
-<a href="/" class="btn green">Customer - Book Your Ride</a>
-<a href="/driver" class="btn blue">Driver - Driver Login</a>
-<a href="/" class="btn white">Visit Full Website</a>
-
 </body>
 </html>
