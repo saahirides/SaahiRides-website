@@ -2,161 +2,69 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SaahiRides Customer</title>
+<title>SaahiRides Customer - Master Fare</title>
 <style>
 body{background:#0A1931;color:#fff;font-family:Arial;padding:15px;margin:0;text-align:center;}
-.card{background:#102542;padding:20px;border-radius:15px;max-width:450px;margin:15px auto;border:1px solid #FFD700;text-align:left;}
-input{width:95%;padding:12px;margin:7px 0;border-radius:8px;border:none;font-size:15px;}
-.btn{padding:14px;width:100%;border-radius:12px;font-weight:bold;border:none;margin-top:12px;font-size:16px;}
+.card{background:#102542;padding:20px;border-radius:15px;max-width:500px;margin:15px auto;border:1px solid #FFD700;text-align:left;}
+input,select{width:95%;padding:12px;margin:7px 0;border-radius:8px;border:none;font-size:15px;}
+.btn{padding:14px;width:100%;border-radius:12px;font-weight:bold;border:none;margin-top:12px;font-size:16px;cursor:pointer}
 .gold{background:#FFD700;color:#0A1931;}.green{background:#00c853;color:#fff;}
 .box{border:1px solid #FFD700;padding:12px;border-radius:10px;margin:10px 0;}
-.pay{background:#fff;color:#0A1931;padding:15px;border-radius:12px;text-align:center;margin-top:15px;}
-label{color:#FFD700;font-size:13px;}
+#fareBill{background:#fff;color:#000;padding:12px;border-radius:10px;margin-top:12px;display:none;line-height:1.6}
 </style>
 </head>
 <body>
 <h2 style="color:#FFD700">SaahiRides Customer</h2>
-
+<!-- Registration wala same rakha -->
 <div class="card" id="step1">
 <h3 style="text-align:center">Enter Mobile Number</h3>
 <input id="check_mob" placeholder="WhatsApp Number" type="tel">
 <button class="btn gold" onclick="checkCustomer()">Check My Records 🔍</button>
 </div>
-
 <div class="card" id="found" style="display:none">
 <h3>Welcome Back! 👋</h3>
 <div id="custDisplay" style="background:#fff;color:#0A1931;padding:12px;border-radius:8px"></div>
 <button class="btn green" onclick="goToBooking()">Confirm to Book Ride ✅</button>
 </div>
-
 <div class="card" id="reg" style="display:none">
 <h3 style="text-align:center">New Registration</h3>
-<input id="cust_name" placeholder="Full Name">
-<input id="aadhar" placeholder="Aadhar Number - 12 Digit">
-<input id="aadhar_mob" placeholder="Aadhar Linked Mobile">
-<input id="wa_mob" placeholder="WhatsApp Mobile">
-<input id="email" placeholder="Email - Subodh.Dandapat@gmail.com">
-<input id="route" placeholder="Route - Eg: Nagaram to ECIL">
+<input id="cust_name" placeholder="Full Name"><input id="aadhar" placeholder="Aadhar Number"><input id="aadhar_mob" placeholder="Aadhar Linked Mobile"><input id="wa_mob" placeholder="WhatsApp Mobile"><input id="email" placeholder="Email"><input id="route" placeholder="Route - Eg: Nagaram to ECIL">
 <div class="box">
-<label>Service:</label><br>
-<input type="radio" name="service" value="route_lock" checked> Route Lock<br>
-<input type="radio" name="service" value="on_demand"> On Demand<br>
-<input type="radio" name="service" value="subscription"> Subscription
-<hr>
-<label>Trip:</label><br>
-<input type="radio" name="trip" value="one_way" checked> One Way
-<input type="radio" name="trip" value="two_way"> Two Way
+<label>Service:</label><br><input type="radio" name="service" value="route_lock" checked> Route Lock<br><input type="radio" name="service" value="on_demand"> On Demand<br><input type="radio" name="service" value="subscription"> Subscription<hr>
+<label>Trip:</label><br><input type="radio" name="trip" value="one_way" checked> One Way <input type="radio" name="trip" value="two_way"> Two Way
 </div>
 <button class="btn gold" id="regBtn" onclick="registerCustomer()">Register & Continue</button>
-
-<div id="payScreen" style="display:none" class="pay">
-<h3 id="planName"></h3>
-<h2 id="planPrice"></h2>
-<p>UPI ID: saahirides@upi</p>
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=saahirides@upi" width="180">
-<br><br>
-<button class="btn green" onclick="paymentDone()">I Have Paid ✅</button>
-</div>
+<div id="payScreen" style="display:none" class="pay"><h3 id="planName"></h3><h2 id="planPrice"></h2><p>UPI ID: saahirides@upi</p><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=saahirides@upi" width="180"><br><br><button class="btn green" onclick="paymentDone()">I Have Paid ✅</button></div>
 </div>
 
+<!-- BOOKING - YAHAN MASTER FARE LAGA HAI -->
 <div class="card" id="book" style="display:none">
-<h3>Book Your Ride</h3>
-<input id="b_from" placeholder="From">
-<input id="b_to" placeholder="To">
-<input id="b_date" type="date">
-<input id="b_time" type="time">
-<button class="btn green" onclick="bookRide()">Confirm Booking 🚖</button>
+<h3>Book Your Ride - Master Fare</h3>
+<input id="b_from" placeholder="From"><input id="b_to" placeholder="To">
+<input id="b_km" type="number" placeholder="Distance in KM (Ex: 22)" oninput="calculateFare()">
+<div style="display:flex;gap:8px"><input id="b_date" type="date" style="width:48%"><input id="b_time" type="time" style="width:48%" value="10:00" onchange="calculateFare()"></div>
+<label>Select Category (16 Types)</label>
+<select id="category" onchange="calculateFare()">
+<optgroup label="BIKE & SCOOTY"><option value="bike_std">Bike Std - ₹10/km N+30</option><option value="bike_prio">Bike Priority - ₹12/km N+35</option><option value="bike_prem">Bike Premium - ₹15/km N+40</option><option value="scooty_std">Scooty Std - ₹13/km N+45</option><option value="scooty_prio">Scooty Priority - ₹15/km N+50</option><option value="scooty_ev">Scooty EV - ₹17/km N+55</option></optgroup>
+<optgroup label="AUTOS"><option value="auto_std">Auto Std - ₹19/km N+60</option><option value="auto_prio">Auto Priority - ₹21/km N+70</option><option value="auto_prem">Auto Premium - ₹23/km N+80</option><option value="ev_auto">EV Auto - ₹25/km N+85</option></optgroup>
+<optgroup label="NON-AC CABS"><option value="nonac_std">Non-AC Std - ₹27/km N+75</option><option value="nonac_prio">Non-AC Priority - ₹28/km N+85</option><option value="nonac_prem" selected>Non-AC Premium - ₹29/km N+95</option></optgroup>
+<optgroup label="AC CABS"><option value="ac_std">AC Std - ₹31/km N+100</option><option value="ac_city">AC City - ₹33/km N+105</option><option value="ac_prem">AC Premium - ₹35/km N+110</option></optgroup>
+</select>
+<div id="fareBill"></div>
+<button class="btn green" id="confirmRideBtn" onclick="bookRide()">Enter KM to See Fare</button>
 <p id="b_msg"></p>
 </div>
 
 <script>
-function checkCustomer(){
- let mob=document.getElementById('check_mob').value.trim();
- let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
- if(all[mob]){
-   let c=all[mob];
-   document.getElementById('step1').style.display='none';
-   document.getElementById('found').style.display='block';
-   document.getElementById('custDisplay').innerHTML="<b>"+c.name+"</b><br>"+c.route+"<br>"+c.service+" - "+c.trip;
-   localStorage.setItem('current_mob',mob);
-   // auto fill
-   document.getElementById('b_from').value=c.route?c.route.split(' to ')[0]:'';
-   document.getElementById('b_to').value=c.route?c.route.split(' to ')[1]:'';
- } else {
-   document.getElementById('step1').style.display='none';
-   document.getElementById('reg').style.display='block';
-   document.getElementById('wa_mob').value=mob;
- }
-}
-
-function registerCustomer(){
- let mob=document.getElementById('wa_mob').value.trim();
- let cname=document.getElementById('cust_name').value.trim();
- if(!cname||!mob){alert('Name & Mobile bharo Mamu');return;}
-
- let service=document.querySelector('input[name="service"]:checked').value;
- let trip=document.querySelector('input[name="trip"]:checked').value;
-
- let cust={
-   name:cname, aadhar:document.getElementById('aadhar').value,
-   aadhar_mob:document.getElementById('aadhar_mob').value, wa_mob:mob,
-   email:document.getElementById('email').value, route:document.getElementById('route').value,
-   service:service, trip:trip, time:new Date().toLocaleString()
- };
-
- let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
- all[mob]=cust;
- localStorage.setItem('all_saahi_customers',JSON.stringify(all));
- localStorage.setItem('saahi_customer',JSON.stringify(cust));
- localStorage.setItem('current_mob',mob);
-
- // LOGIC - Tumne jo bola
- if(service=='on_demand'){
-   alert('Registered Successfully Mamu! ✅\n\nPlease REFRESH page & go back to App Home Page to Continue Booking Ride!');
-   window.location.href='index.html';
- } else {
-   // Route Lock & Subscription - Payment Screen
-   let price=0, plan="";
-   if(service=='route_lock' && trip=='one_way'){price=2999; plan="Route Lock - One Way";}
-   if(service=='route_lock' && trip=='two_way'){price=4999; plan="Route Lock - Two Way";}
-   if(service=='subscription' && trip=='one_way'){price=1999; plan="Subscription - One Way / Month";}
-   if(service=='subscription' && trip=='two_way'){price=3499; plan="Subscription - Two Way / Month";}
-
-   document.getElementById('payScreen').style.display='block';
-   document.getElementById('planName').innerText=plan;
-   document.getElementById('planPrice').innerText="Pay ₹"+price;
-   document.getElementById('regBtn').style.display='none';
-   window.price=price; window.plan=plan;
- }
-}
-
-function paymentDone(){
- let mob=localStorage.getItem('current_mob');
- let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
- if(all[mob]){ all[mob].paid=true; localStorage.setItem('all_saahi_customers',JSON.stringify(all)); }
- alert('Payment Verified! ✅\nHome pe le ja raha hu...');
- window.location.href = 'customer.html?book=true&paid='+Date.now();
-}
-function goToBooking(){
- document.getElementById('found').style.display='none';
- document.getElementById('reg').style.display='none';
- document.getElementById('book').style.display='block';
-}
-}
-
-function goToBooking(){
- document.getElementById('found').style.display='none';
- document.getElementById('book').style.display='block';
-}
-function bookRide(){
- let mob=localStorage.getItem('current_mob');
- let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
- let cust=all[mob];
- let ride={...cust, from:b_from.value, to:b_to.value, date:b_date.value, time_slot:b_time.value, booked_at:new Date().toLocaleString()};
- localStorage.setItem('saahi_ride',JSON.stringify(ride));
- document.getElementById('b_msg').innerText="Ride Booked! 🚖 Home pe ja raha hu...";
- setTimeout(()=>window.location.href='index.html',1500);
-}
+const RATES={bike_std:{r:10,b:10,n:30,name:"Bike Std"},bike_prio:{r:12,b:12,n:35,name:"Bike Priority"},bike_prem:{r:15,b:15,n:40,name:"Bike Premium"},scooty_std:{r:13,b:13,n:45,name:"Scooty Std"},scooty_prio:{r:15,b:15,n:50,name:"Scooty Priority"},scooty_ev:{r:17,b:17,n:55,name:"Scooty EV"},auto_std:{r:19,b:19,n:60,name:"Auto Std"},auto_prio:{r:21,b:21,n:70,name:"Auto Priority"},auto_prem:{r:23,b:23,n:80,name:"Auto Premium"},ev_auto:{r:25,b:25,n:85,name:"EV Auto"},nonac_std:{r:27,b:27,n:75,name:"Non-AC Std"},nonac_prio:{r:28,b:28,n:85,name:"Non-AC Priority"},nonac_prem:{r:29,b:29,n:95,name:"Non-AC Premium"},ac_std:{r:31,b:31,n:100,name:"AC Std"},ac_city:{r:33,b:33,n:105,name:"AC City"},ac_prem:{r:35,b:35,n:110,name:"AC Premium"}};
+function getMult(d){if(d<=5)return{m:1,s:"0-5 km 1x"};if(d<=10)return{m:1.25,s:"5-10 km 1.25x"};if(d<=15)return{m:1.5,s:"10-15 km 1.50x"};if(d<=20)return{m:1.75,s:"15-20 km 1.75x"};if(d<=25)return{m:2,s:"20-25 km 2.00x"};if(d<=30)return{m:2.25,s:"25-30 km 2.25x"};if(d<=35)return{m:2.5,s:"30-35 km 2.50x"};if(d<=40)return{m:2.75,s:"35-40 km 2.75x"};return{m:3,s:"40+ km 3.00x"};}
+function calculateFare(){let d=parseFloat(document.getElementById('b_km').value);if(!d||d<=0)return;let cat=RATES[document.getElementById('category').value];let t=document.getElementById('b_time').value;let hour=t?parseInt(t.split(':')[0]):new Date().getHours();let isNight=(hour>=21||hour<6);let{m,s}=getMult(d);let fare=0,html="";if(d<=5){fare=cat.b;html=<b>Slab:</b> ${s}<br>Base = <b>₹${cat.b}</b>;}else{let rem=d-5;let ch=rem*cat.r*m;fare=cat.b+ch;html=<b>Slab:</b> ${s}<br>Base 5km ₹${cat.b} + Rem ${rem.toFixed(2)}km × ₹${cat.r} × ${m}x = ₹${Math.round(ch)}<br><b>Day = ₹${Math.round(fare)}</b>;}if(isNight){html+=<br><span style='color:red'>🌙 Night 9PM-6AM +₹${cat.n}</span><br><h3>Total = ₹${Math.round(fare+cat.n)}</h3>;fare+=cat.n;}else{html+=<br>☀️ Day<br><h3>Total = ₹${Math.round(fare)}</h3>;}document.getElementById('fareBill').innerHTML=<b>${cat.name} | ${d}km | ${s}</b><br>${html};document.getElementById('fareBill').style.display='block';window.finalFare=Math.round(fare);document.getElementById('confirmRideBtn').innerText=Confirm - Pay ₹${window.finalFare} ${isNight?'🌙':''} 🚖;}
+function checkCustomer(){let mob=check_mob.value.trim();let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');if(all[mob]){let c=all[mob];step1.style.display='none';found.style.display='block';custDisplay.innerHTML="<b>"+c.name+"</b><br>"+c.route+"<br>"+c.service+" - "+c.trip;localStorage.setItem('current_mob',mob);b_from.value=c.route?c.route.split(' to ')[0]:'';b_to.value=c.route?c.route.split(' to ')[1]:'';}else{step1.style.display='none';reg.style.display='block';wa_mob.value=mob;}}
+function registerCustomer(){let mob=wa_mob.value.trim();let cname=cust_name.value.trim();if(!cname||!mob){alert('Name & Mobile bharo Mamu');return;}let service=document.querySelector('input[name="service"]:checked').value;let trip=document.querySelector('input[name="trip"]:checked').value;let cust={name:cname,aadhar:aadhar.value,aadhar_mob:aadhar_mob.value,wa_mob:mob,email:email.value,route:route.value,service:service,trip:trip,time:new Date().toLocaleString()};let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');all[mob]=cust;localStorage.setItem('all_saahi_customers',JSON.stringify(all));localStorage.setItem('saahi_customer',JSON.stringify(cust));localStorage.setItem('current_mob',mob);if(service=='on_demand'){alert('Registered! ✅');goToBooking();}else{let price=0,plan="";if(service=='route_lock'&&trip=='one_way'){price=2999;plan="Route Lock - One Way";}if(service=='route_lock'&&trip=='two_way'){price=4999;plan="Route Lock - Two Way";}if(service=='subscription'&&trip=='one_way'){price=1999;plan="Subscription - One Way";}if(service=='subscription'&&trip=='two_way'){price=3499;plan="Subscription - Two Way";}payScreen.style.display='block';planName.innerText=plan;planPrice.innerText="Pay ₹"+price;regBtn.style.display='none';}}
+function paymentDone(){let mob=localStorage.getItem('current_mob');let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');if(all[mob]){all[mob].paid=true;localStorage.setItem('all_saahi_customers',JSON.stringify(all));}alert('Payment Verified! ✅');goToBooking();}
+function goToBooking(){found.style.display='none';reg.style.display='none';book.style.display='block';}
+function bookRide(){let km=b_km.value;if(!km||!window.finalFare){alert('KM daalo Mamu');return;}let mob=localStorage.getItem('current_mob');let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');let cust=all[mob]||{};let ride={...cust,from:b_from.value,to:b_to.value,date:b_date.value,time_slot:b_time.value,km:km,category:category.value,categoryName:RATES[category.value].name,fare:window.finalFare,booked_at:new Date().toLocaleString()};localStorage.setItem('saahi_ride',JSON.stringify(ride));b_msg.innerHTML=Ride Booked! 🚖<br>${ride.categoryName} - ${km}km = ₹${window.finalFare};setTimeout(()=>window.location.href='index.html',1500);}
+if(new URLSearchParams(window.location.search).get('book')=='true'){goToBooking();}
 </script>
 </body>
 </html>
