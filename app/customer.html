@@ -2,139 +2,151 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SaahiRides - Customer</title>
+<title>SaahiRides Customer</title>
 <style>
 body{background:#0A1931;color:#fff;font-family:Arial;padding:15px;margin:0;text-align:center;}
 .card{background:#102542;padding:20px;border-radius:15px;max-width:450px;margin:15px auto;border:1px solid #FFD700;text-align:left;}
-input,select{width:95%;padding:12px;margin:7px 0;border-radius:8px;border:none;font-size:15px;}
+input{width:95%;padding:12px;margin:7px 0;border-radius:8px;border:none;font-size:15px;}
 .btn{padding:14px;width:100%;border-radius:12px;font-weight:bold;border:none;margin-top:12px;font-size:16px;}
-.gold{background:#FFD700;color:#0A1931;}
-.green{background:#00c853;color:#fff;}
-.box{border:1px solid #FFD700;padding:10px;border-radius:10px;margin:8px 0;}
+.gold{background:#FFD700;color:#0A1931;}.green{background:#00c853;color:#fff;}
+.box{border:1px solid #FFD700;padding:12px;border-radius:10px;margin:10px 0;}
+.pay{background:#fff;color:#0A1931;padding:15px;border-radius:12px;text-align:center;margin-top:15px;}
 label{color:#FFD700;font-size:13px;}
 </style>
 </head>
 <body>
 <h2 style="color:#FFD700">SaahiRides Customer</h2>
 
-<!-- STEP 1 - MOBILE CHECK -->
 <div class="card" id="step1">
-<h3 style="text-align:center">Enter Your Mobile Number</h3>
-<input id="check_mob" placeholder="Enter WhatsApp Mobile Number" type="tel">
+<h3 style="text-align:center">Enter Mobile Number</h3>
+<input id="check_mob" placeholder="WhatsApp Number" type="tel">
 <button class="btn gold" onclick="checkCustomer()">Check My Records 🔍</button>
-<p id="check_msg" style="text-align:center;color:#00ff88"></p>
 </div>
 
-<!-- STEP 2A - IF FOUND -->
 <div class="card" id="found" style="display:none">
-<h3 style="text-align:center">Welcome Back! 👋</h3>
-<div id="custDisplay" style="background:#fff;color:#0A1931;padding:12px;border-radius:8px;font-size:14px"></div>
+<h3>Welcome Back! 👋</h3>
+<div id="custDisplay" style="background:#fff;color:#0A1931;padding:12px;border-radius:8px"></div>
 <button class="btn green" onclick="goToBooking()">Confirm to Book Ride ✅</button>
-<button class="btn" style="background:transparent;border:1px solid #FFD700;color:#FFD700" onclick="showReg()">Edit / New Registration</button>
 </div>
 
-<!-- STEP 2B - IF NOT FOUND / NEW REG -->
 <div class="card" id="reg" style="display:none">
-<h3 style="text-align:center">New Customer Registration</h3>
-<input id="cust_name" placeholder="Full Name (Aadhar as per)">
-<input id="aadhar" placeholder="Aadhar Number">
+<h3 style="text-align:center">New Registration</h3>
+<input id="cust_name" placeholder="Full Name">
+<input id="aadhar" placeholder="Aadhar Number - 12 Digit">
 <input id="aadhar_mob" placeholder="Aadhar Linked Mobile">
 <input id="wa_mob" placeholder="WhatsApp Mobile">
-<input id="email" placeholder="Email">
+<input id="email" placeholder="Email - Subodh.Dandapat@gmail.com">
 <input id="route" placeholder="Route - Eg: Nagaram to ECIL">
 <div class="box">
 <label>Service:</label><br>
-<input type="radio" name="service" value="route_lock" checked> Route Lock
-<input type="radio" name="service" value="on_demand"> On Demand
+<input type="radio" name="service" value="route_lock" checked> Route Lock<br>
+<input type="radio" name="service" value="on_demand"> On Demand<br>
 <input type="radio" name="service" value="subscription"> Subscription
-<br><br>
+<hr>
 <label>Trip:</label><br>
 <input type="radio" name="trip" value="one_way" checked> One Way
 <input type="radio" name="trip" value="two_way"> Two Way
 </div>
-<button class="btn gold" onclick="registerCustomer()">Register & Continue to Payment</button>
+<button class="btn gold" id="regBtn" onclick="registerCustomer()">Register & Continue</button>
+
+<div id="payScreen" style="display:none" class="pay">
+<h3 id="planName"></h3>
+<h2 id="planPrice"></h2>
+<p>UPI ID: saahirides@upi</p>
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=saahirides@upi" width="180">
+<br><br>
+<button class="btn green" onclick="paymentDone()">I Have Paid ✅</button>
+</div>
 </div>
 
-<!-- STEP 3 - BOOK RIDE -->
 <div class="card" id="book" style="display:none">
-<h3 style="text-align:center">Book Your Ride</h3>
+<h3>Book Your Ride</h3>
 <input id="b_from" placeholder="From">
 <input id="b_to" placeholder="To">
 <input id="b_date" type="date">
 <input id="b_time" type="time">
-<button class="btn green" onclick="bookRide()">Confirm Ride Booking 🚖</button>
-<p id="b_msg" style="color:#00ff88;text-align:center"></p>
+<button class="btn green" onclick="bookRide()">Confirm Booking 🚖</button>
+<p id="b_msg"></p>
 </div>
 
 <script>
-// DATABASE CHECK - abhi localStorage se, baad me Google Sheet se
 function checkCustomer(){
- let mob = document.getElementById('check_mob').value.trim();
- if(mob.length < 10){alert('Sahi mobile daalo'); return;}
-
- // Local me check
- let allCustomers = JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
-
- if(allCustomers[mob]){
-   // MIL GAYA
-   let c = allCustomers[mob];
+ let mob=document.getElementById('check_mob').value.trim();
+ let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
+ if(all[mob]){
+   let c=all[mob];
    document.getElementById('step1').style.display='none';
    document.getElementById('found').style.display='block';
-   document.getElementById('custDisplay').innerHTML =
-     "<b>Name:</b> "+c.name+"<br><b>Aadhar:</b> "+c.aadhar+"<br><b>Route:</b> "+c.route+"<br><b>Plan:</b> "+c.service+" - "+c.trip+"<br><b>WhatsApp:</b> "+c.wa_mob;
-   // auto fill booking
-   document.getElementById('b_from').value = c.route? c.route.split(' to ')[0] : '';
-   document.getElementById('b_to').value = c.route? c.route.split(' to ')[1] : '';
-   localStorage.setItem('current_mob', mob);
+   document.getElementById('custDisplay').innerHTML="<b>"+c.name+"</b><br>"+c.route+"<br>"+c.service+" - "+c.trip;
+   localStorage.setItem('current_mob',mob);
+   // auto fill
+   document.getElementById('b_from').value=c.route?c.route.split(' to ')[0]:'';
+   document.getElementById('b_to').value=c.route?c.route.split(' to ')[1]:'';
  } else {
-   // NAHI MILA - Registration pe bhejo
    document.getElementById('step1').style.display='none';
    document.getElementById('reg').style.display='block';
-   document.getElementById('wa_mob').value = mob;
-   document.getElementById('check_msg').innerText = "New customer, please register";
+   document.getElementById('wa_mob').value=mob;
  }
 }
 
-function showReg(){
- document.getElementById('found').style.display='none';
- document.getElementById('reg').style.display='block';
+function registerCustomer(){
+ let mob=document.getElementById('wa_mob').value.trim();
+ let cname=document.getElementById('cust_name').value.trim();
+ if(!cname||!mob){alert('Name & Mobile bharo Mamu');return;}
+
+ let service=document.querySelector('input[name="service"]:checked').value;
+ let trip=document.querySelector('input[name="trip"]:checked').value;
+
+ let cust={
+   name:cname, aadhar:document.getElementById('aadhar').value,
+   aadhar_mob:document.getElementById('aadhar_mob').value, wa_mob:mob,
+   email:document.getElementById('email').value, route:document.getElementById('route').value,
+   service:service, trip:trip, time:new Date().toLocaleString()
+ };
+
+ let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
+ all[mob]=cust;
+ localStorage.setItem('all_saahi_customers',JSON.stringify(all));
+ localStorage.setItem('saahi_customer',JSON.stringify(cust));
+ localStorage.setItem('current_mob',mob);
+
+ // LOGIC - Tumne jo bola
+ if(service=='on_demand'){
+   alert('Registered Successfully Mamu! ✅\n\nPlease REFRESH page & go back to App Home Page to Continue Booking Ride!');
+   window.location.href='index.html';
+ } else {
+   // Route Lock & Subscription - Payment Screen
+   let price=0, plan="";
+   if(service=='route_lock' && trip=='one_way'){price=2999; plan="Route Lock - One Way";}
+   if(service=='route_lock' && trip=='two_way'){price=4999; plan="Route Lock - Two Way";}
+   if(service=='subscription' && trip=='one_way'){price=1999; plan="Subscription - One Way / Month";}
+   if(service=='subscription' && trip=='two_way'){price=3499; plan="Subscription - Two Way / Month";}
+
+   document.getElementById('payScreen').style.display='block';
+   document.getElementById('planName').innerText=plan;
+   document.getElementById('planPrice').innerText="Pay ₹"+price;
+   document.getElementById('regBtn').style.display='none';
+   window.price=price; window.plan=plan;
+ }
 }
 
-function registerCustomer(){
- let mob = document.getElementById('wa_mob').value.trim();
- let cust = {
-   name: name.value, aadhar: aadhar.value, aadhar_mob: aadhar_mob.value,
-   wa_mob: mob, email: email.value, route: route.value,
-   service: document.querySelector('input[name="service"]:checked').value,
-   trip: document.querySelector('input[name="trip"]:checked').value,
-   time: new Date().toLocaleString()
- };
- if(!cust.name ||!cust.wa_mob){alert('Name Mobile bharo'); return;}
-
- let all = JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
- all[mob] = cust;
- localStorage.setItem('all_saahi_customers', JSON.stringify(all));
- localStorage.setItem('saahi_customer', JSON.stringify(cust));
- localStorage.setItem('current_mob', mob);
-
- alert('Registered! Payment Done ✅');
- goToBooking();
+function paymentDone(){
+ alert('Payment Verified! ✅\nRefresh & Go to Home to Book Ride');
+ window.location.href='index.html';
 }
 
 function goToBooking(){
  document.getElementById('found').style.display='none';
- document.getElementById('reg').style.display='none';
  document.getElementById('book').style.display='block';
 }
-
 function bookRide(){
- let mob = localStorage.getItem('current_mob');
- let cust = JSON.parse(localStorage.getItem('all_saahi_customers')||'{}')[mob];
- let ride = {...cust, from:b_from.value, to:b_to.value, date:b_date.value, time_slot:b_time.value, booked_at: new Date().toLocaleString()};
- if(!ride.from ||!ride.to){alert('From To bharo'); return;}
- localStorage.setItem('saahi_ride', JSON.stringify(ride));
- document.getElementById('b_msg').innerText = "Ride Booked! Driver ko bhej diya 🚖";
- setTimeout(()=>{ window.location.href='index.html'; },2000);
+ let mob=localStorage.getItem('current_mob');
+ let all=JSON.parse(localStorage.getItem('all_saahi_customers')||'{}');
+ let cust=all[mob];
+ let ride={...cust, from:b_from.value, to:b_to.value, date:b_date.value, time_slot:b_time.value, booked_at:new Date().toLocaleString()};
+ localStorage.setItem('saahi_ride',JSON.stringify(ride));
+ document.getElementById('b_msg').innerText="Ride Booked! 🚖 Home pe ja raha hu...";
+ setTimeout(()=>window.location.href='index.html',1500);
 }
 </script>
 </body>
