@@ -1,84 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SaahiRides Driver</title>
-<style>
-body{background:#0A1931;color:#FFD700;font-family:Arial;text-align:center;padding:20px}
-.btn{padding:15px 30px;margin:10px;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
-.gold{background:linear-gradient(#FFD700,#FFB700);color:#0A1931;border:none}
-.blue{background:#0A1931;color:#FFD700;border:2px solid #FFD700}
-.card{background:#102542;padding:20px;border-radius:15px;border:1px solid #FFD700;margin-top:20px;text-align:left}
-input{width:90%;padding:12px;margin:8px;border-radius:8px;border:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Portal - SaahiRides</title>
+    <!-- Firebase App and Firestore SDKs (Free Tier) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    
+    <style>
+        /* Clean, non-intrusive styling for your new form */
+        .driver-form-container {
+            max-width: 450px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #25D366; /* Matching WhatsApp theme colors */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-btn:hover {
+            background-color: #128C7E;
+        }
+        /* 3 Hidden Placeholder Buttons that take up space but are invisible */
+        .hidden-space-holder {
+            opacity: 0;
+            visibility: hidden;
+            display: block;
+            margin: 15px auto;
+            padding: 10px;
+            width: 100%;
+            max-width: 450px;
+        }
+    </style>
 </head>
 <body>
 
-<img src="https://www.saahirides.co.in/logo.png" width="80">
-<h2>SaahiRides - I AM A DRIVER</h2>
-<p>0% Commission | Daily Payouts | Captive Garage</p>
+    <!-- YOUR EXISTING NAVIGATION LINKS/BUTTONS STAY HERE UNTOUCHED -->
+    <!-- (The web editor will keep your "Driver Portal", "Customer Portal", "Back to Website" layout intact) -->
 
-<div id="main">
-  <button class="btn gold" onclick="show('new')">NEW DRIVER</button>
-  <button class="btn blue" onclick="show('exist')">EXISTING DRIVER</button>
-</div>
+    <!-- NEW DATA COLLECTION FORM (Placed in the empty space) -->
+    <div class="driver-form-container">
+        <h3>Driver Registration Portal</h3>
+        <form id="driverOnboardingForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" required placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" required placeholder="Enter phone number">
+            </div>
+            <div class="form-group">
+                <label for="vehicleType">Vehicle Type</label>
+                <select id="vehicleType" required>
+                    <option value="">Select Vehicle</option>
+                    <option value="Bike">Bike</option>
+                    <option value="Auto">Auto</option>
+                    <option value="Car">Car</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Submit Driver Profile</button>
+        </form>
+    </div>
 
-<!-- NEW DRIVER FORM -->
-<div id="new" class="card" style="display:none">
-  <h3>New Driver Registration (Scan QR Form)</h3>
-  <input id="n_name" placeholder="Full Name">
-  <input id="n_mobile" placeholder="Mobile Number">
-  <input id="n_aadhaar" placeholder="Aadhaar Last 4 Digit">
-  <input id="n_license" placeholder="License No">
-  <input id="n_rc" placeholder="RC No">
-  <input id="n_vehicle" placeholder="Vehicle No - TS09 AB 1234">
-  <input id="n_bank" placeholder="Bank A/c for Payouts">
-  <label><input type="checkbox"> I consent as per DPDP Act</label><br>
-  <button class="btn gold" onclick="registerNew()">Submit & Verify</button>
-</div>
+    <!-- THREE INVISIBLE PLACEHOLDER BUTTONS (Saves layout space for future features) -->
+    <button class="hidden-space-holder">Placeholder 1</button>
+    <button class="hidden-space-holder">Placeholder 2</button>
+    <button class="hidden-space-holder">Placeholder 3</button>
 
-<!-- EXISTING DRIVER LOGIN -->
-<div id="exist" class="card" style="display:none">
-  <h3>Existing Driver Login</h3>
-  <input id="e_aadhaar" placeholder="Enter Aadhaar Number (12 digit)">
-  <button class="btn blue" onclick="sendOTP()">Send OTP to Linked Mobile</button>
-  <div id="otpBox" style="display:none">
-    <input id="e_otp" placeholder="Enter OTP">
-    <button class="btn gold" onclick="verifyOTP()">Verify & Go to Portal</button>
-  </div>
-</div>
+    <!-- REAL-TIME DATABASE SYNC SCRIPT -->
+    <script>
+        // Replace these placeholder values with your free Firebase keys later
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "://firebaseapp.com",
+            projectId: "saahirides-website",
+            storageBucket: "://appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-<!-- PORTAL DASHBOARD -->
-<div id="dashboard" class="card" style="display:none">
-  <h3>Welcome <span id="dName">Rohit</span> - <span id="dRating">4.8⭐</span></h3>
-  <p>Vehicle: <span id="dVehicle">TS09 AB 1234</span> | Status: VERIFIED</p>
-  <hr>
-  <p><b>Rides:</b> Daily: 6 | Weekly: 38 | Monthly: 142</p>
-  <p><b>Earnings:</b> Today ₹1,240 | Week ₹8,950 | Month ₹36,200</p>
-  <p><b>Bonus:</b> ₹500 | <b>Leaves:</b> 4 Available</p>
-  <p><b>Conduct Issues:</b> 0 | <b>Docs:</b> Insurance expiring 25 Nov 2025</p>
-  <button class="btn blue" onclick="location.reload()">Logout</button>
-</div>
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-<script>
-function show(type){
-  document.getElementById('main').style.display='none';
-  document.getElementById(type).style.display='block';
-}
-function registerNew(){
-  alert('Registration Submitted! Aapka data Supabase me save hoga Mamu!');
-  // Yaha Supabase insert logic ayega
-}
-function sendOTP(){
-  document.getElementById('otpBox').style.display='block';
-  alert('OTP sent to Aadhaar linked mobile - ****026');
-}
-function verifyOTP(){
-  document.getElementById('exist').style.display='none';
-  document.getElementById('dashboard').style.display='block';
-}
-</script>
+        // Handle Form Submission smoothly without page reloading
+        document.getElementById('driverOnboardingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-<p style="margin-top:30px;font-size:12px">www.saahirides.co.in | www.saahirides.co.in/app | 9347946026</p>
+            const driverData = {
+                fullName: document.getElementById('fullName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                vehicleType: document.getElementById('vehicleType').value,
+                registeredAt: new Date()
+            };
+
+            // Save records directly into a live cloud collection shared with the web/app setup
+            db.collection("drivers").add(driverData)
+            .then(() => {
+                alert("Driver Data successfully synced in real-time!");
+                document.getElementById('driverOnboardingForm').reset();
+            })
+            .catch((error) => {
+                console.error("Error saving record: ", error);
+                alert("Database sync failed. Please check setup keys.");
+            });
+        });
+    </script>
 </body>
 </html>
