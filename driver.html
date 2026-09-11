@@ -3,136 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Portal - SaahiRides</title>
-    <!-- Firebase App and Firestore SDKs (Free Tier) -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    
+    <title>Driver Network - SaahiRides</title>
     <style>
-        /* Clean, non-intrusive styling for your new form */
-        .driver-form-container {
-            max-width: 450px;
-            margin: 30px auto;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
             padding: 20px;
-            background: #f9f9f9;
+            color: #333;
+        }
+        .portal-wrapper {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        h2 { margin-bottom: 25px; color: #111; }
+        
+        /* Interactive Toggle Action Layout */
+        .action-card {
+            background: #fafafa;
+            border: 1px solid #eaeaea;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
-        .form-group {
-            margin-bottom: 15px;
+        .action-card:hover {
+            border-color: #25D366;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
+        .action-title {
+            font-size: 18px;
             font-weight: bold;
+            margin-bottom: 10px;
         }
-        .form-group input, .form-group select {
+        .action-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        /* Styled Input Elements */
+        .whatsapp-input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            background-color: #25D366; /* Matching WhatsApp theme colors */
-            color: white;
             padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        
+        /* Functional Button Themes */
+        .btn-registration {
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            padding: 14px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             width: 100%;
             font-size: 16px;
             cursor: pointer;
             font-weight: bold;
         }
-        .submit-btn:hover {
-            background-color: #128C7E;
+        .btn-signin {
+            background-color: #007bff; /* Corporate Active Blue */
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
         }
-        /* 3 Hidden Placeholder Buttons that take up space but are invisible */
+        
+        /* 3 Hidden Placeholder Buttons for Balance Restorations */
         .hidden-space-holder {
             opacity: 0;
             visibility: hidden;
             display: block;
-            margin: 15px auto;
-            padding: 10px;
-            width: 100%;
-            max-width: 450px;
+            margin: 10px auto;
+            height: 20px;
         }
     </style>
 </head>
 <body>
 
-    <!-- YOUR EXISTING NAVIGATION LINKS/BUTTONS STAY HERE UNTOUCHED -->
-    <!-- (The web editor will keep your "Driver Portal", "Customer Portal", "Back to Website" layout intact) -->
+    <!-- PORTAL CONTAINER -->
+    <div class="portal-wrapper">
+        <h2>SaahiRides Driver Network</h2>
 
-    <!-- NEW DATA COLLECTION FORM (Placed in the empty space) -->
-    <div class="driver-form-container">
-        <h3>Driver Registration Portal</h3>
-        <form id="driverOnboardingForm">
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" required placeholder="Enter full name">
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="tel" id="phoneNumber" required placeholder="Enter phone number">
-            </div>
-            <div class="form-group">
-                <label for="vehicleType">Vehicle Type</label>
-                <select id="vehicleType" required>
-                    <option value="">Select Vehicle</option>
-                    <option value="Bike">Bike</option>
-                    <option value="Auto">Auto</option>
-                    <option value="Car">Car</option>
-                </select>
-            </div>
-            <button type="submit" class="submit-btn">Submit Driver Profile</button>
-        </form>
+        <!-- BUTTON BLOCK 1: NEW DRIVER REGISTRATION FILTER -->
+        <div class="action-card">
+            <div class="action-title" style="color: #25D366;">New Driver Registration</div>
+            <div class="action-desc">Enter your WhatsApp Mobile Number to securely receive the verification paperwork and registration links directly to your chat.</div>
+            <form id="whatsappOnboardingForm">
+                <input type="tel" id="driverWhatsApp" class="whatsapp-input" placeholder="Enter WhatsApp Mobile Number" required>
+                <button type="submit" class="btn-registration">Get Registration Form via WhatsApp</button>
+            </form>
+        </div>
+
+        <!-- BUTTON BLOCK 2: VERIFIED SIGN-IN & ACTIVE SUBSCRIPTION MANAGEMENT -->
+        <div class="action-card">
+            <div class="action-title" style="color: #007bff;">Already Registered?</div>
+            <div class="action-desc">Activate your account tier plan, process portal subscription fees, and securely authenticate to launch your dashboard.</div>
+            <button class="btn-signin" onclick="navigateToDashboard()">Activate Plan & Sign In</button>
+        </div>
     </div>
 
-    <!-- THREE INVISIBLE PLACEHOLDER BUTTONS (Saves layout space for future features) -->
-    <button class="hidden-space-holder">Placeholder 1</button>
-    <button class="hidden-space-holder">Placeholder 2</button>
-    <button class="hidden-space-holder">Placeholder 3</button>
+    <!-- PRESERVING YOUR 3 INVISIBLE INTERACTIVE PLACEHOLDERS -->
+    <div class="hidden-space-holder"></div>
+    <div class="hidden-space-holder"></div>
+    <div class="hidden-space-holder"></div>
 
-    <!-- REAL-TIME DATABASE SYNC SCRIPT -->
+    <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Replace these placeholder values with your free Firebase keys later
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "://firebaseapp.com",
-            projectId: "saahirides-website",
-            storageBucket: "://appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Handle Form Submission smoothly without page reloading
-        document.getElementById('driverOnboardingForm').addEventListener('submit', function(e) {
+        // Securely hooks the Google Form destination and dispatches via official WhatsApp API
+        document.getElementById('whatsappOnboardingForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const driverData = {
-                fullName: document.getElementById('fullName').value,
-                phoneNumber: document.getElementById('phoneNumber').value,
-                vehicleType: document.getElementById('vehicleType').value,
-                registeredAt: new Date()
-            };
-
-            // Save records directly into a live cloud collection shared with the web/app setup
-            db.collection("drivers").add(driverData)
-            .then(() => {
-                alert("Driver Data successfully synced in real-time!");
-                document.getElementById('driverOnboardingForm').reset();
-            })
-            .catch((error) => {
-                console.error("Error saving record: ", error);
-                alert("Database sync failed. Please check setup keys.");
-            });
+            
+            const rawPhone = document.getElementById('driverWhatsApp').value;
+            const cleanPhone = rawPhone.replace(/\D/g, ''); // Strips out special characters or symbols
+            
+            const googleFormUrl = "https://google.com";
+            
+            // Professional automated onboarding message template
+            const message = encodeURIComponent(Welcome to SaahiRides! 🎉\n\nPlease complete your driver onboarding verification paperwork by filling out the official form link below:\n\n🔗 ${googleFormUrl}\n\nOnce completed, return to the platform to activate your profile plan.);
+            
+            // Redirects safely using standard window handler
+            window.open(https://wa.me{cleanPhone}?text=${message}, '_blank');
         });
+
+        // Routes verified drivers to their payment options and account portals
+        function navigateToDashboard() {
+            // This can link to a future activation payment gateway or profile dashboard page
+            alert("Redirecting to Plan Activation, Subscriptions, and Login Portal...");
+            // window.location.href = "activation.html"; // Toggle this file path when built
+        }
     </script>
 </body>
 </html>
