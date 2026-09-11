@@ -1,186 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Account Activation - SaahiRides</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 550px;
-            margin: 30px auto;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-        h2 { text-align: center; margin-bottom: 5px; color: #111; }
-        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; }
-        
-        .alert-window {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-
-        /* Dynamic Plan Summary Layout */
-        .plan-summary-card {
-            background: #f8fafd;
-            border: 2px dashed #007bff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .plan-title { font-size: 18px; font-weight: bold; color: #007bff; margin-bottom: 5px; }
-        .plan-pricing-math { font-size: 24px; font-weight: bold; color: #222; margin: 10px 0; }
-        .plan-badge {
-            display: inline-block;
-            background: #28a745;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .btn-submit {
-            background-color: #007bff;
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 6px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .btn-submit:hover { background-color: #0056b3; }
-
-        /* Key Generation Layout Box */
-        .success-box {
-            display: none;
-            background: #e2f0d9;
-            border: 1px solid #b5d99c;
-            color: #385723;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .access-key {
-            font-family: monospace;
-            font-size: 22px;
-            font-weight: bold;
-            background: #fff;
-            padding: 10px;
-            border: 2px dashed #385723;
-            display: inline-block;
-            margin: 15px 0;
-            letter-spacing: 2px;
-            color: #111;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h2>Driver Plan Activation</h2>
-        <div class="subtitle">Complete your tier activation within the designated time frame window.</div>
-
-        <!-- DYNAMIC 5-DAY ACTIVATION DEADLINE CLOCK WARNING -->
-        <div class="alert-window" id="deadlineAlert">
-            ⚠️ Setup Complete! Your activation window expires on: <span id="expDate">Loading...</span> (5 days remaining to clear payment)
-        </div>
-
-        <form id="paymentActivationForm">
-            <!-- MOBILE VALIDATION -->
-            <div class="form-group">
-                <label for="driverPhone">Registered Mobile Number</label>
-                <input type="tel" id="driverPhone" class="form-control" placeholder="Enter 10-digit mobile number" required pattern="[0-9]{10}">
-            </div>
-
-            <!-- VEHICLE SELECTION SWITCH -->
-            <div class="form-group">
-                <label for="vehicleCategory">Select Vehicle Category</label>
-                <select id="vehicleCategory" class="form-control" required onchange="calculateTierPlan()">
-                    <option value="">-- Choose Category --</option>
-                    <option value="bike">Bike Driver</option>
-                    <option value="scooty">Scooty Driver</option>
-                    <option value="auto">Auto Driver</option>
-                    <option value="nonac">Non-AC Cab</option>
-                    <option value="accab">AC Cab</option>
-                </select>
-            </div>
-
-            <!-- DYNAMIC MATHEMATICAL PRICING CARD CARD -->
-            <div id="planSummaryCard" class="plan-summary-card">
-                <div class="plan-title" id="displayPlanTitle">Standard Pack</div>
-                <div class="plan-badge" id="displayOffer">1 Month Free Included</div>
-                <div class="plan-pricing-math" id="displayMath">₹0</div>
-                <div style="font-size: 13px; color: #555;" id="displayTerms">Plan valid for 90 Days cycle window.</div>
-            </div>
-
-            <button type="submit" class="btn-submit">Secure Payment Checkout (Mock)</button>
-        </form>
-
-        <!-- SECURE ONE-TIME VALID 90-DAY KEY GENERATOR BOX -->
-        <div id="successBox" class="success-box">
-            <h3>🎉 Activation Successful!</h3>
-            <p>Your subscription is verified and active for the next 90 days.</p>
-            <p>Here is your new secure one-time token access key to open your dashboard portal:</p>
-            <div class="access-key" id="generatedKey">SR-XXXX-XXXX</div>
-            <p style="font-size: 12px; font-weight: bold; color: #c00000;">⚠️ This token key is strictly valid for 1 execution login. Keep it secure.</p>
-            <button class="btn-submit" style="background: #385723; margin-top: 10px;" onclick="enterDashboard()">Enter Driver Dashboard</button>
-        </div>
-    </div>
-
+<!-- MAKE SURE THIS SCRIPT BLOCK SITS RIGHT ABOVE YOUR CLOSING </body> TAG -->
     <script>
-        // Set exact dynamic 5-day expiration calendar limits upon load
+        // Set dynamic 5-day expiration limits
         const today = new Date();
         const expirationDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000));
         document.getElementById('expDate').innerText = expirationDate.toLocaleDateString('en-IN', { 
             weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
         });
 
-        // Exact operational pricing data model requested
+        // Your specific operational pricing data model matrix
         const pricingMatrix = {
-            bike: { title: "Bike Driver Plan", math: "₹699 x 2 = ₹1,398", total: 1398, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            scooty: { title: "Scooty Driver Plan", math: "₹899 x 2 = ₹1,798", total: 1798, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            auto: { title: "Auto Driver Plan", math: "₹1,199 x 2 = ₹2,398", total: 2398, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            nonac: { title: "Non-AC Cab Plan", math: "₹1,499 x 2 = ₹2,998", total: 2998, terms: "3 Months Plan Bundle (Includes 1 Month FREE Protection)" },
-            accab: { title: "AC Cab Premium Plan", math: "₹1,699 x 2 = ₹3,998", total: 3998, terms: "3 Months Plan Bundle (Includes 1 Month Discount Applied)" }
+            bike: { title: "Bike Driver Plan", math: "₹699 x 2 = ₹1,398", total: 1398, terms: "3 Months Bundle (Includes 1 Month OFF)" },
+            scooty: { title: "Scooty Driver Plan", math: "₹899 x 2 = ₹1,798", total: 1798, terms: "3 Months Bundle (Includes 1 Month OFF)" },
+            auto: { title: "Auto Driver Plan", math: "₹1,199 x 2 = ₹2,398", total: 2398, terms: "3 Months Bundle (Includes 1 Month OFF)" },
+            nonac: { title: "Non-AC Cab Plan", math: "₹1,499 x 2 = ₹2,998", total: 2998, terms: "3 Months Bundle (Includes 1 Month FREE)" },
+            accab: { title: "AC Cab Premium Plan", math: "₹1,699 x 2 = ₹3,998", total: 3998, terms: "3 Months Bundle (Includes 1 Month Discount)" }
         };
 
         function calculateTierPlan() {
@@ -200,7 +33,7 @@
             summaryCard.style.display = "block";
         }
 
-        // Mock Payment Processing & Secure Lifecycle Key Creation Logic
+        // Mock Checkout Form Form Submission Handler
         document.getElementById('paymentActivationForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -208,23 +41,24 @@
             const category = document.getElementById('vehicleCategory').value;
             const targetPlan = pricingMatrix[category];
 
-            // Trigger Mock Checkout window
-            alert(Connecting Secure Gateway...\nProcessing transaction total of ₹${targetPlan.total} for your ${targetPlan.title}.\nAccount: +91 ${phone});
+            alert(Connecting Gateway...\nProcessing transaction total of ₹${targetPlan.total} for your ${targetPlan.title}.\nAccount: +91 ${phone});
 
-            // Hide Form Inputs cleanly
             document.getElementById('paymentActivationForm').style.display = "none";
             document.getElementById('deadlineAlert').style.display = "none";
 
-            // Generate a secure crypto-random one-time valid token key string
+            // Generate secure 90-day cycle unique token keys
             const randomString = Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
             const secureKey = SR-${category.toUpperCase()}-${randomString};
             
-            // Set browser tracking local states variables to simulate 90-day execution limits
-            localStorage.setItem('driver_access_token', secureKey);
             localStorage.setItem('subscription_cycle_start', new Date().getTime());
-            localStorage.setItem('subscription_days_limit', 90);
 
-            // Display Success Elements container panel
             document.getElementById('generatedKey').innerText = secureKey;
             document.getElementById('successBox').style.display = "block";
         });
+
+        // CRUCIAL MISSING REDIRECTION LINE FIXED
+        function enterDashboard() {
+            // Because this file sits in the root folder, we route them down into the app directory!
+            window.location.href = "app/dashboard.html";
+        }
+    </script>

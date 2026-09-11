@@ -142,9 +142,9 @@
 
         // Routes verified drivers to their payment options and account portals
         function navigateToDashboard() {
-            // This can link to a future activation payment gateway or profile dashboard page
-            alert("Redirecting to Plan Activation, Subscriptions, and Login Portal...");
-            // window.location.href = "activation.html"; // Toggle this file path when built
+    // Forces the browser to look inside your app subfolder for activation
+    window.location.href = "app/activation.html"; 
+}
         }
     </script>
 </body>
