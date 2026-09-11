@@ -1,48 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SaahiRides - Maza Wala</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<style>
-body{background:#0A1931;color:#fff;font-family:Arial;margin:0;padding:10px}
-.card{background:#102542;border:2px solid #FFD700;border-radius:20px;padding:15px;max-width:500px;margin:10px auto}
-input{width:92%;padding:13px;margin:6px 0;border-radius:12px;border:none;font-size:15px}
-.cat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0}
-.cat{border:2px solid #333;padding:10px 5px;border-radius:12px;text-align:center;cursor:pointer;background:#0A1931;font-size:12px}
-.cat.active{border-color:#FFD700;background:#FFD700;color:#000;transform:scale(1.05);font-weight:bold}
-.btn{padding:16px;width:100%;border-radius:15px;font-weight:bold;border:none;margin-top:12px;font-size:18px;cursor:pointer}
-.gold{background:#FFD700;color:#000}.green{background:#00ff88;color:#000}
-#map{height:200px;border-radius:15px;margin:10px 0;border:2px solid #FFD700}
-#fareBox{background:linear-gradient(135deg,#FFD700,#ff8c00);color:#000;padding:15px;border-radius:15px;margin:10px 0;display:none;text-align:center}
-.km-slider{width:95%!important;accent-color:#FFD700}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Portal - SaahiRides</title>
+    <!-- Matching Firebase SDKs for Shared Sync -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    
+    <style>
+        /* Modern, non-intrusive styling for your customer portal */
+        .customer-form-container {
+            max-width: 450px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+            border: 1px solid #eee;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            background-color: #007bff; /* Distinct color for Customer actions */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h2 style="text-align:center;color:#FFD700">🛺 Book Your Ride</h2>
-<div class="card">
-<div id="map"></div>
-<input id="b_from" placeholder="📍 From - Kahan se?">
-<input id="b_to" placeholder="🏁 To - Kahan tak?">
-<div style="background:#0A1931;padding:10px;border-radius:10px;border:1px solid #FFD700">
-<label style="color:#FFD700">📏 Distance: <span id="kmShow" style="font-size:22px;font-weight:bold">12</span> KM</label>
-<input type="range" min="1" max="50" value="12" class="km-slider" id="b_km" oninput="kmShow.innerText=this.value;calculateFare()">
-</div>
-<div style="display:flex;gap:6px"><input id="b_date" type="date" style="width:48%"><input id="b_time" type="time" value="14:00" style="width:48%" onchange="calculateFare()"></div>
-<label style="color:#FFD700">🚗 Gaadi Chuno - 16 Types:</label>
-<div class="cat-grid" id="catGrid"></div>
-<select id="category" style="display:none"></select>
-<div id="fareBox"></div>
-<button class="btn green" id="bookBtn" onclick="bookRide()">Gaadi Select Karo 👇</button>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-const RATES={bike_std:{r:10,b:10,n:30,name:"Bike Std",icon:"🏍️"},bike_prio:{r:12,b:12,n:35,name:"Bike Pro",icon:"🏍️💨"},bike_prem:{r:15,b:15,n:40,name:"Bike Prem",icon:"🏍️⭐"},scooty_std:{r:13,b:13,n:45,name:"Scooty",icon:"🛵"},scooty_prio:{r:15,b:15,n:50,name:"Scooty Pro",icon:"🛵💨"},scooty_ev:{r:17,b:17,n:55,name:"Scooty EV",icon:"🛵⚡"},auto_std:{r:19,b:19,n:60,name:"Auto",icon:"🛺"},auto_prio:{r:21,b:21,n:70,name:"Auto Pro",icon:"🛺💨"},auto_prem:{r:23,b:23,n:80,name:"Auto Prem",icon:"🛺⭐"},ev_auto:{r:25,b:25,n:85,name:"EV Auto",icon:"🛺⚡"},nonac_std:{r:27,b:27,n:75,name:"Non-AC",icon:"🚗"},nonac_prio:{r:28,b:28,n:85,name:"Non-AC Pro",icon:"🚙"},nonac_prem:{r:29,b:29,n:95,name:"Non-AC Prem",icon:"🚗⭐"},ac_std:{r:31,b:31,n:100,name:"AC Std",icon:"🚕"},ac_city:{r:33,b:33,n:105,name:"AC City",icon:"🚕💙"},ac_prem:{r:35,b:35,n:110,name:"AC Prem",icon:"🚕⭐"}};
-let map=L.map('map').setView([17.45,78.55],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-let grid=document.getElementById('catGrid');for(let k in RATES){let d=document.createElement('div');d.className='cat';d.id='cat_'+k;d.innerHTML=${RATES[k].icon}<br><b>${RATES[k].name}</b><br>₹${RATES[k].r}/km;d.onclick=()=>{document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));d.classList.add('active');category.value=k;calculateFare()};grid.appendChild(d);let o=document.createElement('option');o.value=k;o.text=RATES[k].name;category.appendChild(o);}document.getElementById('cat_nonac_prem').classList.add('active');category.value='nonac_prem';
-function getMult(d){if(d<=5)return{m:1,s:"0-5km 1x"};if(d<=10)return{m:1.25,s:"5-10km 1.25x"};if(d<=15)return{m:1.5,s:"10-15km 1.5x"};if(d<=20)return{m:1.75,s:"15-20km 1.75x"};if(d<=25)return{m:2,s:"20-25km 2x"};if(d<=30)return{m:2.25,s:"25-30km 2.25x"};if(d<=35)return{m:2.5,s:"30-35km 2.5x"};if(d<=40)return{m:2.75,s:"35-40km 2.75x"};return{m:3,s:"40+km 3x"};}
-function calculateFare(){let d=parseFloat(b_km.value)||12;let cat=RATES[category.value];let hour=b_time.value?parseInt(b_time.value.split(':')[0]):14;let isNight=(hour>=21||hour<6);let{m,s}=getMult(d);let fare=d<=5?cat.b:cat.b+(d-5)*cat.r*m;let total=isNight?fare+cat.n:fare;let box=document.getElementById('fareBox');box.style.display='block';box.innerHTML=<div>${cat.icon} ${cat.name} | ${d}KM | ${s}</div><div style="font-size:36px;font-weight:bold">₹${Math.round(total)} ${isNight?'🌙':''}</div><div style="font-size:11px">${d<=5?`Base 5km ₹${cat.b}:Base ₹${cat.b} + ${(d-5).toFixed(1)}km × ₹${cat.r} × ${m}x}${isNight?<br>🌙 Night +₹${cat.n}:'<br>☀️ Day'}</div>;window.finalFare=Math.round(total);bookBtn.innerText=✅ Book ${cat.name} - Pay ₹${window.finalFare} 🚀`;}
-function bookRide(){if(!window.finalFare){alert('Gaadi select kar!');return;}localStorage.setItem('saahi_ride',JSON.stringify({from:b_from.value,to:b_to.value,km:b_km.value,cat:category.value,fare:window.finalFare}));bookBtn.innerHTML='🎉 Booked! Home...';setTimeout(()=>location.href='index.html',1500);}calculateFare();
-</script>
+
+    <!-- YOUR EXISTING NAVIGATION LINKS, REDIRECTIONS, AND WHATSAPP BUTTONS STAY HERE UNTOUCHED -->
+
+    <!-- CLEAN CUSTOMER BOOKING / DATA FORM -->
+    <div class="customer-form-container">
+        <h3>Customer Request Portal</h3>
+        <form id="customerRequestForm">
+            <div class="form-group">
+                <label for="custName">Your Name</label>
+                <input type="text" id="custName" required placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="custPhone">Phone Number</label>
+                <input type="tel" id="custPhone" required placeholder="Enter contact number">
+            </div>
+            <div class="form-group">
+                <label for="pickupLocation">Pickup Location</label>
+                <input type="text" id="pickupLocation" required placeholder="Where should we pick you up?">
+            </div>
+            <div class="form-group">
+                <label for="dropLocation">Drop Location</label>
+                <input type="text" id="dropLocation" required placeholder="Where are you going?">
+            </div>
+            <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+    </div>
+
+    <!-- SHARED REAL-TIME DATABASE SYNC SCRIPT -->
+    <script>
+        // Matching configuration to sync data with the driver files seamlessly
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "://firebaseapp.com",
+            projectId: "saahirides-website",
+            storageBucket: "://appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Handle Customer Request Submission smoothly without page reloading
+        document.getElementById('customerRequestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const customerData = {
+                customerName: document.getElementById('custName').value,
+                customerPhone: document.getElementById('custPhone').value,
+                pickup: document.getElementById('pickupLocation').value,
+                dropoff: document.getElementById('dropLocation').value,
+                status: "Pending", // Drivers will be able to read this and change it to "Accepted"
+                createdAt: new Date()
+            };
+
+            // Save records directly into a live cloud collection shared with the driver portal
+            db.collection("requests").add(customerData)
+            .then(() => {
+                alert("Your ride request has been sent to active drivers in real-time!");
+                document.getElementById('customerRequestForm').reset();
+            })
+            .catch((error) => {
+                console.error("Error creating entry: ", error);
+                alert("Database sync failed. Please check setup keys.");
+            });
+        });
+    </script>
 </body>
 </html>
