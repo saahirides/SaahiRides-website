@@ -3,167 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaahiRides - Hyderabad's Own Ride App</title>
+    <title>SaahiRides Transit Pvt. Ltd.</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            background-color: #0b1a30; /* Main deep portal background color */
             margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        
-        /* Corporate Top Banner Header Styling */
-        .main-header {
-            background-color: #0d2c54; /* Corporate Deep Blue from your screen */
+            padding: 10px;
             color: white;
-            padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .header-title {
-            font-size: 26px;
+
+        /* Full page frame aligning with your creative layouts */
+        .main-frame {
+            max-width: 600px;
+            margin: 15px auto;
+            background: linear-gradient(135deg, #0f2b48 0%, #153b60 100%);
+            border: 2px solid #00bcd4;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+        }
+
+        /* Branding Headers matching screen fonts */
+        .company-header {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .tagline-sub {
+            font-size: 13px;
+            color: #ffd700; /* Gold branding text color */
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .ticker-bar {
+            background-color: #0056b3;
+            color: white;
+            font-size: 11px;
             font-weight: bold;
-            margin: 0;
+            padding: 6px;
+            border-radius: 4px;
+            margin-bottom: 15px;
             letter-spacing: 0.5px;
         }
-        .header-subtitle {
-            font-size: 13px;
-            color: #ffd700; /* Gold subtitle label */
-            margin: 5px 0 0 0;
-        }
-
-        /* Sub-navigation Announcement Alert Panel */
-        .announcement-bar {
-            background-color: #007bff; /* Active Blue Ticker background */
-            color: white;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        /* Centralized Interactive Canvas Area */
-        .portal-body {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            text-align: center;
-        }
-        
-        .welcome-quote {
+        .quote-text {
+            font-size: 12px;
+            color: #a0c0d8;
             font-style: italic;
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Row Layout For Onboarding Operational Actions */
-        .button-grid {
+        /* Navigation Row - Small Pills */
+        .nav-pill-row {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .btn-landing {
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: bold;
-            border: none;
-            border-radius: 30px; /* pill styling from website screenshot */
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            display: inline-block;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .btn-landing:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-        }
-        
-        /* Functional Palette Colors Matching Your Screens */
-        .bg-customer { background-color: #25D366; } /* Bright Green */
-        .bg-driver { background-color: #ff4757; }   /* Vibrant Red/Orange */
-        .bg-app { background-color: #f1f2f6; color: #333; border: 1px solid #ccc; } /* Neutral Light Grey */
-
-        /* Integrated Geographic Map Box Mockup */
-        .map-section {
-            border-top: 1px solid #eee;
-            padding-top: 25px;
-            margin-top: 20px;
-        }
-        .location-tag {
-            font-size: 14px;
-            font-weight: bold;
-            color: #0d2c54;
+            gap: 8px;
+            flex-wrap: wrap;
             margin-bottom: 15px;
         }
-        .mock-map {
-            width: 100%;
-            height: 200px;
-            background-color: #e3edf7;
-            border-radius: 8px;
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-pill:hover {
+            background: #00bcd4;
+            border-color: #00bcd4;
+        }
+        .pill-green-active {
+            background-color: #25D366;
+            border-color: #25D366;
+            font-weight: bold;
+        }
+
+        /* Social Icons & Gold Offers Row */
+        .offers-row {
             display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .social-square {
+            background: #0056b3;
+            color: white;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #555;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: bold;
-            border: 1px dashed #b0c4de;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .gold-offer-btn {
+            background: #ffd700;
+            color: #111;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            border: 1px solid #ffd700;
+        }
+        .vision-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+            border: 1px dashed rgba(255,255,255,0.3);
+        }
+
+        /* Main Gateway Entry Layout Elements */
+        .gateway-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .btn-core {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+        }
+        .btn-core:active {
+            transform: scale(0.97);
+        }
+        .bg-customer-gate { background-color: #25D366; } /* WhatsApp Green */
+        .bg-driver-gate { background-color: #ff7f50; }   /* Vibrant Coral/Orange */
+        .bg-app-gate { background-color: #f1f2f6; color: #333; } /* Light Grey */
+
+        /* Geolocation Map Segment Container */
+        .map-wrapper {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .map-title-bar {
+            color: #00bcd4;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .map-iframe-container {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <!-- BRAND ELEVATION UPPER HEADER -->
-    <header class="main-header">
-        <h1 class="header-title">SAAHIRIDES TRANSIT PVT.LTD.</h1>
-        <p class="header-subtitle">🚀 SaahiRide - SaafeRide @ SaahiPrice | Apna App + Apna Website</p>
-    </header>
+    <div class="main-frame">
+        <!-- CORPORATE CREDENTIAL TITLE CORES -->
+        <div class="company-header">SAAHIRIDES TRANSIT PVT.LTD.</div>
+        <div class="tagline-sub">🚀 SaahiRide - SaafeRide @ SaahiPrice | Apna App + Apna Website</div>
 
-    <!-- ANNOUNCEMENT SLIDER TICKER -->
-    <div class="announcement-bar">
-        SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY
-    </div>
+        <!-- NOTIFICATION BANNER TICKER -->
+        <div class="ticker-bar">
+            SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY
+        </div>
+        <div class="quote-text">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
 
-    <!-- MAIN PLATFORM PORTAL CONTENT CONTAINER -->
-    <main class="portal-body">
-        <div class="welcome-quote">"DON'T WAIT FOR OPPORTUNITY — CREATE IT"</div>
-
-        <!-- STRATEGIC ACTION ROUTING NETWORK BUTTONS -->
-        <div class="button-grid">
-            
-            <!-- BUTTON 1: Open the Customer Application Portal view inside the subfolder -->
-            <a href="app/index.html" class="btn-landing bg-customer">
-                🟢 I am Customer
-            </a>
-
-            <!-- BUTTON 2: Open the local core Driver Form file located in the root directory -->
-            <a href="driver.html" class="btn-landing bg-driver">
-                🔥 I am Driver
-            </a>
-
-            <!-- BUTTON 3: Open your main App view inside the subfolder -->
-            <a href="app/index.html" class="btn-landing bg-app">
-                📱 Apna App
-            </a>
-            
+        <!-- TOP PILL SELECTION ROW -->
+        <div class="nav-pill-row">
+            <a href="app/customer.html" class="nav-pill pill-green-active">Book Your Ride</a>
+            <a href="#" class="nav-pill">Pricing</a>
+            <a href="app/index.html" class="nav-pill">Login</a>
+            <a href="#" class="nav-pill">Explore</a>
+            <a href="#" class="nav-pill">Message from...</a>
         </div>
 
-        <!-- GEOLOCATION TRACKING PREVIEW BLOCK -->
-        <section class="map-section">
-            <div class="location-tag">📍 Find Us - Nagaram, Hyderabad</div>
-            <div class="mock-map">
-                [ SaahiRides Transit Pvt. Ltd. Map View Integration ]
+        <!-- SOCIAL MATRIX AND FESTIVAL CAMPAIGNS -->
+        <div class="offers-row">
+            <a href="#" class="social-square">W</a>
+            <a href="#" class="social-square">FB</a>
+            <a href="#" class="social-square">IG</a>
+            <a href="#" class="social-square">YT</a>
+            
+            <a href="#" class="gold-offer-btn">✨ Janmashtami offer</a>
+            <a href="#" class="gold-offer-btn">💰 Janmashtami Rates</a>
+            <a href="#" class="vision-btn">★ SaahiRidesvision</a>
+        </div>
+
+        <!-- PRIMARY STRATEGIC CORE GATEWAY ACTIONS -->
+        <div class="gateway-buttons">
+            <!-- Points securely to your inner application workspace folder -->
+            <a href="app/index.html" class="btn-core bg-customer-gate">
+                👤 I am Customer
+            </a>
+
+            <!-- Points seamlessly to your secure local root registration file layout -->
+            <a href="driver.html" class="btn-core bg-driver-gate">
+                🚖 I am Driver
+            </a>
+
+            <!-- Directly opens your interactive portal context window dashboard -->
+            <a href="app/index.html" class="btn-core bg-app-gate">
+                📱 Apna App
+            </a>
+        </div>
+
+        <!-- GEOGRAPHIC SYSTEM INFRASTRUCTURE -->
+        <div class="map-wrapper">
+            <div class="map-title-bar">📍 Find Us - Nagaram, Hyderabad</div>
+            <div class="map-iframe-container">
+                <!-- Standard embedded mapping panel to populate your physical headquarters grid -->
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://google.com" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    marginheight="0" 
+                    marginwidth="0">
+                </iframe>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
 </body>
 </html>
