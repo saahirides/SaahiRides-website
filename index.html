@@ -1,254 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaahiRides Transit Pvt. Ltd.</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b1a30; /* Main deep portal background color */
-            margin: 0;
-            padding: 10px;
-            color: white;
-            text-align: center;
-        }
-
-        /* Full page frame aligning with your creative layouts */
-        .main-frame {
-            max-width: 600px;
-            margin: 15px auto;
-            background: linear-gradient(135deg, #0f2b48 0%, #153b60 100%);
-            border: 2px solid #00bcd4;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.5);
-        }
-
-        /* Branding Headers matching screen fonts */
-        .company-header {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffffff;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        .tagline-sub {
-            font-size: 13px;
-            color: #ffd700; /* Gold branding text color */
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        .ticker-bar {
-            background-color: #0056b3;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-            padding: 6px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
-        .quote-text {
-            font-size: 12px;
-            color: #a0c0d8;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-
-        /* Navigation Row - Small Pills */
-        .nav-pill-row {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-        .nav-pill {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-pill:hover {
-            background: #00bcd4;
-            border-color: #00bcd4;
-        }
-        .pill-green-active {
-            background-color: #25D366;
-            border-color: #25D366;
-            font-weight: bold;
-        }
-
-        /* Social Icons & Gold Offers Row */
-        .offers-row {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-        .social-square {
-            background: #0056b3;
-            color: white;
-            width: 32px;
-            height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-            text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .gold-offer-btn {
-            background: #ffd700;
-            color: #111;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: bold;
-            text-decoration: none;
-            border: 1px solid #ffd700;
-        }
-        .vision-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ccc;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 12px;
-            text-decoration: none;
-            border: 1px dashed rgba(255,255,255,0.3);
-        }
-
-        /* Main Gateway Entry Layout Elements */
-        .gateway-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        .btn-core {
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 25px;
-            text-decoration: none;
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: transform 0.1s ease;
-        }
-        .btn-core:active {
-            transform: scale(0.97);
-        }
-        .bg-customer-gate { background-color: #25D366; } /* WhatsApp Green */
-        .bg-driver-gate { background-color: #ff7f50; }   /* Vibrant Coral/Orange */
-        .bg-app-gate { background-color: #f1f2f6; color: #333; } /* Light Grey */
-
-        /* Geolocation Map Segment Container */
-        .map-wrapper {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        .map-title-bar {
-            color: #00bcd4;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-        .map-iframe-container {
-            width: 100%;
-            height: 180px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaahiRides | Hyderabad</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body{
+    margin:0; background:#06122E; font-family:'Poppins', sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; padding:20px;
+  }
+  .landing-box{
+    max-width:950px; width:100%; text-align:center;
+  }
+  .card-img{
+    width:100%; max-width:850px; border-radius:18px;
+    box-shadow:0 0 40px rgba(255,215,0,0.3);
+    border:2px solid #D4AF37;
+  }
+  .tagline-sujata{
+    color:#FFD700; margin-top:18px; font-size:14px; letter-spacing:1px;
+  }
+  .tagline-sujata span{ color:#fff; font-weight:600; }
+  .btn-row{
+    margin-top:25px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  }
+  .btn{
+    padding:14px 32px; border-radius:50px; font-weight:800; text-decoration:none;
+    font-size:16px; transition:0.3s; min-width:180px;
+  }
+  .btn-gold{
+    background:linear-gradient(90deg, #D4AF37, #FFD700); color:#06122E;
+  }
+  .btn-outline{
+    background:transparent; color:#FFD700; border:2px solid #D4AF37;
+  }
+  .btn:hover{ transform:scale(1.05); box-shadow:0 5px 20px rgba(255,215,0,0.4); }
+</style>
 </head>
 <body>
+  <div class="landing-box">
+    <!-- Yahi teri image hai -->
+    <img src="founder-card.png" class="card-img" alt="SaahiRides Founder Hyderabad">
 
-    <div class="main-frame">
-        <!-- CORPORATE CREDENTIAL TITLE CORES -->
-        <div class="company-header">SAAHIRIDES TRANSIT PVT.LTD.</div>
-        <div class="tagline-sub">🚀 SaahiRide - SaafeRide @ SaahiPrice | Apna App + Apna Website</div>
-
-        <!-- NOTIFICATION BANNER TICKER -->
-        <div class="ticker-bar">
-            SaahiRides # HYDERABAD'S OWN FLEET # ROME WAS NOT BUILT IN A DAY
-        </div>
-        <div class="quote-text">DON'T WAIT FOR OPPORTUNITY — CREATE IT</div>
-
-        <!-- TOP PILL SELECTION ROW -->
-        <div class="nav-pill-row">
-            <a href="app/customer.html" class="nav-pill pill-green-active">Book Your Ride</a>
-            <a href="#" class="nav-pill">Pricing</a>
-            <a href="app/index.html" class="nav-pill">Login</a>
-            <a href="#" class="nav-pill">Explore</a>
-            <a href="#" class="nav-pill">Message from...</a>
-        </div>
-
-        <!-- SOCIAL MATRIX AND FESTIVAL CAMPAIGNS -->
-        <div class="offers-row">
-            <a href="#" class="social-square">W</a>
-            <a href="#" class="social-square">FB</a>
-            <a href="#" class="social-square">IG</a>
-            <a href="#" class="social-square">YT</a>
-            
-            <a href="#" class="gold-offer-btn">✨ Janmashtami offer</a>
-            <a href="#" class="gold-offer-btn">💰 Janmashtami Rates</a>
-            <a href="#" class="vision-btn">★ SaahiRidesvision</a>
-        </div>
-
-        <!-- PRIMARY STRATEGIC CORE GATEWAY ACTIONS -->
-        <div class="gateway-buttons">
-            <!-- Points securely to your inner application workspace folder -->
-            <a href="app/index.html" class="btn-core bg-customer-gate">
-                👤 I am Customer
-            </a>
-
-            <!-- Points seamlessly to your secure local root registration file layout -->
-            <a href="driver.html" class="btn-core bg-driver-gate">
-                🚖 I am Driver
-            </a>
-
-            <!-- Directly opens your interactive portal context window dashboard -->
-            <a href="app/index.html" class="btn-core bg-app-gate">
-                📱 Apna App
-            </a>
-        </div>
-
-        <!-- GEOGRAPHIC SYSTEM INFRASTRUCTURE -->
-        <div class="map-wrapper">
-            <div class="map-title-bar">📍 Find Us - Nagaram, Hyderabad</div>
-            <div class="map-iframe-container">
-                <!-- Standard embedded mapping panel to populate your physical headquarters grid -->
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    src="https://google.com" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    marginheight="0" 
-                    marginwidth="0">
-                </iframe>
-            </div>
-        </div>
+    <div class="tagline-sujata">
+      Inspired by my wife <span>Sujata ❤️</span> - For every family of Hyderabad
     </div>
 
+    <div class="btn-row">
+      <a href="/website/" class="btn btn-gold">Explore Website 🌐</a>
+      <a href="/app/" class="btn btn-outline">GoTo App 📱</a>
+    </div>
+  </div>
 </body>
 </html>
