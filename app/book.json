@@ -1,0 +1,15 @@
+{
+  "name": "SaahiRides Nagaram",
+  "short_name": "SaahiRides",
+  "start_url": "/book/",
+  "display": "standalone",
+  "background_color": "#0f8a0f",
+  "theme_color": "#0f8a0f",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3774/3774083.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
