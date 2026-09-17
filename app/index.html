@@ -1,101 +1,39 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SaahiRides</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}body{background:#0A2342}:root{--navy:#0A2342;--gold:#FFC107;--g1:#FFD76B;--g2:#B77900}
-#s1,#s2,#s3,#s4{position:fixed;inset:0;background:#0A2342;display:flex;flex-direction:column;align-items:center;overflow-y:auto}#s2,#s3,#s4{display:none}
-.logo{color:#E53935;font-weight:900;font-size:26px;margin-top:40px}.logo span{color:var(--gold)}
-#s1{justify-content:center}#s1 h1{font-size:44px;font-weight:900;background:linear-gradient(90deg,#E53935,#FFC107);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.card{background:white;width:92%;max-width:400px;border-radius:28px;padding:26px 22px;margin-top:30px}
-.card h2{font-size:28px;font-weight:900;color:var(--navy);line-height:1.1}.sub{color:#475569;font-size:13px;margin:8px 0 18px}
-.input{border:1.5px solid var(--gold);border-radius:14px;display:flex;align-items:center;padding:6px;margin-top:8px}
-.input span{background:#F1F5F9;padding:7px 10px;border-radius:8px;font-weight:700;margin-right:10px}
-.input input{border:0;outline:0;flex:1;font-size:15px}
-.btn{width:100%;margin-top:18px;background:linear-gradient(180deg,var(--g1),var(--g2));border:0;padding:16px;border-radius:14px;font-weight:900;font-size:18px;color:white;cursor:pointer}
-.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.lang-btn{padding:16px 10px;border:2px solid #FEF3C7;border-radius:14px;background:#FFFBEB;font-weight:800;text-align:center;cursor:pointer}
-.bar{width:220px;height:14px;border:2px solid #E8D9A0;border-radius:20px;margin-top:30px;overflow:hidden}.bar div{height:100%;width:60%;background:linear-gradient(90deg,var(--g1),var(--g2));animation:load 1.2s infinite alternate}@keyframes load{from{transform:translateX(-20%)}to{transform:translateX(80%)}}
-#recaptcha{margin-top:12px}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaahiRides</title>
+<style>
+body{margin:0;background:#0a192f;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;color:white}
+.logo{width:220px;margin-bottom:10px}
+.card{background:white;color:#0a192f;padding:25px;border-radius:20px;width:85%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+input{width:100%;padding:14px;margin:8px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box;font-size:16px}
+button{width:100%;padding:14px;background:#e11d2a;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer}
+#recaptcha-container{margin-top:15px;display:flex;justify-content:center}
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-</head><body>
-
-<div id="s1"><div style="font-size:80px">🦅</div><h1>SaahiRides</h1><div style="color:white;font-weight:700">SaahiRides Transit Pvt. Ltd.</div><div class="bar"><div></div></div></div>
-
-<div id="s2"><div class="logo">🦅 Saahi<span>Rides</span></div>
-<div class="card" id="mobCard"><h2>Welcome to<br>SaahiRides</h2><p class="sub">SaafeRide @ SaahiPrice</p>
-<label style="font-weight:700">Mobile Number</label><div class="input"><span>+91</span><input id="mob" placeholder="Enter 10-digit" maxlength="10" type="tel"></div><div id="recaptcha"></div>
-<button class="btn" id="sendBtn" onclick="sendOTP()">Send OTP</button></div>
-<div class="card" id="otpCard" style="display:none"><h2>Verify OTP</h2><p class="sub">Sent to +91 <span id="showMob"></span></p>
-<div class="input"><input id="otp" placeholder="6-digit OTP" maxlength="6" style="text-align:center;letter-spacing:6px;font-weight:900"></div>
-<button class="btn" id="verifyBtn" onclick="verifyOTP()">Verify</button></div></div>
-
-<div id="s3"><div class="logo">🦅 Saahi<span>Rides</span></div>
-<div class="card"><h2>Choose Language</h2><div class="lang-grid">
-<div class="lang-btn" onclick="chooseLang('en')">English</div><div class="lang-btn" onclick="chooseLang('hi')">हिंदी</div>
-<div class="lang-btn" onclick="chooseLang('te')">తెలుగు</div><div class="lang-btn" onclick="chooseLang('ta')">தமிழ்</div>
-<div class="lang-btn" onclick="chooseLang('kn')">ಕನ್ನಡ</div><div class="lang-btn" onclick="chooseLang('ml')">മലയാളം</div>
-<div class="lang-btn" onclick="chooseLang('bn')">বাংলা</div><div class="lang-btn" onclick="chooseLang('or')">ଓଡ଼ିଆ</div>
-<div class="lang-btn" onclick="chooseLang('pa')">ਪੰਜਾਬੀ</div><div class="lang-btn" onclick="chooseLang('mr')">मराठी</div>
-</div></div></div>
-
-<div id="s4"><div style="width:100%;background:var(--navy);padding:14px 18px;display:flex;justify-content:space-between;color:white"><div style="font-weight:900">Saahi<span style="color:var(--gold)">Rides</span></div>
-<select id="langDrop" onchange="chooseLang(this.value)" style="background:rgba(255,255,255,.15);color:white;border:0;padding:6px 10px;border-radius:20px">
-<option value="en">English</option><option value="hi">हिंदी</option><option value="te">తెలుగు</option><option value="ta">தமிழ்</option><option value="kn">ಕನ್ನಡ</option><option value="ml">മലയാളം</option><option value="bn">বাংলা</option><option value="or">ଓଡ଼ିଆ</option><option value="pa">ਪੰਜਾਬੀ</option><option value="mr">मराठी</option>
-</select></div>
-<div class="card"><h2>Where to go?</h2>
-<select id="from" style="width:100%;padding:14px;border-radius:12px;margin-top:10px"><option>Nagaram</option><option>ECIL</option></select>
-<select id="to" style="width:100%;padding:14px;border-radius:12px;margin-top:10px"><option>ECIL</option><option>Nagaram</option></select>
-<div style="background:#FFF8E1;border:1px dashed var(--gold);padding:10px;border-radius:10px;text-align:center;font-weight:800;margin-top:14px">Fare: ₹100</div>
-<button class="btn" onclick="book()">Book on WhatsApp</button></div></div>
-
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+<img src="./splash.jpg" class="logo">
+<h1 style="color:#e11d2a;margin:0">Saahi<span style="color:#f5c542">Rides</span></h1>
+<p style="font-size:11px;opacity:0.8">SaahiRides Transit Pvt. Ltd.</p>
+<div class="card">
+<h2>Welcome</h2>
+<input id="phone" type="tel" value="+91 ">
+<input id="otp" type="text" placeholder="Enter 6-digit OTP" style="display:none">
+<button id="sendBtn">Send OTP</button>
+<button id="verifyBtn" style="display:none">Verify OTP</button>
+<div id="recaptcha-container"></div>
+<p id="msg" style="font-size:13px;margin-top:10px"></p>
+</div>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA6XpcE7FeEja0cas5hdcapGV-W1QlFzQ4",
-  authDomain: "saahirides-transit-pvt-ltd.firebaseapp.com",
-  projectId: "saahirides-transit-pvt-ltd",
-  storageBucket: "saahirides-transit-pvt-ltd.firebasestorage.app",
-  messagingSenderId: "193039459690",
-  appId: "1:193039459690:web:ca4e9d6c9c630f01323113",
-  measurementId: "G-NDHZP6X7QY"
-};
+const firebaseConfig={apiKey:"AIzaSyA5ISVRjnuaGqVJmcYC2yQjo60mTASnQdk",authDomain:"saahirides-transit-pvt-l-6f4b0.firebaseapp.com",projectId:"saahirides-transit-pvt-l-6f4b0",storageBucket:"saahirides-transit-pvt-l-6f4b0.firebasestorage.app",messagingSenderId:"546887705562",appId:"1:546887705562:web:42204adb2b1d58ffa656e3",measurementId:"G-HCQNZBY90L"};
 firebase.initializeApp(firebaseConfig);
-let confirmationResult;
-
-window.onload=()=>{
-  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
-    'size': 'normal',
-    'callback': ()=>{ console.log('captcha verified'); }
-  });
-  window.recaptchaVerifier.render();
-  setTimeout(()=>{ document.getElementById('s1').style.display='none'; document.getElementById('s2').style.display='flex'; },2000);
-}
-
-function sendOTP(){
-  let m=document.getElementById('mob').value.trim();
-  if(m.length!=10) return alert('10 digit daal Mamu!');
-  let p='+91'+m;
-  let btn=document.getElementById('sendBtn');
-  btn.innerText='Sending...'; btn.disabled=true;
-  firebase.auth().signInWithPhoneNumber(p, window.recaptchaVerifier).then(r=>{
-    confirmationResult=r;
-    document.getElementById('mobCard').style.display='none';
-    document.getElementById('otpCard').style.display='block';
-    document.getElementById('showMob').innerText=m;
-  }).catch(e=>{
-    alert(e.message); 
-    btn.innerText='Send OTP'; btn.disabled=false;
-  });
-}
-function verifyOTP(){
-  let c=document.getElementById('otp').value.trim();
-  if(c.length!=6) return alert('6 digit OTP');
-  document.getElementById('verifyBtn').innerText='Verifying...';
-  confirmationResult.confirm(c).then(()=>{
-    localStorage.setItem('mob',document.getElementById('mob').value);
-    document.getElementById('s2').style.display='none';
-    document.getElementById('s3').style.display='flex';
-  }).catch(()=>{ alert('Wrong OTP Mamu!'); document.getElementById('verifyBtn').innerText='Verify'; });
-}
-function chooseLang(l){ localStorage.setItem('saahi_lang',l); document.getElementById('langDrop').value=l; document.getElementById('s3').style.display='none'; document.getElementById('s4').style.display='flex'; }
-function book(){ let f=document.getElementById('from').value,t=document.getElementById('to').value,m=localStorage.getItem('mob'); window.open(`https://wa.me/919000000000?text=Booking ${f} to ${t} - ${m}`,'_blank'); }
-</script></body></html>
+let confirmationResult=null;let recaptchaVerifier=null;
+function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'normal'});recaptchaVerifier.render();}}
+initRecaptcha();
+const phoneInput=document.getElementById('phone');const otpInput=document.getElementById('otp');const sendBtn=document.getElementById('sendBtn');const verifyBtn=document.getElementById('verifyBtn');const msg=document.getElementById('msg');
+sendBtn.onclick=async()=>{const phone=phoneInput.value.trim();if(phone.length<13){msg.innerText="Number sahi daal: +91XXXXXXXXXX";return;}msg.innerText="OTP bhej raha hu...";sendBtn.disabled=true;try{confirmationResult=await firebase.auth().signInWithPhoneNumber(phone,recaptchaVerifier);msg.style.color="green";msg.innerText="OTP bhej diya!";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";}catch(e){msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();}};
+verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6
