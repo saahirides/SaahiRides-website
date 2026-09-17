@@ -1,63 +1,94 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SaahiRides</title>
 <style>
-body{margin:0;background:#081b33;font-family:sans-serif}
-#splash{position:fixed;inset:0;background:#081b33;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30}
-#splash .logo{color:#e11d2a;font-size:32px;font-weight:bold}#splash .logo span{color:#f5c542}
-#langScreen{position:fixed;inset:0;background:#081b33;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:20}
-.lang-card{background:white;padding:25px;border-radius:20px;width:90%;max-width:360px;text-align:center}
-.lang-btn{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:10px;background:white;font-weight:bold;cursor:pointer}
-.lang-btn.active{background:#e11d2a;color:white}
-#login{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#081b33}
-.welcome-card{background:white;padding:25px;border-radius:20px;width:90%;max-width:360px}
-.welcome-card h2{margin:0;font-size:28px;color:#081b33}
-.welcome-card input{width:100%;padding:14px;border:1.5px solid #e8c87a;border-radius:12px;margin:15px 0;box-sizing:border-box}
-.gold-btn{width:100%;padding:14px;background:linear-gradient(#e8c04a,#b78a1f);border:none;border-radius:12px;color:white;font-weight:bold;font-size:18px}
-</style>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-</head>
-<body>
-<div id="splash">
-  <div style="font-size:80px">🦅</div>
-  <div class="logo">Saahi<span>Rides</span></div>
-  <p style="color:#f5c542;font-size:11px;letter-spacing:1px;margin-top:5px">Apna App - Apna Website</p>
-</div>
-<div id="langScreen">
-  <div class="lang-card">
-    <h3>Choose Your Language</h3>
-    <button class="lang-btn" onclick="setLang('en')">English</button>
-    <button class="lang-btn" onclick="setLang('hi')">हिंदी</button>
-    <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
-    <button id="contBtn" class="gold-btn" style="display:none;margin-top:10px;background:#081b33" onclick="goLogin()">Continue</button>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body,html{height:100%;background:#081b33;overflow:hidden}
+.screen{position:fixed;inset:0;background:#081b33;display:none;flex-direction:column;overflow-y:auto}
+.screen.active{display:flex}
+#splash{background:#081b33 url('./splash.jpg') center/cover no-repeat;z-index:9999}
+.card{background:white;border-radius:18px;padding:22px;width:92%;max-width:380px;margin:auto}
+.lang-btn{width:100%;padding:12px;margin:6px 0;border:1.5px solid #C9A86A;border-radius:10px;background:white;font-weight:800}
+.lang-btn.active{background:#081b33;color:#C9A86A}
+.inputBox{width:100%;padding:14px;border:1.5px solid #C9A86A;border-radius:12px;margin:10px 0;font-size:16px}
+.gold-btn{width:100%;padding:14px;background:linear-gradient(135deg,#E8C87A,#C9A86A);border:none;border-radius:12px;font-weight:900;color:#081b33}
+</style></head><body>
+
+<!-- 1. FIRST PAGE = TERA POSTER wa_image_6942205122554237495 ko splash.jpg bana ke daal -->
+<div id="splash" class="screen active" onclick="show('lang')"></div>
+
+<!-- 2. LANGUAGE SCREEN - YAHAN LANGUAGE CHOOSE HOTA HAI -->
+<div id="lang" class="screen">
+  <div class="card">
+    <h3 id="t1" style="color:#081b33">Choose Language</h3>
+    <button class="lang-btn" onclick="setLang('en',this)">English</button>
+    <button class="lang-btn" onclick="setLang('hi',this)">हिंदी</button>
+    <button class="lang-btn" onclick="setLang('te',this)">తెలుగు</button>
+    <button id="cBtn" class="gold-btn" style="display:none;margin-top:12px;background:#081b33;color:#C9A86A" onclick="show('otp')">Continue / जारी रखें</button>
   </div>
 </div>
-<div id="login">
-  <div style="color:#e11d2a;font-size:28px;font-weight:bold;margin-bottom:20px">🦅 Saahi<span style="color:#f5c542">Rides</span></div>
-  <div class="welcome-card">
-    <h2>Welcome to<br>SaahiRides</h2>
-    <p style="font-size:13px;opacity:0.7">SaafeRide @ SaahiPrice - Apna App</p>
-    <label style="font-size:13px;font-weight:bold">Mobile Number</label>
-    <div style="display:flex;gap:5px"><input id="phone" type="tel" value="+91 " style="flex:1"><input id="otp" type="text" placeholder="Enter OTP" style="display:none;flex:1"></div>
-    <button id="sendBtn" class="gold-btn">Continue</button>
-    <button id="verifyBtn" class="gold-btn" style="display:none">Verify OTP</button>
-    <div id="recaptcha-container" style="margin-top:10px"></div>
-    <p id="msg" style="font-size:12px;text-align:center"></p>
-    <p style="font-size:11px;text-align:center;opacity:0.6;margin-top:10px">We will send you a one-time OTP to verify your number</p>
+
+<!-- 3. OTP SCREEN - YAHAN OTP 123456 HAI -->
+<div id="otp" class="screen" style="justify-content:center;align-items:center">
+  <div style="text-align:center;margin-bottom:15px"><img src="./logo.png" style="width:60px"><div style="font-size:28px;font-weight:900"><span style="color:#E53935">Saahi</span><span style="color:#C9A86A">Rides</span></div></div>
+  <div class="card">
+    <h2 id="t2" style="color:#081b33">Welcome</h2>
+    <input class="inputBox" id="phone" value="+91 9347946026">
+    <input class="inputBox" id="otpIn" placeholder="OTP 123456" style="display:none">
+    <button id="sBtn" class="gold-btn" onclick="sendOtp()">Continue</button>
+    <button id="vBtn" class="gold-btn" style="display:none" onclick="show('home')">Verify OTP</button>
+    <p id="msg" style="font-size:12px;text-align:center;color:green;margin-top:8px"></p>
   </div>
-  <p style="color:#f5c542;font-size:11px;margin-top:20px">Apna App - Apna Website</p>
 </div>
+
+<!-- 4. HOME SCREEN - YAHAN BOOK YOUR RIDE HAI -->
+<div id="home" class="screen">
+  <div style="background:#081b33;color:white;padding:16px 15px 40px;border-radius:0 0 26px 26px">
+    <b>SaahiRides</b> <span style="float:right;font-size:11px" onclick="location.reload()">Logout</span><br>
+    <div style="margin-top:12px;font-size:11px">📍 Pickup: Kapra</div>
+  </div>
+  <div style="padding:15px;margin-top:-20px">
+    <div id="t3" style="font-size:24px;font-weight:900;color:white">Book Your Ride</div>
+    <div style="background:white;padding:20px;border-radius:16px;margin-top:10px;text-align:center">
+      🛺 Sawari auto - OTP 123456 se login successful<br><br>
+      <button class="gold-btn" onclick="alert('Sawari Flow - 6 vehicles + Real-time + Route Lock')">Go to Sawari</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// FLOW: SPLASH -> LANG -> OTP
-setTimeout(()=>{document.getElementById('splash').style.display='none';let l=localStorage.getItem("saahi_lang");if(l){document.getElementById('login').style.display='flex';}else{document.getElementById('langScreen').style.display='flex';}},2500);
-function setLang(lang){localStorage.setItem("saahi_lang",lang);document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');document.getElementById('contBtn').style.display='block';}
-function goLogin(){document.getElementById('langScreen').style.display='none';document.getElementById('login').style.display='flex';}
-const firebaseConfig={apiKey:"AIzaSyA5ISVRjnuaGqVJmcYC2yQjo60mTASnQdk",authDomain:"saahirides-transit-pvt-l-6f4b0.firebaseapp.com",projectId:"saahirides-transit-pvt-l-6f4b0",storageBucket:"saahirides-transit-pvt-l-6f4b0.firebasestorage.app",messagingSenderId:"546887705562",appId:"1:546887705562:web:42204adb2b1d58ffa656e3"};firebase.initializeApp(firebaseConfig);let confirmationResult=null,recaptchaVerifier=null;function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'normal'});recaptchaVerifier.render();}}initRecaptcha();const phoneInput=document.getElementById('phone'),otpInput=document.getElementById('otp'),sendBtn=document.getElementById('sendBtn'),verifyBtn=document.getElementById('verifyBtn'),msg=document.getElementById('msg');const TEST_NUM="9347946026",TEST_OTP="123456";
-sendBtn.onclick=async()=>{const raw=phoneInput.value.trim(),numOnly=raw.replace(/\D/g,'');if(numOnly.includes(TEST_NUM)){localStorage.setItem("temp_phone",TEST_NUM);msg.style.color="green";msg.innerText="Test: 123456";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";document.getElementById('recaptcha-container').style.display="none";return;}if(raw.length<13){msg.innerText="Number sahi daal";return;}msg.innerText="Sending OTP...";sendBtn.disabled=true;try{confirmationResult=await firebase.auth().signInWithPhoneNumber(raw,recaptchaVerifier);msg.style.color="green";msg.innerText="OTP sent!";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";}catch(e){msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();}};
-verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6 digit OTP";return;}if(code===TEST_OTP){localStorage.setItem("saahi_user",TEST_NUM);location.href="./home.html";return;}verifyBtn.disabled=true;try{await confirmationResult.confirm(code);location.href="./home.html";}catch(e){msg.style.color="red";msg.innerText="Wrong OTP";verifyBtn.disabled=false;}};
+const T={
+ en:{choose:"Choose Language",welcome:"Welcome",cont:"Continue",verify:"Verify OTP",book:"Book Your Ride"},
+ hi:{choose:"भाषा चुनें",welcome:"स्वागत है",cont:"जारी रखें",verify:"OTP सत्यापित करें",book:"अपनी सवारी बुक करें"},
+ te:{choose:"భాషను ఎంచుకోండి",welcome:"స్వాగతం",cont:"కొనసాగించు",verify:"OTP ధృవీకరించండి",book:"మీ రైడ్ బుక్ చేయండి"}
+};
+function applyLang(l){
+ let d=T[l];
+ document.getElementById('t1').innerText=d.choose;
+ document.getElementById('cBtn').innerText=d.cont;
+ document.getElementById('t2').innerText=d.welcome;
+ document.getElementById('sBtn').innerText=d.cont;
+ document.getElementById('vBtn').innerText=d.verify;
+ document.getElementById('t3').innerText=d.book;
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function setLang(l,el){
+ localStorage.setItem('saahi_lang',l);
+ applyLang(l);
+ document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+ el.classList.add('active');
+ document.getElementById('cBtn').style.display='block';
+}
+function sendOtp(){
+ document.getElementById('msg').innerText='OTP is 123456';
+ document.getElementById('sBtn').style.display='none';
+ document.getElementById('otpIn').style.display='block';
+ document.getElementById('vBtn').style.display='block';
+ document.getElementById('otpIn').value='123456';
+}
+// auto splash -> lang after 3 sec
+setTimeout(()=>{ if(document.getElementById('splash').classList.contains('active')) show('lang'); },3000);
+// load saved lang
+let sv=localStorage.getItem('saahi_lang'); if(sv) applyLang(sv);
 </script>
-</body>
-</html>
+</body></html>
