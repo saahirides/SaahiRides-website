@@ -6,7 +6,7 @@
 <title>SaahiRides</title>
 <style>
 body{margin:0;background:#0a192f;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;color:white}
-.logo{width:220px;margin-bottom:10px}
+.logo{width:220px;margin-bottom:10px;border-radius:10px}
 .card{background:white;color:#0a192f;padding:25px;border-radius:20px;width:85%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
 input{width:100%;padding:14px;margin:8px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box;font-size:16px}
 button{width:100%;padding:14px;background:#e11d2a;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer}
@@ -16,7 +16,7 @@ button{width:100%;padding:14px;background:#e11d2a;color:white;border:none;border
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-<img src="./splash.jpg" class="logo">
+<img src="./IMG-20260917-WA9327.jpg" class="logo">
 <h1 style="color:#e11d2a;margin:0">Saahi<span style="color:#f5c542">Rides</span></h1>
 <p style="font-size:11px;opacity:0.8">SaahiRides Transit Pvt. Ltd.</p>
 <div class="card">
@@ -36,4 +36,7 @@ function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.a
 initRecaptcha();
 const phoneInput=document.getElementById('phone');const otpInput=document.getElementById('otp');const sendBtn=document.getElementById('sendBtn');const verifyBtn=document.getElementById('verifyBtn');const msg=document.getElementById('msg');
 sendBtn.onclick=async()=>{const phone=phoneInput.value.trim();if(phone.length<13){msg.innerText="Number sahi daal: +91XXXXXXXXXX";return;}msg.innerText="OTP bhej raha hu...";sendBtn.disabled=true;try{confirmationResult=await firebase.auth().signInWithPhoneNumber(phone,recaptchaVerifier);msg.style.color="green";msg.innerText="OTP bhej diya!";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";}catch(e){msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();}};
-verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6
+verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6 digit OTP daal";return;}msg.innerText="Verify kar raha hu...";verifyBtn.disabled=true;try{await confirmationResult.confirm(code);msg.style.color="green";msg.innerText="Login ho gaya Mamu! 🎉";}catch(e){msg.style.color="red";msg.innerText="Galat OTP! "+e.message;verifyBtn.disabled=false;}};
+</script>
+</body>
+</html>
