@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaahiRides</title>
+<style>
+body{margin:0;background:#f5f5f5;font-family:sans-serif}
+.header{background:#081b33;color:white;padding:12px 15px;display:flex;justify-content:space-between}
+.screen{padding:15px;display:none}.screen.active{display:block}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rideType{background:white;padding:18px;border-radius:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;border:2px solid transparent}
+.tabs{display:flex;background:white;border-radius:10px;padding:4px;margin:10px 0}
+.tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px}
+.tab.active{background:#081b33;color:white}
+.vehicle{background:white;padding:12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin:8px 0;cursor:pointer;border:1px solid #eee}
+.inputBox{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin:6px 0;box-sizing:border-box}
+.gold-btn{width:100%;padding:14px;background:linear-gradient(#e8c04a,#b78a1f);border:none;border-radius:12px;color:white;font-weight:bold}
+.bill{background:white;padding:15px;border-radius:12px;margin:10px 0;font-size:13px}
+.bill div{display:flex;justify-content:space-between;margin:4px 0}
+.badge{background:#e11d2a;color:white;font-size:10px;padding:3px 6px;border-radius:20px;margin-left:6px}
+.routeLock{background:#e6f9e6;border:1px solid #22c55e;color:#15803d;padding:10px;border-radius:10px;font-size:12px;margin:10px 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="header"><span>🦅 SaahiRides</span><span onclick="localStorage.clear();location.href='./index.html'" style="font-size:12px">Logout</span></div>
+
+<!-- S1: BOOK YOUR RIDE -->
+<div id="s1" class="screen active">
+<h3>Book Your Ride</h3>
+<div class="grid4">
+<div class="rideType" onclick="selectRide('sawari')"><div style="font-size:28px">🛺</div><b>Sawari</b></div>
+<div class="rideType" onclick="alert('Premium coming soon')"><div style="font-size:28px">🚗</div><b>Premium</b></div>
+<div class="rideType" onclick="alert('Rental coming soon')"><div style="font-size:28px">⏰</div><b>Rental</b></div>
+<div class="rideType" onclick="alert('Outstation Rs 15/km')"><div style="font-size:28px">🛣️</div><b>Outstation</b></div>
+</div>
+</div>
+
+<!-- S2: SAWARI - ON DEMAND vs SUBSCRIPTION -->
+<div id="s2" class="screen">
+<h3><span onclick="show('s1')">←</span> Sawari</h3>
+<div class="tabs">
+<div id="tabOn" class="tab active" onclick="switchTab('on')">On-Demand</div>
+<div id="tabSub" class="tab" onclick="switchTab('sub')">Subscription</div>
+</div>
+
+<!-- ON DEMAND CONTENT -->
+<div id="onContent">
+<p style="font-size:11px;color:gray">All 6 categories - Base 0-5km + Multiplier + Night (11pm-5am)</p>
+<div id="vehList"></div>
+</div>
+
+<!-- SUBSCRIPTION CONTENT -->
+<div id="subContent" style="display:none">
+<div style="background:white;padding:15px;border-radius:15px">
+<h4 style="margin:0">Subscription Plan <span class="badge">Route Lock</span></h4>
+<p style="font-size:12px;opacity:0.7">Same driver daily | Fixed time | No cancellation</p>
+<div class="vehicle" onclick="chooseVehicleSub()"><span><b>Daily Sawari</b><br><small>Bike / Scooty - Monthly fixed</small></span><span style="color:#e11d2a;font-weight:bold">₹1499 / month</span></div>
+<div class="routeLock">🔒 Route Locked: Home ↔ Office | Driver arrives in 5 mins | No surge, No night charge</div>
+<ul style="font-size:12px;padding-left:18px">
+<li>Driver arrives in 5 mins sharp</li>
+<li>Route lock - only fixed route</li>
+<li>No extra charges after 11pm</li>
+<li>Priority support</li>
+</ul>
+<button class="gold-btn" onclick="chooseVehicleSub()">Subscribe Now</button>
+</div>
+</div>
+</div>
+
+<!-- S3: BOOKING -->
+<div id="s3" class="screen">
+<h3><span onclick="show('s2')">←</span> <span id="vehName">Booking</span> <span id="lockBadge"></span></h3>
+<input class="inputBox" id="fromLoc" placeholder="From - Kapra">
+<input class="inputBox" id="toLoc" placeholder="To location" oninput="calcPrice()">
+<div style="display:flex;gap:8px">
+<input class="inputBox" id="kmInput" type="number" placeholder="km" style="flex:1" oninput="calcPrice()">
+<select id="timeSel" class="inputBox" style="flex:1" onchange="calcPrice()"><option value="day">Day</option><option value="night">Night (11pm-5am)</option></select>
+</div>
+<div style="background:#dbeafe;height:120px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:10px 0"><span>🗺️ Map</span><small id="etaTxt">Driver in 5 mins</small><small id="multTxt">Multiplier: 1x</small></div>
+<div class="bill">
+<div><span>Base (0-5km)</span><span id="baseP">₹0</span></div>
+<div><span>Extra</span><span id="extraP">₹0</span></div>
+<div><span>Night</span><span id="nightP">₹0</span></div>
+<div style="font-weight:bold;border-top:1px solid #eee;padding-top:6px"><span>Total</span><span id="totalP">₹0</span></div>
+</div>
+<div id="routeLockMsg" style="display:none" class="routeLock">🔒 Route locked after booking - cannot change</div>
+<button class="gold-btn" onclick="confirmBooking()">Confirm Booking</button>
+</div>
+
+<div id="s4" class="screen"><h3>Ride Started - Route Locked</h3><div style="background:white;padding:20px;border-radius:15px;text-align:center"><p>Share OTP</p><h1 id="rideOtp" style="letter-spacing:8px;color:#e11d2a">0000</h1><p id="rideStatus">Driver arriving in 5 mins...</p><div class="routeLock">🔒 Route is locked - driver will follow same route</div><button class="gold-btn" onclick="show('s5')">Ride Complete</button></div></div>
+<div id="s5" class="screen"><h3>Payment</h3><div class="bill" id="finalBill"></div><button class="gold-btn" onclick="show('s6')">Pay</button></div>
+<div id="s6" class="screen"><h3>Feedback</h3><div style="background:white;padding:20px;border-radius:15px;text-align:center"><p>⭐⭐⭐⭐⭐</p><textarea class="inputBox" placeholder="Feedback"></textarea><button class="gold-btn" onclick="alert('Thanks Mamu!');location.reload()">Submit</button></div></div>
+
+<script>
+const vehicles=[
+{name:"Bike Standard",rate:10,base:50,night:30},
+{name:"Bike Priority",rate:12,base:60,night:35},
+{name:"Bike Premium",rate:15,base:75,night:40},
+{name:"Scooty Standard",rate:13,base:65,night:45},
+{name:"Scooty Priority",rate:15,base:75,night:50},
+{name:"Scooty EV",rate:17,base:85,night:55}
+];
+function getMult(km){if(km<=5)return 1;if(km<=10)return 1.25;if(km<=15)return 1.5;if(km<=20)return 1.75;if(km<=25)return 2;if(km<=30)return 2.25;if(km<=35)return 2.5;if(km<=40)return 2.75;return 3;}
+let selVeh=null,curTotal=0,curKm=5,isSub=false;
+function renderVeh(){let
