@@ -1,98 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SaahiRides</title>
 <style>
-body{margin:0;background:#0a192f;font-family:sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;color:white}
-.logo{width:220px;margin-bottom:10px;border-radius:10px}
-.card{background:white;color:#0a192f;padding:25px;border-radius:20px;width:85%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-input{width:100%;padding:14px;margin:8px 0;border:1px solid #ccc;border-radius:10px;box-sizing:border-box;font-size:16px}
-button{width:100%;padding:14px;background:#e11d2a;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px;cursor:pointer}
-#recaptcha-container{margin-top:15px;display:flex;justify-content:center}
+body{margin:0;background:#081b33;font-family:sans-serif}
+#splash{position:fixed;inset:0;background:#081b33;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:30}
+#splash .logo{color:#e11d2a;font-size:32px;font-weight:bold}#splash .logo span{color:#f5c542}
+#langScreen{position:fixed;inset:0;background:#081b33;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:20}
+.lang-card{background:white;padding:25px;border-radius:20px;width:90%;max-width:360px;text-align:center}
+.lang-btn{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:10px;background:white;font-weight:bold;cursor:pointer}
+.lang-btn.active{background:#e11d2a;color:white}
+#login{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:#081b33}
+.welcome-card{background:white;padding:25px;border-radius:20px;width:90%;max-width:360px}
+.welcome-card h2{margin:0;font-size:28px;color:#081b33}
+.welcome-card input{width:100%;padding:14px;border:1.5px solid #e8c87a;border-radius:12px;margin:15px 0;box-sizing:border-box}
+.gold-btn{width:100%;padding:14px;background:linear-gradient(#e8c04a,#b78a1f);border:none;border-radius:12px;color:white;font-weight:bold;font-size:18px}
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-<img src="./IMG-20260917-WA9327.jpg" class="logo">
-<h1 style="color:#e11d2a;margin:0">Saahi<span style="color:#f5c542">Rides</span></h1>
-<p style="font-size:11px;opacity:0.8">SaahiRides Transit Pvt. Ltd.</p>
-<div class="card">
-<h2>Welcome</h2>
-<input id="phone" type="tel" value="+91 ">
-<input id="otp" type="text" placeholder="Enter 6-digit OTP" style="display:none">
-<button id="sendBtn">Send OTP</button>
-<button id="verifyBtn" style="display:none">Verify OTP</button>
-<div id="recaptcha-container"></div>
-<p id="msg" style="font-size:13px;margin-top:10px"></p>
+<div id="splash">
+  <div style="font-size:80px">🦅</div>
+  <div class="logo">Saahi<span>Rides</span></div>
+  <p style="color:#f5c542;font-size:11px;letter-spacing:1px;margin-top:5px">Apna App - Apna Website</p>
+</div>
+<div id="langScreen">
+  <div class="lang-card">
+    <h3>Choose Your Language</h3>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('hi')">हिंदी</button>
+    <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
+    <button id="contBtn" class="gold-btn" style="display:none;margin-top:10px;background:#081b33" onclick="goLogin()">Continue</button>
+  </div>
+</div>
+<div id="login">
+  <div style="color:#e11d2a;font-size:28px;font-weight:bold;margin-bottom:20px">🦅 Saahi<span style="color:#f5c542">Rides</span></div>
+  <div class="welcome-card">
+    <h2>Welcome to<br>SaahiRides</h2>
+    <p style="font-size:13px;opacity:0.7">SaafeRide @ SaahiPrice - Apna App</p>
+    <label style="font-size:13px;font-weight:bold">Mobile Number</label>
+    <div style="display:flex;gap:5px"><input id="phone" type="tel" value="+91 " style="flex:1"><input id="otp" type="text" placeholder="Enter OTP" style="display:none;flex:1"></div>
+    <button id="sendBtn" class="gold-btn">Continue</button>
+    <button id="verifyBtn" class="gold-btn" style="display:none">Verify OTP</button>
+    <div id="recaptcha-container" style="margin-top:10px"></div>
+    <p id="msg" style="font-size:12px;text-align:center"></p>
+    <p style="font-size:11px;text-align:center;opacity:0.6;margin-top:10px">We will send you a one-time OTP to verify your number</p>
+  </div>
+  <p style="color:#f5c542;font-size:11px;margin-top:20px">Apna App - Apna Website</p>
 </div>
 <script>
-const firebaseConfig={apiKey:"AIzaSyA5ISVRjnuaGqVJmcYC2yQjo60mTASnQdk",authDomain:"saahirides-transit-pvt-l-6f4b0.firebaseapp.com",projectId:"saahirides-transit-pvt-l-6f4b0",storageBucket:"saahirides-transit-pvt-l-6f4b0.firebasestorage.app",messagingSenderId:"546887705562",appId:"1:546887705562:web:42204adb2b1d58ffa656e3",measurementId:"G-HCQNZBY90L"};
-firebase.initializeApp(firebaseConfig);
-let confirmationResult=null;let recaptchaVerifier=null;
-function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'normal'});recaptchaVerifier.render();}}
-initRecaptcha();
-const phoneInput=document.getElementById('phone');const otpInput=document.getElementById('otp');const sendBtn=document.getElementById('sendBtn');const verifyBtn=document.getElementById('verifyBtn');const msg=document.getElementById('msg');
-
-// MAMU TEST CONFIG
-const TEST_NUM="9347946026";
-const TEST_OTP="123456";
-
-sendBtn.onclick=async()=>{
-  const rawPhone=phoneInput.value.trim();
-  const numOnly=rawPhone.replace(/\D/g,'');
-  
-  // TEST BYPASS - NO FIREBASE CALL
-  if(numOnly.includes(TEST_NUM)){
-    localStorage.setItem("temp_phone",TEST_NUM);
-    msg.style.color="green";
-    msg.innerText="Mamu Test Mode: OTP is 123456";
-    phoneInput.style.display="none";
-    sendBtn.style.display="none";
-    otpInput.style.display="block";
-    verifyBtn.style.display="block";
-    document.getElementById('recaptcha-container').style.display="none";
-    return;
-  }
-
-  if(rawPhone.length<13){msg.innerText="Number sahi daal: +91XXXXXXXXXX";return;}
-  msg.innerText="OTP bhej raha hu...";sendBtn.disabled=true;
-  try{
-    confirmationResult=await firebase.auth().signInWithPhoneNumber(rawPhone,recaptchaVerifier);
-    msg.style.color="green";msg.innerText="OTP bhej diya!";
-    phoneInput.style.display="none";sendBtn.style.display="none";
-    otpInput.style.display="block";verifyBtn.style.display="block";
-  }catch(e){
-    msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;
-    try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();
-  }
-};
-
-verifyBtn.onclick=async()=>{
-  const code=otpInput.value.trim();
-  if(code.length!=6){msg.innerText="6 digit OTP daal";return;}
-
-  // TEST VERIFY BYPASS
-  if(code===TEST_OTP){
-    msg.style.color="green";
-    msg.innerText="Login ho gaya Mamu! 🎉";
-    localStorage.setItem("saahi_user",TEST_NUM);
-    localStorage.setItem("saahi_verified","true");
-    setTimeout(()=>{ window.location.href="./home.html"; },700);
-    return;
-  }
-
-  msg.innerText="Verify kar raha hu...";verifyBtn.disabled=true;
-  try{
-    await confirmationResult.confirm(code);
-    msg.style.color="green";msg.innerText="Login ho gaya Mamu! 🎉";
-    setTimeout(()=>{ window.location.href="./home.html"; },700);
-  }catch(e){
-    msg.style.color="red";msg.innerText="Galat OTP! "+e.message;verifyBtn.disabled=false;
-  }
-};
+// FLOW: SPLASH -> LANG -> OTP
+setTimeout(()=>{document.getElementById('splash').style.display='none';let l=localStorage.getItem("saahi_lang");if(l){document.getElementById('login').style.display='flex';}else{document.getElementById('langScreen').style.display='flex';}},2500);
+function setLang(lang){localStorage.setItem("saahi_lang",lang);document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');document.getElementById('contBtn').style.display='block';}
+function goLogin(){document.getElementById('langScreen').style.display='none';document.getElementById('login').style.display='flex';}
+const firebaseConfig={apiKey:"AIzaSyA5ISVRjnuaGqVJmcYC2yQjo60mTASnQdk",authDomain:"saahirides-transit-pvt-l-6f4b0.firebaseapp.com",projectId:"saahirides-transit-pvt-l-6f4b0",storageBucket:"saahirides-transit-pvt-l-6f4b0.firebasestorage.app",messagingSenderId:"546887705562",appId:"1:546887705562:web:42204adb2b1d58ffa656e3"};firebase.initializeApp(firebaseConfig);let confirmationResult=null,recaptchaVerifier=null;function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'normal'});recaptchaVerifier.render();}}initRecaptcha();const phoneInput=document.getElementById('phone'),otpInput=document.getElementById('otp'),sendBtn=document.getElementById('sendBtn'),verifyBtn=document.getElementById('verifyBtn'),msg=document.getElementById('msg');const TEST_NUM="9347946026",TEST_OTP="123456";
+sendBtn.onclick=async()=>{const raw=phoneInput.value.trim(),numOnly=raw.replace(/\D/g,'');if(numOnly.includes(TEST_NUM)){localStorage.setItem("temp_phone",TEST_NUM);msg.style.color="green";msg.innerText="Test: 123456";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";document.getElementById('recaptcha-container').style.display="none";return;}if(raw.length<13){msg.innerText="Number sahi daal";return;}msg.innerText="Sending OTP...";sendBtn.disabled=true;try{confirmationResult=await firebase.auth().signInWithPhoneNumber(raw,recaptchaVerifier);msg.style.color="green";msg.innerText="OTP sent!";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";}catch(e){msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();}};
+verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6 digit OTP";return;}if(code===TEST_OTP){localStorage.setItem("saahi_user",TEST_NUM);location.href="./home.html";return;}verifyBtn.disabled=true;try{await confirmationResult.confirm(code);location.href="./home.html";}catch(e){msg.style.color="red";msg.innerText="Wrong OTP";verifyBtn.disabled=false;}};
 </script>
 </body>
 </html>
