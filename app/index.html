@@ -1,71 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaahiRides - Book Auto | Nagaram</title>
-<link rel="manifest" href="manifest.json">
-<style>
-body{font-family:Arial;background:#f5f5f5;margin:0;padding:15px}
-.card{background:white;border-radius:15px;padding:20px;max-width:400px;margin:auto;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
-h2{color:#0f8a0f;text-align:center}
-input,select{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;box-sizing:border-box}
-.btn{background:#0f8a0f;color:white;border:none;padding:15px;width:100%;border-radius:10px;font-size:18px;font-weight:bold;margin-top:10px}
-.fare{background:#e8f5e9;padding:10px;border-radius:8px;text-align:center;margin-top:10px;font-weight:bold}
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>SaahiRides</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui}body{background:#0A2342}:root{--navy:#0A2342;--gold:#FFC107;--g1:#FFD76B;--g2:#B77900}
+#s1,#s2,#s3,#s4{position:fixed;inset:0;background:#0A2342;display:flex;flex-direction:column;align-items:center;overflow-y:auto}#s2,#s3,#s4{display:none}
+.logo{color:#E53935;font-weight:900;font-size:26px;margin-top:40px}.logo span{color:var(--gold)}
+#s1{justify-content:center}#s1 h1{font-size:44px;font-weight:900;background:linear-gradient(90deg,#E53935,#FFC107);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.card{background:white;width:92%;max-width:400px;border-radius:28px;padding:26px 22px;margin-top:30px}
+.card h2{font-size:28px;font-weight:900;color:var(--navy);line-height:1.1}.sub{color:#475569;font-size:13px;margin:8px 0 18px}
+.input{border:1.5px solid var(--gold);border-radius:14px;display:flex;align-items:center;padding:6px;margin-top:8px}
+.input span{background:#F1F5F9;padding:7px 10px;border-radius:8px;font-weight:700;margin-right:10px}
+.input input{border:0;outline:0;flex:1;font-size:15px}
+.btn{width:100%;margin-top:18px;background:linear-gradient(180deg,var(--g1),var(--g2));border:0;padding:16px;border-radius:14px;font-weight:900;font-size:18px;color:white;cursor:pointer}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.lang-btn{padding:16px 10px;border:2px solid #FEF3C7;border-radius:14px;background:#FFFBEB;font-weight:800;text-align:center;cursor:pointer}
+.bar{width:220px;height:14px;border:2px solid #E8D9A0;border-radius:20px;margin-top:30px;overflow:hidden}.bar div{height:100%;width:60%;background:linear-gradient(90deg,var(--g1),var(--g2));animation:load 1.2s infinite alternate}@keyframes load{from{transform:translateX(-20%)}to{transform:translateX(80%)}}
+#recaptcha{margin-top:10px}
 </style>
-</head>
-<body>
-<div class="card">
-<h2>🛺 SaahiRides Transit Pvt. Ltd. </h2>
-<p style="text-align:center;font-size:13px">SaahiRides-SaafeRide @SaahiPrice | Apna App @Apna Website</p>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head><body>
 
-<label>From</label>
-<select id="from">
-<option>Nagaram</option>
-<option>ECIL</option>
-<option>Kushaiguda</option>
-<option>Dammaiguda</option>
-<option>Keerthi Homes</option>
-</select>
+<div id="s1"><div style="font-size:80px">🦅</div><h1>SaahiRides</h1><div style="color:white;font-weight:700">SaahiRides Transit Pvt. Ltd.</div><div class="bar"><div></div></div></div>
 
-<label>To</label>
-<select id="to">
-<option>ECIL</option>
-<option>Nagaram</option>
-<option>Kushaiguda</option>
-<option>Secunderabad</option>
-<option>Moula Ali</option>
-</select>
+<div id="s2"><div class="logo">🦅 Saahi<span>Rides</span></div>
+<div class="card" id="mobCard"><h2>Welcome to<br>SaahiRides</h2><p class="sub">SaafeRide @ SaahiPrice</p>
+<label style="font-weight:700">Mobile Number</label><div class="input"><span>+91</span><input id="mob" placeholder="Enter 10-digit" maxlength="10" type="tel"></div><div id="recaptcha"></div>
+<button class="btn" id="sendBtn" onclick="sendOTP()">Send OTP</button></div>
+<div class="card" id="otpCard" style="display:none"><h2>Verify OTP</h2><p class="sub">Sent to +91 <span id="showMob"></span></p>
+<div class="input"><input id="otp" placeholder="6-digit OTP" maxlength="6" style="text-align:center;letter-spacing:6px;font-weight:900"></div>
+<button class="btn" id="verifyBtn" onclick="verifyOTP()">Verify</button></div></div>
 
-<label>Phone</label>
-<input id="phone" type="tel" placeholder="Customer Number">
+<div id="s3"><div class="logo">🦅 Saahi<span>Rides</span></div>
+<div class="card"><h2>Choose Language</h2><div class="lang-grid">
+<div class="lang-btn" onclick="chooseLang('en')">English</div><div class="lang-btn" onclick="chooseLang('hi')">हिंदी</div>
+<div class="lang-btn" onclick="chooseLang('te')">తెలుగు</div><div class="lang-btn" onclick="chooseLang('ta')">தமிழ்</div>
+<div class="lang-btn" onclick="chooseLang('kn')">ಕನ್ನಡ</div><div class="lang-btn" onclick="chooseLang('ml')">മലയാളം</div>
+<div class="lang-btn" onclick="chooseLang('bn')">বাংলা</div><div class="lang-btn" onclick="chooseLang('or')">ଓଡ଼ିଆ</div>
+<div class="lang-btn" onclick="chooseLang('pa')">ਪੰਜਾਬੀ</div><div class="lang-btn" onclick="chooseLang('mr')">मराठी</div>
+</div></div></div>
 
-<div class="fare">Fare: ₹<span id="fare">100</span></div>
-
-<button class="btn" onclick="book()">WhatsApp Booking Karo</button>
-</div>
+<div id="s4"><div style="width:100%;background:var(--navy);padding:14px 18px;display:flex;justify-content:space-between;color:white"><div style="font-weight:900">Saahi<span style="color:var(--gold)">Rides</span></div>
+<select id="langDrop" onchange="chooseLang(this.value)" style="background:rgba(255,255,255,.15);color:white;border:0;padding:6px 10px;border-radius:20px">
+<option value="en">English</option><option value="hi">हिंदी</option><option value="te">తెలుగు</option><option value="ta">தமிழ்</option><option value="kn">ಕನ್ನಡ</option><option value="ml">മലയാളം</option><option value="bn">বাংলা</option><option value="or">ଓଡ଼ିଆ</option><option value="pa">ਪੰਜਾਬੀ</option><option value="mr">मराठी</option>
+</select></div>
+<div class="card"><h2>Where to go?</h2>
+<select id="from" style="width:100%;padding:14px;border-radius:12px;margin-top:10px"><option>Nagaram</option><option>ECIL</option></select>
+<select id="to" style="width:100%;padding:14px;border-radius:12px;margin-top:10px"><option>ECIL</option><option>Nagaram</option></select>
+<div style="background:#FFF8E1;border:1px dashed var(--gold);padding:10px;border-radius:10px;text-align:center;font-weight:800;margin-top:14px">Fare: ₹100</div>
+<button class="btn" onclick="book()">Book on WhatsApp</button></div></div>
 
 <script>
-function book(){
-let f=document.getElementById('from').value;
-let t=document.getElementById('to').value;
-let ph=document.getElementById('phone').value;
-let fare=document.getElementById('fare').innerText;
-let msg=`SaahiRides Booking:%0AFrom: ${f}%0ATo: ${t}%0AFare: ₹${fare}%0APhone: ${ph}%0ABooked via: saahirides.com/book`;
-window.open(`https://wa.me/919347946026?text=${msg}`,'_blank');
+// ===== PASTE YOUR FIREBASE CONFIG HERE - Firebase console se copy karna =====
+const firebaseConfig = {
+  apiKey: "PASTE_HERE",
+  authDomain: "PASTE_HERE.firebaseapp.com",
+  projectId: "PASTE_HERE",
+  storageBucket: "PASTE_HERE.appspot.com",
+  messagingSenderId: "PASTE_HERE",
+  appId: "PASTE_HERE"
+};
+// ===========================================
+firebase.initializeApp(firebaseConfig);
+let confirmationResult;
+
+window.onload=()=>{
+  try{
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+      'size': 'normal',
+      'callback': (response) => { console.log('captcha done'); }
+    });
+    window.recaptchaVerifier.render();
+  } catch(e){ console.log(e); }
+  setTimeout(()=>{ document.getElementById('s1').style.display='none'; document.getElementById('s2').style.display='flex'; },2000);
 }
-document.getElementById('from').addEventListener('change',calc);
-document.getElementById('to').addEventListener('change',calc);
-function calc(){
-let f=document.getElementById('from').value;
-let t=document.getElementById('to').value;
-let price=100;
-if((f=='Nagaram' && t=='ECIL')||(f=='ECIL' && t=='Nagaram')) price=100;
-if(t=='Secunderabad') price=250;
-if(t=='Kushaiguda') price=80;
-document.getElementById('fare').innerText=price;
+
+function sendOTP(){
+  let m=document.getElementById('mob').value.trim();
+  if(m.length!=10 || isNaN(m)) return alert('10 digit number dal Mamu!');
+  if(firebaseConfig.apiKey.includes('PASTE_HERE')) return alert('Pehle Firebase Config daal Mamu!');
+  
+  let p='+91'+m;
+  let btn=document.getElementById('sendBtn');
+  btn.innerText='Sending...'; btn.disabled=true;
+
+  firebase.auth().signInWithPhoneNumber(p, window.recaptchaVerifier).then(r=>{
+    confirmationResult=r;
+    document.getElementById('mobCard').style.display='none';
+    document.getElementById('otpCard').style.display='block';
+    document.getElementById('showMob').innerText=m;
+  }).catch(e=>{
+    alert(e.message);
+    btn.innerText='Send OTP'; btn.disabled=false;
+    window.recaptchaVerifier.render().then(w=>{ grecaptcha.reset(w); });
+  });
 }
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
-</script>
-</body>
-</html>
+
+function verifyOTP(){
+  let c=document.getElementById('otp').value.trim();
+  if(c.length!=6) return alert('6 digit OTP daal');
+  document.getElementById('verifyBtn').innerText='Verifying...';
+  confirmationResult.confirm(c).then(()=>{
+    localStorage.setItem('mob',document.getElementById('mob').value);
+    document.getElementById('s2').style.display='none';
+    document.getElementById('s3').style.display='flex';
+  }).catch(()=>{ alert('Wrong OTP Mamu!'); document.getElementById('verifyBtn').innerText='Verify'; });
+}
+
+function chooseLang(l){ localStorage.setItem('saahi_lang',l); document.getElementById('langDrop').value=l; document.getElementById('s3').style.display='none'; document.getElementById('s4').style.display='flex'; }
+function book(){ let f=document.getElementById('from').value,t=document.getElementById('to').value,m=localStorage.getItem('mob'); window.open(`https://wa.me/919000000000?text=Booking ${f} to ${t} - ${m}`,'_blank'); }
+</script></body></html>
