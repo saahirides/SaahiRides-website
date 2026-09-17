@@ -37,4 +37,62 @@ initRecaptcha();
 const phoneInput=document.getElementById('phone');const otpInput=document.getElementById('otp');const sendBtn=document.getElementById('sendBtn');const verifyBtn=document.getElementById('verifyBtn');const msg=document.getElementById('msg');
 
 // MAMU TEST CONFIG
-const TEST
+const TEST_NUM="9347946026";
+const TEST_OTP="123456";
+
+sendBtn.onclick=async()=>{
+  const rawPhone=phoneInput.value.trim();
+  const numOnly=rawPhone.replace(/\D/g,'');
+  
+  // TEST BYPASS - NO FIREBASE CALL
+  if(numOnly.includes(TEST_NUM)){
+    localStorage.setItem("temp_phone",TEST_NUM);
+    msg.style.color="green";
+    msg.innerText="Mamu Test Mode: OTP is 123456";
+    phoneInput.style.display="none";
+    sendBtn.style.display="none";
+    otpInput.style.display="block";
+    verifyBtn.style.display="block";
+    document.getElementById('recaptcha-container').style.display="none";
+    return;
+  }
+
+  if(rawPhone.length<13){msg.innerText="Number sahi daal: +91XXXXXXXXXX";return;}
+  msg.innerText="OTP bhej raha hu...";sendBtn.disabled=true;
+  try{
+    confirmationResult=await firebase.auth().signInWithPhoneNumber(rawPhone,recaptchaVerifier);
+    msg.style.color="green";msg.innerText="OTP bhej diya!";
+    phoneInput.style.display="none";sendBtn.style.display="none";
+    otpInput.style.display="block";verifyBtn.style.display="block";
+  }catch(e){
+    msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;
+    try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();
+  }
+};
+
+verifyBtn.onclick=async()=>{
+  const code=otpInput.value.trim();
+  if(code.length!=6){msg.innerText="6 digit OTP daal";return;}
+
+  // TEST VERIFY BYPASS
+  if(code===TEST_OTP){
+    msg.style.color="green";
+    msg.innerText="Login ho gaya Mamu! 🎉";
+    localStorage.setItem("saahi_user",TEST_NUM);
+    localStorage.setItem("saahi_verified","true");
+    setTimeout(()=>{ window.location.href="./home.html"; },700);
+    return;
+  }
+
+  msg.innerText="Verify kar raha hu...";verifyBtn.disabled=true;
+  try{
+    await confirmationResult.confirm(code);
+    msg.style.color="green";msg.innerText="Login ho gaya Mamu! 🎉";
+    setTimeout(()=>{ window.location.href="./home.html"; },700);
+  }catch(e){
+    msg.style.color="red";msg.innerText="Galat OTP! "+e.message;verifyBtn.disabled=false;
+  }
+};
+</script>
+</body>
+</html>
