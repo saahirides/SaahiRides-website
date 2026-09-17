@@ -35,8 +35,6 @@ let confirmationResult=null;let recaptchaVerifier=null;
 function initRecaptcha(){if(!recaptchaVerifier){recaptchaVerifier=new firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'normal'});recaptchaVerifier.render();}}
 initRecaptcha();
 const phoneInput=document.getElementById('phone');const otpInput=document.getElementById('otp');const sendBtn=document.getElementById('sendBtn');const verifyBtn=document.getElementById('verifyBtn');const msg=document.getElementById('msg');
-sendBtn.onclick=async()=>{const phone=phoneInput.value.trim();if(phone.length<13){msg.innerText="Number sahi daal: +91XXXXXXXXXX";return;}msg.innerText="OTP bhej raha hu...";sendBtn.disabled=true;try{confirmationResult=await firebase.auth().signInWithPhoneNumber(phone,recaptchaVerifier);msg.style.color="green";msg.innerText="OTP bhej diya!";phoneInput.style.display="none";sendBtn.style.display="none";otpInput.style.display="block";verifyBtn.style.display="block";}catch(e){msg.style.color="red";msg.innerText=e.message;sendBtn.disabled=false;try{recaptchaVerifier.clear();}catch(err){}recaptchaVerifier=null;initRecaptcha();}};
-verifyBtn.onclick=async()=>{const code=otpInput.value.trim();if(code.length!=6){msg.innerText="6 digit OTP daal";return;}msg.innerText="Verify kar raha hu...";verifyBtn.disabled=true;try{await confirmationResult.confirm(code);msg.style.color="green";msg.innerText="Login ho gaya Mamu! 🎉";}catch(e){msg.style.color="red";msg.innerText="Galat OTP! "+e.message;verifyBtn.disabled=false;}};
-</script>
-</body>
-</html>
+
+// MAMU TEST CONFIG
+const TEST
