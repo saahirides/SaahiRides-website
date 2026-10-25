@@ -85,7 +85,16 @@ footer a{color:#06122E;font-weight:800}
     <article class="card"><div class="icon">💍</div><h3>Destination Weddings</h3><p>Ask about guest transfers, family transport and coordination for wedding travel requirements.</p></article>
     <article class="card"><div class="icon">🚌</div><h3>Family &amp; Group Trips</h3><p>Enquire about suitable cars and tempo travellers for family outings, pilgrim groups, events and corporate travel.</p></article>
   </div>
-  <div class="note"><strong>Package inclusions:</strong> Depending on the selected itinerary, ask about food, accommodation, darshan arrangements and fresh-up stops. These are not automatically included in every trip; we will list confirmed inclusions, exclusions, cancellation terms and the total quote before you book.</div>
+  <section class="note" id="package-inclusions" aria-labelledby="inclusions-heading">
+    <strong id="inclusions-heading">What is included in SaahiRides tour packages</strong>
+    <p style="margin-top:8px">Unless a specific package clearly states otherwise, the standard package plan includes shared accommodation and night halt, vegetarian meals (breakfast, lunch and dinner), and shared general darshan tickets for applicable temple visits. The final package confirmation will specify the number of nights, meal schedule, room-sharing arrangement, temples covered and ticket conditions.</p>
+    <p style="margin-top:10px"><strong>Optional add-ons are extra:</strong> special/VIP/priority darshan, attraction or activity tickets (including Ramoji Film City entry), room upgrades or private rooms, extra meals/snacks, personal shopping, and any service not expressly listed as included. The customer pays separately for requested add-ons; prices will be shared before confirmation.</p>
+  </section>
+  <section class="note" id="itinerary" aria-labelledby="itinerary-heading">
+    <strong id="itinerary-heading">Itinerary, pickup and drop-off timings</strong>
+    <p style="margin-top:8px">Every bookable package should show a day-by-day itinerary with pickup point and reporting time, departure time, planned stops, meal breaks, arrival and darshan/visiting schedule, night-halt details, return departure, and expected final drop-off time. Exact clock times depend on the selected route, temple/attraction schedules, traffic, permits and travel date, so they will be confirmed in the package itinerary before payment rather than guessed in advance.</p>
+    <p style="margin-top:10px"><strong>Before paying:</strong> ask for the written itinerary, exact pickup and drop times, total package price, included meals/stay/tickets, add-on prices, and cancellation terms. Any change to the itinerary will be communicated by the SaahiRides team.</p>
+  </section>
   <h2 id="enquire">How to Enquire</h2>
   <div class="steps">
     <div class="step"><b>1. Share your plan</b>Destination, pickup city, travel dates and number of travellers.</div>
@@ -102,7 +111,7 @@ footer a{color:#06122E;font-weight:800}
       <div class="form-field"><label for="destination">Destination / route</label><input id="destination" name="destination" placeholder="Where would you like to go?" required></div>
       <div class="form-field"><label for="start-date">Departure date</label><input id="start-date" name="start-date" type="date" required></div>
       <div class="form-field"><label for="end-date">Return date (if applicable)</label><input id="end-date" name="end-date" type="date"></div>
-      <div class="form-field full"><label for="trip-notes">Additional requirements</label><textarea id="trip-notes" name="trip-notes" placeholder="Vehicle preference, food/stay/darshan needs, stops, budget or other requests"></textarea></div>
+      <div class="form-field full"><label for="trip-notes">Additional requirements</label><textarea id="trip-notes" name="trip-notes" placeholder="Vehicle preference, required pickup/drop times, meal or room-sharing needs, darshan type, stops, add-ons and budget"></textarea></div>
     </div>
     <button class="form-submit" type="submit">Continue to WhatsApp →</button>
     <p class="form-note">Your booking is not confirmed by sending an enquiry. We will confirm availability, package inclusions, price and terms before you book.</p>
@@ -125,7 +134,7 @@ footer a{color:#06122E;font-weight:800}
       'Return date: '+(value('end-date')||'Not decided'),
       'Additional requirements: '+(value('trip-notes')||'None provided'),
       '',
-      'Please confirm availability, full price, inclusions, exclusions and booking terms.'
+      'Please send the day-by-day itinerary with pickup/reporting and drop-off times, shared stay/night halts, breakfast/lunch/dinner, included general darshan tickets, optional add-on prices, total price and booking terms.'
     ];
     window.location.href='https://wa.me/919347946026?text='+encodeURIComponent(lines.join('\n'));
   });
