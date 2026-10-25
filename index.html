@@ -14,18 +14,53 @@
 <link rel="canonical" href="https://www.saahirides.co.in/">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#06122E;font-family:'Segoe UI',sans-serif}
-.container{max-width:550px;margin:0 auto;background:#06122E}
+:root{color-scheme:dark;--navy:#06122E;--navy2:#0B1C3D;--gold:#FFD700;--gold2:#D4AF37}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at top,#132b53 0%,#06122E 48%,#030817 100%);font-family:'Segoe UI',Arial,sans-serif;color:#fff;line-height:1.55}
+.container{max-width:900px;margin:0 auto;background:var(--navy);overflow:hidden;box-shadow:0 0 50px rgba(0,0,0,.35)}
 img{width:100%;display:block}
-.btn-box{padding:25px;display:flex;flex-direction:column;gap:15px}
-.btn{padding:18px;text-align:center;border-radius:60px;font-weight:800;font-size:18px;text-decoration:none;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
-.btn-gold{background:linear-gradient(90deg,#D4AF37,#FFD700);color:#06122E}
-.btn-outline{border:2px solid #D4AF37;color:#FFD700;background:transparent}
-.footer{text-align:center;padding:25px;color:#D4AF37;font-size:13px;line-height:1.6}
+.container>img{object-fit:cover}
+.btn-box{padding:24px;display:flex;flex-direction:column;gap:13px;background:linear-gradient(180deg,#0b1c3d,#06122e)}
+.btn{padding:17px 20px;text-align:center;border-radius:16px;font-weight:800;font-size:17px;text-decoration:none;box-shadow:0 7px 18px rgba(0,0,0,.22);transition:transform .18s ease,filter .18s ease}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn-gold{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+.btn-outline{border:2px solid #D4AF37;color:#FFD700;background:rgba(255,255,255,.025)}
+.footer{text-align:center;padding:28px 20px;color:#F2CF59;font-size:14px;line-height:1.8;background:#030817}
+.hero{padding:34px 24px 30px;text-align:center;background:linear-gradient(145deg,#102b55 0%,#06122e 62%,#17203a 100%);border-bottom:1px solid rgba(255,215,0,.35)}
+.hero-mark{display:inline-block;color:#FFD700;border:1px solid rgba(255,215,0,.6);border-radius:999px;padding:6px 13px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.08;letter-spacing:-1.2px;color:#fff;margin:0 auto 14px;max-width:760px}
+.hero h1 span{color:#FFD700}
+.hero p{max-width:650px;margin:0 auto 20px;color:#e2e8f0;font-size:16px}
+.hero-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px auto 24px}
+.hero-tags span{font-size:12px;border:1px solid rgba(255,215,0,.3);background:rgba(255,255,255,.06);border-radius:999px;padding:6px 10px;color:#fff}
+.hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hero-actions a{display:inline-block;text-decoration:none;font-weight:800;border-radius:12px;padding:13px 17px}
+.hero-primary{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+.hero-secondary{border:1px solid #D4AF37;color:#FFD700}
+.section-intro{padding:28px 20px 8px;text-align:center;background:#06122E}
+.section-intro h2{font-size:clamp(25px,4vw,34px);color:#FFD700;margin-bottom:6px}
+.section-intro p{color:#dbe4f4;font-size:15px}
+@media(min-width:650px){.btn-box{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:28px}.btn{font-size:15px;padding:15px 12px}.hero{padding:52px 40px 42px}}
+@media(max-width:420px){.hero{padding:28px 16px}.hero p{font-size:15px}.btn-box{padding:17px}.btn{font-size:15px}}
 </style>
 </head>
 <body>
 <div class="container">
+  <header class="hero">
+    <div class="hero-mark">Hyderabad Ki Apni Sawari</div>
+    <h1>Every Journey, <span>SaahiPrice.</span></h1>
+    <p>Safe, affordable rides for everyday travel and special journeys. Choose from bikes, scooties, autos, cabs, rentals and outstation trips — with no surge pricing.</p>
+    <div class="hero-tags">
+      <span>✓ No Surge Pricing</span>
+      <span>✓ Multiple Ride Categories</span>
+      <span>✓ WhatsApp Booking</span>
+    </div>
+    <div class="hero-actions">
+      <a class="hero-primary" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.">Book on WhatsApp</a>
+      <a class="hero-secondary" href="#vehicles">Explore Vehicles ↓</a>
+    </div>
+  </header>
+
   <img src="saahirides-hyderabad-welcome-family.jpg" alt="SaahiRides Hyderabad Welcome Family - CEO Subodh & Co-Founder Sujata - Safe Affordable Rides Hyderabad" loading="lazy">
   
   <img src="saahirides-love-story-subodh-sujata-taj-mahal.jpg" alt="SaahiRides founders and the story behind the Hyderabad transport company" loading="lazy">
@@ -77,7 +112,12 @@ img{width:100%;display:block}
   <a href="tel:9347946026" style="display:block;background:transparent;color:#FFD700;padding:18px;border-radius:15px;margin:12px 0;font-weight:800;text-decoration:none;font-size:15px;border:2px solid #fff">12. Two Way 30 Days Both Ways + Carry Forward Available</a>
 </div>
 
-  <!-- VEHICLES CATEGORY - BIG BUTTONS -->
+  <div class="section-intro" id="vehicles">
+  <h2>Find Your SaahiRide</h2>
+  <p>Explore available vehicle categories and contact us for an itemised fare quote.</p>
+</div>
+
+<!-- VEHICLES CATEGORY - BIG BUTTONS -->
 <div style="background:#fff;padding:25px 15px;text-align:center">
   <h2 style="color:#06122E;font-size:32px;margin:0;font-weight:900">Our Vehicles</h2>
   <p style="color:#06122E;margin:5px 0 25px 0;font-size:18px;opacity:0.7">Hyderabad Ki Apni Sawari - Choose Your Ride</p>
