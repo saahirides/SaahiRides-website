@@ -78,6 +78,26 @@ img{width:100%;display:block}
 .offer-strip>div>span:last-child{font-size:12px;color:#e2e8f0}
 .offer-strip>a{flex-shrink:0;color:#06122E;background:linear-gradient(100deg,#D4AF37,#FFE66D);font-weight:900;text-decoration:none;border-radius:10px;padding:12px 16px}
 #contact{scroll-margin-top:12px}
+
+.travel-section{padding:34px 22px 36px;background:linear-gradient(145deg,#0b1c3d,#06122e 60%,#030817);border-top:1px solid rgba(255,215,0,.45);border-bottom:1px solid rgba(255,215,0,.45)}
+.travel-heading{text-align:center;max-width:720px;margin:0 auto 24px}
+.travel-kicker{display:inline-block;color:#FFD700;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:900;margin-bottom:7px}
+.travel-heading h2{font-size:clamp(28px,4.5vw,40px);color:#FFD700;line-height:1.15;margin-bottom:10px}
+.travel-heading p{color:#dbe4f4;font-size:15px}
+.travel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.travel-card{padding:19px 16px;border:1px solid rgba(255,215,0,.38);border-radius:15px;background:linear-gradient(145deg,#10284d,#07152f);min-width:0}
+.travel-icon{font-size:27px;display:block;margin-bottom:8px}
+.travel-card h3{color:#FFD700;font-size:17px;line-height:1.3;margin-bottom:8px}
+.travel-card p{color:#e2e8f0;font-size:13px;line-height:1.6}
+.travel-note{margin:18px 0;padding:15px 17px;border-left:4px solid #FFD700;background:rgba(255,255,255,.055);color:#e2e8f0;font-size:14px}
+.travel-note strong{color:#FFD700}
+.travel-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px}
+.travel-actions a{display:inline-block;text-align:center;text-decoration:none;font-weight:900;padding:13px 18px;border-radius:11px}
+.travel-primary{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+.travel-secondary{border:1px solid #D4AF37;color:#FFD700}
+@media(max-width:650px){.travel-section{padding:28px 16px}.travel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.travel-card{padding:15px 12px}.travel-card h3{font-size:15px}.travel-card p{font-size:12px}.travel-actions{flex-direction:column}.travel-actions a{width:100%}}
+@media(max-width:400px){.travel-grid{grid-template-columns:1fr}}
+
 @media(max-width:650px){.top-nav{align-items:flex-start;flex-direction:column;padding:12px 15px}.nav-links{justify-content:flex-start;gap:12px}.nav-links a{font-size:12px}.landing-hero{grid-template-columns:1fr;padding:25px 17px;gap:18px}.landing-hero h1{font-size:46px}.hero-portrait img{max-height:360px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.offer-strip{align-items:flex-start;flex-direction:column;padding:17px}.offer-strip>a{width:100%;text-align:center}}
 </style>
 </head>
@@ -86,7 +106,7 @@ img{width:100%;display:block}
   <nav class="top-nav" aria-label="Main navigation">
     <a class="brand-mini" href="#home">🦅 <span>Saahi<span class="brand-orange">Rides</span></span></a>
     <div class="nav-links">
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#vehicles">Vehicles</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
+      <a href="#home">Home</a><a href="#services">Services</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
     </div>
   </nav>
 
@@ -123,6 +143,27 @@ img{width:100%;display:block}
   <section class="offer-strip" id="offers">
     <div><span class="offer-kicker">SaahiRides Offer</span><strong>15 Days Free Trial</strong><span>Check current eligibility and offer details with our team.</span></div>
     <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20the%20current%2015%20days%20free%20trial%20offer%20details.">Ask About Offer</a>
+  </section>
+
+  <section class="travel-section" id="tours" aria-labelledby="travel-heading">
+    <div class="travel-heading">
+      <span class="travel-kicker">Beyond the everyday ride</span>
+      <h2 id="travel-heading">Tours &amp; Travel</h2>
+      <p>From Hyderabad city experiences to memorable journeys across India, ask SaahiRides about a trip planned around your group, dates and budget.</p>
+    </div>
+    <div class="travel-grid">
+      <article class="travel-card"><span class="travel-icon">🛕</span><h3>Temple &amp; Pilgrimage Tours</h3><p>South Indian temples, North Indian temple journeys and seasonal Sabarimala travel (typically November–January; confirm current dates and arrangements).</p></article>
+      <article class="travel-card"><span class="travel-icon">🌆</span><h3>Hyderabad Experiences</h3><p>Hyderabad sightseeing, Ramoji Film City visits and customised local itineraries for families and groups.</p></article>
+      <article class="travel-card"><span class="travel-icon">🛣️</span><h3>Intercity &amp; Outstation</h3><p>One-way and round-trip journeys, including Hyderabad to Vijayawada for Kanaka Durga Temple and other destinations by request.</p></article>
+      <article class="travel-card"><span class="travel-icon">💍</span><h3>Honeymoon &amp; Destination Weddings</h3><p>Discuss transport and travel coordination for couples, wedding guests and group movements.</p></article>
+      <article class="travel-card"><span class="travel-icon">🚌</span><h3>Group &amp; Family Packages</h3><p>Ask about cars and tempo travellers for families, pilgrim groups, corporate outings and special occasions.</p></article>
+      <article class="travel-card"><span class="travel-icon">🍽️</span><h3>Trip Inclusions on Request</h3><p>Depending on the selected package, enquire about food, accommodation, darshan arrangements and fresh-up stops. Inclusions and costs are confirmed in your written itinerary.</p></article>
+    </div>
+    <div class="travel-note"><strong>Planning a trip?</strong> Share your destination, travel dates, number of travellers and pickup city. We will confirm availability, itinerary, inclusions and a clear quote before you book.</div>
+    <div class="travel-actions">
+      <a class="travel-primary" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20enquire%20about%20Tours%20%26%20Travel.%20Please%20help%20me%20plan%20a%20trip.">💬 Enquire on WhatsApp</a>
+      <a class="travel-secondary" href="travel-tours.html">Explore Tours &amp; Travel ↗</a>
+    </div>
   </section>
 
   <img src="saahirides-hyderabad-welcome-family.jpg" alt="SaahiRides founders' welcome — company family and Hyderabad community" loading="eager">
