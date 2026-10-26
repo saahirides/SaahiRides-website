@@ -114,6 +114,100 @@ footer a{color:#06122E;font-weight:800}
     <a class="secondary" href="index.html">← Back to SaahiRides</a>
   </div>
 </header>
+
+<section class="content" id="saahi-travel-hub" aria-labelledby="travel-hub-heading">
+  <h2 id="travel-hub-heading">Plan Your India Journey</h2>
+  <p class="intro">Choose a Team SaahiRides recommendation, explore destinations state-wise, build your own route, or plan a special occasion. Your selections update as you go.</p>
+  <div class="grid travel-hub-grid">
+    <article class="card"><div class="icon">🏆</div><h3>A. 20 Selected Destinations by Team SaahiRides</h3><p>Start with our curated trips for pilgrimage, heritage, family holidays and popular experiences.</p><div class="package-actions"><a class="primary" href="#trip-options">Explore 20 trips ↓</a></div></article>
+    <article class="card"><div class="icon">🗺️</div><h3>B. Choose State-wise — Add to Cart</h3><p>Select a region and destination, add multiple stops, and review your trip list before sending an enquiry.</p><div class="package-actions"><a href="#state-trip-builder">Build a state-wise trip ↓</a></div></article>
+    <article class="card"><div class="icon">🧭</div><h3>C. You Choose the Destinations</h3><p>Tell us your pickup point and the places you want to visit. We will review the route and prepare a tailored quote.</p><div class="package-actions"><a href="#custom-trip-builder">Build my own trip ↓</a></div></article>
+    <article class="card"><div class="icon">💍</div><h3>D. Destination Wedding Planner</h3><p>Plan guest transport, airport and railway pickups, venue transfers and multi-day travel coordination.</p><div class="package-actions"><a href="#special-trip-enquiry" data-special="Destination Wedding Planner">Plan a wedding ↓</a></div></article>
+    <article class="card"><div class="icon">✍️</div><h3>E. CEO Blogs</h3><p>Read SaahiRides travel stories, practical destination guides and cultural notes, including our Panchavati guide.</p><div class="package-actions"><a class="primary" href="ceo-blog-panchavati.html">Read CEO Blog →</a></div></article>
+    <article class="card"><div class="icon">❤️</div><h3>F. Bride &amp; Groom Special Package</h3><p>Request a couple's getaway or honeymoon with a preferred destination, dates, vehicle and optional experiences.</p><div class="package-actions"><a href="#special-trip-enquiry" data-special="Bride & Groom Special Package">Plan a couple's trip ↓</a></div></article>
+  </div>
+  <section class="trip-tools" id="state-trip-builder" aria-labelledby="state-trip-heading">
+    <h3 id="state-trip-heading">B. State-wise Destination Builder</h3>
+    <p>Choose a state or region to see starter destinations. Add as many as you want; this list can be expanded without redesigning the page.</p>
+    <div class="form-grid">
+      <div class="form-field"><label for="travel-region">State / region</label><select id="travel-region"><option value="Telangana">1. Telangana</option><option value="Tamil Nadu">2. Tamil Nadu</option><option value="Maharashtra">3. Maharashtra</option><option value="Andhra Pradesh">4. Andhra Pradesh</option><option value="Karnataka">5. Karnataka</option><option value="Odisha">6. Odisha</option><option value="Jaipur">7.a Jaipur</option><option value="Rest of Rajasthan">7.b Rest of Rajasthan</option><option value="Gujarat">8. Gujarat</option><option value="Uttar Pradesh">9. Uttar Pradesh</option><option value="Kerala">10. Kerala</option><option value="Goa">11. Goa</option><option value="West Bengal & Assam">12. West Bengal &amp; Assam</option><option value="Himachal Pradesh">13. Himachal Pradesh</option></select></div>
+      <div class="form-field"><label for="travel-destination">Destination</label><select id="travel-destination"></select></div>
+    </div>
+    <div class="package-actions"><button class="primary" type="button" id="add-destination">＋ Add destination to trip</button></div>
+    <p id="destination-hint" aria-live="polite">Choose a destination to begin.</p>
+    <div id="trip-cart" class="trip-tools" aria-live="polite"><h4>Your trip cart (<span id="cart-count">0</span>)</h4><p id="cart-empty">No destinations added yet.</p><ul id="cart-items"></ul><div class="package-actions"><button type="button" id="clear-trip-cart">Clear trip</button><button type="button" class="primary" id="send-cart-enquiry">Request route &amp; quote on WhatsApp</button></div><p class="form-note">Cart selections are held in this page session only. This is an enquiry cart, not a confirmed booking or live fare calculation.</p></div>
+  </section>
+  <section class="trip-tools" id="custom-trip-builder" aria-labelledby="custom-trip-heading">
+    <h3 id="custom-trip-heading">C. Build Your Own Trip</h3>
+    <p>Enter your route and preferences. We'll send the details to SaahiRides on WhatsApp for route review and a written quote.</p>
+    <div class="form-grid">
+      <div class="form-field"><label for="custom-pickup">Pickup location</label><input id="custom-pickup" placeholder="e.g. Nagaram, Hyderabad"></div>
+      <div class="form-field"><label for="custom-drop">Final drop location</label><input id="custom-drop" placeholder="e.g. Hyderabad"></div>
+      <div class="form-field"><label for="custom-stops">Places to visit (in order)</label><textarea id="custom-stops" placeholder="Add one or more destinations, one per line"></textarea></div>
+      <div class="form-field"><label for="custom-vehicle">Preferred travel mode</label><select id="custom-vehicle"><option>Recommend a suitable vehicle</option><option>Sedan</option><option>SUV / MUV</option><option>Tempo traveller</option><option>Bus / large group</option><option>Train/flight plus local transfers</option></select></div>
+      <div class="form-field"><label for="custom-date">Travel start date</label><input id="custom-date" type="date"></div>
+      <div class="form-field"><label for="custom-travellers">Number of travellers</label><input id="custom-travellers" type="number" min="1" max="100" placeholder="e.g. 4"></div>
+      <div class="form-field full"><label for="custom-notes">Special requirements</label><textarea id="custom-notes" placeholder="Trip duration, accessibility, meal/stay needs, sightseeing preferences, budget"></textarea></div>
+    </div>
+    <div class="package-actions"><button type="button" class="primary" id="send-custom-trip">Send custom trip enquiry →</button></div>
+  </section>
+  <section class="trip-tools" id="special-trip-enquiry" aria-labelledby="special-trip-heading">
+    <h3 id="special-trip-heading">D &amp; F. Special Occasion Enquiry</h3>
+    <p>For destination weddings or Bride &amp; Groom packages, share the occasion, location and guest/couple travel needs. Venue, vendors, accommodation and dates remain subject to confirmation.</p>
+    <div class="form-grid">
+      <div class="form-field"><label for="special-type">Package type</label><select id="special-type"><option>Destination Wedding Planner</option><option>Bride & Groom Special Package</option></select></div>
+      <div class="form-field"><label for="special-location">Preferred destination</label><input id="special-location" placeholder="City, state or destination"></div>
+      <div class="form-field"><label for="special-date">Preferred date</label><input id="special-date" type="date"></div>
+      <div class="form-field"><label for="special-group">Guests / travellers</label><input id="special-group" type="number" min="1" max="500" placeholder="Approximate number"></div>
+      <div class="form-field full"><label for="special-notes">Transport and planning requirements</label><textarea id="special-notes" placeholder="Airport/rail pickups, venue transfers, duration, accommodation or experiences requested"></textarea></div>
+    </div>
+    <div class="package-actions"><button type="button" class="primary" id="send-special-trip">Send special package enquiry →</button></div>
+  </section>
+</section>
+<style>
+.travel-hub-grid{margin:22px 0 28px}
+#saahi-travel-hub .trip-tools{scroll-margin-top:20px}
+#saahi-travel-hub .form-grid{margin-top:12px}
+#saahi-travel-hub .form-field textarea{min-height:75px}
+#saahi-travel-hub .package-actions{margin-top:14px}
+#saahi-travel-hub .package-actions button{color:#fff}
+#saahi-travel-hub .package-actions button.primary{color:#06122e}
+#saahi-travel-hub .card{height:100%}
+</style>
+<script>
+(function(){
+  const data={
+    "Telangana":["Hyderabad City Tour","Ramoji Film City","Yadadri Temple","Bhadrachalam","Basara Temple","Vemulawada Temple","Ramappa Temple & Laknavaram"],
+    "Tamil Nadu":["Madurai & Meenakshi Temple","Rameswaram","Thanjavur Heritage","Kanyakumari","Mahabalipuram"],
+    "Maharashtra":["Nashik & Panchavati","Trimbakeshwar Temple","Shirdi","Ajanta & Ellora Caves","Mumbai Heritage"],
+    "Andhra Pradesh":["Tirupati","Vijayawada Kanaka Durga Temple","Araku Valley","Visakhapatnam","Srisailam Circuit"],
+    "Karnataka":["Mysuru Palace","Hampi Heritage","Bengaluru City Tour","Belur & Halebidu","Coorg"],
+    "Odisha":["Puri Jagannath Temple","Konark Sun Temple","Bhubaneswar Temple Circuit","Chilika Lake"],
+    "Jaipur":["Jaipur City Palace & Hawa Mahal","Amber Fort","Jaipur Heritage Circuit"],
+    "Rest of Rajasthan":["Udaipur","Jodhpur","Jaisalmer","Pushkar"],
+    "Gujarat":["Dwarka","Somnath","Ahmedabad Heritage","Rani ki Vav"],
+    "Uttar Pradesh":["Varanasi","Ayodhya","Agra & Taj Mahal","Mathura–Vrindavan"],
+    "Kerala":["Munnar","Alleppey Backwaters","Kochi Heritage","Guruvayur"],
+    "Goa":["North Goa","South Goa","Old Goa Heritage"],
+    "West Bengal & Assam":["Kolkata Heritage","Darjeeling","Guwahati & Kamakhya Temple","Kaziranga"],
+    "Himachal Pradesh":["Shimla","Manali","Dharamshala","Kullu"]
+  };
+  const region=document.getElementById('travel-region'), destination=document.getElementById('travel-destination');
+  const cart=[], cartItems=document.getElementById('cart-items'), cartEmpty=document.getElementById('cart-empty'), cartCount=document.getElementById('cart-count');
+  function populate(){destination.replaceChildren();(data[region.value]||[]).forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;destination.appendChild(option);});document.getElementById('destination-hint').textContent=(data[region.value]||[]).length+' starter destinations shown for '+region.value+'. More verified destinations can be added to this catalogue.';}
+  function renderCart(){cartItems.replaceChildren();cart.forEach((item,index)=>{const li=document.createElement('li');li.textContent=item.region+' — '+item.name+' ';const btn=document.createElement('button');btn.type='button';btn.textContent='Remove';btn.setAttribute('aria-label','Remove '+item.name);btn.addEventListener('click',()=>{cart.splice(index,1);renderCart();});li.appendChild(btn);cartItems.appendChild(li);});cartCount.textContent=cart.length;cartEmpty.hidden=cart.length>0;}
+  function send(message){window.location.href='https://wa.me/919347946026?text='+encodeURIComponent(message);}
+  region.addEventListener('change',populate);
+  document.getElementById('add-destination').addEventListener('click',()=>{if(!destination.value)return;cart.push({region:region.value,name:destination.value});renderCart();document.getElementById('destination-hint').textContent=destination.value+' added to your trip cart.';});
+  document.getElementById('clear-trip-cart').addEventListener('click',()=>{cart.length=0;renderCart();});
+  document.getElementById('send-cart-enquiry').addEventListener('click',()=>{if(!cart.length){document.getElementById('destination-hint').textContent='Please add at least one destination before requesting a quote.';return;}send('Hello SaahiRides, please plan a state-wise trip and send an itemised quote.\nSelected destinations:\n'+cart.map((x,i)=>(i+1)+'. '+x.region+' — '+x.name).join('\n')+'\nPlease confirm route connectivity, approximate kilometres, travel time, suitable vehicle, itinerary, inclusions, taxes and availability.');});
+  document.getElementById('send-custom-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();if(!v('custom-pickup')||!v('custom-drop')||!v('custom-stops')){alert('Please enter pickup, final drop and at least one destination.');return;}send('Hello SaahiRides, please quote my custom trip.\nPickup: '+v('custom-pickup')+'\nFinal drop: '+v('custom-drop')+'\nStops in order: '+v('custom-stops')+'\nVehicle: '+v('custom-vehicle')+'\nStart date: '+(v('custom-date')||'Not decided')+'\nTravellers: '+(v('custom-travellers')||'Not decided')+'\nRequirements: '+(v('custom-notes')||'None stated')+'\nPlease verify connectivity, route, kilometres, timings and itemised package cost.');});
+  document.getElementById('send-special-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();send('Hello SaahiRides, please contact me about a special package.\nPackage: '+v('special-type')+'\nDestination: '+(v('special-location')||'To be decided')+'\nDate: '+(v('special-date')||'Not decided')+'\nGuests/travellers: '+(v('special-group')||'Not decided')+'\nRequirements: '+(v('special-notes')||'Please advise')+'\nPlease share availability, inclusions, transport options and an itemised quote.');});
+  document.querySelectorAll('[data-special]').forEach(link=>link.addEventListener('click',()=>{document.getElementById('special-type').value=link.dataset.special; }));
+  populate();renderCart();
+})();
+</script>
+
 <section class="content" id="trip-options">
   <h2>Explore Trip Options</h2>
   <p class="intro">Choose from 20 named packages below. Durations are indicative planning estimates, not guaranteed schedules; the written quote will confirm availability, final route, pickup/drop timings, inclusions and price.</p>
