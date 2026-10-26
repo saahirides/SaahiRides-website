@@ -176,21 +176,25 @@ footer a{color:#06122E;font-weight:800}
 </style>
 <script>
 (function(){
+  // Combined catalogue: current SaahiRides package destinations plus additional state-wise research starters.
+  // Destinations are suggestions, not confirmed package availability or live route/fare data.
   const data={
-    "Telangana":["Hyderabad City Tour","Ramoji Film City","Yadadri Temple","Bhadrachalam","Basara Temple","Vemulawada Temple","Ramappa Temple & Laknavaram"],
-    "Tamil Nadu":["Madurai & Meenakshi Temple","Rameswaram","Thanjavur Heritage","Kanyakumari","Mahabalipuram"],
-    "Maharashtra":["Nashik & Panchavati","Trimbakeshwar Temple","Shirdi","Ajanta & Ellora Caves","Mumbai Heritage"],
-    "Andhra Pradesh":["Tirupati","Vijayawada Kanaka Durga Temple","Araku Valley","Visakhapatnam","Srisailam Circuit"],
-    "Karnataka":["Mysuru Palace","Hampi Heritage","Bengaluru City Tour","Belur & Halebidu","Coorg"],
-    "Odisha":["Puri Jagannath Temple","Konark Sun Temple","Bhubaneswar Temple Circuit","Chilika Lake"],
-    "Jaipur":["Jaipur City Palace & Hawa Mahal","Amber Fort","Jaipur Heritage Circuit"],
-    "Rest of Rajasthan":["Udaipur","Jodhpur","Jaisalmer","Pushkar"],
-    "Gujarat":["Dwarka","Somnath","Ahmedabad Heritage","Rani ki Vav"],
-    "Uttar Pradesh":["Varanasi","Ayodhya","Agra & Taj Mahal","Mathura–Vrindavan"],
-    "Kerala":["Munnar","Alleppey Backwaters","Kochi Heritage","Guruvayur"],
-    "Goa":["North Goa","South Goa","Old Goa Heritage"],
-    "West Bengal & Assam":["Kolkata Heritage","Darjeeling","Guwahati & Kamakhya Temple","Kaziranga"],
-    "Himachal Pradesh":["Shimla","Manali","Dharamshala","Kullu"]
+    "Telangana — Hyderabad":["Hyderabad City Tour (existing package #2)","Ramoji Film City (existing package #1)","Charminar & Old City","Golconda Fort","Hussain Sagar & Birla Mandir","Chowmahalla Palace","Salar Jung Museum"],
+    "Telangana — Rest of Telangana":["Yadadri Temple","Bhadrachalam","Basara Temple","Vemulawada Temple","Ramappa Temple & Laknavaram","Warangal Fort & Thousand Pillar Temple","Bogatha Waterfalls","Nagarjuna Sagar"],
+    "Tamil Nadu":["Rameswaram (existing package #13)","Madurai & Meenakshi Temple","Thanjavur Heritage","Kanyakumari","Mahabalipuram","Chennai Heritage","Chidambaram","Kanchipuram","Ooty, Kodaikanal & Coonoor (existing package #11)"],
+    "Maharashtra":["Nashik & Panchavati (existing package #8)","Trimbakeshwar Temple","Shirdi","Ajanta & Ellora Caves","Mumbai Heritage","Pune Heritage","Mahabaleshwar","Kolhapur Mahalaxmi Temple (existing package #7)"],
+    "Andhra Pradesh":["Kanaka Durga Temple, Vijayawada (existing package #3)","Tirupati","Visakhapatnam","Araku Valley","Amaravati","Srisailam (existing package #4; cross-check state/route before booking)"],
+    "Karnataka":["Mysuru Trip (existing package #15)","Hampi Heritage","Bengaluru City Tour","Belur & Halebidu","Coorg","Badami Caves","Udupi & Murudeshwar"],
+    "Odisha":["Puri, Bhubaneswar & Konark (existing package #16)","Chilika Lake","Cuttack Heritage","Similipal region"],
+    "Jaipur":["Jaipur (existing package #12)","Hawa Mahal & City Palace","Amber Fort","Jantar Mantar","Jaipur Heritage Circuit"],
+    "Rest of Rajasthan":["Udaipur","Jodhpur","Jaisalmer","Pushkar","Mount Abu","Ranthambore region"],
+    "Gujarat":["Somnath (existing package #18)","Dwarka","Ahmedabad Heritage","Rani ki Vav","Statue of Unity","Gir National Park (existing package #18 circuit)"],
+    "Uttar Pradesh":["Varanasi","Ayodhya","Agra & Taj Mahal","Mathura–Vrindavan","Prayagraj","Sarnath"],
+    "Kerala":["Kerala Backwaters (existing package #5)","Munnar","Alleppey Backwaters","Kochi Heritage","Guruvayur","Thekkady","Wayanad"],
+    "Goa":["Go Goa (existing package #6)","North Goa","South Goa","Old Goa Heritage","Dudhsagar Falls area"],
+    "West Bengal & Assam":["Kamakhya Temple, Assam (existing package #20)","Kolkata Heritage","Darjeeling","Kalimpong","Guwahati","Kaziranga","Sundarbans"],
+    "Himachal Pradesh":["Kullu Dussehra & Manali (existing package #9)","Shimla & Nainital (existing package #10; multi-state itinerary)","Dharamshala","Kullu","Manali","Spiti Valley (seasonal; access check required)"],
+    "Cross-state / special packages":["Honeymoon Escape (existing package #14)","Your Pick — Custom India Tour (existing package #17)","Destination Wedding Planner (existing package #19)"]
   };
   const region=document.getElementById('travel-region'), destination=document.getElementById('travel-destination');
   const cart=[], cartItems=document.getElementById('cart-items'), cartEmpty=document.getElementById('cart-empty'), cartCount=document.getElementById('cart-count');
