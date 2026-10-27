@@ -140,10 +140,42 @@ img{width:100%;display:block}
     </div>
   </section>
 
-  <section class="offer-strip" id="offers">
-    <div><span class="offer-kicker">SaahiRides Offer</span><strong>15 Days Free Trial</strong><span>Check current eligibility and offer details with our team.</span></div>
-    <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20the%20current%2015%20days%20free%20trial%20offer%20details.">Ask About Offer</a>
+  <section class="offers-announcements" id="offers" aria-labelledby="offers-heading">
+    <div class="offers-announcements-heading">
+      <span class="offer-kicker">Stay in the loop</span>
+      <h2 id="offers-heading">Special Offers &amp; Announcements</h2>
+      <p>Check the latest SaahiRides offers, service updates and announcements before you book.</p>
+    </div>
+    <div class="offers-announcements-grid">
+      <article class="offer-feature-card">
+        <span class="offer-card-label">Special Offer</span>
+        <h3>15 Days Free Trial</h3>
+        <p>Ask our team about eligibility, applicable ride categories and current terms.</p>
+        <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20the%20current%2015%20days%20free%20trial%20offer%20details.">Ask About This Offer ↗</a>
+      </article>
+      <article class="offer-feature-card announcement-card">
+        <span class="offer-card-label">Announcements</span>
+        <h3>Updates from SaahiRides</h3>
+        <p>For current offers, launch updates, service notices and new travel packages, contact us or follow our social pages.</p>
+        <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20your%20latest%20offers%20and%20announcements.">Request Latest Updates ↗</a>
+      </article>
+    </div>
+    <p class="offers-footnote">Offers are subject to eligibility, availability and the terms confirmed by SaahiRides. Please verify the current offer before booking.</p>
   </section>
+  <style>
+  .offers-announcements{padding:34px 22px;background:#f8fafc;border-top:2px solid #D4AF37}
+  .offers-announcements-heading{text-align:center;max-width:700px;margin:0 auto 22px}
+  .offers-announcements-heading h2{color:#173B7A;font-size:clamp(25px,4vw,36px);margin:7px 0}
+  .offers-announcements-heading p{color:#475569;margin:0}
+  .offers-announcements-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:950px;margin:auto}
+  .offer-feature-card{padding:24px;border-radius:16px;background:linear-gradient(145deg,#102d62,#07152f);color:#fff;border:1px solid #D4AF37;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+  .offer-card-label{display:inline-block;background:#FFD700;color:#06122E;padding:5px 9px;border-radius:30px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px}
+  .offer-feature-card h3{color:#FFD700;font-size:22px;margin:14px 0 8px}
+  .offer-feature-card p{font-size:14px;line-height:1.6;margin:0 0 17px;color:#e2e8f0}
+  .offer-feature-card a{display:inline-block;color:#fff;font-weight:800;text-decoration:none;border-bottom:2px solid #FFD700;padding-bottom:4px}
+  .offers-footnote{text-align:center;color:#64748b;font-size:12px;margin:17px auto 0;max-width:800px}
+  @media(max-width:600px){.offers-announcements{padding:27px 15px}.offers-announcements-grid{grid-template-columns:1fr}.offer-feature-card{padding:20px}}
+  </style>
 
   <section class="travel-section" id="tours" aria-labelledby="travel-heading">
     <div class="travel-heading">
