@@ -107,7 +107,7 @@ img{width:100%;display:block}
   <nav class="top-nav" aria-label="Main navigation">
     <a class="brand-mini" href="#home" aria-label="SaahiRides Transit Pvt. Ltd. home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span class="brand-full-name">SaahiRides Transit Pvt. Ltd.</span></a>
     <div class="nav-links">
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
+      <a href="#home">Home</a><a href="#services">Services</a><a href="#pricing-model">Pricing</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
     </div>
   </nav>
 
@@ -172,6 +172,60 @@ img{width:100%;display:block}
       <a href="#vehicles"><strong>📍 Outstation</strong><span>One Way • Round Trip</span></a>
     </div>
   </section>
+
+  <section class="pricing-model-section" id="pricing-model" aria-labelledby="pricing-model-heading">
+    <div class="pricing-model-heading">
+      <span class="pricing-model-kicker">Clear fares. Your choice.</span>
+      <h2 id="pricing-model-heading">Our Pricing Model</h2>
+      <p>Choose On-Demand for individual trips or Subscription for a planned 30-day route-locked option. SaahiRides does not use surge pricing.</p>
+    </div>
+    <div class="pricing-model-grid">
+      <article class="pricing-model-card">
+        <span class="pricing-model-icon">₹</span>
+        <h3>On-Demand Pricing</h3>
+        <p class="pricing-model-lead">Pay for each trip.</p>
+        <ul>
+          <li>City fares use cumulative distance slabs up to 30 km.</li>
+          <li>Each distance slab uses its approved multiplier.</li>
+          <li>For a city trip beyond 30 km, the separate city-to-outstation handoff rules apply.</li>
+          <li>Bike, Scooty, EV, Auto and Cab options have their applicable rates and service tiers.</li>
+        </ul>
+        <a class="pricing-model-link" href="#fare-chart">View On-Demand Fare Chart ↓</a>
+      </article>
+      <article class="pricing-model-card pricing-model-subscription">
+        <span class="pricing-model-icon">📅</span>
+        <h3>Subscription Pricing</h3>
+        <p class="pricing-model-lead">Plan your regular route for 30 days.</p>
+        <ul>
+          <li>Monthly subscription amount depends on the approved service-rate level.</li>
+          <li>Add the fixed ₹199 Route-Lock fee to the monthly subscription amount.</li>
+          <li>Divide the 30-day total by 30 to calculate the one-way 0–5 km base fare.</li>
+          <li>Beyond 5 km, the subscription distance multipliers are: 5–10 km × 1.25; 10–15 km × 1.50; above 15 km × 1.75.</li>
+        </ul>
+        <a class="pricing-model-link" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20the%20Subscription%20Pricing%20Table%20and%20route-lock%20details.">Ask for Subscription Plans ↗</a>
+      </article>
+    </div>
+    <p class="pricing-model-note"><strong>Important:</strong> On-Demand city pricing applies only up to 30 km. The city-traveller threshold is separate from normal outstation bookings. Confirm the applicable vehicle, route, subscription tier and final itemised fare with SaahiRides before booking.</p>
+  </section>
+  <style>
+  .pricing-model-section{padding:34px 22px 38px;background:linear-gradient(145deg,#06122e,#123564 58%,#06122e);border-top:3px solid #D4AF37;border-bottom:3px solid #D4AF37;color:#fff}
+  .pricing-model-heading{max-width:760px;text-align:center;margin:0 auto 24px}
+  .pricing-model-kicker{display:inline-block;color:#FFD700;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px}
+  .pricing-model-heading h2{font-size:clamp(28px,4.5vw,40px);line-height:1.15;color:#FFD700;margin:0 0 10px}
+  .pricing-model-heading p{color:#e2e8f0;font-size:15px}
+  .pricing-model-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:1000px;margin:0 auto}
+  .pricing-model-card{padding:23px 21px;border:1px solid rgba(255,215,0,.5);border-radius:16px;background:linear-gradient(145deg,#10284d,#07152f);min-width:0;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+  .pricing-model-subscription{background:linear-gradient(145deg,#123564,#07152f)}
+  .pricing-model-icon{display:inline-flex;width:42px;height:42px;align-items:center;justify-content:center;border-radius:50%;background:#FFD700;color:#06122E;font-size:23px;font-weight:900;margin-bottom:10px}
+  .pricing-model-card h3{color:#FFD700;font-size:23px;margin:0 0 4px}
+  .pricing-model-lead{font-weight:800;color:#fff;margin:0 0 12px}
+  .pricing-model-card ul{padding-left:20px;margin:0 0 20px;color:#e2e8f0;font-size:14px;line-height:1.65}
+  .pricing-model-card li{margin:0 0 7px}
+  .pricing-model-link{display:inline-block;padding:11px 14px;border-radius:9px;background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E;font-weight:900;text-decoration:none}
+  .pricing-model-note{max-width:1000px;margin:18px auto 0;padding:13px 15px;border-left:4px solid #FFD700;background:rgba(255,255,255,.07);color:#e2e8f0;font-size:13px;line-height:1.6}
+  .pricing-model-note strong{color:#FFD700}
+  @media(max-width:650px){.pricing-model-section{padding:28px 16px}.pricing-model-grid{grid-template-columns:1fr}.pricing-model-card{padding:20px 17px}.pricing-model-card h3{font-size:21px}}
+  </style>
 
   <section class="offers-announcements" id="offers" aria-labelledby="offers-heading">
     <div class="offers-announcements-heading">
@@ -318,7 +372,7 @@ img{width:100%;display:block}
 
 <!-- VEHICLE CATEGORIES -->
 <div style="background:#fff;padding:25px 15px;text-align:center">
-  <h2 style="color:#06122E;font-size:32px;margin:0;font-weight:900">Our Saati Vehicle List</h2>
+  <h2 style="color:#06122E;font-size:32px;margin:0;font-weight:900">Our Sawari Vehicle List</h2>
   <p style="color:#06122E;margin:5px 0 25px;font-size:18px;opacity:.8">Hyderabad Ki Apni Sawari — Choose Your Ride</p>
   <div class="vehicle-category-grid">
     <a href="#fare-chart">🏍️ <strong>Bike</strong><span>Standard • Express • Super Fast</span></a>
