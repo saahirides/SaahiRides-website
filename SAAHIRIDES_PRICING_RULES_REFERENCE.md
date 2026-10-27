@@ -22,13 +22,13 @@
 |---|---:|---:|---:|
 | Bike | ₹10/km | ₹12/km | ₹13/km |
 | Scooty | ₹14/km | ₹15/km | ₹17/km |
-| Scooty EV | ₹16/km | Unconfirmed | Unconfirmed |
+| Scooty EV | **Single rate: ₹16/km** | Not applicable | Not applicable |
 | Auto Rickshaw | ₹23/km | ₹25/km | ₹26/km |
-| Electric Auto Rickshaw | ₹25/km | Unconfirmed | Unconfirmed |
+| Electric Auto Rickshaw | **Single rate: ₹25/km** | Not applicable | Not applicable |
 | Non-AC Cab | ₹25/km | ₹27/km | ₹28/km |
 | AC Cab | ₹30/km | ₹32/km | ₹33/km |
 
-Unconfirmed rates must remain blocked until approved.
+Scooty EV and Electric Auto Rickshaw use one rate each only. Express and Super Fast tiers do not apply to these two vehicle categories.
 
 ## 3. City travellers whose actual trip exceeds 30 km
 This threshold rule applies only to a city traveller whose trip exceeds the 30 km city limit. Stop city fare calculation and hand off to the existing outstation pricing engine.
