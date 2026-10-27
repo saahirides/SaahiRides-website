@@ -44,7 +44,7 @@ img{width:100%;display:block}
 @media(max-width:420px){.hero{padding:28px 16px}.hero p{font-size:15px}.btn-box{padding:17px}.btn{font-size:15px}}
 
 .top-nav{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 22px;background:#030817;border-bottom:2px solid #D4AF37;position:relative;z-index:2}
-.brand-mini{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:900;font-size:clamp(18px,3vw,25px);white-space:nowrap}
+.brand-mini{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;font-size:clamp(14px,2.25vw,23px);white-space:nowrap;min-width:0}.brand-full-name{white-space:nowrap;letter-spacing:-.35px}
 .brand-logo{width:44px;height:44px;flex:0 0 44px;object-fit:contain;background:#fff;border:2px solid #D4AF37;border-radius:50%;padding:2px}
 .brand-orange{color:#ff8a00}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:15px}
@@ -99,13 +99,13 @@ img{width:100%;display:block}
 @media(max-width:650px){.travel-section{padding:28px 16px}.travel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.travel-card{padding:15px 12px}.travel-card h3{font-size:15px}.travel-card p{font-size:12px}.travel-actions{flex-direction:column}.travel-actions a{width:100%}}
 @media(max-width:400px){.travel-grid{grid-template-columns:1fr}}
 
-@media(max-width:650px){.top-nav{align-items:flex-start;flex-direction:column;padding:12px 15px}.nav-links{justify-content:flex-start;gap:12px}.nav-links a{font-size:12px}.landing-hero{grid-template-columns:1fr;padding:25px 17px;gap:18px}.landing-hero h1{font-size:46px}.hero-portrait img{max-height:360px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.offer-strip{align-items:flex-start;flex-direction:column;padding:17px}.offer-strip>a{width:100%;text-align:center}}
+@media(max-width:650px){.brand-mini{font-size:clamp(14px,4vw,20px);gap:8px}.brand-logo{width:40px;height:40px;flex-basis:40px}.top-nav{align-items:flex-start;flex-direction:column;padding:12px 15px}.nav-links{justify-content:flex-start;gap:12px}.nav-links a{font-size:12px}.landing-hero{grid-template-columns:1fr;padding:25px 17px;gap:18px}.landing-hero h1{font-size:46px}.hero-portrait img{max-height:360px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.offer-strip{align-items:flex-start;flex-direction:column;padding:17px}.offer-strip>a{width:100%;text-align:center}}
 </style>
 </head>
 <body>
 <div class="container">
   <nav class="top-nav" aria-label="Main navigation">
-    <a class="brand-mini" href="#home" aria-label="SaahiRides home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span>Saahi<span class="brand-orange">Rides</span><small style="display:block;font-size:10px;letter-spacing:.7px;color:#e2e8f0;line-height:1.2">TRANSIT PVT. LTD.</small></span></a>
+    <a class="brand-mini" href="#home" aria-label="SaahiRides Transit Pvt. Ltd. home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span class="brand-full-name">SaahiRides Transit Pvt. Ltd.</span></a>
     <div class="nav-links">
       <a href="#home">Home</a><a href="#services">Services</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
     </div>
@@ -114,7 +114,7 @@ img{width:100%;display:block}
   <header class="hero landing-hero" id="home">
     <div class="hero-copy">
       <div class="hero-mark">Welcome to SaahiRides</div>
-      <h1>Saahi<span>Rides</span><small>Transit Pvt. Ltd.</small></h1>
+      <h1>Saahi<span>Rides</span></h1>
       <h2>SafeRide @ SaahiPrice</h2>
       <p>Your Journey, Our Responsibility. Hyderabad Ki Apni Sawari — rides for everyday travel and special journeys, with no surge pricing.</p>
       <div class="hero-tags">
@@ -126,8 +126,7 @@ img{width:100%;display:block}
       </div>
     </div>
     <div class="hero-portrait">
-      <img src="saahirides-hyderabad-welcome-family.jpg" alt="SaahiRides family welcome" fetchpriority="high">
-      <p>Welcome to the SaahiRides family</p>
+      <img src="saahirides%20main%20page.png" alt="SaahiRides co-founder and HR leadership" fetchpriority="high">
     </div>
   </header>
 
