@@ -5,7 +5,7 @@
 *{box-sizing:border-box}body{margin:0;background:var(--paper);font:16px/1.5 Arial,Helvetica,sans-serif;color:var(--ink)}header{background:var(--navy);color:#fff;text-align:center;padding:26px 16px;border-bottom:5px solid var(--gold)}header h1{color:#ffd700;margin:0 0 6px;font-size:clamp(25px,5vw,38px)}header p{margin:0}.wrap{max-width:1100px;margin:24px auto;padding:0 12px}.table-wrap{overflow-x:auto;background:#fff;border:1px solid #dbe3ef;border-radius:12px;box-shadow:0 5px 18px #06122e12}table{width:100%;min-width:700px;border-collapse:collapse}th,td{padding:11px 12px;text-align:center;border:1px solid #dbe3ef;white-space:nowrap}thead th{background:var(--blue);color:#ffd700}tbody tr:nth-child(even){background:#f1f5f9}tbody th{text-align:left}footer{margin:20px 0;padding:16px;border-left:4px solid var(--gold);background:#fff;border-radius:5px}a{color:var(--blue);font-weight:bold}
 </style></head><body>
 <header><h1>SaahiRides On-Demand Fare Chart</h1><p>Hyderabad • Transparent pricing • No surge pricing</p></header>
-<main class="wrap"><p><strong>Fare levels:</strong> Standard · Express (+₹2/km) · Super Fast (+₹3/km)</p><div class="table-wrap"><table><thead><tr><th>Distance</th><th>Vehicle</th><th>Base</th><th>Standard Fare</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th></tr></thead><tbody>
+<main class="wrap"><p><strong>Fare levels:</strong> Standard · Express · Super Fast. Fares are calculated using the progressive cumulative model below; no surge pricing.</p><div class="table-wrap"><table><thead><tr><th>Distance</th><th>Vehicle</th><th>Base</th><th>Standard Fare</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th></tr></thead><tbody>
 <tr><td>5 km</td><th>Bike</th><td>Normal</td><td>₹50</td><td>₹60</td><td>₹65</td></tr>
 <tr><td>5 km</td><th>Auto</th><td>Normal</td><td>₹115</td><td>₹125</td><td>₹130</td></tr>
 <tr><td>5 km</td><th>Non-AC Cab</th><td>Normal</td><td>₹125</td><td>₹135</td><td>₹140</td></tr>
@@ -44,7 +44,7 @@
 <tr><td>45 km</td><th>AC Cab</th><td>Normal</td><td>₹2338</td><td>₹2428</td><td>₹2473</td></tr>
 </tbody></table></div>
 <h2 style="margin:26px 0 8px;color:#06122e">Per-Kilometre Rates — Review Table</h2>
-<p>Rates below are published for review. The existing distance-based tariff above remains unchanged until the progressive fare model is finalized.</p>
+<p>These are the current working per-kilometre rates for the progressive cumulative On-Demand fare model. All rates are in Indian Rupees (₹) per kilometre.</p>
 <div class="table-wrap"><table><thead><tr><th>Vehicle Category</th><th>Standard (₹/km)</th><th>Express (₹/km)</th><th>Super Fast (₹/km)</th></tr></thead><tbody>
 <tr><th>Bike</th><td>₹10</td><td>₹12</td><td>₹13*</td></tr>
 <tr><th>Scooty</th><td>₹14</td><td>₹15</td><td>₹17</td></tr>
@@ -54,9 +54,11 @@
 <tr><th>Non-AC Cab</th><td>₹25</td><td>₹27</td><td>₹28</td></tr>
 <tr><th>AC Cab</th><td>₹30</td><td>₹32</td><td>₹33</td></tr>
 </tbody></table></div>
-<p><strong>Rate review notes:</strong> *Bike Super Fast and Auto Super Fast are provisional. Scooty EV and Electric Auto Express/Super Fast rates are not confirmed. Proposed progressive pricing uses a 3 km base, then cumulative multipliers of 1.15× (3–5 km), 1.25× (5–10 km), 1.50× (10–15 km), 1.75× (15–20 km), 2.00× (20–25 km), and 2.25× (25–30 km). Above 30 km, separate outstation pricing applies. These proposed rules do not replace the existing tariff until approved.</p>
+<p><strong>Progressive cumulative fare rules:</strong> The base fare covers the first 3 km, calculated as 3 × the selected vehicle and service tier's per-kilometre rate. Each multiplier applies only to kilometres within its own slab, and the slab fares are added cumulatively: 3–5 km at 1.15×; 5–10 km at 1.25×; 10–15 km at 1.50×; 15–20 km at 1.75×; 20–25 km at 2.00×; and 25–30 km at 2.25×.</p>
+<p><strong>Above 30 km:</strong> The separately approved outstation tariff applies to Non-AC and AC cabs only. Outstation pricing does not apply to bikes, scooties, Scooty EV, Auto Rickshaw, or Electric Auto Rickshaw.</p>
+<p><strong>Rate notes:</strong> *Bike Super Fast and Auto Super Fast rates are provisional and require confirmation. Scooty EV and Electric Auto Express/Super Fast rates are not yet confirmed. Unconfirmed rates must not be assumed or automatically filled in.</p>
 <h2 style="margin:26px 0 8px;color:#06122e">Additional Vehicle Rates</h2>
-<p>Base fare covers the first 5 km. Per-kilometre rates apply after the first 5 km.</p>
+<p>The rates below are retained as historical reference figures only. The active fare model uses a 3 km base and progressive cumulative slabs, as described above. These legacy 5 km base fares do not override the active model.</p>
 <div class="table-wrap"><table><thead><tr><th>Vehicle</th><th>Fare level</th><th>Per km after first 5 km</th><th>Base fare (first 5 km)</th></tr></thead><tbody>
 <tr><th>Scooty</th><td>Standard</td><td>₹14/km</td><td>₹70</td></tr>
 <tr><th>Scooty</th><td>Express</td><td>₹15/km</td><td>₹75</td></tr>
@@ -65,5 +67,5 @@
 <tr><th>Electric Auto</th><td>Rate supplied</td><td>₹25/km</td><td>₹125</td></tr>
 </tbody></table></div>
 <p><strong>Note:</strong> Scooty EV and Electric Auto rates are shown as supplied; Express and Super Fast tiers have not been inferred for these categories.</p>
-<footer><strong>Reference tariff:</strong> This chart preserves the supplied On-Demand rate card for Bike, Auto, Non-AC Cab and AC Cab, from 5 km through 45 km. Express and Super Fast are the exact prices shown in the reference chart. The pricing logic is Standard + ₹2/km for Express and Standard + ₹3/km for Super Fast. Subscription rates are separate and are not included here.</footer>
+<footer><strong>Pricing policy:</strong> The progressive cumulative model is the active On-Demand calculation through 30 km. For trips above 30 km, only cabs use the separately approved outstation tariff. Bikes, scooties, electric scooties, auto-rickshaws and electric auto-rickshaws do not use cab outstation pricing. Subscription fares are separate.</footer>
 <p><a href="https://www.saahirides.co.in/">Back to SaahiRides website</a></p></main></body></html>
