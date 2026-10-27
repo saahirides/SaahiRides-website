@@ -45,6 +45,7 @@ img{width:100%;display:block}
 
 .top-nav{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 22px;background:#030817;border-bottom:2px solid #D4AF37;position:relative;z-index:2}
 .brand-mini{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:900;font-size:clamp(18px,3vw,25px);white-space:nowrap}
+.brand-logo{width:44px;height:44px;flex:0 0 44px;object-fit:contain;background:#fff;border:2px solid #D4AF37;border-radius:50%;padding:2px}
 .brand-orange{color:#ff8a00}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:15px}
 .nav-links a{color:#fff;text-decoration:none;font-weight:700;font-size:13px}
@@ -104,7 +105,7 @@ img{width:100%;display:block}
 <body>
 <div class="container">
   <nav class="top-nav" aria-label="Main navigation">
-    <a class="brand-mini" href="#home">🦅 <span>Saahi<span class="brand-orange">Rides</span></span></a>
+    <a class="brand-mini" href="#home" aria-label="SaahiRides home"><img class="brand-logo" src="logo.png" alt="SaahiRides eagle logo"><span>Saahi<span class="brand-orange">Rides</span><small style="display:block;font-size:10px;letter-spacing:.7px;color:#e2e8f0;line-height:1.2">TRANSIT PVT. LTD.</small></span></a>
     <div class="nav-links">
       <a href="#home">Home</a><a href="#services">Services</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a>
     </div>
