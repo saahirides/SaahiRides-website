@@ -33,11 +33,12 @@ Scooty EV and Electric Auto Rickshaw use one rate each only. Express and Super F
 ## 3. City travellers whose actual trip exceeds 30 km
 This threshold rule applies only to a city traveller whose trip exceeds the 30 km city limit. Stop city fare calculation and hand off to the existing outstation pricing engine.
 
-| Actual distance | Billable distance |
-|---|---:|
-| Up to 30 km | Actual distance, city cumulative pricing |
-| 30.01–50 km | 50 km minimum, outstation pricing |
-| 50.01–100 km | 100 km minimum, outstation pricing |
+| Actual city-cab distance | Billing basis |
+|---|---|
+| Up to 30 km | Actual distance, progressive cumulative city pricing |
+| 30.01–50 km | 50 km billing basis × 1.25 |
+| 50.01–100 km | 100 km billing basis × 1.50 |
+| Above 100 km | Separately approved normal outstation rules; no further city-model band |
 
 Confirmed examples:
 - 35 km → bill 50 km
@@ -46,7 +47,7 @@ Confirmed examples:
 - 80 km → bill 100 km
 - 100 km → bill 100 km
 
-Do not use city multipliers above 30 km. Do not replace or rewrite normal outstation booking rules with this city-traveller threshold.
+The 1.25× and 1.50× multipliers apply to the stated city-cab billing bands. This extended city-cab rule does not apply to bikes, scooties, Scooty EV, Auto Rickshaw or Electric Auto Rickshaw. Do not replace or rewrite normal outstation booking rules with this city-traveller threshold.
 
 ## 4. Existing outstation booking policy — keep separate
 Previously shared outstation rates and terms remain unchanged:
@@ -61,7 +62,18 @@ Previously shared outstation rates and terms remain unchanged:
 
 **Important:** The 50 km / 100 km threshold is only for a city traveller crossing the 30 km city limit. It is not a replacement for the normal 350 km one-way or 300 km/day round-trip minimums for regular outstation bookings.
 
-## 5. Website and data safety
+
+## 5. Subscription model — confirmed published details
+- Subscription period: 30 days.
+- Route-lock fee: ₹199 for all categories.
+- Calculation: monthly subscription price + ₹199 route-lock fee = 30-day total; divide the total by 30 for the daily one-way reference fare.
+- Confirmed example: Bike Standard monthly subscription ₹999 + ₹199 route lock = ₹1,198 total; ₹1,198 ÷ 30 = ₹39.93 (about ₹40) per day.
+- Eligible regular journeys are intended to be 10–15% cheaper than On-Demand pricing.
+- Other vehicle/category monthly subscription prices are not confirmed in this reference and must not be invented.
+- Planned benefits documented on the website include route lock, dedicated driver, SOS and ride insurance at no extra charge subject to applicable coverage terms, eligible unused-balance carry-forward with a 5-day use window, and an expiry reminder 5 days before expiry. Automated bot handling for eligibility, balance deductions, carry-forward and reminders is planned.
+- The 15-day free trial offer ran 1–15 October 2026 and is no longer a current offer.
+
+## 6. Website and data safety
 - Update the existing website in place; do not rebuild it from scratch.
 - Do not modify Supabase data.
 - Do not add extra vehicle tiers or alter the approved outstation billing rules.
