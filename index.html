@@ -352,7 +352,7 @@ img{width:100%;display:block}
 <section class="fare-chart-section" id="fare-chart" aria-labelledby="fare-chart-heading">
   <div class="fare-chart-wrap">
     <h2 id="fare-chart-heading" style="text-align:center;color:#06122E;font-size:clamp(27px,4vw,36px);margin:0 0 8px;font-weight:900">SaahiRides On-Demand Fare Chart</h2>
-    <p style="text-align:center;color:#334155;margin:0 0 22px">Distance-wise fares in ₹ • Standard, Express (+₹2/km) and Super Fast (+₹3/km)</p>
+    <p style="text-align:center;color:#334155;margin:0 0 22px">Cumulative progressive fares in ₹ • First 3 km at base rate, then each distance slab is charged at its own multiplier</p>
     <div class="fare-chart-table-wrap">
       <table class="fare-chart-table">
         <thead>
@@ -360,33 +360,54 @@ img{width:100%;display:block}
           <tr><th>Standard</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th><th>Standard</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th><th>Standard</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th><th>Standard</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th></tr>
         </thead>
         <tbody>
-          <tr><th>5 km</th><td>50</td><td>60</td><td>65</td><td>115</td><td>125</td><td>130</td><td>125</td><td>135</td><td>140</td><td>150</td><td>160</td><td>165</td></tr>
-          <tr><th>10 km</th><td>112</td><td>132</td><td>142</td><td>228</td><td>248</td><td>258</td><td>250</td><td>270</td><td>280</td><td>306</td><td>326</td><td>336</td></tr>
-          <tr><th>15 km</th><td>188</td><td>218</td><td>233</td><td>362</td><td>392</td><td>407</td><td>400</td><td>430</td><td>445</td><td>494</td><td>524</td><td>539</td></tr>
-          <tr><th>20 km</th><td>275</td><td>315</td><td>335</td><td>520</td><td>560</td><td>580</td><td>575</td><td>615</td><td>635</td><td>712</td><td>752</td><td>772</td></tr>
-          <tr><th>25 km</th><td>375</td><td>425</td><td>450</td><td>700</td><td>750</td><td>775</td><td>775</td><td>825</td><td>850</td><td>962</td><td>1012</td><td>1037</td></tr>
-          <tr><th>30 km</th><td>488</td><td>548</td><td>578</td><td>902</td><td>962</td><td>992</td><td>1000</td><td>1060</td><td>1090</td><td>1244</td><td>1304</td><td>1334</td></tr>
-          <tr><th>35 km</th><td>612</td><td>682</td><td>717</td><td>1128</td><td>1198</td><td>1233</td><td>1250</td><td>1320</td><td>1355</td><td>1556</td><td>1626</td><td>1661</td></tr>
-          <tr><th>40 km</th><td>750</td><td>830</td><td>870</td><td>1375</td><td>1455</td><td>1495</td><td>1525</td><td>1605</td><td>1645</td><td>1900</td><td>1980</td><td>2020</td></tr>
-          <tr><th>45 km</th><td>925</td><td>1015</td><td>1060</td><td>1690</td><td>1780</td><td>1825</td><td>1875</td><td>1965</td><td>2010</td><td>2338</td><td>2428</td><td>2473</td></tr>
+          <tr><th>5 km</th><td>53</td><td>63.60</td><td>68.90</td><td>121.90</td><td>132.50</td><td>137.80</td><td>132.50</td><td>143.10</td><td>148.40</td><td>159</td><td>169.60</td><td>174.90</td></tr>
+          <tr><th>10 km</th><td>115.50</td><td>138.60</td><td>150.15</td><td>265.65</td><td>288.75</td><td>300.30</td><td>288.75</td><td>311.85</td><td>323.40</td><td>346.50</td><td>369.60</td><td>381.15</td></tr>
+          <tr><th>15 km</th><td>190.50</td><td>228.60</td><td>247.65</td><td>438.15</td><td>476.25</td><td>495.30</td><td>476.25</td><td>514.35</td><td>533.40</td><td>571.50</td><td>609.60</td><td>628.65</td></tr>
+          <tr><th>20 km</th><td>278</td><td>333.60</td><td>361.40</td><td>639.40</td><td>695</td><td>722.80</td><td>695</td><td>750.60</td><td>778.40</td><td>834</td><td>889.60</td><td>917.40</td></tr>
+          <tr><th>25 km</th><td>378</td><td>453.60</td><td>491.40</td><td>869.40</td><td>945</td><td>982.80</td><td>945</td><td>1020.60</td><td>1058.40</td><td>1134</td><td>1209.60</td><td>1247.40</td></tr>
+          <tr><th>30 km</th><td>490.50</td><td>588.60</td><td>637.65</td><td>1128.15</td><td>1226.25</td><td>1275.30</td><td>1226.25</td><td>1324.35</td><td>1373.40</td><td>1471.50</td><td>1569.60</td><td>1618.65</td></tr>
         </tbody>
       </table>
     </div>
     <div class="fare-chart-notes">
 
     <h3 style="color:#06122E;margin:24px 0 10px">Additional Vehicle Rates</h3>
-    <p style="color:#334155;margin:0 0 12px">Base fare covers the first 5 km. The per-kilometre rate is shown separately for clarity.</p>
-    <div class="fare-chart-table-wrap"><table class="fare-chart-table" style="min-width:520px"><thead><tr><th>Vehicle</th><th>Fare level</th><th>Per km after first 5 km</th><th>Base fare (first 5 km)</th></tr></thead><tbody>
-      <tr><th>Scooty</th><td>Standard</td><td>₹14/km</td><td>₹70</td></tr>
-      <tr><th>Scooty</th><td>Express</td><td>₹15/km</td><td>₹75</td></tr>
-      <tr><th>Scooty</th><td>Super Fast</td><td>₹17/km</td><td>₹85</td></tr>
-      <tr><th>Scooty EV</th><td>Rate supplied</td><td>₹16/km</td><td>₹80</td></tr>
-      <tr><th>Electric Auto</th><td>Rate supplied</td><td>₹25/km</td><td>₹125</td></tr>
+    <p style="color:#334155;margin:0 0 12px">These are the base rates per kilometre used by the same cumulative city-pricing formula. They are not a flat first-5-km fare.</p>
+    <div class="fare-chart-table-wrap"><table class="fare-chart-table" style="min-width:520px"><thead><tr><th>Vehicle</th><th>Service tier</th><th>Base rate per km</th><th>Status</th></tr></thead><tbody>
+      <tr><th>Scooty</th><td>Standard</td><td>₹14/km</td><td>Confirmed</td></tr>
+      <tr><th>Scooty</th><td>Express</td><td>₹15/km</td><td>Confirmed</td></tr>
+      <tr><th>Scooty</th><td>Super Fast</td><td>₹17/km</td><td>Confirmed</td></tr>
+      <tr><th>Scooty EV</th><td>Standard</td><td>₹16/km</td><td>Confirmed</td></tr>
+      <tr><th>Scooty EV</th><td>Express</td><td>—</td><td>Rate unconfirmed</td></tr>
+      <tr><th>Scooty EV</th><td>Super Fast</td><td>—</td><td>Rate unconfirmed</td></tr>
+      <tr><th>Electric Auto</th><td>Standard</td><td>₹25/km</td><td>Confirmed</td></tr>
+      <tr><th>Electric Auto</th><td>Express</td><td>—</td><td>Rate unconfirmed</td></tr>
+      <tr><th>Electric Auto</th><td>Super Fast</td><td>—</td><td>Rate unconfirmed</td></tr>
     </tbody></table></div>    <div class="fare-chart-notes">
-      <strong>Fare notes:</strong> Rates are shown in Indian rupees for the listed distance slabs. Express is calculated at Standard + ₹2 per km; Super Fast is Standard + ₹3 per km, as reflected in the approved fare chart. The additional vehicle rates above are listed as supplied. Scooty EV and Electric Auto have not been assigned Express or Super Fast tiers unless separately confirmed. For distances outside this chart, request an itemised quote.
+      <strong>Fare notes:</strong> Rates are shown in Indian rupees for the listed distance slabs. Express is calculated at Standard + ₹2 per km; Super Fast is Standard + ₹3 per km, as reflected in the approved fare chart. The additional vehicle rates above are listed as supplied. Scooty EV and Electric Auto have not been assigned Express or Super Fast tiers unless separately confirmed. City cumulative pricing is available only up to 30 km. Above 30 km, city pricing stops and the city traveller is handed to the existing outstation pricing rules.
       <br><strong>No surge pricing.</strong> Night charges may apply from 10:00 PM to 6:00 AM under the applicable fare rules. Taxes and any other applicable charges will be disclosed in the fare quote.
       <br><strong>Need a quote?</strong> <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20please%20share%20an%20itemised%20fare%20quote." style="color:#123564;font-weight:800">WhatsApp SaahiRides</a> or call <a href="tel:9347946026" style="color:#123564;font-weight:800">9347946026</a>.
     </div>
+  </div>
+</section>
+
+
+<section id="city-distance-threshold" style="background:#f8fafc;color:#0f172a;padding:28px 18px;border-top:4px solid #D4AF37;border-bottom:4px solid #D4AF37">
+  <div style="max-width:1050px;margin:0 auto">
+    <h2 style="color:#06122E;font-size:clamp(25px,4vw,34px);margin:0 0 10px">City Trip Distance Limit &amp; Outstation Handoff</h2>
+    <p style="margin:0 0 14px">City vehicles cannot be billed with city pricing beyond 30 km. For a city traveller whose trip exceeds 30 km, the city fare calculation stops and the existing SaahiRides outstation pricing rules apply. This special threshold rule does not replace the separate rules for a customer who books an outstation trip from the start.</p>
+    <div style="overflow-x:auto;background:#fff;border:1px solid #dbe3ef;border-radius:12px">
+      <table style="border-collapse:collapse;width:100%;min-width:440px">
+        <thead><tr style="background:#123564;color:#FFD700"><th style="padding:12px;text-align:left">Actual city-trip distance</th><th style="padding:12px;text-align:left">Billing treatment</th><th style="padding:12px;text-align:left">Billable distance</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:12px;border-top:1px solid #e2e8f0">Up to 30 km</td><td style="padding:12px;border-top:1px solid #e2e8f0">Cumulative city pricing</td><td style="padding:12px;border-top:1px solid #e2e8f0">Actual distance</td></tr>
+          <tr><td style="padding:12px;border-top:1px solid #e2e8f0">30.01–50 km</td><td style="padding:12px;border-top:1px solid #e2e8f0">Existing outstation pricing</td><td style="padding:12px;border-top:1px solid #e2e8f0">50 km minimum</td></tr>
+          <tr><td style="padding:12px;border-top:1px solid #e2e8f0">50.01–100 km</td><td style="padding:12px;border-top:1px solid #e2e8f0">Existing outstation pricing</td><td style="padding:12px;border-top:1px solid #e2e8f0">100 km minimum</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin:14px 0 0"><strong>Examples:</strong> 35 km → 50 km billed; 50 km → 50 km billed; 51 km → 100 km billed; 80 km → 100 km billed; 100 km → 100 km billed.</p>
+    <p style="margin:8px 0 0">The outstation amount is calculated by the existing outstation pricing rules. Do not apply the city slab multipliers to trips over 30 km, and do not use this city-traveller threshold to rewrite normal outstation bookings. For a confirmed itemised quote, contact SaahiRides at <a href="tel:9347946026" style="color:#123564;font-weight:800">9347946026</a>.</p>
   </div>
 </section>
 
@@ -395,9 +416,9 @@ img{width:100%;display:block}
   <h2 style="color:#FFD700;font-size:30px;margin:0">Price Calculations</h2>
   <p style="color:#fff;opacity:0.8;margin:10px 0 25px 0">Transparent Pricing - No Hidden Charges</p>
   
-  <div style="display:block;background:#FFD700;color:#06122E;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px">1. SLABS - Distance Based Fair Price</div>
-  <div style="display:block;background:#fff;color:#06122E;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px;border:3px solid #FFD700">2. MULTIPLIERS - Peak Hour Logic (No Surge)</div>
-  <div style="display:block;background:#ff4444;color:#fff;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px">3. NIGHT CHARGES - Applicable 10 PM to 6 AM</div>
+  <div style="display:block;background:#FFD700;color:#06122E;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px">1. CITY CUMULATIVE SLABS — Maximum 30 km</div>
+  <div style="display:block;background:#fff;color:#06122E;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px;border:3px solid #FFD700">2. EACH DISTANCE SLAB USES ITS OWN MULTIPLIER — NO SURGE PRICING</div>
+  <div style="display:block;background:#ff4444;color:#fff;padding:20px;border-radius:15px;margin:14px 0;font-weight:900;font-size:19px">3. NIGHT CHARGES — Applicable 10 PM to 6 AM</div>
   
   <p style="color:#FFD700;margin-top:25px;font-size:16px">Fare depends on vehicle category, distance and applicable time-based rules.<br>For a confirmed itemised quote, contact SaahiRides: 9347946026.</p>
 </div>
