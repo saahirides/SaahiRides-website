@@ -64,4 +64,4 @@ Previously shared outstation rates and terms remain unchanged:
 ## 5. Website and data safety
 - Update the existing website in place; do not rebuild it from scratch.
 - Do not modify Supabase data.
-- Do not invent unconfirmed vehicle/tier rates or outstation billing rules beyond those confirmed above.
+- Do not add extra vehicle tiers or alter the approved outstation billing rules.
