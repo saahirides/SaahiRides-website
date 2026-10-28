@@ -1,5 +1,6 @@
 -- SaahiRides Supabase foundation (review before running in production)
--- Run in Supabase SQL Editor. Does not create an administrator automatically.
+-- Run in Supabase SQL Editor only after reviewing this file.
+-- Does not create an administrator automatically.
 create extension if not exists pgcrypto;
 
 create table if not exists public.admin_users (
@@ -65,20 +66,15 @@ on public.policy_documents for all to authenticated
 using (public.is_saahirides_admin())
 with check (public.is_saahirides_admin());
 
+-- Secure interim default: only admins can read policy rows until explicit
+-- customer/driver role mapping is implemented and tested. Do not broaden this
+-- policy based only on the audience text array.
 drop policy if exists "audiences read published policies" on public.policy_documents;
-create policy "audiences read published policies"
+drop policy if exists "admins read policy documents" on public.policy_documents;
+create policy "admins read policy documents"
 on public.policy_documents for select to authenticated
-using (
-  status = 'published'
-  and (
-    (public.is_saahirides_admin())
-    or ('Customer' = any(audience))
-    or ('Driver' = any(audience))
-  )
-);
+using (public.is_saahirides_admin());
 
--- Users can record/read only their own acknowledgement. Published policy visibility
--- should be checked by the application before displaying the acknowledgement action.
 drop policy if exists "users read own acknowledgements" on public.policy_acknowledgements;
 create policy "users read own acknowledgements"
 on public.policy_acknowledgements for select to authenticated
@@ -87,8 +83,17 @@ using (user_id = (select auth.uid()) or public.is_saahirides_admin());
 drop policy if exists "users create own acknowledgements" on public.policy_acknowledgements;
 create policy "users create own acknowledgements"
 on public.policy_acknowledgements for insert to authenticated
-with check (user_id = (select auth.uid()));
+with check (
+  user_id = (select auth.uid())
+  and exists (
+    select 1 from public.policy_documents p
+    where p.id = policy_id
+      and p.status = 'published'
+      and p.acknowledgement_required = true
+      and p.version = policy_version
+  )
+);
 
 -- Intentionally no client-side insert/update/delete policy for admin_users.
 -- Promote the verified owner account manually through the Supabase SQL Editor
--- only after confirming its auth.users UUID.
+-- only after confirming its auth.users UUID. Never allow self-service admin grants.
