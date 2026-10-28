@@ -62,6 +62,16 @@ input,textarea,select {
   background:#06122e;
   color:#fff;
   font:inherit}
+.password-field {
+  display:flex;
+  align-items:stretch;
+  gap:8px}
+.password-field input {
+  flex:1;
+  min-width:0}
+.password-field .password-toggle {
+  margin:0;
+  white-space:nowrap}
 textarea {
   min-height:180px;
   resize:vertical}
@@ -148,7 +158,10 @@ footer {
 <label for="email">Email</label>
 <input id="email" type="email" autocomplete="username">
 <label for="password">Password</label>
-<input id="password" type="password" autocomplete="current-password">
+<div class="password-field">
+  <input id="password" type="password" autocomplete="current-password">
+  <button type="button" class="secondary password-toggle" id="togglePassword" aria-controls="password" aria-pressed="false">Show</button>
+</div>
 <button id="signIn">Sign in</button>
 <button class="secondary" id="reset">Send password reset</button>
 </section>
@@ -253,6 +266,7 @@ footer {
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const config=(url,key)=>{if(!window.supabase?.createClient)throw Error('Supabase client library did not load. Check internet access and reload.');if(!url.startsWith('https://')||!key.trim())throw Error('Enter the HTTPS project URL and public anon/publishable key.');client=window.supabase.createClient(url.trim(),key.trim());show('auth');say('Project client configured for this page session. Sign in to check database permissions.');};
  $('connect').onclick=()=>{try{config($('projectUrl').value,$('publicKey').value)}catch(e){say(e.message)}};
+ $('togglePassword').onclick=()=>{const input=$('password');const reveal=input.type==='password';input.type=reveal?'text':'password';$('togglePassword').textContent=reveal?'Hide':'Show';$('togglePassword').setAttribute('aria-pressed',String(reveal));};
  $('signIn').onclick=async()=>{if(!client)return say('Connect the project first.');const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;await checkAccess();};
  $('reset').onclick=async()=>{if(!client)return say('Connect the project first.');const email=$('email').value.trim();if(!email)return say('Enter your account email first.');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});say(error?'Reset request failed: '+error.message:'If the account exists and email delivery is configured, a password-reset email will be sent.');};
  $('logout').onclick=async()=>{if(client)await client.auth.signOut();session=null;admin=false;hr=false;show('workspace',false);show('auth',true);say('Signed out.');};
