@@ -6,25 +6,245 @@
 <meta name="robots" content="noindex,nofollow">
 <style>
 :root{color-scheme:dark;--navy:#06122e;--blue:#1e3a8a;--gold:#f5b82e;--text:#f8fafc;--muted:#bac7dc;--line:#28436d;--panel:#0b1c3d}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17365f,var(--navy) 60%);font:16px/1.5 system-ui,Arial,sans-serif;color:var(--text)}main{max-width:1100px;margin:auto;padding:22px}.brand{color:var(--gold);font-weight:900;letter-spacing:.04em}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:18px}.card{background:rgba(11,28,61,.96);border:1px solid var(--line);border-radius:16px;padding:20px;margin:18px 0}.hint{color:var(--muted);font-size:.94rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.tile{border:1px solid var(--line);border-radius:12px;padding:16px;background:#0a1934}.tile h3{color:var(--gold);margin:0 0 6px}label{display:block;margin:12px 0 5px;color:var(--muted)}input,textarea,select{width:100%;padding:11px;border-radius:8px;border:1px solid #46618b;background:#06122e;color:#fff;font:inherit}textarea{min-height:180px;resize:vertical}button,.btn{border:0;border-radius:9px;background:linear-gradient(100deg,#d4af37,#ffe27a);color:#06122e;font-weight:800;padding:11px 15px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px 5px 4px 0}button.secondary,.btn.secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}button:disabled{opacity:.5;cursor:not-allowed}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.tabs button.active{outline:2px solid white}.status{padding:10px 12px;border-radius:8px;background:#11294b;margin:12px 0;white-space:pre-wrap}.hidden{display:none!important}.policy{padding:14px 0;border-bottom:1px solid var(--line)}.policy h4{margin:0;color:var(--gold)}.policy p{white-space:pre-wrap;overflow-wrap:anywhere}.small{font-size:.85rem;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:20px}@media(max-width:500px){main{padding:14px}.card{padding:15px}}
+* {
+  box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#17365f,var(--navy) 60%);
+  font:16px/1.5 system-ui,Arial,sans-serif;
+  color:var(--text)}
+main {
+  max-width:1100px;
+  margin:auto;
+  padding:22px}
+.brand {
+  color:var(--gold);
+  font-weight:900;
+  letter-spacing:.04em}
+.top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--line);
+  padding-bottom:18px}
+.card {
+  background:rgba(11,28,61,.96);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin:18px 0}
+.hint {
+  color:var(--muted);
+  font-size:.94rem}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px}
+.tile {
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px;
+  background:#0a1934}
+.tile h3 {
+  color:var(--gold);
+  margin:0 0 6px}
+label {
+  display:block;
+  margin:12px 0 5px;
+  color:var(--muted)}
+input,textarea,select {
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid #46618b;
+  background:#06122e;
+  color:#fff;
+  font:inherit}
+textarea {
+  min-height:180px;
+  resize:vertical}
+button,.btn {
+  border:0;
+  border-radius:9px;
+  background:linear-gradient(100deg,#d4af37,#ffe27a);
+  color:#06122e;
+  font-weight:800;
+  padding:11px 15px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+  margin:4px 5px 4px 0}
+button.secondary,.btn.secondary {
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold)}
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed}
+.tabs {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:16px 0}
+.tabs button.active {
+  outline:2px solid white}
+.status {
+  padding:10px 12px;
+  border-radius:8px;
+  background:#11294b;
+  margin:12px 0;
+  white-space:pre-wrap}
+.hidden {
+  display:none!important}
+.policy {
+  padding:14px 0;
+  border-bottom:1px solid var(--line)}
+.policy h4 {
+  margin:0;
+  color:var(--gold)}
+.policy p {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere}
+.small {
+  font-size:.85rem;
+  color:var(--muted)}
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:20px}
+@media(max-width:500px) {
+  main {
+  padding:14px}
+.card {
+  padding:15px}
+}
 </style>
 </head>
-<body><main>
-<header class="top"><div><div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div><h1 style="margin:4px 0">Admin & Policy Centre</h1><div class="hint">Restricted workspace · staged implementation</div></div><a class="btn secondary" href="./index.html">← Main website</a></header>
+<body>
+<main>
+<header class="top">
+<div>
+<div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div>
+<h1 style="margin:4px 0">Admin & Policy Centre</h1>
+<div class="hint">Restricted workspace · staged implementation</div>
+</div>
+<a class="btn secondary" href="./index.html">← Main website</a>
+</header>
 <div id="notice" class="status">Configuration required: add the Supabase project URL and public anon/publishable key in this file before use. Never put a service-role key here.</div>
-<section id="config" class="card"><h2>Connect existing Supabase project</h2><p class="hint">Enter the existing project URL and its public anon/publishable key. This form stores them only in this page's current memory; it does not save them to browser storage.</p><label for="projectUrl">Supabase project URL</label><input id="projectUrl" value="https://uzwubbzlytqqewqibobr.supabase.co" autocomplete="url"><label for="publicKey">Public anon/publishable key</label><input id="publicKey" type="password" autocomplete="off" placeholder="Paste the project's public client key"><button id="connect">Connect</button></section>
-<section id="auth" class="card hidden"><h2>Secure sign-in</h2><p class="hint">Use an account already created in Supabase Auth. Access is granted only when the database recognizes an active Admin/Owner or authorized HR publisher.</p><label for="email">Email</label><input id="email" type="email" autocomplete="username"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password"><button id="signIn">Sign in</button><button class="secondary" id="reset">Send password reset</button><button class="secondary" id="signOut" class="hidden">Sign out</button></section>
+<section id="config" class="card">
+<h2>Connect existing Supabase project</h2>
+<p class="hint">Enter the existing project URL and its public anon/publishable key. This form stores them only in this page's current memory; it does not save them to browser storage.</p>
+<label for="projectUrl">Supabase project URL</label>
+<input id="projectUrl" value="https://uzwubbzlytqqewqibobr.supabase.co" autocomplete="url">
+<label for="publicKey">Public anon/publishable key</label>
+<input id="publicKey" type="password" autocomplete="off" placeholder="Paste the project's public client key">
+<button id="connect">Connect</button>
+</section>
+<section id="auth" class="card hidden">
+<h2>Secure sign-in</h2>
+<p class="hint">Use an account already created in Supabase Auth. Access is granted only when the database recognizes an active Admin/Owner or authorized HR publisher.</p>
+<label for="email">Email</label>
+<input id="email" type="email" autocomplete="username">
+<label for="password">Password</label>
+<input id="password" type="password" autocomplete="current-password">
+<button id="signIn">Sign in</button>
+<button class="secondary" id="reset">Send password reset</button>
+<button class="secondary" id="signOut" class="hidden">Sign out</button>
+</section>
 <section id="workspace" class="hidden">
-<div class="card"><div class="top"><div><h2 id="welcome">Signed in</h2><div id="roleText" class="hint"></div></div><button id="logout">Sign out</button></div><div class="grid">
-<div class="tile"><h3>Admin</h3><p>Owner-controlled access, governance and sensitive actions.</p><span class="small">Only active database-authorized admins see admin controls.</span></div>
-<div class="tile"><h3>HR</h3><p>Separate HR publishing workspace for content the owner has supplied or authorized.</p><span class="small">HR publishers can manage HR-category policies only.</span></div>
-<div class="tile"><h3>Customer</h3><p>Customer terms, fares, booking, cancellations, privacy and safety.</p></div>
-<div class="tile"><h3>Driver</h3><p>Driver KYC, vehicle, safety, trip conduct and grievance policies.</p></div>
-<div class="tile"><h3>Admin Governance</h3><p>Approval records, access controls, audits and operating rules.</p></div>
-</div></div>
-<div class="card"><h2>Policy Centre</h2><p class="hint">Only authorized Admin/Owner or HR publishers can load records. This initial interface does not invent policy wording; paste only text approved by SaahiRides.</p><div class="tabs" id="tabs"><button data-category="HR">HR</button><button data-category="Customer">Customer</button><button data-category="Driver">Driver</button><button data-category="Admin Governance">Admin Governance</button></div><div id="editor" class="hidden"><h3 id="editorTitle">Create policy</h3><input type="hidden" id="policyId"><label for="title">Policy title</label><input id="title" maxlength="180"><label for="body">Approved policy text</label><textarea id="body" placeholder="Paste approved text here. Do not add unapproved terms."></textarea><div class="grid"><div><label for="version">Version</label><input id="version" value="1.0"></div><div><label for="effective">Effective date</label><input id="effective" type="date"></div><div><label for="review">Review date</label><input id="review" type="date"></div></div><label for="status">Status</label><select id="status"><option value="draft">Draft</option><option value="pending approval">Pending approval</option><option value="published">Published</option><option value="superseded">Superseded</option><option value="archived">Archived</option></select><label><input id="ackRequired" type="checkbox" style="width:auto"> Require acknowledgement for this version</label><button id="save">Save policy</button><button id="clear" class="secondary">Clear form</button><p class="small">Publishing is permission-controlled by the database. Confirm your organization's approval requirements before selecting Published.</p></div><div id="policyList"><p class="hint">Choose a category to load its policy records.</p></div></div>
-<div class="card" id="approvalNote"><strong>Mandatory governance rule</strong><p>Joint Founder & at least one Director Approval — MANDATORY.</p><p class="small">This page is an initial working interface, not a substitute for a complete dual-approval workflow. That workflow must be enforced server-side before sensitive approvals go live.</p></div>
-</section><footer>SaahiRides · SafeRide @ SaahiPrice · Admin workspace is not linked from public navigation yet.</footer></main>
+<div class="card">
+<div class="top">
+<div>
+<h2 id="welcome">Signed in</h2>
+<div id="roleText" class="hint">
+</div>
+</div>
+<button id="logout">Sign out</button>
+</div>
+<div class="grid">
+<div class="tile">
+<h3>Admin</h3>
+<p>Owner-controlled access, governance and sensitive actions.</p>
+<span class="small">Only active database-authorized admins see admin controls.</span>
+</div>
+<div class="tile">
+<h3>HR</h3>
+<p>Separate HR publishing workspace for content the owner has supplied or authorized.</p>
+<span class="small">HR publishers can manage HR-category policies only.</span>
+</div>
+<div class="tile">
+<h3>Customer</h3>
+<p>Customer terms, fares, booking, cancellations, privacy and safety.</p>
+</div>
+<div class="tile">
+<h3>Driver</h3>
+<p>Driver KYC, vehicle, safety, trip conduct and grievance policies.</p>
+</div>
+<div class="tile">
+<h3>Admin Governance</h3>
+<p>Approval records, access controls, audits and operating rules.</p>
+</div>
+</div>
+</div>
+<div class="card">
+<h2>Policy Centre</h2>
+<p class="hint">Only authorized Admin/Owner or HR publishers can load records. This initial interface does not invent policy wording; paste only text approved by SaahiRides.</p>
+<div class="tabs" id="tabs">
+<button data-category="HR">HR</button>
+<button data-category="Customer">Customer</button>
+<button data-category="Driver">Driver</button>
+<button data-category="Admin Governance">Admin Governance</button>
+</div>
+<div id="editor" class="hidden">
+<h3 id="editorTitle">Create policy</h3>
+<input type="hidden" id="policyId">
+<label for="title">Policy title</label>
+<input id="title" maxlength="180">
+<label for="body">Approved policy text</label>
+<textarea id="body" placeholder="Paste approved text here. Do not add unapproved terms.">
+</textarea>
+<div class="grid">
+<div>
+<label for="version">Version</label>
+<input id="version" value="1.0">
+</div>
+<div>
+<label for="effective">Effective date</label>
+<input id="effective" type="date">
+</div>
+<div>
+<label for="review">Review date</label>
+<input id="review" type="date">
+</div>
+</div>
+<label for="status">Status</label>
+<select id="status">
+<option value="draft">Draft</option>
+<option value="pending approval">Pending approval</option>
+<option value="published">Published</option>
+<option value="superseded">Superseded</option>
+<option value="archived">Archived</option>
+</select>
+<label>
+<input id="ackRequired" type="checkbox" style="width:auto"> Require acknowledgement for this version</label>
+<button id="save">Save policy</button>
+<button id="clear" class="secondary">Clear form</button>
+<p class="small">Publishing is permission-controlled by the database. Confirm your organization's approval requirements before selecting Published.</p>
+</div>
+<div id="policyList">
+<p class="hint">Choose a category to load its policy records.</p>
+</div>
+</div>
+<div class="card" id="approvalNote">
+<strong>Mandatory governance rule</strong>
+<p>Joint Founder & at least one Director Approval — MANDATORY.</p>
+<p class="small">This page is an initial working interface, not a substitute for a complete dual-approval workflow. That workflow must be enforced server-side before sensitive approvals go live.</p>
+</div>
+</section>
+<footer>SaahiRides · SafeRide @ SaahiPrice · Admin workspace is not linked from public navigation yet.</footer>
+</main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
