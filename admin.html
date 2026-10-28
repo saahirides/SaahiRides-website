@@ -151,7 +151,6 @@ footer {
 <input id="password" type="password" autocomplete="current-password">
 <button id="signIn">Sign in</button>
 <button class="secondary" id="reset">Send password reset</button>
-<button class="secondary" id="signOut" class="hidden">Sign out</button>
 </section>
 <section id="workspace" class="hidden">
 <div class="card">
@@ -243,7 +242,7 @@ footer {
 <p class="small">This page is an initial working interface, not a substitute for a complete dual-approval workflow. That workflow must be enforced server-side before sensitive approvals go live.</p>
 </div>
 </section>
-<footer>SaahiRides · SafeRide @ SaahiPrice · Admin workspace is not linked from public navigation yet.</footer>
+<footer>SaahiRides · SafeRide @ SaahiPrice · Staged admin workspace; production access and approval controls are not yet enabled.</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -302,7 +301,5 @@ footer {
   say('Policy saved. Confirm approval and audience before relying on publication.');
   await loadPolicies(category);
   };
-  
- client?.auth?.onAuthStateChange?.((_event,s)=>{if(s&&!session){session=s;checkAccess()}});
 })();
 </script></body></html>
