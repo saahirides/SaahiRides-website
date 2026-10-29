@@ -1,8 +1,25 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SaahiRides On-Demand Fare Chart</title>
 <style>
-:root{color-scheme:light;--navy:#06122e;--blue:#123564;--gold:#d4af37;--paper:#f8fafc;--ink:#0f172a}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);font:16px/1.5 Arial,Helvetica,sans-serif;color:var(--ink)}header{background:var(--navy);color:#fff;text-align:center;padding:26px 16px;border-bottom:5px solid var(--gold)}header h1{color:#ffd700;margin:0 0 6px;font-size:clamp(25px,5vw,38px)}header p{margin:0}.wrap{max-width:1100px;margin:24px auto;padding:0 12px}.table-wrap{overflow-x:auto;background:#fff;border:1px solid #dbe3ef;border-radius:12px;box-shadow:0 5px 18px #06122e12}table{width:100%;min-width:700px;border-collapse:collapse}th,td{padding:11px 12px;text-align:center;border:1px solid #dbe3ef;white-space:nowrap}thead th{background:var(--blue);color:#ffd700}tbody tr:nth-child(even){background:#f1f5f9}tbody th{text-align:left}footer{margin:20px 0;padding:16px;border-left:4px solid var(--gold);background:#fff;border-radius:5px}a{color:var(--blue);font-weight:bold}
+:root{color-scheme:dark;--navy:#071931;--blue:#16223F;--gold:#FFC107;--cyan:#00F0FF;--paper:#071931;--ink:#F8FAFC}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#132c4d 0%,var(--paper) 70%);font:16px/1.55 Arial,Helvetica,sans-serif;color:var(--ink)}
+header{background:var(--navy);color:#fff;text-align:center;padding:28px 16px;border-bottom:3px solid var(--cyan);box-shadow:0 8px 28px #0003}
+header h1{color:var(--gold);margin:0 0 6px;font-size:clamp(25px,5vw,38px)}
+header p{margin:0;color:#dbeafe}
+.wrap{max-width:1100px;margin:26px auto;padding:0 16px}
+.wrap>p,.wrap>h2,.table-wrap,footer{margin-top:18px}
+.wrap>p{background:var(--blue);border:1px solid rgba(0,240,255,.18);border-radius:14px;padding:16px 18px;color:#eef6ff}
+.wrap h2{color:var(--gold)!important;background:var(--blue);border-left:4px solid var(--cyan);border-radius:12px;padding:14px 16px}
+.table-wrap{overflow-x:auto;background:var(--blue);border:1px solid rgba(0,240,255,.24);border-radius:14px;box-shadow:0 12px 32px #0003}
+table{width:100%;min-width:700px;border-collapse:collapse}
+th,td{padding:11px 12px;text-align:center;border:1px solid rgba(226,232,240,.14);white-space:nowrap}
+thead th{background:#0b1b35;color:var(--gold);border-bottom:2px solid var(--cyan)}
+tbody tr:nth-child(even){background:#1b2d4d}
+tbody th{text-align:left;color:#fff}
+footer{padding:18px;border-left:4px solid var(--gold);background:var(--blue);border-radius:12px;color:#eef6ff}
+a{color:var(--cyan);font-weight:bold}
+@media(max-width:640px){header{padding:22px 12px}.wrap{padding:0 10px;margin:18px auto}.wrap>p{padding:13px}.table-wrap{border-radius:10px}th,td{padding:9px 10px}}
 </style></head><body>
 <header><h1>SaahiRides On-Demand Fare Chart</h1><p>Hyderabad • Transparent pricing • No surge pricing</p></header>
 <main class="wrap"><p><strong>Current pricing:</strong> Standard · Express · Super Fast. The active fare rules and vehicle rates are listed below. No surge pricing.</p><h2 style="margin:26px 0 8px;color:#06122e">Legacy Fixed-Distance Fare Chart — Reference Only</h2><p>The fixed-distance prices in this historical chart are retained for reference and are not the active progressive fare calculation. Use the current per-kilometre rates and rules below for the active model.</p><div class="table-wrap"><table><thead><tr><th>Distance</th><th>Vehicle</th><th>Base</th><th>Standard Fare</th><th>Express (+₹2/km)</th><th>Super Fast (+₹3/km)</th></tr></thead><tbody>
