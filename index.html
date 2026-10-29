@@ -646,7 +646,28 @@ img{height:auto}
 .contents-guide-text{color:#a0aec0;font-size:.95rem;margin:0;line-height:1.6}
 .contents-matrix-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch}
 .matrix-group-bucket{min-width:0;background:#16223f;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:20px 16px}
-.group-label-tag{font-size:.75rem;font-weight:700;color:#a0aec0;letter-spacing:1px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:8px}
+/* Updated table-of-contents group headings: cyan-to-white, with gold accents for groups 2 and 4. */
+.group-label-tag{
+  font-size:.8rem;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(90deg,#00F0FF,#FFFFFF);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:flex;
+  align-items:center;
+}
+.matrix-group-bucket:nth-child(2) .group-label-tag,
+.matrix-group-bucket:nth-child(4) .group-label-tag{
+  background:linear-gradient(90deg,#FFC107,#FFFFFF);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 .links-stack{display:flex;flex-direction:column;gap:8px}
 .matrix-row-link{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;background:rgba(7,25,49,.4);border:1px solid rgba(255,255,255,.05);padding:11px 10px;border-radius:6px;color:#e2e8f0;font-size:.86rem;font-weight:600;line-height:1.4;text-decoration:none;transition:background .2s,border-color .2s,color .2s}
 .link-num{font-size:.72rem;font-weight:800;color:#00f0ff;background:rgba(0,240,255,.08);padding:3px 5px;border-radius:4px;white-space:nowrap}
