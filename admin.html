@@ -149,7 +149,7 @@ footer {
 <label for="projectUrl">Supabase project URL</label>
 <input id="projectUrl" value="https://uzwubbzlytqqewqibobr.supabase.co" autocomplete="url">
 <label for="publicKey">Public anon/publishable key</label>
-<input id="publicKey" type="password" autocomplete="off" placeholder="Paste the project's public client key">
+<input id="publicKey" type="password" autocomplete="off" value="sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq">
 <button id="connect">Connect</button>
 </section>
 <section id="auth" class="card hidden">
@@ -260,7 +260,7 @@ footer {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
- const $=id=>document.getElementById(id); let client=null, session=null, admin=false, hr=false, approvalRole=null, category='HR';
+ const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, approvalRole=null, category='HR';
  const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -275,6 +275,7 @@ footer {
   return}session={user};
   const [a,h,g]=await Promise.all([client.from('admin_users').select('role,active').eq('user_id',user.id).maybeSingle(),client.from('hr_publishers').select('active').eq('user_id',user.id).maybeSingle(),client.from('governance_approvers').select('approval_role,active').eq('user_id',user.id).maybeSingle()]);
   admin=!!(a.data&&a.data.active);
+  owner=!!(a.data&&a.data.active&&a.data.role==='owner');
   hr=!!(h.data&&h.data.active);
   approvalRole=(g.data?.active ? g.data.approval_role : null);
   if(a.error||h.error||g.error){say('Could not verify access: '+[a.error?.message,h.error?.message,g.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema and governance migration are installed.');
@@ -317,5 +318,6 @@ footer {
   say('Policy saved. Confirm approval and audience before relying on publication.');
   await loadPolicies(category);
   };
+$('connect').click();
 })();
 </script></body></html>
