@@ -520,15 +520,15 @@ img{height:auto}
 /* Approved changes only: six hero buttons on one line, slightly larger eagle and company name. */
 .brand-logo{width:62px!important;height:62px!important;flex:0 0 62px!important}
 .brand-mini{font-size:clamp(16px,2.5vw,25px)!important}
-.landing-hero .hero-button-row{grid-column:1/-1;display:flex;flex-wrap:nowrap;align-items:stretch;gap:7px;width:100%;min-width:0;margin-top:16px}
-.landing-hero .hero-button-row a{flex:1 1 0;min-width:0;white-space:nowrap;text-align:center;padding:10px 5px;font-size:clamp(9px,.95vw,13px);line-height:1.25;border-radius:8px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.landing-hero .hero-button-row{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;width:100%;min-width:0;margin-top:16px}
+.landing-hero .hero-button-row a{flex:1 1 calc(33.333% - 8px);min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-align:center;padding:10px 7px;font-size:clamp(11px,1vw,13px);line-height:1.3;min-height:48px;border-radius:8px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center}
 .landing-hero .hero-button-row .hero-primary{background:#25D366;border:1px solid #25D366;color:#fff}
 .landing-hero .hero-button-row .hero-secondary{border:2px solid var(--saahi-gold);background:transparent;color:var(--saahi-gold)}
 @media(max-width:650px){
  .brand-logo{width:54px!important;height:54px!important;flex-basis:54px!important}
  .brand-mini{font-size:clamp(15px,4.4vw,22px)!important}
- .landing-hero .hero-button-row{gap:3px}
- .landing-hero .hero-button-row a{padding:8px 2px;font-size:clamp(7px,1.8vw,10px);letter-spacing:-.2px}
+ .landing-hero .hero-button-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .landing-hero .hero-button-row a{font-size:12px;padding:9px 7px;overflow-wrap:break-word;letter-spacing:0}
 }
 </style>
 
