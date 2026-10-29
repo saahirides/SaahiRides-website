@@ -22,6 +22,17 @@ create table if not exists public.policy_approvals (
 alter table public.governance_approvers enable row level security;
 alter table public.policy_approvals enable row level security;
 
+-- Designated approvers need to inspect policy versions before approving them.
+drop policy if exists "governance approvers read policy documents" on public.policy_documents;
+create policy "governance approvers read policy documents"
+on public.policy_documents for select to authenticated
+using (
+  exists (
+    select 1 from public.governance_approvers ga
+    where ga.user_id = (select auth.uid()) and ga.active = true
+  )
+);
+
 -- No browser write policy exists for governance_approvers: role assignments are
 -- deliberately restricted to the SQL Editor / trusted database administration.
 drop policy if exists "approvers read own assignment" on public.governance_approvers;
