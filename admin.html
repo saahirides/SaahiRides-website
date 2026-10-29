@@ -142,7 +142,7 @@ footer {
 </div>
 <a class="btn secondary" href="./index.html">← Main website</a>
 </header>
-<div id="notice" class="status">Configuration required: add the Supabase project URL and public anon/publishable key in this file before use. Never put a service-role key here.</div>
+<div id="notice" class="status">SaahiRides Supabase connection is preconfigured with the public client key. Sign in with your authorized account.</div>
 <section id="config" class="card">
 <h2>Connect existing Supabase project</h2>
 <p class="hint">Enter the existing project URL and its public anon/publishable key. This form stores them only in this page's current memory; it does not save them to browser storage.</p>
@@ -283,15 +283,15 @@ footer {
   return}show('auth',false);
   show('workspace',true);
   $('welcome').textContent='Welcome';
-  $('roleText').textContent=(admin?'Admin/Owner access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(approvalRole?' · Governance approver: '+approvalRole.replace('_',' '):'');
-  $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category!=='HR'&&!admin&&!approvalRole);
+  $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(approvalRole?' · Governance approver: '+approvalRole.replace('_',' '):'');
+  $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category==='Admin Governance'&&!owner)||(b.dataset.category!=='HR'&&!admin&&!approvalRole);
   });
-  if(!admin){category='HR';
+  if(!admin&&!owner){category='HR';
   $('tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category==='HR'));
   }await loadPolicies(category);
   say('Signed in. Permissions checked against Supabase database records.');
   }
- $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',admin||hr&&category==='HR');$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
+ $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
  async function loadPolicies(cat){$('policyList').innerHTML='<p class="hint">Loading policies…</p>';
   if(!client)return;
   let q=client.from('policy_documents').select('id,title,category,body,version,effective_date,review_date,status,acknowledgement_required,created_at').eq('category',cat).order('created_at',{ascending:false});
@@ -306,7 +306,7 @@ footer {
  function editPolicy(p){if(!p)return;show('editor',true);$('editorTitle').textContent='Edit '+category+' policy';$('policyId').value=p.id;$('title').value=p.title;$('body').value=p.body;$('version').value=p.version;$('effective').value=p.effective_date||'';$('review').value=p.review_date||'';$('status').value=p.status;$('ackRequired').checked=p.acknowledgement_required;}
  $('clear').onclick=()=>{['policyId','title','body','effective','review'].forEach(id=>$(id).value='');$('version').value='1.0';$('status').value='draft';$('ackRequired').checked=false;};
  $('save').onclick=async()=>{if(!client||!session)return say('Sign in first.');
-  if(!admin&&!(hr&&category==='HR'))return say('Permission denied.');
+  if(category==='Admin Governance'&&!owner)return say('Only the Owner can manage Admin Governance policies.');\n  if(category!=='Admin Governance'&&!admin&&!(hr&&category==='HR'))return say('Permission denied.');
   const payload={title:$('title').value.trim(),body:$('body').value.trim(),category,version:$('version').value.trim(),effective_date:$('effective').value||null,review_date:$('review').value||null,status:$('status').value,acknowledgement_required:$('ackRequired').checked,author_id:session.user.id,updated_at:new Date().toISOString()};
   if(!payload.title||!payload.body||!payload.version)return say('Title, approved policy text, and version are required.');
   let result;
