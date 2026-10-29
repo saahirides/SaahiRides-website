@@ -16,6 +16,7 @@ create table if not exists public.policy_approvals (
   approver_id uuid not null references auth.users(id) on delete cascade,
   approval_role text not null check (approval_role in ('joint_founder','director')),
   approved_at timestamptz not null default now(),
+  revoked_at timestamptz,
   unique (policy_id, policy_version, approver_id)
 );
 
@@ -105,7 +106,7 @@ begin
     -- Any edit invalidates prior approvals for this policy. Approvers must
     -- review the final saved content/version again before publication.
     if content_changed then
-      delete from public.policy_approvals where policy_id = new.id;
+      update public.policy_approvals set revoked_at = now() where policy_id = new.id and revoked_at is null;
     end if;
   end if;
 
@@ -125,6 +126,7 @@ begin
     from public.policy_approvals pa
     join public.governance_approvers ga on ga.user_id = pa.approver_id
     where pa.policy_id = new.id
+      and pa.revoked_at is null
       and pa.policy_version = new.version
       and pa.approval_role = 'joint_founder'
       and ga.approval_role = 'joint_founder'
