@@ -95,6 +95,14 @@ img{width:100%;display:block}
 .travel-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px}
 .travel-actions a{display:inline-block;text-align:center;text-decoration:none;font-weight:900;padding:13px 18px;border-radius:11px}
 .travel-primary{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+.portal-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.portal-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:850;font-size:14px;letter-spacing:.01em;border:1px solid rgba(255,215,0,.7);background:rgba(6,18,46,.88);color:#fff;transition:transform .15s ease,background .15s ease}
+.portal-btn:hover{transform:translateY(-2px);background:#1e3a8a}
+.portal-btn.customer-portal{border-color:#67e8f9}
+.portal-btn.driver-portal{border-color:#93c5fd}
+.portal-btn.hr-portal{border-color:#fbbf24}
+.portal-btn.admin-portal{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+@media(max-width:650px){.portal-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.portal-btn{padding:10px 8px;font-size:12px}}
 .travel-secondary{border:1px solid #D4AF37;color:#FFD700}
 @media(max-width:650px){.travel-section{padding:28px 16px}.travel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.travel-card{padding:15px 12px}.travel-card h3{font-size:15px}.travel-card p{font-size:12px}.travel-actions{flex-direction:column}.travel-actions a{width:100%}}
 @media(max-width:400px){.travel-grid{grid-template-columns:1fr}}
@@ -123,6 +131,12 @@ img{width:100%;display:block}
       <div class="hero-actions">
         <a class="hero-primary" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.">💬 Book Now on WhatsApp</a>
         <a class="hero-secondary" href="#services">Explore Services ↓</a>
+      </div>
+      <div class="portal-actions" aria-label="Separate SaahiRides portals">
+        <a class="portal-btn customer-portal" href="./app/customer.html">Customer Portal</a>
+        <a class="portal-btn driver-portal" href="./app/driver.html">Driver Portal</a>
+        <a class="portal-btn hr-portal" href="./admin.html#policy-centre">HR Portal</a>
+        <a class="portal-btn admin-portal" href="./admin.html">Admin Portal</a>
       </div>
     </div>
     <div class="hero-portrait">
