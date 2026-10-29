@@ -655,6 +655,83 @@ img{height:auto}
     </div>
   </section>
 
+<section class="vehicle-tabs-section" id="vehicle-lists" aria-label="SaahiRides vehicle lists">
+  <h2 class="vehicle-tabs-title">Our Vehicle Lists</h2>
+  <p class="vehicle-tabs-subtitle">Choose Sawari, Premium, Rental or Outstation. All bookings are subject to vehicle availability.</p>
+  <div class="vehicle-tabs" role="tablist" aria-label="Vehicle categories">
+    <button type="button" class="vehicle-tab active" id="tab-sawari" role="tab" aria-selected="true" aria-controls="panel-sawari" data-vehicle-tab="sawari">Our Sawari Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-premium" role="tab" aria-selected="false" aria-controls="panel-premium" data-vehicle-tab="premium">Premium Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-rental" role="tab" aria-selected="false" aria-controls="panel-rental" data-vehicle-tab="rental">Rental Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-outstation" role="tab" aria-selected="false" aria-controls="panel-outstation" data-vehicle-tab="outstation">Outstation Vehicle List</button>
+  </div>
+
+  <div class="vehicle-tab-panel active" id="panel-sawari" role="tabpanel" aria-labelledby="tab-sawari" data-vehicle-panel="sawari">
+    <h3>Our Sawari Vehicle List</h3>
+    <p class="vehicle-panel-intro">Hyderabad Ki Apni Sawari — Choose Your Ride</p>
+  <div class="vehicle-category-grid">
+    <a href="#fare-chart">🏍️ <strong>Bike</strong><span>Standard booking</span></a>
+    <a href="#fare-chart">🏍️ <strong>Bike Express</strong><span>Express booking</span></a>
+    <a href="#fare-chart">🏍️ <strong>Bike Super Fast</strong><span>Super Fast booking</span></a>
+    <a href="#fare-chart">🛵 <strong>Scooty</strong><span>Standard booking</span></a>
+    <a href="#fare-chart">🛵 <strong>Scooty Express</strong><span>Express booking</span></a>
+    <a href="#fare-chart">🌱 <strong>Scooty EV</strong><span>Electric two-wheeler</span></a>
+    <a href="#fare-chart">🛺 <strong>Auto</strong><span>Standard booking</span></a>
+    <a href="#fare-chart">🛺 <strong>Auto Express</strong><span>Express booking</span></a>
+    <a href="#fare-chart">🛺 <strong>Auto Super Fast</strong><span>Super Fast booking</span></a>
+    <a href="#fare-chart">⚡ <strong>EV Auto</strong><span>Electric three-wheeler</span></a>
+    <a href="#fare-chart">🚘 <strong>Non-AC Cab</strong><span>Standard booking</span></a>
+    <a href="#fare-chart">🚘 <strong>Non-AC Cab Express</strong><span>Express booking</span></a>
+    <a href="#fare-chart">🚘 <strong>Non-AC Cab Super Fast</strong><span>Super Fast booking</span></a>
+    <a href="#fare-chart">🚖 <strong>AC Cab</strong><span>Standard booking</span></a>
+    <a href="#fare-chart">🚖 <strong>AC Cab Express</strong><span>Express booking</span></a>
+    <a href="#fare-chart">🚖 <strong>AC Cab Super Fast</strong><span>Super Fast booking</span></a>
+  </div>
+  </div>
+
+  <div class="vehicle-tab-panel" id="panel-premium" role="tabpanel" aria-labelledby="tab-premium" data-vehicle-panel="premium" hidden>
+    <h3>Premium Vehicle List</h3>
+    <p class="vehicle-panel-intro">Air-conditioned cars for a more comfortable journey.</p>
+    <div class="vehicle-category-grid">
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>AC 5-Seater</strong><span>Premium private ride</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>AC 7-Seater</strong><span>Premium group or family ride</span></article>
+    </div>
+    <h4 class="vehicle-subheading">Booking Models</h4>
+    <div class="vehicle-model-grid">
+      <article><strong>On-Demand</strong><span>Airport rides, bus depots, railway stations and Financial District routes.</span></article>
+      <article><strong>Car Sharing</strong><span>Shared rides to and from airports, bus depots, railway stations and Financial District routes, subject to route and seat availability.</span></article>
+      <article><strong>Subscription</strong><span>Subscription rides for airport, bus depot, railway station and Financial District routes. Route, schedule and availability are confirmed before booking.</span></article>
+    </div>
+  </div>
+
+  <div class="vehicle-tab-panel" id="panel-rental" role="tabpanel" aria-labelledby="tab-rental" data-vehicle-panel="rental" hidden>
+    <h3>Rental Vehicle List</h3>
+    <p class="vehicle-panel-intro">Choose a vehicle with a driver or self-drive. For self-drive rentals, required documents must be submitted through KYC and a valid driving licence is mandatory; approval is required before booking.</p>
+    <div class="vehicle-model-grid">
+      <article><strong>With Driver</strong><span>Vehicle supplied with a SaahiRides driver, subject to availability and booking confirmation.</span></article>
+      <article><strong>Self-Drive</strong><span>Available only after identity, driving licence and required documents are verified and approved.</span></article>
+    </div>
+    <h4 class="vehicle-subheading">Rental Durations</h4>
+    <div class="vehicle-model-grid rental-duration-grid">
+      <article><strong>Daily</strong><span>Deposit depends on the selected vehicle category.</span></article>
+      <article><strong>Weekly</strong><span>Deposit depends on the selected vehicle category.</span></article>
+      <article><strong>Monthly</strong><span>Deposit depends on the selected vehicle category.</span></article>
+    </div>
+    <p class="vehicle-policy-note"><strong>Important:</strong> A refundable/security deposit may be required based on vehicle category and rental duration. Any damage costs are extra and payable by the renter. Deposit amounts, rental charges, eligibility and terms will be confirmed before booking.</p>
+  </div>
+
+  <div class="vehicle-tab-panel" id="panel-outstation" role="tabpanel" aria-labelledby="tab-outstation" data-vehicle-panel="outstation" hidden>
+    <h3>Outstation Vehicle List</h3>
+    <p class="vehicle-panel-intro">For intercity and outstation journeys. All bookings are subject to vehicle availability.</p>
+    <div class="vehicle-category-grid">
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>Sedan</strong><span>Outstation travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚗</span><strong>Hatchback</strong><span>Outstation travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Ertiga</strong><span>Group travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Innova</strong><span>Family and group travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Fortuner</strong><span>Premium outstation travel</span></article>
+    </div>
+  </div>
+</section>
+
   <section class="pricing-model-section" id="pricing-model" aria-labelledby="pricing-model-heading">
     <div class="pricing-model-heading">
       <span class="pricing-model-kicker">Clear fares. Your choice.</span>
@@ -917,82 +994,7 @@ img{height:auto}
 </div>
 
 <!-- VEHICLE CATEGORY TABS -->
-<section class="vehicle-tabs-section" id="vehicle-lists" aria-label="SaahiRides vehicle lists">
-  <h2 class="vehicle-tabs-title">Our Vehicle Lists</h2>
-  <p class="vehicle-tabs-subtitle">Choose Sawari, Premium, Rental or Outstation. All bookings are subject to vehicle availability.</p>
-  <div class="vehicle-tabs" role="tablist" aria-label="Vehicle categories">
-    <button type="button" class="vehicle-tab active" id="tab-sawari" role="tab" aria-selected="true" aria-controls="panel-sawari" data-vehicle-tab="sawari">Our Sawari Vehicle List</button>
-    <button type="button" class="vehicle-tab" id="tab-premium" role="tab" aria-selected="false" aria-controls="panel-premium" data-vehicle-tab="premium">Premium Vehicle List</button>
-    <button type="button" class="vehicle-tab" id="tab-rental" role="tab" aria-selected="false" aria-controls="panel-rental" data-vehicle-tab="rental">Rental Vehicle List</button>
-    <button type="button" class="vehicle-tab" id="tab-outstation" role="tab" aria-selected="false" aria-controls="panel-outstation" data-vehicle-tab="outstation">Outstation Vehicle List</button>
-  </div>
 
-  <div class="vehicle-tab-panel active" id="panel-sawari" role="tabpanel" aria-labelledby="tab-sawari" data-vehicle-panel="sawari">
-    <h3>Our Sawari Vehicle List</h3>
-    <p class="vehicle-panel-intro">Hyderabad Ki Apni Sawari — Choose Your Ride</p>
-  <div class="vehicle-category-grid">
-    <a href="#fare-chart">🏍️ <strong>Bike</strong><span>Standard booking</span></a>
-    <a href="#fare-chart">🏍️ <strong>Bike Express</strong><span>Express booking</span></a>
-    <a href="#fare-chart">🏍️ <strong>Bike Super Fast</strong><span>Super Fast booking</span></a>
-    <a href="#fare-chart">🛵 <strong>Scooty</strong><span>Standard booking</span></a>
-    <a href="#fare-chart">🛵 <strong>Scooty Express</strong><span>Express booking</span></a>
-    <a href="#fare-chart">🌱 <strong>Scooty EV</strong><span>Electric two-wheeler</span></a>
-    <a href="#fare-chart">🛺 <strong>Auto</strong><span>Standard booking</span></a>
-    <a href="#fare-chart">🛺 <strong>Auto Express</strong><span>Express booking</span></a>
-    <a href="#fare-chart">🛺 <strong>Auto Super Fast</strong><span>Super Fast booking</span></a>
-    <a href="#fare-chart">⚡ <strong>EV Auto</strong><span>Electric three-wheeler</span></a>
-    <a href="#fare-chart">🚘 <strong>Non-AC Cab</strong><span>Standard booking</span></a>
-    <a href="#fare-chart">🚘 <strong>Non-AC Cab Express</strong><span>Express booking</span></a>
-    <a href="#fare-chart">🚘 <strong>Non-AC Cab Super Fast</strong><span>Super Fast booking</span></a>
-    <a href="#fare-chart">🚖 <strong>AC Cab</strong><span>Standard booking</span></a>
-    <a href="#fare-chart">🚖 <strong>AC Cab Express</strong><span>Express booking</span></a>
-    <a href="#fare-chart">🚖 <strong>AC Cab Super Fast</strong><span>Super Fast booking</span></a>
-  </div>
-  </div>
-
-  <div class="vehicle-tab-panel" id="panel-premium" role="tabpanel" aria-labelledby="tab-premium" data-vehicle-panel="premium" hidden>
-    <h3>Premium Vehicle List</h3>
-    <p class="vehicle-panel-intro">Air-conditioned cars for a more comfortable journey.</p>
-    <div class="vehicle-category-grid">
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>AC 5-Seater</strong><span>Premium private ride</span></article>
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>AC 7-Seater</strong><span>Premium group or family ride</span></article>
-    </div>
-    <h4 class="vehicle-subheading">Booking Models</h4>
-    <div class="vehicle-model-grid">
-      <article><strong>On-Demand</strong><span>Airport rides, bus depots, railway stations and Financial District routes.</span></article>
-      <article><strong>Car Sharing</strong><span>Shared rides to and from airports, bus depots, railway stations and Financial District routes, subject to route and seat availability.</span></article>
-      <article><strong>Subscription</strong><span>Subscription rides for airport, bus depot, railway station and Financial District routes. Route, schedule and availability are confirmed before booking.</span></article>
-    </div>
-  </div>
-
-  <div class="vehicle-tab-panel" id="panel-rental" role="tabpanel" aria-labelledby="tab-rental" data-vehicle-panel="rental" hidden>
-    <h3>Rental Vehicle List</h3>
-    <p class="vehicle-panel-intro">Choose a vehicle with a driver or self-drive. For self-drive rentals, required documents must be submitted through KYC and a valid driving licence is mandatory; approval is required before booking.</p>
-    <div class="vehicle-model-grid">
-      <article><strong>With Driver</strong><span>Vehicle supplied with a SaahiRides driver, subject to availability and booking confirmation.</span></article>
-      <article><strong>Self-Drive</strong><span>Available only after identity, driving licence and required documents are verified and approved.</span></article>
-    </div>
-    <h4 class="vehicle-subheading">Rental Durations</h4>
-    <div class="vehicle-model-grid rental-duration-grid">
-      <article><strong>Daily</strong><span>Deposit depends on the selected vehicle category.</span></article>
-      <article><strong>Weekly</strong><span>Deposit depends on the selected vehicle category.</span></article>
-      <article><strong>Monthly</strong><span>Deposit depends on the selected vehicle category.</span></article>
-    </div>
-    <p class="vehicle-policy-note"><strong>Important:</strong> A refundable/security deposit may be required based on vehicle category and rental duration. Any damage costs are extra and payable by the renter. Deposit amounts, rental charges, eligibility and terms will be confirmed before booking.</p>
-  </div>
-
-  <div class="vehicle-tab-panel" id="panel-outstation" role="tabpanel" aria-labelledby="tab-outstation" data-vehicle-panel="outstation" hidden>
-    <h3>Outstation Vehicle List</h3>
-    <p class="vehicle-panel-intro">For intercity and outstation journeys. All bookings are subject to vehicle availability.</p>
-    <div class="vehicle-category-grid">
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>Sedan</strong><span>Outstation travel</span></article>
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚗</span><strong>Hatchback</strong><span>Outstation travel</span></article>
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Ertiga</strong><span>Group travel</span></article>
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Innova</strong><span>Family and group travel</span></article>
-      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Fortuner</strong><span>Premium outstation travel</span></article>
-    </div>
-  </div>
-</section>
 <style>
 .vehicle-category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;max-width:1050px;margin:0 auto}
 .vehicle-category-grid a{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;min-height:112px;padding:17px 12px;background:#06122E;color:#FFD700;border:2px solid #D4AF37;border-radius:14px;text-decoration:none;font-size:25px;box-sizing:border-box}
