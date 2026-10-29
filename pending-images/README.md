@@ -1,0 +1,3 @@
+# SaahiRides pending images
+
+Upload new images into this folder first. These files are a staging library only and are not displayed on the website until they are deliberately referenced from the correct page. Use clear filenames such as `nashik-trimbakeshwar-temple-01.jpg` or `bengaluru-cubbon-park-01.webp`. Avoid spaces; use lowercase letters and hyphens. After upload, we can map each image to its exact package/page location without rebuilding the site.
