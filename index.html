@@ -474,6 +474,47 @@ img{height:auto}
 }
 </style>
 
+<style id="saahirides-approved-header-tweaks">
+/* Only the three requested header adjustments: portal buttons on one line,
+   a slightly larger eagle, and a larger orange-yellow-gold company name. */
+.brand-logo {
+  width: 54px !important;
+  height: 54px !important;
+  flex: 0 0 54px !important;
+}
+.brand-full-name {
+  font-size: clamp(18px, 2.2vw, 26px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+  background: linear-gradient(100deg, #F97316 0%, #FFD400 48%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FFD400;
+}
+.landing-hero .portal-actions {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100%;
+  max-width: 720px;
+}
+.landing-hero .portal-btn {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  font-size: clamp(10px, 1.1vw, 13px) !important;
+}
+@media (max-width: 650px) {
+  .brand-logo { width: 46px !important; height: 46px !important; flex-basis: 46px !important; }
+  .brand-full-name { font-size: clamp(16px, 4.3vw, 21px) !important; }
+  .landing-hero .portal-actions { display: flex !important; flex-wrap: nowrap !important; gap: 5px !important; }
+  .landing-hero .portal-btn { padding: 9px 3px !important; font-size: clamp(9px, 2.7vw, 11px) !important; }
+}
+</style>
+
 </head>
 <body>
 <div class="container">
