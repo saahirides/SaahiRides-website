@@ -515,6 +515,23 @@ img{height:auto}
 }
 </style>
 
+
+<style id="approved-six-button-logo-size">
+/* Approved changes only: six hero buttons on one line, slightly larger eagle and company name. */
+.brand-logo{width:62px!important;height:62px!important;flex:0 0 62px!important}
+.brand-mini{font-size:clamp(16px,2.5vw,25px)!important}
+.landing-hero .hero-button-row{grid-column:1/-1;display:flex;flex-wrap:nowrap;align-items:stretch;gap:7px;width:100%;min-width:0;margin-top:16px}
+.landing-hero .hero-button-row a{flex:1 1 0;min-width:0;white-space:nowrap;text-align:center;padding:10px 5px;font-size:clamp(9px,.95vw,13px);line-height:1.25;border-radius:8px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.landing-hero .hero-button-row .hero-primary{background:#25D366;border:1px solid #25D366;color:#fff}
+.landing-hero .hero-button-row .hero-secondary{border:2px solid var(--saahi-gold);background:transparent;color:var(--saahi-gold)}
+@media(max-width:650px){
+ .brand-logo{width:54px!important;height:54px!important;flex-basis:54px!important}
+ .brand-mini{font-size:clamp(15px,4.4vw,22px)!important}
+ .landing-hero .hero-button-row{gap:3px}
+ .landing-hero .hero-button-row a{padding:8px 2px;font-size:clamp(7px,1.8vw,10px);letter-spacing:-.2px}
+}
+</style>
+
 </head>
 <body>
 <div class="container">
@@ -534,13 +551,11 @@ img{height:auto}
       <div class="hero-tags">
         <span>✓ No Surge Pricing</span><span>✓ Multiple Ride Categories</span><span>✓ WhatsApp Booking</span>
       </div>
-      <div class="portal-actions" aria-label="Separate SaahiRides portals">
+      <div class="hero-button-row" aria-label="SaahiRides portals and booking links">
         <a class="portal-btn customer-portal" href="./app/customer.html">Customer Portal</a>
         <a class="portal-btn driver-portal" href="./app/driver.html">Driver Portal</a>
         <a class="portal-btn hr-portal" href="./admin.html">HR Portal</a>
         <a class="portal-btn admin-portal" href="./admin.html">Admin Portal</a>
-      </div>
-      <div class="hero-actions">
         <a class="hero-primary" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.">💬 Book Now on WhatsApp</a>
         <a class="hero-secondary" href="#services">Explore Services ↓</a>
       </div>
