@@ -1,105 +1,81 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaahiRides</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides | Sawari booking and prices</title>
 <style>
-body{margin:0;background:#f5f5f5;font-family:sans-serif}
-.header{background:#081b33;color:white;padding:12px 15px;display:flex;justify-content:space-between}
-.screen{padding:15px;display:none}.screen.active{display:block}
-.grid4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.rideType{background:white;padding:18px;border-radius:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);cursor:pointer;border:2px solid transparent}
-.tabs{display:flex;background:white;border-radius:10px;padding:4px;margin:10px 0}
-.tab{flex:1;padding:10px;text-align:center;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px}
-.tab.active{background:#081b33;color:white}
-.vehicle{background:white;padding:12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin:8px 0;cursor:pointer;border:1px solid #eee}
-.inputBox{width:100%;padding:12px;border:1px solid #ccc;border-radius:10px;margin:6px 0;box-sizing:border-box}
-.gold-btn{width:100%;padding:14px;background:linear-gradient(#e8c04a,#b78a1f);border:none;border-radius:12px;color:white;font-weight:bold}
-.bill{background:white;padding:15px;border-radius:12px;margin:10px 0;font-size:13px}
-.bill div{display:flex;justify-content:space-between;margin:4px 0}
-.badge{background:#e11d2a;color:white;font-size:10px;padding:3px 6px;border-radius:20px;margin-left:6px}
-.routeLock{background:#e6f9e6;border:1px solid #22c55e;color:#15803d;padding:10px;border-radius:10px;font-size:12px;margin:10px 0;text-align:center}
+:root{--navy:#06122e;--blue:#1e3a8a;--gold:#f5b82e;--paper:#f3f6fb;--ink:#13223a;--muted:#5b6b83;--line:#d8e0ee}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,Arial,sans-serif}
+header{background:linear-gradient(120deg,#06122e,#1e3a8a);color:white;padding:16px max(16px,calc((100% - 980px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:4px solid var(--gold)}
+header strong{color:#ffd66b;font-size:20px}header a{color:white}
+main{max-width:980px;margin:0 auto;padding:20px 14px 42px}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 6px 20px #06122e0b}
+h1,h2,h3{line-height:1.2}h1{font-size:clamp(25px,5vw,36px);margin:6px 0}h2{font-size:22px;margin:4px 0 12px}p{margin:8px 0}.muted{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.vehicle{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px;text-align:left;cursor:pointer;color:var(--ink);width:100%;font:inherit}
+.vehicle strong{display:block;font-size:17px}.vehicle small{display:block;color:var(--muted);margin-top:4px}.vehicle.selected{border:2px solid var(--blue);background:#eff6ff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tab{flex:1;min-width:130px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:800;cursor:pointer}.tab.active{background:var(--blue);color:white;border-color:var(--blue)}
+label{display:block;font-weight:700;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #b8c5d9;border-radius:9px;font:inherit;background:white;color:var(--ink)}
+button.primary{background:linear-gradient(100deg,#d4af37,#ffe27a);border:0;border-radius:10px;padding:12px 16px;font-weight:900;color:#06122e;cursor:pointer}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.price{font-size:28px;font-weight:900;color:var(--blue)}.pricebox{background:#eff6ff;border:1px solid #c8d8f2;padding:16px;border-radius:12px;margin:12px 0}
+.notice{background:#fff8df;border:1px solid #f1d47b;padding:12px;border-radius:10px;font-size:14px}
+.hidden{display:none!important}
+@media(max-width:520px){main{padding:14px 10px 30px}.panel{padding:14px}.row{grid-template-columns:1fr}.tab{min-width:0;font-size:14px}}
 </style>
 </head>
 <body>
-<div class="header"><span>🦅 SaahiRides</span><span onclick="localStorage.clear();location.href='./index.html'" style="font-size:12px">Logout</span></div>
-
-<!-- S1: BOOK YOUR RIDE -->
-<div id="s1" class="screen active">
-<h3>Book Your Ride</h3>
-<div class="grid4">
-<div class="rideType" onclick="selectRide('sawari')"><div style="font-size:28px">🛺</div><b>Sawari</b></div>
-<div class="rideType" onclick="alert('Premium coming soon')"><div style="font-size:28px">🚗</div><b>Premium</b></div>
-<div class="rideType" onclick="alert('Rental coming soon')"><div style="font-size:28px">⏰</div><b>Rental</b></div>
-<div class="rideType" onclick="alert('Outstation Rs 15/km')"><div style="font-size:28px">🛣️</div><b>Outstation</b></div>
+<header><div><strong>🦅 SaahiRides</strong><div class="muted" style="color:#dbeafe">SafeRide @ SaahiPrice · No surge pricing</div></div><a href="../index.html">← Main website</a></header>
+<main>
+<section class="panel">
+<p class="muted">SAWARI · SELECT YOUR VEHICLE</p><h1>Choose a vehicle and see its prices</h1>
+<p class="muted">Tap a vehicle, then choose On-Demand or Subscription. The two prices are kept separate so you can compare before continuing.</p>
+<div class="grid" id="vehicleList"></div>
+</section>
+<section class="panel" id="pricePanel">
+<h2 id="selectedTitle">Select a vehicle to see prices</h2>
+<div class="tabs" role="tablist" aria-label="Pricing type">
+<button class="tab active" id="onTab" type="button" onclick="setMode('on')">On-Demand prices</button>
+<button class="tab" id="subTab" type="button" onclick="setMode('sub')">Subscription prices</button>
 </div>
-</div>
-
-<!-- S2: SAWARI - ON DEMAND vs SUBSCRIPTION -->
-<div id="s2" class="screen">
-<h3><span onclick="show('s1')">←</span> Sawari</h3>
-<div class="tabs">
-<div id="tabOn" class="tab active" onclick="switchTab('on')">On-Demand</div>
-<div id="tabSub" class="tab" onclick="switchTab('sub')">Subscription</div>
-</div>
-
-<!-- ON DEMAND CONTENT -->
 <div id="onContent">
-<p style="font-size:11px;color:gray">All 6 categories - Base 0-5km + Multiplier + Night (11pm-5am)</p>
-<div id="vehList"></div>
+<p class="muted" id="rateSummary">Select a vehicle to view the fare.</p>
+<div class="row">
+<div><label for="distance">Trip distance (km)</label><input id="distance" type="number" min="0.1" max="30" step="0.1" value="5"></div>
+<div><label for="service">Service level</label><select id="service"><option value="standard">Standard</option><option value="priority">Priority / Express</option><option value="premium">Premium / Super Fast</option></select></div>
 </div>
-
-<!-- SUBSCRIPTION CONTENT -->
-<div id="subContent" style="display:none">
-<div style="background:white;padding:15px;border-radius:15px">
-<h4 style="margin:0">Subscription Plan <span class="badge">Route Lock</span></h4>
-<p style="font-size:12px;opacity:0.7">Same driver daily | Fixed time | No cancellation</p>
-<div class="vehicle" onclick="chooseVehicleSub()"><span><b>Daily Sawari</b><br><small>Bike / Scooty - Monthly fixed</small></span><span style="color:#e11d2a;font-weight:bold">₹1499 / month</span></div>
-<div class="routeLock">🔒 Route Locked: Home ↔ Office | Driver arrives in 5 mins | No surge, No night charge</div>
-<ul style="font-size:12px;padding-left:18px">
-<li>Driver arrives in 5 mins sharp</li>
-<li>Route lock - only fixed route</li>
-<li>No extra charges after 11pm</li>
-<li>Priority support</li>
-</ul>
-<button class="gold-btn" onclick="chooseVehicleSub()">Subscribe Now</button>
+<div class="pricebox"><div class="muted">Estimated On-Demand fare</div><div class="price" id="fare">₹50.00</div><div class="muted" id="fareNote">Estimate based on the published progressive fare slabs.</div></div>
+<div class="notice">Fare estimate only. Trips above 30 km, night charges, and vehicle categories with a single published rate follow their separate approved rules. No surge pricing.</div>
 </div>
+<div id="subContent" class="hidden">
+<div id="subscriptionDetails"></div>
 </div>
-</div>
-
-<!-- S3: BOOKING -->
-<div id="s3" class="screen">
-<h3><span onclick="show('s2')">←</span> <span id="vehName">Booking</span> <span id="lockBadge"></span></h3>
-<input class="inputBox" id="fromLoc" placeholder="From - Kapra">
-<input class="inputBox" id="toLoc" placeholder="To location" oninput="calcPrice()">
-<div style="display:flex;gap:8px">
-<input class="inputBox" id="kmInput" type="number" placeholder="km" style="flex:1" oninput="calcPrice()">
-<select id="timeSel" class="inputBox" style="flex:1" onchange="calcPrice()"><option value="day">Day</option><option value="night">Night (11pm-5am)</option></select>
-</div>
-<div style="background:#dbeafe;height:120px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:10px 0"><span>🗺️ Map</span><small id="etaTxt">Driver in 5 mins</small><small id="multTxt">Multiplier: 1x</small></div>
-<div class="bill">
-<div><span>Base (0-5km)</span><span id="baseP">₹0</span></div>
-<div><span>Extra</span><span id="extraP">₹0</span></div>
-<div><span>Night</span><span id="nightP">₹0</span></div>
-<div style="font-weight:bold;border-top:1px solid #eee;padding-top:6px"><span>Total</span><span id="totalP">₹0</span></div>
-</div>
-<div id="routeLockMsg" style="display:none" class="routeLock">🔒 Route locked after booking - cannot change</div>
-<button class="gold-btn" onclick="confirmBooking()">Confirm Booking</button>
-</div>
-
-<div id="s4" class="screen"><h3>Ride Started - Route Locked</h3><div style="background:white;padding:20px;border-radius:15px;text-align:center"><p>Share OTP</p><h1 id="rideOtp" style="letter-spacing:8px;color:#e11d2a">0000</h1><p id="rideStatus">Driver arriving in 5 mins...</p><div class="routeLock">🔒 Route is locked - driver will follow same route</div><button class="gold-btn" onclick="show('s5')">Ride Complete</button></div></div>
-<div id="s5" class="screen"><h3>Payment</h3><div class="bill" id="finalBill"></div><button class="gold-btn" onclick="show('s6')">Pay</button></div>
-<div id="s6" class="screen"><h3>Feedback</h3><div style="background:white;padding:20px;border-radius:15px;text-align:center"><p>⭐⭐⭐⭐⭐</p><textarea class="inputBox" placeholder="Feedback"></textarea><button class="gold-btn" onclick="alert('Thanks Mamu!');location.reload()">Submit</button></div></div>
-
+</section>
+<section class="panel">
+<h2>Fare rules at a glance</h2>
+<p>First 3 km are calculated at the selected per-kilometre rate. Additional kilometres are calculated progressively within each slab: 3–5 km × 1.15; 5–10 km × 1.25; 10–15 km × 1.50; 15–20 km × 1.75; 20–25 km × 2.00; 25–30 km × 2.25.</p>
+<p class="muted">Subscription savings are intended to be 10–15% below comparable On-Demand prices for eligible regular journeys. Only confirmed subscription prices are displayed as fixed amounts; unconfirmed prices are not guessed.</p>
+</section>
+</main>
 <script>
 const vehicles=[
-{name:"Bike Standard",rate:10,base:50,night:30},
-{name:"Bike Priority",rate:12,base:60,night:35},
-{name:"Bike Premium",rate:15,base:75,night:40},
-{name:"Scooty Standard",rate:13,base:65,night:45},
-{name:"Scooty Priority",rate:15,base:75,night:50},
-{name:"Scooty EV",rate:17,base:85,night:55}
+ {id:'bike-standard',name:'Bike Standard',rates:{standard:10,priority:12,premium:13},subscription:'confirmed'},
+ {id:'bike-priority',name:'Bike Priority',rates:{standard:12,priority:12,premium:13},subscription:'not-confirmed'},
+ {id:'bike-premium',name:'Bike Premium',rates:{standard:15,priority:15,premium:15},subscription:'not-confirmed'},
+ {id:'scooty-standard',name:'Scooty Standard',rates:{standard:14,priority:14,premium:14},subscription:'not-confirmed'},
+ {id:'scooty-priority',name:'Scooty Priority',rates:{standard:15,priority:15,premium:15},subscription:'not-confirmed'},
+ {id:'scooty-ev',name:'Scooty EV',rates:{standard:16},subscription:'not-confirmed'},
+ {id:'auto-standard',name:'Auto Rickshaw Standard',rates:{standard:23,priority:25,premium:26},subscription:'not-confirmed'},
+ {id:'electric-auto',name:'Electric Auto Rickshaw',rates:{standard:25},subscription:'not-confirmed'},
+ {id:'nonac-standard',name:'Non-AC Cab Standard',rates:{standard:25,priority:27,premium:28},subscription:'not-confirmed'},
+ {id:'ac-standard',name:'AC Cab Standard',rates:{standard:30,priority:32,premium:33},subscription:'not-confirmed'}
 ];
-function getMult(km){if(km<=5)return 1;if(km<=10)return 1.25;if(km<=15)return 1.5;if(km<=20)return 1.75;if(km<=25)return 2;if(km<=30)return 2.25;if(km<=35)return 2.5;if(km<=40)return 2.75;return 3;}
-let selVeh=null,curTotal=0,curKm=5,isSub=false;
-function renderVeh(){let
+let selected=vehicles[0],mode='on';
+const money=n=>'₹'+Number(n).toFixed(2);
+function renderVehicles(){document.getElementById('vehicleList').innerHTML=vehicles.map(v=>'<button type="button" class="vehicle '+(v.id===selected.id?'selected':'')+'" onclick="chooseVehicle(\''+v.id+'\')"><strong>'+v.name+'</strong><small>Standard rate: '+money(v.rates.standard)+'/km</small></button>').join('')}
+function chooseVehicle(id){selected=vehicles.find(v=>v.id===id)||vehicles[0];renderVehicles();document.getElementById('selectedTitle').textContent=selected.name+' — prices';const service=document.getElementById('service');service.innerHTML=Object.keys(selected.rates).map(k=>'<option value="'+k+'">'+({standard:'Standard',priority:'Priority / Express',premium:'Premium / Super Fast'}[k])+'</option>').join('');document.getElementById('rateSummary').textContent='Published rates: '+Object.entries(selected.rates).map(([k,v])=>({standard:'Standard',priority:'Priority / Express',premium:'Premium / Super Fast'}[k])+' '+money(v)+'/km').join(' · ');updateFare();updateSubscription()}
+function fareFor(km,rate){let total=Math.min(km,3)*rate;const slabs=[[3,5,1.15],[5,10,1.25],[10,15,1.5],[15,20,1.75],[20,25,2],[25,30,2.25]];for(const [lo,hi,m] of slabs){const covered=Math.max(0,Math.min(km,hi)-lo);total+=covered*rate*m}return total}
+function updateFare(){if(!selected)return;const km=Math.max(0.1,Math.min(30,Number(document.getElementById('distance').value)||0.1));const tier=document.getElementById('service').value;const rate=selected.rates[tier]??selected.rates.standard;document.getElementById('fare').textContent=money(fareFor(km,rate));document.getElementById('fareNote').textContent=km<=30?'Distance: '+km+' km · Rate: '+money(rate)+'/km · progressive slab calculation':'Above 30 km: separate tariff applies.'}
+function updateSubscription(){const el=document.getElementById('subscriptionDetails');if(selected.id==='bike-standard'){el.innerHTML='<div class="pricebox"><div class="muted">Confirmed 30-day Bike Standard plan</div><div class="price">₹999 + ₹199</div><p><strong>₹999 monthly subscription + ₹199 route-lock fee = ₹1,198 total for 30 days.</strong></p><p>Daily one-way reference: ₹1,198 ÷ 30 = about ₹39.93 (₹40/day).</p><p class="muted">Eligible regular journeys are intended to be 10–15% cheaper than On-Demand pricing. Route lock, dedicated driver and other benefits apply under the plan terms.</p></div>'}else{el.innerHTML='<div class="notice"><strong>Subscription price not yet confirmed for '+selected.name+'.</strong><p>We are not displaying an invented monthly price. The published subscription model targets 10–15% savings on eligible regular journeys. This vehicle’s fixed monthly price will appear here once approved.</p></div>'}}
+function setMode(m){mode=m;document.getElementById('onTab').classList.toggle('active',m==='on');document.getElementById('subTab').classList.toggle('active',m==='sub');document.getElementById('onContent').classList.toggle('hidden',m!=='on');document.getElementById('subContent').classList.toggle('hidden',m!=='sub');if(m==='sub')updateSubscription()}
+document.getElementById('distance').addEventListener('input',updateFare);document.getElementById('service').addEventListener('change',updateFare);chooseVehicle('bike-standard');
+</script>
+</body></html>
