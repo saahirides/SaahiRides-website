@@ -163,6 +163,18 @@ footer {
 <input id="publicKey" type="password" autocomplete="off" placeholder="Paste the project's public client key">
 <button id="connect" type="button">Connect existing project</button>
 </details>
+
+<section class="card" id="superAdminGate">
+<h2>Super Admin secure access</h2>
+<p class="hint">Enter the registered Super Admin mobile number and private security key. The key is sent only to the server-side verification function; it is never stored in this webpage.</p>
+<label for="superMobile">Registered mobile number</label>
+<input id="superMobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="Enter registered mobile number">
+<label for="superKey">Private security key</label>
+<div class="password-field"><input id="superKey" type="password" autocomplete="off" placeholder="Enter private key"><button type="button" class="secondary password-toggle" id="toggleSuperKey" aria-controls="superKey" aria-pressed="false">Show</button></div>
+<button id="superVerify" type="button">Verify Super Admin</button>
+<p class="small">After server verification, sign in with the authorized account below. Mobile number alone does not grant access.</p>
+</section>
+
 <section id="auth" class="card">
 <h2>Secure sign-in</h2>
 <p class="hint">Use an account already created in Supabase Auth. Access is granted only when the database recognizes an active Admin/Owner or authorized HR publisher.</p>
@@ -277,6 +289,8 @@ footer {
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const config=(url,key)=>{if(!window.supabase?.createClient)throw Error('Supabase client library did not load. Check internet access and reload.');if(!url.startsWith('https://')||!key.trim())throw Error('Enter the HTTPS project URL and public anon/publishable key.');client=window.supabase.createClient(url.trim(),key.trim());show('auth');say('Project client configured for this page session. Sign in to check database permissions.');};
  $('connect').onclick=()=>{try{config($('projectUrl').value,$('publicKey').value)}catch(e){say(e.message)}};
+ $('toggleSuperKey').onclick=()=>{const input=$('superKey');const reveal=input.type==='password';input.type=reveal?'text':'password';$('toggleSuperKey').textContent=reveal?'Hide':'Show';$('toggleSuperKey').setAttribute('aria-pressed',String(reveal));};
+ $('superVerify').onclick=async()=>{if(!client){show('config',true);return say('Connect the existing Supabase project first.');}const mobile=$('superMobile').value.trim();const key=$('superKey').value;if(!mobile||!key)return say('Enter both the registered mobile number and private security key.');$('superVerify').disabled=true;$('superVerify').textContent='Verifying…';try{const {data,error}=await client.functions.invoke('super-admin-gate',{body:{mobile,key}});if(error||!data?.verified){say('Super Admin verification failed. Check the server-side function configuration and credentials.');return;}say('Super Admin gate verified. Now sign in below with the authorized Supabase email and password to open the workspace.');$('email').focus();}catch(e){say('Super Admin verification service is not available yet. Deploy the server function and configure its private secrets before testing this login.');}finally{$('superVerify').disabled=false;$('superVerify').textContent='Verify Super Admin';$('superKey').value='';};};
  $('togglePassword').onclick=()=>{const input=$('password');const reveal=input.type==='password';input.type=reveal?'text':'password';$('togglePassword').textContent=reveal?'Hide':'Show';$('togglePassword').setAttribute('aria-pressed',String(reveal));};
  $('signIn').onclick=async()=>{if(!client){show('config',true);return say('Connection setup required: open Connection settings and enter the existing Supabase public anon/publishable key. Email/password sign-in is ready, but authentication cannot run without the client key.');}const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;await checkAccess();};
  $('reset').onclick=async()=>{if(!client)return say('Connect the project first.');const email=$('email').value.trim();if(!email)return say('Enter your account email first.');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});say(error?'Reset request failed: '+error.message:'If the account exists and email delivery is configured, a password-reset email will be sent.');};
