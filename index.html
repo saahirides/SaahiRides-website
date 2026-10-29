@@ -381,6 +381,30 @@ img{width:100%;display:block}
   .landing-hero .portal-actions { grid-template-columns: repeat(2,minmax(0,1fr)); width: 100%; }
 }
 
+
+/* Compact four-card services matrix — scoped to avoid changing other site sections. */
+.services-compact-matrix{background:#071931;padding:24px clamp(14px,3vw,34px) 28px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07)}
+.services-compact-matrix .matrix-heading{text-align:center;margin:0 auto 16px}
+.services-compact-matrix .matrix-heading h2{color:#FFC107;font-size:clamp(23px,3vw,30px);line-height:1.2;margin:0 0 3px}
+.services-compact-matrix .matrix-heading p{color:#A0AEC0;font-size:14px;margin:0}
+.matrix-wrapper{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.matrix-card{background:#16223F;border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:17px 18px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;min-width:0;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.matrix-card:hover{transform:translateY(-3px);border-color:#00F0FF;box-shadow:0 10px 25px rgba(0,240,255,.08)}
+.matrix-card.highlighted-gold-card{border-color:rgba(255,193,7,.4);background:#1A2A4E}
+.matrix-card.highlighted-gold-card:hover{border-color:#FFC107;box-shadow:0 10px 25px rgba(255,193,7,.08)}
+.matrix-icon-header{display:flex;align-items:center;gap:10px;margin-bottom:7px;position:relative;z-index:1}
+.matrix-card .service-emoji{font-size:1.35rem;line-height:1.2}
+.matrix-card .matrix-title{font-size:1.12rem;font-weight:800;color:#fff;margin:0;line-height:1.25}
+.matrix-card .matrix-tags{font-size:.8rem;line-height:1.45;color:#A0AEC0;margin:0 0 12px;font-weight:500;position:relative;z-index:1}
+.matrix-mini-link{font-size:.82rem;font-weight:800;color:#00F0FF;text-decoration:none;display:inline-block;align-self:flex-start;position:relative;z-index:1;transition:transform .2s ease}
+.matrix-mini-link.link-gold{color:#FFC107}
+.matrix-mini-link:hover{transform:translateX(3px)}
+.matrix-accent-glow{position:absolute;top:-30px;right:-30px;width:70px;height:70px;border-radius:50%;filter:blur(25px);pointer-events:none;opacity:.15}
+.matrix-accent-glow.cyan-glow{background:#00F0FF}
+.matrix-accent-glow.gold-glow{background:#FFC107;opacity:.25}
+@media(max-width:900px){.matrix-wrapper{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media(max-width:480px){.services-compact-matrix{padding:20px 14px 22px}.matrix-wrapper{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.matrix-card{padding:13px 12px}.matrix-icon-header{gap:7px}.matrix-card .matrix-title{font-size:1rem}.matrix-card .matrix-tags{font-size:.74rem}.matrix-mini-link{font-size:.75rem}}
+
 </style>
 <style id="saahirides-sitewide-polish">
 
@@ -598,13 +622,36 @@ img{height:auto}
 @media(max-width:400px){.highlights-grid{grid-template-columns:1fr}}
 </style>
 
-  <section class="quick-services" id="services" aria-label="SaahiRides services">
-    <h2>Our Services</h2><p>Choose Your Ride, Your Way</p>
-    <div class="service-grid">
-      <a href="#vehicles"><strong>🏍️ Sawari</strong><span>Bikes • Scooters • EV • Auto • Cabs</span></a>
-      <a href="#vehicles"><strong>👑 Premium</strong><span>Airport • Railway • Bus Depot • IT Hubs</span></a>
-      <a href="#vehicles"><strong>🗓️ Rental</strong><span>Daily • Weekly • Monthly</span></a>
-      <a href="#vehicles"><strong>📍 Outstation</strong><span>One Way • Round Trip</span></a>
+  <section id="services" class="quick-services services-compact-matrix" aria-label="SaahiRides services">
+    <div class="matrix-heading">
+      <h2>Our Services</h2>
+      <p>Choose Your Ride, Your Way</p>
+    </div>
+    <div class="matrix-wrapper">
+      <article class="matrix-card">
+        <div class="matrix-accent-glow cyan-glow" aria-hidden="true"></div>
+        <div class="matrix-icon-header"><span class="service-emoji" aria-hidden="true">🏍️</span><h3 class="matrix-title">Sawari</h3></div>
+        <p class="matrix-tags">Bikes • Scooters • EV • Auto • Cabs</p>
+        <a href="#vehicles" class="matrix-mini-link">Choose Sawari →</a>
+      </article>
+      <article class="matrix-card highlighted-gold-card">
+        <div class="matrix-accent-glow gold-glow" aria-hidden="true"></div>
+        <div class="matrix-icon-header"><span class="service-emoji" aria-hidden="true">👑</span><h3 class="matrix-title">Premium</h3></div>
+        <p class="matrix-tags">Airport • Railway • Bus Depot • IT Hubs</p>
+        <a href="#vehicles" class="matrix-mini-link link-gold">Reserve Premium →</a>
+      </article>
+      <article class="matrix-card">
+        <div class="matrix-accent-glow cyan-glow" aria-hidden="true"></div>
+        <div class="matrix-icon-header"><span class="service-emoji" aria-hidden="true">🗓️</span><h3 class="matrix-title">Rental</h3></div>
+        <p class="matrix-tags">Daily • Weekly • Monthly Fleet Plans</p>
+        <a href="#vehicles" class="matrix-mini-link">View Rental Options →</a>
+      </article>
+      <article class="matrix-card">
+        <div class="matrix-accent-glow cyan-glow" aria-hidden="true"></div>
+        <div class="matrix-icon-header"><span class="service-emoji" aria-hidden="true">📍</span><h3 class="matrix-title">Outstation</h3></div>
+        <p class="matrix-tags">One Way • Round Trip Tourism Tours</p>
+        <a href="#vehicles" class="matrix-mini-link">Plan Outstation →</a>
+      </article>
     </div>
   </section>
 
