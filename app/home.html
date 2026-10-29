@@ -57,25 +57,25 @@ button.primary{background:linear-gradient(100deg,#d4af37,#ffe27a);border:0;borde
 </main>
 <script>
 const vehicles=[
- {id:'bike-standard',name:'Bike Standard',rates:{standard:10,priority:12,premium:13},subscription:'confirmed'},
- {id:'bike-priority',name:'Bike Priority',rates:{standard:12,priority:12,premium:13},subscription:'not-confirmed'},
- {id:'bike-premium',name:'Bike Premium',rates:{standard:15,priority:15,premium:15},subscription:'not-confirmed'},
- {id:'scooty-standard',name:'Scooty Standard',rates:{standard:14,priority:14,premium:14},subscription:'not-confirmed'},
- {id:'scooty-priority',name:'Scooty Priority',rates:{standard:15,priority:15,premium:15},subscription:'not-confirmed'},
+ {id:'bike-standard',name:'Bike Standard',rates:{standard:10},subscription:'confirmed'},
+ {id:'bike-priority',name:'Bike Priority / Express',rates:{standard:12},subscription:'not-confirmed'},
+ {id:'bike-premium',name:'Bike Super Fast',rates:{standard:13},subscription:'not-confirmed'},
+ {id:'scooty-standard',name:'Scooty Standard',rates:{standard:14},subscription:'not-confirmed'},
+ {id:'scooty-priority',name:'Scooty Express',rates:{standard:15},subscription:'not-confirmed'},
  {id:'scooty-ev',name:'Scooty EV',rates:{standard:16},subscription:'not-confirmed'},
- {id:'auto-standard',name:'Auto Rickshaw Standard',rates:{standard:23,priority:25,premium:26},subscription:'not-confirmed'},
+ {id:'auto-standard',name:'Auto Rickshaw Standard',rates:{standard:23},subscription:'not-confirmed'},
  {id:'electric-auto',name:'Electric Auto Rickshaw',rates:{standard:25},subscription:'not-confirmed'},
- {id:'nonac-standard',name:'Non-AC Cab Standard',rates:{standard:25,priority:27,premium:28},subscription:'not-confirmed'},
- {id:'ac-standard',name:'AC Cab Standard',rates:{standard:30,priority:32,premium:33},subscription:'not-confirmed'}
+ {id:'nonac-standard',name:'Non-AC Cab Standard',rates:{standard:25},subscription:'not-confirmed'},
+ {id:'ac-standard',name:'AC Cab Standard',rates:{standard:30},subscription:'not-confirmed'}
 ];
 let selected=vehicles[0],mode='on';
 const money=n=>'₹'+Number(n).toFixed(2);
 function renderVehicles(){document.getElementById('vehicleList').innerHTML=vehicles.map(v=>'<button type="button" class="vehicle '+(v.id===selected.id?'selected':'')+'" onclick="chooseVehicle(\''+v.id+'\')"><strong>'+v.name+'</strong><small>Standard rate: '+money(v.rates.standard)+'/km</small></button>').join('')}
-function chooseVehicle(id){selected=vehicles.find(v=>v.id===id)||vehicles[0];renderVehicles();document.getElementById('selectedTitle').textContent=selected.name+' — prices';const service=document.getElementById('service');service.innerHTML=Object.keys(selected.rates).map(k=>'<option value="'+k+'">'+({standard:'Standard',priority:'Priority / Express',premium:'Premium / Super Fast'}[k])+'</option>').join('');document.getElementById('rateSummary').textContent='Published rates: '+Object.entries(selected.rates).map(([k,v])=>({standard:'Standard',priority:'Priority / Express',premium:'Premium / Super Fast'}[k])+' '+money(v)+'/km').join(' · ');updateFare();updateSubscription()}
+function chooseVehicle(id){selected=vehicles.find(v=>v.id===id)||vehicles[0];renderVehicles();document.getElementById('selectedTitle').textContent=selected.name+' — prices';document.getElementById('rateSummary').textContent='Published On-Demand rate: '+money(selected.rates.standard)+'/km';updateFare();updateSubscription()}
 function fareFor(km,rate){let total=Math.min(km,3)*rate;const slabs=[[3,5,1.15],[5,10,1.25],[10,15,1.5],[15,20,1.75],[20,25,2],[25,30,2.25]];for(const [lo,hi,m] of slabs){const covered=Math.max(0,Math.min(km,hi)-lo);total+=covered*rate*m}return total}
-function updateFare(){if(!selected)return;const km=Math.max(0.1,Math.min(30,Number(document.getElementById('distance').value)||0.1));const tier=document.getElementById('service').value;const rate=selected.rates[tier]??selected.rates.standard;document.getElementById('fare').textContent=money(fareFor(km,rate));document.getElementById('fareNote').textContent=km<=30?'Distance: '+km+' km · Rate: '+money(rate)+'/km · progressive slab calculation':'Above 30 km: separate tariff applies.'}
+function updateFare(){if(!selected)return;const km=Math.max(0.1,Math.min(30,Number(document.getElementById('distance').value)||0.1));const rate=selected.rates.standard;document.getElementById('fare').textContent=money(fareFor(km,rate));document.getElementById('fareNote').textContent='Distance: '+km+' km · Rate: '+money(rate)+'/km · progressive slab calculation'}
 function updateSubscription(){const el=document.getElementById('subscriptionDetails');if(selected.id==='bike-standard'){el.innerHTML='<div class="pricebox"><div class="muted">Confirmed 30-day Bike Standard plan</div><div class="price">₹999 + ₹199</div><p><strong>₹999 monthly subscription + ₹199 route-lock fee = ₹1,198 total for 30 days.</strong></p><p>Daily one-way reference: ₹1,198 ÷ 30 = about ₹39.93 (₹40/day).</p><p class="muted">Eligible regular journeys are intended to be 10–15% cheaper than On-Demand pricing. Route lock, dedicated driver and other benefits apply under the plan terms.</p></div>'}else{el.innerHTML='<div class="notice"><strong>Subscription price not yet confirmed for '+selected.name+'.</strong><p>We are not displaying an invented monthly price. The published subscription model targets 10–15% savings on eligible regular journeys. This vehicle’s fixed monthly price will appear here once approved.</p></div>'}}
 function setMode(m){mode=m;document.getElementById('onTab').classList.toggle('active',m==='on');document.getElementById('subTab').classList.toggle('active',m==='sub');document.getElementById('onContent').classList.toggle('hidden',m!=='on');document.getElementById('subContent').classList.toggle('hidden',m!=='sub');if(m==='sub')updateSubscription()}
-document.getElementById('distance').addEventListener('input',updateFare);document.getElementById('service').addEventListener('change',updateFare);chooseVehicle('bike-standard');
+document.getElementById('distance').addEventListener('input',updateFare);chooseVehicle('bike-standard');
 </script>
 </body></html>
