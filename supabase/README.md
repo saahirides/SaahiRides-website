@@ -29,12 +29,12 @@ Both portals use Supabase Auth and the existing SaahiRides project.
 - Active Admin/Owner accounts can manage all four policy categories: HR, Customer, Driver, and Admin Governance.
 - Active HR publishers can manage HR-category policies only. The dedicated `hr.html` workspace only offers HR drafts and pending-approval submissions; it does not offer a Published status.
 - Governance approver role assignments are SQL-Editor-only. Assigned approvers can record approval for an exact policy version in `admin.html`.
-- The database trigger blocks publication until the exact policy version has approval from a designated Joint Founder and a distinct designated Director. The database is the final publication gate; the UI alone is not trusted.
+- The database trigger blocks publication until the exact policy version has approval from a designated Joint Founder and a distinct designated Director. The trigger also blocks edits to published policy content under the same version; content changes require a new version and fresh dual approval. The database is the final publication gate; the UI alone is not trusted.
 - Customers/drivers cannot read policy rows yet. Their role mapping and published-policy access must be implemented and tested before those views are opened.
 - Acknowledgement insert rules require the policy to be published, require acknowledgement, and match the recorded version.
 
 ## Important limitations
-- These changes are staged and have not been executed or integration-tested against the live Supabase project in this workflow. Confirm the base schema and migration are applied before using either portal.
+- These changes are staged and have not been executed or integration-tested against the live Supabase project in this workflow. The publication trigger was hardened to run on every policy-row update so a published policy cannot be altered silently without versioning and fresh approvals. Confirm the base schema and migration are applied before using either portal.
 - The mandatory approval rule is enforced for policy publication. Other sensitive business actions must receive their own server-side authorization before they are enabled.
 - The supplied `VITE_*` variables are not automatically loaded by a plain static `index.html`; the staged Admin/HR pages use the Supabase JS browser library.
 - Changes are on `work/supabase-admin-policy-centre`; `main` and the live website have not been changed. No DNS changes or live database SQL execution have occurred.
