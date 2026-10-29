@@ -108,6 +108,122 @@ img{width:100%;display:block}
 @media(max-width:400px){.travel-grid{grid-template-columns:1fr}}
 
 @media(max-width:650px){.brand-mini{font-size:clamp(14px,4vw,20px);gap:8px}.brand-logo{width:40px;height:40px;flex-basis:40px}.top-nav{align-items:flex-start;flex-direction:column;padding:12px 15px}.nav-links{justify-content:flex-start;gap:12px}.nav-links a{font-size:12px}.landing-hero{grid-template-columns:1fr;padding:25px 17px;gap:18px}.landing-hero h1{font-size:46px}.hero-portrait img{max-height:360px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.offer-strip{align-items:flex-start;flex-direction:column;padding:17px}.offer-strip>a{width:100%;text-align:center}}
+
+/* SaahiRides matte blue and gold pricing theme */
+.pricing-model-section,
+.subscription-pricing-section,
+.subscription-benefits {
+  background: #071931;
+  color: #fff;
+}
+.pricing-model-section {
+  padding-top: clamp(42px, 7vw, 78px);
+  padding-bottom: clamp(42px, 7vw, 78px);
+}
+.pricing-model-heading,
+.subscription-benefits-heading {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.pricing-model-kicker,
+.subscription-benefits-kicker {
+  display: inline-block;
+  color: #00F0FF;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.pricing-model-heading h2,
+.subscription-benefits-heading h3,
+.subscription-pricing-table-title {
+  color: #fff;
+  font-weight: 800;
+}
+.pricing-model-heading p,
+.subscription-benefits-heading p {
+  color: #A0AEC0;
+}
+.pricing-model-grid,
+.subscription-benefits-grid {
+  gap: 22px;
+}
+.pricing-model-card,
+.subscription-benefit-card,
+.subscription-pricing-table-wrap {
+  background: #16223F;
+  color: #E2E8F0;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.22);
+  transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.pricing-model-card:hover,
+.subscription-benefit-card:hover,
+.subscription-pricing-table-wrap:hover {
+  transform: translateY(-4px);
+  border-color: #00F0FF;
+  box-shadow: 0 18px 36px rgba(0,240,255,.09);
+}
+.pricing-model-card h3,
+.subscription-benefit-card h4 {
+  color: #fff;
+}
+.pricing-model-card li,
+.subscription-benefit-card p {
+  color: #E2E8F0;
+}
+.pricing-model-card .pricing-model-link,
+.pricing-model-link {
+  border-radius: 9px;
+}
+.subscription-pricing-table-wrap {
+  padding: 18px;
+  overflow: hidden;
+}
+.subscription-pricing-table-title {
+  color: #FFC107;
+}
+.subscription-pricing-table-intro {
+  color: #A0AEC0;
+}
+.subscription-pricing-scroll {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.subscription-pricing-table {
+  background: #16223F;
+  color: #E2E8F0;
+}
+.subscription-pricing-table thead th {
+  background: #0B294B;
+  color: #FFC107;
+  border-color: rgba(255,255,255,.12);
+}
+.subscription-pricing-table tbody th,
+.subscription-pricing-table tbody td {
+  background: #16223F;
+  color: #E2E8F0;
+  border-color: rgba(255,255,255,.09);
+}
+.subscription-pricing-table tbody tr:hover td,
+.subscription-pricing-table tbody tr:hover th {
+  background: #223657;
+  color: #fff;
+}
+.subscription-pricing-scroll:focus-within,
+.fare-chart-table-wrap:focus-within {
+  outline: 3px solid #FFC107;
+  outline-offset: 3px;
+}
+@media (max-width: 560px) {
+  .subscription-pricing-table-wrap { padding: 12px; }
+  .pricing-model-section { padding-top: 38px; padding-bottom: 38px; }
+}
+
 </style>
 <style id="saahirides-sitewide-polish">
 
