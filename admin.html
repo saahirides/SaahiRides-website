@@ -278,12 +278,12 @@ footer {
   hr=!!(h.data&&h.data.active);
   if(a.error||h.error){say('Could not verify access: '+[a.error?.message,h.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema is installed. Governance approval roles are checked separately.');
   return}
-  if(!admin&&!hr){say('Signed in, but this account has no active Admin/Owner or HR publisher permission. No policy controls are enabled.');
+  if(!admin&&!hr&&!approvalRole){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(admin?'Admin/Owner access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(approvalRole?' · Governance approver: '+approvalRole.replace('_',' '):'');
-  $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category!=='HR'&&!admin);
+  $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category!=='HR'&&!admin&&!approvalRole);
   });
   if(!admin){category='HR';
   $('tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category==='HR'));
