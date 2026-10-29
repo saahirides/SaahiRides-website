@@ -184,7 +184,7 @@ img{width:100%;display:block}
       <div class="subscription-benefits-heading">
         <span class="subscription-benefits-kicker">Your regular ride, made simpler</span>
         <h3 id="subscription-benefits-heading">SaahiRides Subscription Benefits</h3>
-        <p>Pay <strong>10–15% less than On-Demand prices</strong> for eligible regular journeys—without booking the same ride manually every day.</p>
+        <p>Subscription totals are calculated from the published On-Demand fares multiplied by the number of planned trip legs, plus the applicable 30-day route-lock fee.</p>
       </div>
       <div class="subscription-benefits-grid">
         <article class="subscription-benefit-card"><span>⚙️</span><h4>Automatic Eligibility</h4><p>Planned benefit: eligibility can be identified when the same time slot and fixed-distance journey are used over 3 days. Automated eligibility checks will be implemented later in the booking bot.</p></article>
@@ -198,16 +198,78 @@ img{width:100%;display:block}
         <article class="subscription-benefit-card"><span>🛡️</span><h4>Ride Insurance at No Extra Cost</h4><p>Ride insurance is available at no additional charge, subject to the applicable coverage terms.</p></article>
       </div>
     </div>
-    <div class="subscription-pricing-table-wrap">
-      <h3 class="subscription-pricing-table-title">30-Day Route-Lock Subscription Pricing</h3>
-      <p class="subscription-pricing-table-intro">The subscription price is the 30-day plan price plus the one-time ₹199 route-lock fee. Eligible regular journeys are intended to cost 10–15% less than comparable On-Demand fares. No daily one-way reference is shown because it is not the subscription amount payable.</p>
-      <div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Plan / category</th><th>30-day plan price</th><th>One-time route-lock fee</th><th>Total payable</th></tr></thead><tbody>
-      <tr><th>Bike — Standard</th><td>₹999</td><td>₹199</td><td><strong>₹1,198</strong></td></tr>
-      <tr><th>Scooty / Scooty EV</th><td>Plan price to be confirmed</td><td>₹199</td><td>Plan price + ₹199</td></tr>
-      <tr><th>Auto / Electric Auto</th><td>Plan price to be confirmed</td><td>₹199</td><td>Plan price + ₹199</td></tr>
-      <tr><th>Non-AC / AC Cab</th><td>Plan price to be confirmed</td><td>₹199</td><td>Plan price + ₹199</td></tr>
-      </tbody></table></div>
-      <p class="subscription-pricing-footnote"><strong>Pricing note:</strong> Confirmed amount currently available: Bike Standard ₹999 + ₹199 route lock = ₹1,198 for 30 days. Other monthly plan prices are not included until the approved figures are retrieved, rather than guessed. The 1–15 October 2026 trial offer has ended.</p>
+    <div class="subscription-pricing-section">
+      <h3 class="subscription-pricing-table-title">30-Day Subscription Pricing — Route Locked</h3>
+      <p class="subscription-pricing-table-intro">Only 3 km, 5 km, 10 km and 15 km are shown. Amounts use the matching On-Demand trip fare: one-way subscription = fare × 30 + ₹199 route lock; two-way subscription = fare × 60 + ₹299 route lock. Route-lock fee is included in the displayed total.</p>
+      <div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Bike</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Standard</td><td>₹1,099</td><td>₹2,099</td></tr>
+<tr><th>3 km</th><td>Priority</td><td>₹1,279</td><td>₹2,459</td></tr>
+<tr><th>3 km</th><td>Premium</td><td>₹1,369</td><td>₹2,639</td></tr>
+<tr><th>5 km</th><td>Standard</td><td>₹1,789</td><td>₹3,479</td></tr>
+<tr><th>5 km</th><td>Priority</td><td>₹2,119</td><td>₹4,139</td></tr>
+<tr><th>5 km</th><td>Premium</td><td>₹2,269</td><td>₹4,439</td></tr>
+<tr><th>10 km</th><td>Standard</td><td>₹3,679</td><td>₹7,259</td></tr>
+<tr><th>10 km</th><td>Priority</td><td>₹4,369</td><td>₹8,639</td></tr>
+<tr><th>10 km</th><td>Premium</td><td>₹4,699</td><td>₹9,299</td></tr>
+<tr><th>15 km</th><td>Standard</td><td>₹5,929</td><td>₹11,759</td></tr>
+<tr><th>15 km</th><td>Priority</td><td>₹7,069</td><td>₹14,039</td></tr>
+<tr><th>15 km</th><td>Premium</td><td>₹7,639</td><td>₹15,179</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Scooty</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Standard</td><td>₹1,459</td><td>₹2,819</td></tr>
+<tr><th>3 km</th><td>Priority</td><td>₹1,549</td><td>₹2,999</td></tr>
+<tr><th>3 km</th><td>Premium</td><td>₹1,729</td><td>₹3,359</td></tr>
+<tr><th>5 km</th><td>Standard</td><td>₹2,419</td><td>₹4,739</td></tr>
+<tr><th>5 km</th><td>Priority</td><td>₹2,599</td><td>₹5,099</td></tr>
+<tr><th>5 km</th><td>Premium</td><td>₹2,899</td><td>₹5,699</td></tr>
+<tr><th>10 km</th><td>Standard</td><td>₹5,059</td><td>₹10,019</td></tr>
+<tr><th>10 km</th><td>Priority</td><td>₹5,389</td><td>₹10,679</td></tr>
+<tr><th>10 km</th><td>Premium</td><td>₹6,079</td><td>₹12,059</td></tr>
+<tr><th>15 km</th><td>Standard</td><td>₹8,209</td><td>₹16,319</td></tr>
+<tr><th>15 km</th><td>Priority</td><td>₹8,779</td><td>₹17,459</td></tr>
+<tr><th>15 km</th><td>Premium</td><td>₹9,919</td><td>₹19,739</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Scooty EV</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Single rate</td><td>₹1,639</td><td>₹3,179</td></tr>
+<tr><th>5 km</th><td>Single rate</td><td>₹2,749</td><td>₹5,399</td></tr>
+<tr><th>10 km</th><td>Single rate</td><td>₹5,749</td><td>₹11,399</td></tr>
+<tr><th>15 km</th><td>Single rate</td><td>₹9,349</td><td>₹18,599</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Auto Rickshaw</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Standard</td><td>₹2,269</td><td>₹4,439</td></tr>
+<tr><th>3 km</th><td>Priority</td><td>₹2,449</td><td>₹4,799</td></tr>
+<tr><th>3 km</th><td>Premium</td><td>₹2,539</td><td>₹4,979</td></tr>
+<tr><th>5 km</th><td>Standard</td><td>₹3,859</td><td>₹7,619</td></tr>
+<tr><th>5 km</th><td>Priority</td><td>₹4,189</td><td>₹8,279</td></tr>
+<tr><th>5 km</th><td>Premium</td><td>₹4,339</td><td>₹8,579</td></tr>
+<tr><th>10 km</th><td>Standard</td><td>₹8,179</td><td>₹16,259</td></tr>
+<tr><th>10 km</th><td>Priority</td><td>₹8,869</td><td>₹17,639</td></tr>
+<tr><th>10 km</th><td>Premium</td><td>₹9,199</td><td>₹18,299</td></tr>
+<tr><th>15 km</th><td>Standard</td><td>₹13,339</td><td>₹26,579</td></tr>
+<tr><th>15 km</th><td>Priority</td><td>₹14,479</td><td>₹28,859</td></tr>
+<tr><th>15 km</th><td>Premium</td><td>₹15,049</td><td>₹29,999</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Electric Auto Rickshaw</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Single rate</td><td>₹2,449</td><td>₹4,799</td></tr>
+<tr><th>5 km</th><td>Single rate</td><td>₹4,189</td><td>₹8,279</td></tr>
+<tr><th>10 km</th><td>Single rate</td><td>₹8,869</td><td>₹17,639</td></tr>
+<tr><th>15 km</th><td>Single rate</td><td>₹14,479</td><td>₹28,859</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">Non-AC Cab</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Standard</td><td>₹2,449</td><td>₹4,799</td></tr>
+<tr><th>3 km</th><td>Priority</td><td>₹2,629</td><td>₹5,159</td></tr>
+<tr><th>3 km</th><td>Premium</td><td>₹2,719</td><td>₹5,339</td></tr>
+<tr><th>5 km</th><td>Standard</td><td>₹4,189</td><td>₹8,279</td></tr>
+<tr><th>5 km</th><td>Priority</td><td>₹4,489</td><td>₹8,879</td></tr>
+<tr><th>5 km</th><td>Premium</td><td>₹4,639</td><td>₹9,179</td></tr>
+<tr><th>10 km</th><td>Standard</td><td>₹8,869</td><td>₹17,639</td></tr>
+<tr><th>10 km</th><td>Priority</td><td>₹9,559</td><td>₹19,019</td></tr>
+<tr><th>10 km</th><td>Premium</td><td>₹9,889</td><td>₹19,679</td></tr>
+<tr><th>15 km</th><td>Standard</td><td>₹14,479</td><td>₹28,859</td></tr>
+<tr><th>15 km</th><td>Priority</td><td>₹15,619</td><td>₹31,139</td></tr>
+<tr><th>15 km</th><td>Premium</td><td>₹16,189</td><td>₹32,279</td></tr></tbody></table></div></div>
+<div class="subscription-pricing-table-wrap" style="margin-bottom:18px"><h3 class="subscription-pricing-table-title">AC Cab</h3><p class="subscription-pricing-table-intro">Calculated from the current On-Demand fare chart. 30-day one-way: trip fare × 30 + ₹199 route lock. 30-day two-way: trip fare × 60 + ₹299 route lock.</p><div class="subscription-pricing-scroll"><table class="subscription-pricing-table"><thead><tr><th>Distance</th><th>Tier</th><th>30-day one-way total</th><th>30-day two-way total</th></tr></thead><tbody><tr><th>3 km</th><td>Standard</td><td>₹2,899</td><td>₹5,699</td></tr>
+<tr><th>3 km</th><td>Priority</td><td>₹3,079</td><td>₹6,059</td></tr>
+<tr><th>3 km</th><td>Premium</td><td>₹3,169</td><td>₹6,239</td></tr>
+<tr><th>5 km</th><td>Standard</td><td>₹4,969</td><td>₹9,839</td></tr>
+<tr><th>5 km</th><td>Priority</td><td>₹5,299</td><td>₹10,499</td></tr>
+<tr><th>5 km</th><td>Premium</td><td>₹5,449</td><td>₹10,799</td></tr>
+<tr><th>10 km</th><td>Standard</td><td>₹10,609</td><td>₹21,119</td></tr>
+<tr><th>10 km</th><td>Priority</td><td>₹11,299</td><td>₹22,499</td></tr>
+<tr><th>10 km</th><td>Premium</td><td>₹11,629</td><td>₹23,159</td></tr>
+<tr><th>15 km</th><td>Standard</td><td>₹17,359</td><td>₹34,619</td></tr>
+<tr><th>15 km</th><td>Priority</td><td>₹18,499</td><td>₹36,899</td></tr>
+<tr><th>15 km</th><td>Premium</td><td>₹19,069</td><td>₹38,039</td></tr></tbody></table></div></div>
+      <p class="subscription-pricing-footnote"><strong>Calculation:</strong> 30 one-way trips or 60 one-way trip legs across 30 days, plus the applicable route-lock fee. All amounts are in Indian rupees.</p>
     </div>
     <div class="pricing-model-grid">
       <article class="pricing-model-card">
@@ -227,7 +289,8 @@ img{width:100%;display:block}
         <h3>Subscription Pricing</h3>
         <p class="pricing-model-lead">Plan your regular route for 30 days.</p>
         <ul>
-          <li>Pay 10–15% less than On-Demand prices on eligible regular journeys.</li>
+          <li>30-day one-way total: On-Demand trip fare × 30 + ₹199 route lock.</li>
+          <li>30-day two-way total: On-Demand trip fare × 60 + ₹299 route lock.</li>
           <li>Planned automatic eligibility detection after the same fixed-distance trip and time slot are used over 3 days; bot calculations will be added later.</li>
           <li>Dedicated driver, route lock and no need to rebook the same daily trip manually.</li>
           <li>Planned automatic ride-balance deduction after each completed ride and a reminder 5 days before plan expiry; these automated calculations and reminders will be added to the bot later.</li>
