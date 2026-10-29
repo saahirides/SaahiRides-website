@@ -874,10 +874,20 @@ img{height:auto}
   <p>Explore available vehicle categories and contact us for an itemised fare quote.</p>
 </div>
 
-<!-- VEHICLE CATEGORIES -->
-<div style="background:#fff;padding:25px 15px;text-align:center">
-  <h2 style="color:#06122E;font-size:32px;margin:0;font-weight:900">Our Sawari Vehicle List</h2>
-  <p style="color:#06122E;margin:5px 0 25px;font-size:18px;opacity:.8">Hyderabad Ki Apni Sawari — Choose Your Ride</p>
+<!-- VEHICLE CATEGORY TABS -->
+<section class="vehicle-tabs-section" id="vehicle-lists" aria-label="SaahiRides vehicle lists">
+  <h2 class="vehicle-tabs-title">Our Vehicle Lists</h2>
+  <p class="vehicle-tabs-subtitle">Choose Sawari, Premium, Rental or Outstation. All bookings are subject to vehicle availability.</p>
+  <div class="vehicle-tabs" role="tablist" aria-label="Vehicle categories">
+    <button type="button" class="vehicle-tab active" id="tab-sawari" role="tab" aria-selected="true" aria-controls="panel-sawari" data-vehicle-tab="sawari">Our Sawari Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-premium" role="tab" aria-selected="false" aria-controls="panel-premium" data-vehicle-tab="premium">Premium Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-rental" role="tab" aria-selected="false" aria-controls="panel-rental" data-vehicle-tab="rental">Rental Vehicle List</button>
+    <button type="button" class="vehicle-tab" id="tab-outstation" role="tab" aria-selected="false" aria-controls="panel-outstation" data-vehicle-tab="outstation">Outstation Vehicle List</button>
+  </div>
+
+  <div class="vehicle-tab-panel active" id="panel-sawari" role="tabpanel" aria-labelledby="tab-sawari" data-vehicle-panel="sawari">
+    <h3>Our Sawari Vehicle List</h3>
+    <p class="vehicle-panel-intro">Hyderabad Ki Apni Sawari — Choose Your Ride</p>
   <div class="vehicle-category-grid">
     <a href="#fare-chart">🏍️ <strong>Bike</strong><span>Standard booking</span></a>
     <a href="#fare-chart">🏍️ <strong>Bike Express</strong><span>Express booking</span></a>
@@ -896,8 +906,51 @@ img{height:auto}
     <a href="#fare-chart">🚖 <strong>AC Cab Express</strong><span>Express booking</span></a>
     <a href="#fare-chart">🚖 <strong>AC Cab Super Fast</strong><span>Super Fast booking</span></a>
   </div>
-</div>
+  </div>
 
+  <div class="vehicle-tab-panel" id="panel-premium" role="tabpanel" aria-labelledby="tab-premium" data-vehicle-panel="premium" hidden>
+    <h3>Premium Vehicle List</h3>
+    <p class="vehicle-panel-intro">Air-conditioned cars for a more comfortable journey.</p>
+    <div class="vehicle-category-grid">
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>AC 5-Seater</strong><span>Premium private ride</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>AC 7-Seater</strong><span>Premium group or family ride</span></article>
+    </div>
+    <h4 class="vehicle-subheading">Booking Models</h4>
+    <div class="vehicle-model-grid">
+      <article><strong>On-Demand</strong><span>Book a premium vehicle for an individual ride, subject to availability.</span></article>
+      <article><strong>Car Sharing</strong><span>Shared airport rides, bus depots, railway stations and Financial District routes, subject to route and seat availability.</span></article>
+      <article><strong>Subscription</strong><span>Subscription-based premium ride options. Route, schedule and availability are confirmed before booking.</span></article>
+    </div>
+  </div>
+
+  <div class="vehicle-tab-panel" id="panel-rental" role="tabpanel" aria-labelledby="tab-rental" data-vehicle-panel="rental" hidden>
+    <h3>Rental Vehicle List</h3>
+    <p class="vehicle-panel-intro">Choose a vehicle with a driver or a self-drive option, subject to verification and document approval.</p>
+    <div class="vehicle-model-grid">
+      <article><strong>With Driver</strong><span>Vehicle supplied with a SaahiRides driver, subject to availability and booking confirmation.</span></article>
+      <article><strong>Self-Drive</strong><span>Available only after identity, driving licence and required documents are verified and approved.</span></article>
+    </div>
+    <h4 class="vehicle-subheading">Rental Durations</h4>
+    <div class="vehicle-model-grid rental-duration-grid">
+      <article><strong>Daily</strong><span>Deposit depends on the selected vehicle category.</span></article>
+      <article><strong>Weekly</strong><span>Deposit depends on the selected vehicle category.</span></article>
+      <article><strong>Monthly</strong><span>Deposit depends on the selected vehicle category.</span></article>
+    </div>
+    <p class="vehicle-policy-note"><strong>Important:</strong> A refundable/security deposit may be required based on vehicle category and rental duration. Any damage costs are extra and payable by the renter. Deposit amounts, rental charges, eligibility and terms will be confirmed before booking.</p>
+  </div>
+
+  <div class="vehicle-tab-panel" id="panel-outstation" role="tabpanel" aria-labelledby="tab-outstation" data-vehicle-panel="outstation" hidden>
+    <h3>Outstation Vehicle List</h3>
+    <p class="vehicle-panel-intro">For intercity and outstation journeys. All bookings are subject to vehicle availability.</p>
+    <div class="vehicle-category-grid">
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚘</span><strong>Sedan</strong><span>Outstation travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚗</span><strong>Hatchback</strong><span>Outstation travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Ertiga</strong><span>Group travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Innova</strong><span>Family and group travel</span></article>
+      <article class="vehicle-list-card"><span class="vehicle-card-icon">🚙</span><strong>Fortuner</strong><span>Premium outstation travel</span></article>
+    </div>
+  </div>
+</section>
 <style>
 .vehicle-category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;max-width:1050px;margin:0 auto}
 .vehicle-category-grid a{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;min-height:112px;padding:17px 12px;background:#06122E;color:#FFD700;border:2px solid #D4AF37;border-radius:14px;text-decoration:none;font-size:25px;box-sizing:border-box}
@@ -914,6 +967,30 @@ img{height:auto}
 .fare-chart-table tbody tr:nth-child(even) td{background:#f8fafc}
 .fare-chart-notes{max-width:1050px;margin:16px auto 0;color:#334155;font-size:14px;line-height:1.65}
 @media(max-width:600px){.fare-chart-section{padding:26px 10px}.fare-chart-table{font-size:12px}.fare-chart-table th,.fare-chart-table td{padding:9px 7px}}
+
+.vehicle-tabs-section{background:#fff;padding:28px 16px 32px;text-align:center;color:#06122E}
+.vehicle-tabs-title{font-size:clamp(28px,4vw,36px);margin:0 0 8px;font-weight:900;color:#06122E}
+.vehicle-tabs-subtitle,.vehicle-panel-intro{margin:0 auto 20px;color:#475569;line-height:1.6}
+.vehicle-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;max-width:1100px;margin:0 auto 22px}
+.vehicle-tab{appearance:none;cursor:pointer;border:2px solid #D4AF37;border-radius:10px;background:#06122E;color:#FFD700;font-weight:900;font-size:15px;padding:13px 17px;min-height:48px}
+.vehicle-tab.active,.vehicle-tab[aria-selected="true"]{background:#FFD700;color:#06122E;border-color:#06122E}
+.vehicle-tab:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+.vehicle-tab-panel{max-width:1100px;margin:0 auto;padding:22px 18px;background:#f8fafc;border:1px solid #dbe3ef;border-radius:16px}
+.vehicle-tab-panel[hidden]{display:none!important}
+.vehicle-tab-panel h3{margin:0 0 8px;font-size:clamp(23px,3vw,30px);color:#06122E}
+.vehicle-panel-intro{margin-bottom:20px}
+.vehicle-category-grid .vehicle-list-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:112px;padding:17px 12px;background:#06122E;color:#FFD700;border:2px solid #D4AF37;border-radius:14px;box-sizing:border-box}
+.vehicle-category-grid .vehicle-list-card strong{font-size:18px}
+.vehicle-category-grid .vehicle-list-card>span:last-child{font-size:13px;color:#fff}
+.vehicle-card-icon{font-size:25px}
+.vehicle-subheading{font-size:20px;margin:24px 0 12px;color:#06122E}
+.vehicle-model-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:1050px;margin:0 auto}
+.vehicle-model-grid article{display:flex;flex-direction:column;gap:9px;padding:18px;background:#fff;border:1px solid #d4af37;border-radius:12px;text-align:left;line-height:1.55}
+.vehicle-model-grid article strong{font-size:17px;color:#123564}
+.vehicle-model-grid article span{font-size:14px;color:#334155}
+.vehicle-policy-note{max-width:1000px;margin:18px auto 0;padding:14px 16px;background:#fff7d6;border-left:4px solid #D4AF37;border-radius:8px;text-align:left;line-height:1.65;color:#334155}
+@media(max-width:760px){.vehicle-model-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vehicle-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.vehicle-tab{padding:12px 8px;font-size:13px}.vehicle-tab-panel{padding:18px 12px}}
+@media(max-width:480px){.vehicle-model-grid{grid-template-columns:1fr}.vehicle-tabs-section{padding:22px 10px}.vehicle-tab{font-size:12px;overflow-wrap:anywhere}}
 </style>
 
 <section class="fare-chart-section" id="fare-chart" aria-labelledby="fare-chart-heading">
@@ -988,5 +1065,41 @@ img{height:auto}
 }
 </style>
 </div>
+
+<script id="saahirides-vehicle-tabs">
+(function(){
+  const tabs = Array.from(document.querySelectorAll('[data-vehicle-tab]'));
+  const panels = Array.from(document.querySelectorAll('[data-vehicle-panel]'));
+  function activate(name, moveFocus){
+    tabs.forEach(function(tab){
+      const selected = tab.dataset.vehicleTab === name;
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+      tab.tabIndex = selected ? 0 : -1;
+      if(selected && moveFocus) tab.focus();
+    });
+    panels.forEach(function(panel){
+      const selected = panel.dataset.vehiclePanel === name;
+      panel.hidden = !selected;
+      panel.classList.toggle('active', selected);
+    });
+  }
+  tabs.forEach(function(tab,index){
+    tab.addEventListener('click',function(){activate(tab.dataset.vehicleTab,false);});
+    tab.addEventListener('keydown',function(event){
+      let next = index;
+      if(event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index+1)%tabs.length;
+      else if(event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index-1+tabs.length)%tabs.length;
+      else if(event.key === 'Home') next = 0;
+      else if(event.key === 'End') next = tabs.length-1;
+      else return;
+      event.preventDefault();
+      activate(tabs[next].dataset.vehicleTab,true);
+    });
+  });
+  if(tabs.length) activate('sawari',false);
+})();
+</script>
+
 </body>
 </html>
