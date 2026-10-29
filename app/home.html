@@ -46,6 +46,10 @@ button.primary{background:linear-gradient(100deg,#d4af37,#ffe27a);border:0;borde
 <div class="notice">Fare estimate only. Trips above 30 km, night charges, and vehicle categories with a single published rate follow their separate approved rules. No surge pricing.</div>
 </div>
 <div id="subContent" class="hidden">
+<div class="row">
+<div><label for="subDistance">Subscription trip distance</label><select id="subDistance"><option value="3">3 km</option><option value="5">5 km</option><option value="10">10 km</option><option value="15">15 km</option></select></div>
+<div><label for="subTripType">Subscription direction</label><select id="subTripType"><option value="one">One-way · 30 days</option><option value="both">Both-way · 30 days</option></select></div>
+</div>
 <div id="subscriptionDetails"></div>
 </div>
 </section>
