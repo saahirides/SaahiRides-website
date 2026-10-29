@@ -82,8 +82,33 @@ declare
   caller uuid := (select auth.uid());
   founder_id uuid;
   director_id uuid;
+  content_changed boolean := false;
 begin
-  if new.status = 'published' and (tg_op = 'INSERT' or old.status is distinct from 'published' or old.version is distinct from new.version) then
+  -- A published policy's content cannot be silently edited under the same version.
+  -- Any content change on an already-published row must use a new version.
+  if tg_op = 'UPDATE' and old.status = 'published' then
+    content_changed :=
+      new.title is distinct from old.title
+      or new.category is distinct from old.category
+      or new.body is distinct from old.body
+      or new.effective_date is distinct from old.effective_date
+      or new.review_date is distinct from old.review_date
+      or new.audience is distinct from old.audience
+      or new.acknowledgement_required is distinct from old.acknowledgement_required;
+
+    if content_changed and new.version is not distinct from old.version then
+      raise exception 'Published policy content cannot change under the same version. Create a new version and obtain both approvals.';
+    end if;
+  end if;
+
+  -- Require fresh approvals whenever publishing, republishing, or changing the
+  -- version/content of a published policy. The approvals must match this exact version.
+  if new.status = 'published' and (
+    tg_op = 'INSERT'
+    or old.status is distinct from 'published'
+    or old.version is distinct from new.version
+    or content_changed
+  ) then
     if caller is not null and public.is_saahirides_hr_publisher() then
       raise exception 'HR publishers cannot publish policies. Submit the policy for governance approval.';
     end if;
@@ -119,7 +144,7 @@ $$;
 
 drop trigger if exists policy_publication_requires_dual_approval on public.policy_documents;
 create trigger policy_publication_requires_dual_approval
-before insert or update of status, version on public.policy_documents
+before insert or update on public.policy_documents
 for each row execute function public.enforce_policy_publication_approval();
 
 -- No delete/update policies for approvals: submitted approvals are immutable
