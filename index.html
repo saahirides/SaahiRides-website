@@ -8,7 +8,7 @@
 <meta name="keywords" content="SaahiRides, Hyderabad rides, bike taxi Hyderabad, scooty rides Hyderabad, auto booking Hyderabad, cab service Hyderabad, affordable taxi Hyderabad, car rental Hyderabad, outstation cabs Hyderabad">
 <meta property="og:title" content="SaahiRides Transit Pvt. Ltd. | SafeRide @ SaahiPrice">
 <meta property="og:description" content="Safe and affordable rides in Hyderabad — bikes, scooties, autos, cabs, rentals and outstation travel. No surge pricing.">
-<meta property="og:image" content="https://www.saahirides.co.in/saahirides-hyderabad-welcome-family.jpg">
+<meta property="og:image" content="https://www.saahirides.co.in/saahirides%20logo.jpg">
 <meta property="og:url" content="https://www.saahirides.co.in/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://www.saahirides.co.in/">
@@ -453,6 +453,57 @@ img{height:auto}
 
 </style>
 
+
+<style id="saahirides-approved-logo-fix">
+/* Approved logo treatment: keep the complete eagle visible, never wrap or crop it. */
+.brand-logo {
+  width: 44px !important;
+  height: 44px !important;
+  flex: 0 0 44px !important;
+  display: block;
+  object-fit: contain !important;
+  object-position: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.landing-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, .72fr) !important;
+  background: radial-gradient(ellipse at 75% 40%, #163c70 0%, #071931 58%, #030817 100%) !important;
+}
+.hero-portrait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  height: auto !important;
+  max-height: 390px;
+  object-fit: contain !important;
+  object-position: center !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+@media (max-width: 650px) {
+  .landing-hero { grid-template-columns: minmax(0, 1fr) !important; }
+  .hero-portrait { width: min(100%, 320px); margin: 8px auto 0; }
+  .hero-portrait img { max-height: 280px; }
+  .brand-logo { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
+}
+</style>
+
 </head>
 <body>
 <div class="container">
@@ -484,7 +535,7 @@ img{height:auto}
       </div>
     </div>
     <div class="hero-portrait">
-      <img src="saahirides%20main%20page.png" alt="SaahiRides co-founder and HR leadership" fetchpriority="high">
+      <img src="saahirides%20logo.jpg" alt="SaahiRides matte-blue eagle logo" fetchpriority="high">
     </div>
   </header>
 
