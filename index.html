@@ -674,6 +674,32 @@ img{height:auto}
 }
 </style>
 
+<style id="saahirides-premium-footer">
+.saahirides-footer-panel{background:#071931;padding:64px 4% 0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;color:#fff;border-top:1px solid rgba(255,255,255,.08)}
+.saahirides-footer-panel .footer-container{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:60px;padding-bottom:48px}
+.saahirides-footer-panel .footer-brand-title{font-size:clamp(1.45rem,2.2vw,1.8rem);font-weight:800;margin:0 0 10px;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 0%,#c4d1eb 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.saahirides-footer-panel .footer-tagline-slogan{font-size:1rem;color:#ffc107;margin:0 0 26px;font-weight:500}
+.saahirides-footer-panel .footer-services-pillbox{display:flex;gap:8px;flex-wrap:wrap;max-width:500px}
+.saahirides-footer-panel .mini-pill{background:rgba(22,34,63,.7);border:1px solid rgba(255,255,255,.08);color:#a0aec0;padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600}
+.saahirides-footer-panel .footer-logistics-side{display:flex;flex-direction:column;gap:20px;min-width:0}
+.saahirides-footer-panel .logistics-data-card{background:#16223f;border:1px solid rgba(255,255,255,.06);padding:20px 24px;border-radius:12px}
+.saahirides-footer-panel .data-label{font-size:.72rem;font-weight:800;color:#00f0ff;letter-spacing:1.4px;display:block;margin-bottom:10px}
+.saahirides-footer-panel .data-value-txt{font-size:1.02rem;font-weight:600;margin:0;color:#fff}
+.saahirides-footer-panel .digital-channels-grid{background:#16223f;border:1px solid rgba(255,255,255,.06);padding:22px;border-radius:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.saahirides-footer-panel .channels-span{grid-column:1/-1;margin-bottom:2px}
+.saahirides-footer-panel .channel-link-row{min-width:0;box-sizing:border-box;background:rgba(7,25,49,.65);border:1px solid rgba(255,255,255,.05);padding:12px 14px;border-radius:8px;color:#e2e8f0;font-size:.9rem;font-weight:600;text-decoration:none!important;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background-color .2s ease,border-color .2s ease,color .2s ease}
+.saahirides-footer-panel .channel-link-row:hover,.saahirides-footer-panel .channel-link-row:focus-visible{background:#1e2e4a;border-color:#00f0ff;color:#fff;outline:none}
+.saahirides-footer-panel .channel-arrow{color:rgba(255,255,255,.45);font-weight:800;transition:transform .2s ease,color .2s ease}
+.saahirides-footer-panel .channel-link-row:hover .channel-arrow,.saahirides-footer-panel .channel-link-row:focus-visible .channel-arrow{transform:translateX(3px);color:#00f0ff}
+.saahirides-footer-panel .channel-link-row.whatsapp-highlight-edge{border-color:rgba(37,211,102,.35)}
+.saahirides-footer-panel .channel-link-row.whatsapp-highlight-edge:hover,.saahirides-footer-panel .channel-link-row.whatsapp-highlight-edge:focus-visible{border-color:#25d366}
+.saahirides-footer-panel .channel-link-row.whatsapp-highlight-edge:hover .channel-arrow,.saahirides-footer-panel .channel-link-row.whatsapp-highlight-edge:focus-visible .channel-arrow{color:#25d366}
+.saahirides-footer-panel .footer-copyright-bar{border-top:1px solid rgba(255,255,255,.08);margin-top:0;padding:22px 0}
+.saahirides-footer-panel .copyright-content{max-width:1280px;margin:0 auto;text-align:center}
+.saahirides-footer-panel .copyright-content p{font-size:.8rem;color:#a0aec0;margin:0;font-weight:500}
+@media(max-width:992px){.saahirides-footer-panel .footer-container{grid-template-columns:minmax(0,1fr);gap:32px}.saahirides-footer-panel .digital-channels-grid{grid-template-columns:minmax(0,1fr)}.saahirides-footer-panel .channels-span{grid-column:auto}}
+@media(max-width:560px){.saahirides-footer-panel{padding:42px 5% 0}.saahirides-footer-panel .logistics-data-card,.saahirides-footer-panel .digital-channels-grid{padding:18px}.saahirides-footer-panel .footer-container{gap:26px}}
+</style>
 </head>
 <body>
 <div class="container">
@@ -1265,18 +1291,34 @@ document.addEventListener('DOMContentLoaded',function(){
  document.querySelectorAll('[data-saahi-tab]').forEach(function(link){link.addEventListener('click',function(){var tab=document.getElementById(link.getAttribute('data-saahi-tab'));if(tab){setTimeout(function(){tab.click();var panel=document.getElementById('panel-sawari');if(panel){panel.scrollIntoView({behavior:'smooth',block:'start'});}},80);}});});
 });
 </script>
-<footer id="contact" class="footer" style="background:linear-gradient(110deg,#D4AF37,#FFE66D,#D4AF37);color:#06122E;border-top:4px solid #fff0a6">
-    <h2 style="color:#06122E;font-size:21px;margin-bottom:8px">SaahiRides Transit Pvt. Ltd.</h2>
-    <p><strong>Company Location:</strong> Nagaram, Hyderabad, Telangana, India</p>
-    <p>SafeRide @ SaahiPrice • Your Journey, Our Responsibility</p>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px auto 8px">
-      <a href="https://www.saahirides.co.in/" style="color:#06122E;font-weight:800;padding:9px 12px;border:1px solid #06122E;border-radius:8px;text-decoration:none">🌐 Website</a>
-      <a href="https://www.facebook.com/saahiridestransitpvt.ltd" style="color:#06122E;font-weight:800;padding:9px 12px;border:1px solid #06122E;border-radius:8px;text-decoration:none">📘 Facebook</a>
-      <a href="https://www.instagram.com/saahirides/" style="color:#06122E;font-weight:800;padding:9px 12px;border:1px solid #06122E;border-radius:8px;text-decoration:none">📸 Instagram @saahirides</a>
-      <a href="https://wa.me/919347946026" style="color:#06122E;font-weight:800;padding:9px 12px;border:1px solid #06122E;border-radius:8px;text-decoration:none">💬 WhatsApp</a>
+<footer id="saahi-footer-anchor" class="saahirides-footer-panel">
+  <div class="footer-container">
+    <div class="footer-brand-side">
+      <h2 class="footer-brand-title">SaahiRides Transit Pvt. Ltd.</h2>
+      <p class="footer-tagline-slogan">SafeRide @ SaahiPrice — Your Journey, Our Responsibility.</p>
+      <div class="footer-services-pillbox" aria-label="SaahiRides services">
+        <span class="mini-pill">Bikes</span><span class="mini-pill">Scooty</span><span class="mini-pill">Auto</span>
+        <span class="mini-pill">AC Cabs</span><span class="mini-pill">Non-AC Cabs</span><span class="mini-pill">Rental</span><span class="mini-pill">Outstation</span>
+      </div>
     </div>
-    <p style="font-size:13px;margin-top:10px">Bikes • Scooty • Auto • AC & Non-AC Cabs • Rental • Outstation</p>
-  </footer>
+    <div class="footer-logistics-side">
+      <div class="logistics-data-card">
+        <span class="data-label">HEADQUARTERS LOCATION</span>
+        <p class="data-value-txt">📍 Nagaram, Hyderabad, Telangana, India</p>
+      </div>
+      <div class="digital-channels-grid">
+        <span class="data-label channels-span">VERIFIED DIGITAL CHANNELS</span>
+        <a href="https://www.saahirides.co.in/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>🌐 Website</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://wa.me/919347946026" class="channel-link-row whatsapp-highlight-edge" target="_blank" rel="noopener noreferrer"><span>💬 WhatsApp Support</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://www.facebook.com/saahiridestransitpvt.ltd" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📘 Facebook Page</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://www.instagram.com/saahirides/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📸 @saahirides</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright-bar"><div class="copyright-content">
+    <p>© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved. Registered in Telangana, India.</p>
+  </div></div>
+</footer>
 
   
 
