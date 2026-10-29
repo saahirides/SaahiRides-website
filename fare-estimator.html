@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071931">
+<title>Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.</title>
+<meta name="description" content="Estimate SaahiRides progressive on-demand and 30-day route-locked subscription fares by vehicle tier and route distance.">
+<style>
+:root{--bg:#071931;--card:#16223f;--cyan:#00f0ff;--gold:#ffc107;--white:#fff;--muted:#a0aec0;--green:#25d366}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.5}
+a{color:inherit}
+.estimator-dashboard-panel{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#102b50 0%,var(--bg) 55%);padding:52px 4% 44px}
+.estimator-container{max-width:1280px;margin:0 auto}
+.page-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:40px}
+.brand{font-weight:800;color:#fff;text-decoration:none}
+.back-link{border:1px solid rgba(0,240,255,.4);border-radius:8px;padding:9px 14px;text-decoration:none;color:var(--cyan);font-weight:700}
+.estimator-header-block{text-align:center;margin:0 auto 42px;max-width:800px}
+.estimator-mini-badge{color:var(--cyan);font-size:.8rem;font-weight:800;letter-spacing:1.5px;display:block;margin-bottom:8px}
+.estimator-header-block h1{font-size:clamp(2rem,4.5vw,2.8rem);font-weight:850;line-height:1.15;margin:0 0 12px}
+.estimator-header-block p{color:var(--muted);font-size:1rem;max-width:700px;margin:0 auto}
+.estimator-interface-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:stretch}
+.estimator-controls-card,.estimator-readout-card{border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:clamp(20px,3vw,32px)}
+.estimator-controls-card{background:var(--card);display:flex;flex-direction:column;gap:34px}
+.control-group-block{display:flex;flex-direction:column;min-width:0}
+.input-panel-label{font-size:.76rem;font-weight:800;color:var(--muted);letter-spacing:1px;margin-bottom:14px}
+.vehicle-pill-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.vehicle-pill{background:rgba(7,25,49,.72);border:1px solid rgba(255,255,255,.1);color:#e2e8f0;padding:12px 13px;border-radius:8px;font-size:.88rem;font-weight:700;text-align:left;cursor:pointer;transition:background .2s,border-color .2s}
+.vehicle-pill:hover,.vehicle-pill:focus-visible{border-color:var(--cyan);outline:none}
+.vehicle-pill.active{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.slider-header-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.slider-counter-txt{font-size:1.25rem;font-weight:850;color:var(--cyan);white-space:nowrap}
+.saahi-custom-range{appearance:none;width:100%;height:7px;border-radius:5px;background:#071931;outline:none;margin:17px 0 12px;cursor:pointer}
+.saahi-custom-range::-webkit-slider-thumb{appearance:none;width:21px;height:21px;border-radius:50%;background:var(--gold);border:2px solid #fff;box-shadow:0 0 10px #ffc10755}
+.saahi-custom-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid #fff;box-shadow:0 0 10px #ffc10755}
+.slider-bounds-indicators{display:flex;justify-content:space-between;gap:12px;font-size:.75rem;color:#718096}
+.estimator-readout-card{background:#111e36;display:flex;flex-direction:column;gap:18px}
+.readout-tier-box{background:rgba(22,34,63,.68);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:20px}
+.readout-tier-box.gold-tint-box{border-color:#ffc10733;background:rgba(26,42,78,.4)}
+.readout-tier-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.readout-tier-header h2{margin:0;font-size:1.05rem;font-weight:750}
+.readout-tag-pill{font-size:.68rem;font-weight:800;padding:4px 8px;border-radius:4px;letter-spacing:.4px;white-space:nowrap}
+.cyan-pill{background:#00f0ff19;color:var(--cyan)}.gold-pill{background:#ffc1071b;color:var(--gold)}
+.readout-price-row{display:flex;align-items:baseline;gap:3px;margin-bottom:8px}
+.readout-currency{font-size:1.2rem;font-weight:700;color:var(--muted)}
+.readout-sum-bold{font-size:clamp(2rem,4vw,2.5rem);font-weight:850;color:#fff;line-height:1.1;overflow-wrap:anywhere}
+.readout-price-row.size-medium .readout-sum-bold{font-size:clamp(1.45rem,3vw,1.9rem)}
+.readout-calculation-note{font-size:.76rem;color:#8c9bb4;margin:0;line-height:1.5}
+.readout-calculation-note.gold-note{color:#e0bd55}
+.subscription-split-outputs{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0}
+.sub-price-subblock{flex:1;min-width:0}
+.sub-label-micro{font-size:.65rem;font-weight:800;color:var(--muted);display:block;margin-bottom:7px;letter-spacing:.5px}
+.vertical-divider-line{width:1px;height:48px;background:rgba(255,255,255,.12)}
+.estimator-submit-cta-btn{background:var(--green);color:#fff;text-align:center;padding:15px;border-radius:8px;font-weight:800;font-size:.95rem;text-decoration:none;box-shadow:0 4px 14px #25d36633;transition:transform .2s,box-shadow .2s;margin-top:auto}
+.estimator-submit-cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px #25d3664d}
+.fare-disclaimer{color:#8290a8;font-size:.78rem;margin:24px auto 0;max-width:950px;text-align:center}
+footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8290a8;font-size:.8rem}
+@media(max-width:992px){.estimator-interface-grid{grid-template-columns:1fr}.vehicle-pill-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.estimator-dashboard-panel{padding:28px 4%}.page-top{margin-bottom:30px}.vehicle-pill-matrix{grid-template-columns:1fr}.subscription-split-outputs{align-items:flex-start}.readout-tier-box{padding:16px}.slider-bounds-indicators{font-size:.68rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main id="saahi-fare-estimator" class="estimator-dashboard-panel">
+<div class="estimator-container">
+  <div class="page-top"><a class="brand" href="https://www.saahirides.co.in/">SaahiRides Transit Pvt. Ltd.</a><a class="back-link" href="index.html">← Back to main website</a></div>
+  <header class="estimator-header-block">
+    <span class="estimator-mini-badge">REAL-TIME TELEMETRY</span>
+    <h1>Interactive Fare Estimator</h1>
+    <p>Select your fleet tier and route distance to estimate On-Demand progressive slabs or 30-Day Subscription costs instantly.</p>
+  </header>
+  <div class="estimator-interface-grid">
+    <section class="estimator-controls-card" aria-label="Fare estimator controls">
+      <div class="control-group-block">
+        <label class="input-panel-label">1. SELECT VEHICLE TIER</label>
+        <div class="vehicle-pill-matrix" role="group" aria-label="Select vehicle tier">
+          <button type="button" class="vehicle-pill active" data-tier="bike" data-rate="10" aria-pressed="true">🏍️ Bike (₹10/km)</button>
+          <button type="button" class="vehicle-pill" data-tier="scooty" data-rate="14" aria-pressed="false">🛵 Scooty (₹14/km)</button>
+          <button type="button" class="vehicle-pill" data-tier="auto" data-rate="23" aria-pressed="false">🛺 Auto (₹23/km)</button>
+          <button type="button" class="vehicle-pill" data-tier="non_ac" data-rate="25" aria-pressed="false">🚘 Non-AC Cab (₹25/km)</button>
+          <button type="button" class="vehicle-pill" data-tier="ac_cab" data-rate="30" aria-pressed="false">🚖 AC Cab (₹30/km)</button>
+        </div>
+      </div>
+      <div class="control-group-block">
+        <div class="slider-header-row"><label class="input-panel-label" for="estimator-distance-slider">2. ROUTE DISTANCE</label><output id="display-distance-val" class="slider-counter-txt" for="estimator-distance-slider">15 km</output></div>
+        <input type="range" id="estimator-distance-slider" min="1" max="30" value="15" step="1" class="saahi-custom-range" aria-describedby="distance-bounds">
+        <div id="distance-bounds" class="slider-bounds-indicators"><span>1 km</span><span>City Limit Threshold (30 km)</span></div>
+      </div>
+    </section>
+    <section class="estimator-readout-card" aria-label="Estimated fares">
+      <div class="readout-tier-box">
+        <div class="readout-tier-header"><h2>On-Demand Fare</h2><span class="readout-tag-pill cyan-pill">Per Trip Cost</span></div>
+        <div class="readout-price-row"><span class="readout-currency">₹</span><output id="output-ondemand-price" class="readout-sum-bold" aria-live="polite">191</output></div>
+        <p class="readout-calculation-note">Calculated using the progressive distance slabs and selected vehicle base rate.</p>
+      </div>
+      <div class="readout-tier-box gold-tint-box">
+        <div class="readout-tier-header"><h2>30-Day Subscription</h2><span class="readout-tag-pill gold-pill">Route Locked</span></div>
+        <div class="subscription-split-outputs">
+          <div class="sub-price-subblock"><span class="sub-label-micro">ONE-WAY TOTAL</span><div class="readout-price-row size-medium"><span class="readout-currency">₹</span><output id="output-sub-oneway" class="readout-sum-bold" aria-live="polite">5929</output></div></div>
+          <div class="vertical-divider-line" aria-hidden="true"></div>
+          <div class="sub-price-subblock"><span class="sub-label-micro">BOTH-WAY TOTAL</span><div class="readout-price-row size-medium"><span class="readout-currency">₹</span><output id="output-sub-bothway" class="readout-sum-bold" aria-live="polite">11759</output></div></div>
+        </div>
+        <p class="readout-calculation-note gold-note">Uses the supplied 30-trip / 60-trip equations and their route-lock processing fees.</p>
+      </div>
+      <a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20would%20like%20to%20confirm%20an%20estimated%20fare." class="estimator-submit-cta-btn" target="_blank" rel="noopener noreferrer">💬 Confirm This Estimated Fare on WhatsApp</a>
+    </section>
+  </div>
+  <p class="fare-disclaimer">These are estimates generated by the supplied progressive slab formula and subscription equations. Final booking fare may depend on the confirmed SaahiRides pricing rules. This separate estimator does not change the published fare tables on the main website.</p>
+</div>
+</main>
+<footer>© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved.</footer>
+<script>
+(function(){
+  'use strict';
+  var baseRatePerKm = 10;
+  var slider = document.getElementById('estimator-distance-slider');
+  var distanceOutput = document.getElementById('display-distance-val');
+  var onDemandOutput = document.getElementById('output-ondemand-price');
+  var oneWayOutput = document.getElementById('output-sub-oneway');
+  var bothWayOutput = document.getElementById('output-sub-bothway');
+  var vehicleButtons = Array.prototype.slice.call(document.querySelectorAll('.vehicle-pill'));
+  function calculateFare(distance, rate){
+    var total = 0;
+    if(distance <= 3){ total = rate * distance; }
+    else {
+      total += rate * 3;
+      if(distance <= 5){ total += rate * (distance - 3) * 1.15; }
+      else {
+        total += rate * 2 * 1.15;
+        if(distance <= 10){ total += rate * (distance - 5) * 1.25; }
+        else {
+          total += rate * 5 * 1.25;
+          if(distance <= 15){ total += rate * (distance - 10) * 1.50; }
+          else {
+            total += rate * 5 * 1.50;
+            if(distance <= 20){ total += rate * (distance - 15) * 1.75; }
+            else {
+              total += rate * 5 * 1.75;
+              if(distance <= 25){ total += rate * (distance - 20) * 2.00; }
+              else {
+                total += rate * 5 * 2.00;
+                if(distance <= 30){ total += rate * (distance - 25) * 2.25; }
+              }
+            }
+          }
+        }
+      }
+    }
+    return Math.round(total);
+  }
+  function updateEstimate(){
+    var distance = parseInt(slider.value,10);
+    var onDemand = calculateFare(distance,baseRatePerKm);
+    distanceOutput.textContent = distance + ' km';
+    onDemandOutput.textContent = String(onDemand);
+    oneWayOutput.textContent = String(Math.round(onDemand * 30 + 199));
+    bothWayOutput.textContent = String(Math.round(onDemand * 60 + 299));
+  }
+  vehicleButtons.forEach(function(button){
+    button.addEventListener('click',function(){
+      baseRatePerKm = Number(button.getAttribute('data-rate'));
+      vehicleButtons.forEach(function(item){
+        var active = item === button;
+        item.classList.toggle('active',active);
+        item.setAttribute('aria-pressed',active ? 'true' : 'false');
+      });
+      updateEstimate();
+    });
+  });
+  slider.addEventListener('input',updateEstimate);
+  updateEstimate();
+})();
+</script>
+</body>
+</html>
