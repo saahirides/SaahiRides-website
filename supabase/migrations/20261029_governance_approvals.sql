@@ -84,20 +84,28 @@ declare
   director_id uuid;
   content_changed boolean := false;
 begin
-  -- A published policy's content cannot be silently edited under the same version.
-  -- Any content change on an already-published row must use a new version.
-  if tg_op = 'UPDATE' and old.status = 'published' then
+  -- Detect edits to policy content for drafts and published records alike.
+  if tg_op = 'UPDATE' then
     content_changed :=
       new.title is distinct from old.title
       or new.category is distinct from old.category
       or new.body is distinct from old.body
+      or new.version is distinct from old.version
       or new.effective_date is distinct from old.effective_date
       or new.review_date is distinct from old.review_date
       or new.audience is distinct from old.audience
       or new.acknowledgement_required is distinct from old.acknowledgement_required;
 
-    if content_changed and new.version is not distinct from old.version then
+    if old.status = 'published'
+       and content_changed
+       and new.version is not distinct from old.version then
       raise exception 'Published policy content cannot change under the same version. Create a new version and obtain both approvals.';
+    end if;
+
+    -- Any edit invalidates prior approvals for this policy. Approvers must
+    -- review the final saved content/version again before publication.
+    if content_changed then
+      delete from public.policy_approvals where policy_id = new.id;
     end if;
   end if;
 
