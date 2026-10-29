@@ -309,7 +309,8 @@ footer {
  function editPolicy(p){if(!p)return;show('editor',true);$('editorTitle').textContent='Edit '+category+' policy';$('policyId').value=p.id;$('title').value=p.title;$('body').value=p.body;$('version').value=p.version;$('effective').value=p.effective_date||'';$('review').value=p.review_date||'';$('status').value=p.status;$('ackRequired').checked=p.acknowledgement_required;}
  $('clear').onclick=()=>{['policyId','title','body','effective','review'].forEach(id=>$(id).value='');$('version').value='1.0';$('status').value='draft';$('ackRequired').checked=false;};
  $('save').onclick=async()=>{if(!client||!session)return say('Sign in first.');
-  if(category==='Admin Governance'&&!owner)return say('Only the Owner can manage Admin Governance policies.');\n  if(category!=='Admin Governance'&&!admin&&!(hr&&category==='HR'))return say('Permission denied.');
+  if(category==='Admin Governance'&&!owner)return say('Only the Owner can manage Admin Governance policies.');
+  if(category!=='Admin Governance'&&!admin&&!(hr&&category==='HR'))return say('Permission denied.');
   const payload={title:$('title').value.trim(),body:$('body').value.trim(),category,version:$('version').value.trim(),effective_date:$('effective').value||null,review_date:$('review').value||null,status:$('status').value,acknowledgement_required:$('ackRequired').checked,author_id:session.user.id,updated_at:new Date().toISOString()};
   if(!payload.title||!payload.body||!payload.version)return say('Title, approved policy text, and version are required.');
   let result;
