@@ -276,7 +276,8 @@ footer {
   const [a,h,g]=await Promise.all([client.from('admin_users').select('role,active').eq('user_id',user.id).maybeSingle(),client.from('hr_publishers').select('active').eq('user_id',user.id).maybeSingle(),client.from('governance_approvers').select('approval_role,active').eq('user_id',user.id).maybeSingle()]);
   admin=!!(a.data&&a.data.active);
   hr=!!(h.data&&h.data.active);
-  if(a.error||h.error){say('Could not verify access: '+[a.error?.message,h.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema is installed. Governance approval roles are checked separately.');
+  approvalRole=(g.data?.active ? g.data.approval_role : null);
+  if(a.error||h.error||g.error){say('Could not verify access: '+[a.error?.message,h.error?.message,g.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema and governance migration are installed.');
   return}
   if(!admin&&!hr&&!approvalRole){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
