@@ -260,7 +260,7 @@ footer {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
- const $=id=>document.getElementById(id); let client=null, session=null, admin=false, hr=false, category='HR';
+ const $=id=>document.getElementById(id); let client=null, session=null, admin=false, hr=false, approvalRole=null, category='HR';
  const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -273,16 +273,16 @@ footer {
  async function checkAccess(){const {data:{user}}=await client.auth.getUser();
   if(!user){say('No authenticated user returned.');
   return}session={user};
-  const [a,h]=await Promise.all([client.from('admin_users').select('role,active').eq('user_id',user.id).maybeSingle(),client.from('hr_publishers').select('active').eq('user_id',user.id).maybeSingle()]);
+  const [a,h,g]=await Promise.all([client.from('admin_users').select('role,active').eq('user_id',user.id).maybeSingle(),client.from('hr_publishers').select('active').eq('user_id',user.id).maybeSingle(),client.from('governance_approvers').select('approval_role,active').eq('user_id',user.id).maybeSingle()]);
   admin=!!(a.data&&a.data.active);
   hr=!!(h.data&&h.data.active);
-  if(a.error||h.error){say('Could not verify access: '+[a.error?.message,h.error?.message].filter(Boolean).join(' | ')+'. The schema update may not have been run yet.');
+  if(a.error||h.error){say('Could not verify access: '+[a.error?.message,h.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema is installed. Governance approval roles are checked separately.');
   return}
   if(!admin&&!hr){say('Signed in, but this account has no active Admin/Owner or HR publisher permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
   $('welcome').textContent='Welcome';
-  $('roleText').textContent=(admin?'Admin/Owner access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'');
+  $('roleText').textContent=(admin?'Admin/Owner access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(approvalRole?' · Governance approver: '+approvalRole.replace('_',' '):'');
   $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category!=='HR'&&!admin);
   });
   if(!admin){category='HR';
@@ -298,8 +298,9 @@ footer {
   if(error){$('policyList').innerHTML='<p class="hint">Could not load: '+esc(error.message)+'</p>';
   return}
   if(!data?.length){$('policyList').innerHTML='<p class="hint">No '+esc(cat)+' policies yet. Add only approved content.</p>';
-  return}$('policyList').innerHTML=data.map(p=>'<article class="policy"><h4>'+esc(p.title)+'</h4><p class="small">Version '+esc(p.version)+' · '+esc(p.status)+' · Effective '+esc(p.effective_date||'not set')+' · Review '+esc(p.review_date||'not set')+'</p><p>'+esc(p.body)+'</p>'+(admin||hr&&cat==='HR'?'<button data-edit="'+esc(p.id)+'">Edit</button>':'')+'</article>').join('');
+  return}$('policyList').innerHTML=data.map(p=>'<article class="policy"><h4>'+esc(p.title)+'</h4><p class="small">Version '+esc(p.version)+' · '+esc(p.status)+' · Effective '+esc(p.effective_date||'not set')+' · Review '+esc(p.review_date||'not set')+'</p><p>'+esc(p.body)+'</p>'+(admin||hr&&cat==='HR'?'<button data-edit="'+esc(p.id)+'">Edit</button>':'')+(approvalRole&&['draft','pending approval'].includes(p.status)?'<button class="secondary" data-approve="'+esc(p.id)+'" data-version="'+esc(p.version)+'">Approve as '+esc(approvalRole.replace('_',' '))+'</button>':'')+'</article>').join('');
   $('policyList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editPolicy(data.find(p=>p.id===b.dataset.edit)));
+  $('policyList').querySelectorAll('[data-approve]').forEach(b=>b.onclick=async()=>{const policyId=b.dataset.approve,version=b.dataset.version;const {error}=await client.from('policy_approvals').insert({policy_id:policyId,policy_version:version,approver_id:session.user.id,approval_role:approvalRole});if(error){say('Approval not recorded: '+error.message);return}say('Your '+approvalRole.replace('_',' ')+' approval was recorded for version '+version+'. A distinct Director and Joint Founder approval are both required before publication.');await loadPolicies(category)});
    }
  function editPolicy(p){if(!p)return;show('editor',true);$('editorTitle').textContent='Edit '+category+' policy';$('policyId').value=p.id;$('title').value=p.title;$('body').value=p.body;$('version').value=p.version;$('effective').value=p.effective_date||'';$('review').value=p.review_date||'';$('status').value=p.status;$('ackRequired').checked=p.acknowledgement_required;}
  $('clear').onclick=()=>{['policyId','title','body','effective','review'].forEach(id=>$(id).value='');$('version').value='1.0';$('status').value='draft';$('ackRequired').checked=false;};
