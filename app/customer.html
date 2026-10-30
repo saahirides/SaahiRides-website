@@ -1,124 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Portal - SaahiRides</title>
-    <!-- Matching Firebase SDKs for Shared Sync -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    
-    <style>
-        /* Modern, non-intrusive styling for your customer portal */
-        .customer-form-container {
-            max-width: 450px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            font-family: Arial, sans-serif;
-            border: 1px solid #eee;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            background-color: #007bff; /* Distinct color for Customer actions */
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .submit-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Registration & Booking | SaahiRides</title>
+<style>
+:root{--navy:#0B132B;--panel:#16223F;--gold:#FFC107;--cyan:#00F0FF}
+*{box-sizing:border-box}body{margin:0;padding:24px 16px;background:linear-gradient(145deg,#07152f,#0B132B);color:#f8fafc;font-family:Segoe UI,Arial,sans-serif}
+main{max-width:900px;margin:auto}.card{background:var(--panel);border:1px solid #344563;border-radius:16px;padding:24px;margin:18px 0;box-shadow:0 12px 28px #0004}
+h1,h2{color:var(--gold);margin-top:0}p{line-height:1.6;color:#e2e8f0}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+a.btn{display:inline-block;padding:13px 18px;border-radius:10px;text-decoration:none;font-weight:800;background:var(--gold);color:#0B132B}
+a.secondary{background:transparent;border:1px solid var(--cyan);color:#fff}
+iframe{width:100%;height:1250px;border:0;border-radius:10px;background:#fff}
+.note{font-size:13px;color:#cbd5e1}
+@media(max-width:600px){body{padding:14px 10px}.card{padding:17px}iframe{height:1450px}.actions a{width:100%;text-align:center}}
+</style>
 </head>
-<body>
-
-    <!-- YOUR EXISTING NAVIGATION LINKS, REDIRECTIONS, AND WHATSAPP BUTTONS STAY HERE UNTOUCHED -->
-
-    <!-- CLEAN CUSTOMER BOOKING / DATA FORM -->
-    <div class="customer-form-container">
-        <h3>Customer Request Portal</h3>
-        <form id="customerRequestForm">
-            <div class="form-group">
-                <label for="custName">Your Name</label>
-                <input type="text" id="custName" required placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label for="custPhone">Phone Number</label>
-                <input type="tel" id="custPhone" required placeholder="Enter contact number">
-            </div>
-            <div class="form-group">
-                <label for="pickupLocation">Pickup Location</label>
-                <input type="text" id="pickupLocation" required placeholder="Where should we pick you up?">
-            </div>
-            <div class="form-group">
-                <label for="dropLocation">Drop Location</label>
-                <input type="text" id="dropLocation" required placeholder="Where are you going?">
-            </div>
-            <button type="submit" class="submit-btn">Submit Request</button>
-        </form>
-    </div>
-
-    <!-- SHARED REAL-TIME DATABASE SYNC SCRIPT -->
-    <script>
-        // Matching configuration to sync data with the driver files seamlessly
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "://firebaseapp.com",
-            projectId: "saahirides-website",
-            storageBucket: "://appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Handle Customer Request Submission smoothly without page reloading
-        document.getElementById('customerRequestForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const customerData = {
-                customerName: document.getElementById('custName').value,
-                customerPhone: document.getElementById('custPhone').value,
-                pickup: document.getElementById('pickupLocation').value,
-                dropoff: document.getElementById('dropLocation').value,
-                status: "Pending", // Drivers will be able to read this and change it to "Accepted"
-                createdAt: new Date()
-            };
-
-            // Save records directly into a live cloud collection shared with the driver portal
-            db.collection("requests").add(customerData)
-            .then(() => {
-                alert("Your ride request has been sent to active drivers in real-time!");
-                document.getElementById('customerRequestForm').reset();
-            })
-            .catch((error) => {
-                console.error("Error creating entry: ", error);
-                alert("Database sync failed. Please check setup keys.");
-            });
-        });
-    </script>
-</body>
-</html>
+<body><main>
+<section class="card">
+<h1>SaahiRides Customer Registration</h1>
+<p>Register once using the official SaahiRides customer form. After submitting, return here to request a ride or contact our booking team on WhatsApp.</p>
+<div class="actions"><a class="btn" href="https://forms.gle/LPifCEhAXQzVSiLm9" target="_blank" rel="noopener">Open Customer Registration Form</a></div>
+</section>
+<section class="card">
+<h2>Registration Form</h2>
+<iframe title="SaahiRides Customer Registration Form" src="https://forms.gle/LPifCEhAXQzVSiLm9" loading="lazy">Loading customer registration form… <a href="https://forms.gle/LPifCEhAXQzVSiLm9">Open form</a></iframe>
+<p class="note">If the form does not display inside this page, use the Open Customer Registration Form link above. Your submission is recorded by the Google Form owner.</p>
+</section>
+<section class="card">
+<h2>Ready to Book a Ride?</h2>
+<p>Registration is not a booking confirmation. Send your pickup and destination to SaahiRides to begin a booking request. Your ride is confirmed only after availability and eligibility checks.</p>
+<div class="actions"><a class="btn" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20have%20registered%20and%20want%20to%20book%20a%20ride." target="_blank" rel="noopener">Continue to WhatsApp Booking</a><a class="btn secondary" href="../index.html">Back to SaahiRides</a></div>
+</section>
+</main></body></html>
