@@ -146,15 +146,15 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   var routeButton=document.getElementById('saahi-calculate-route');
   var routeStatus=document.getElementById('saahi-route-status');
   var routeDistance=document.getElementById('saahi-route-distance');
-  var routeMap=null, directionsService=null, directionsRenderer=null;
+  var routeMap=null, RouteLibrary=null, routePolylines=[];
   var pickupPlace=null, dropPlace=null, pickupMarker=null, dropMarker=null;
   function routeMessage(message){routeStatus.textContent=message}
-  function initSaahiRouteMap(){
+  async function initSaahiRouteMap(){
     var mapEl=document.getElementById('saahi-route-map');
     if(!mapEl || !window.google || !google.maps) return;
     routeMap=new google.maps.Map(mapEl,{center:{lat:17.385,lng:78.4867},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:true});
-    directionsService=new google.maps.DirectionsService();
-    directionsRenderer=new google.maps.DirectionsRenderer({map:routeMap,suppressMarkers:false,preserveViewport:false});
+    var routeLibrary=await google.maps.importLibrary('routes');
+    RouteLibrary=routeLibrary.Route;
     var bounds={componentRestrictions:{country:'in'}};
     var pickupAuto=new google.maps.places.Autocomplete(pickupInput,Object.assign({fields:['formatted_address','geometry','name']},bounds));
     var dropAuto=new google.maps.places.Autocomplete(dropInput,Object.assign({fields:['formatted_address','geometry','name']},bounds));
@@ -168,23 +168,28 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     routeButton.addEventListener('click',calculateSaahiRoute);
     routeMessage('Map ready. Search addresses or tap the map to set pickup and drop.');
   }
-  function calculateSaahiRoute(){
+  async function calculateSaahiRoute(){
     if(!pickupPlace || !dropPlace || !pickupPlace.geometry || !dropPlace.geometry){routeMessage('Please choose both pickup and drop from suggestions or map pins.');return}
     routeButton.disabled=true;routeMessage('Calculating driving route…');
-    directionsService.route({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:google.maps.TravelMode.DRIVING},function(result,status){
-      routeButton.disabled=false;
-      if(status!=='OK' || !result.routes || !result.routes[0] || !result.routes[0].legs.length){routeMessage('Could not calculate this road route. Please adjust the locations and try again.');return}
-      directionsRenderer.setDirections(result);
-      var metres=result.routes[0].legs.reduce(function(sum,leg){return sum+(leg.distance?leg.distance.value:0)},0);
+    try{
+      var result=await RouteLibrary.computeRoutes({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:'DRIVING',fields:['path','legs.distanceMeters']});
+      var route=result.routes&&result.routes[0];
+      if(!route || !route.legs || !route.legs.length){routeMessage('Could not calculate this road route. Please adjust the locations and try again.');return}
+      routePolylines.forEach(function(line){line.setMap(null)});
+      routePolylines=route.createPolylines();
+      routePolylines.forEach(function(line){line.setMap(routeMap)});
+      var metres=route.legs.reduce(function(sum,leg){return sum+(leg.distanceMeters||0)},0);
       var km=Math.round((metres/1000)*10)/10;
       routeDistance.textContent=km.toFixed(1)+' km';
+      if(route.path&&route.path.length){var bounds=new google.maps.LatLngBounds();route.path.forEach(function(point){bounds.extend(point)});routeMap.fitBounds(bounds)}
       if(km>30){routeMessage('Route distance captured. This is above the standard city estimator limit; request a long-distance quote before booking.');return}
       var slider=document.getElementById('estimator-distance-slider');
       slider.value=Math.max(0.1,Math.min(30,km)).toFixed(1);
       slider.dispatchEvent(new Event('input',{bubbles:true}));
       routeMessage('Road distance applied to the fare calculator. Review the updated estimate below.');
       document.querySelector('.estimator-interface-grid').scrollIntoView({behavior:'smooth',block:'start'});
-    });
+    }catch(error){routeMessage('Route calculation failed. Check that Routes API is enabled and the key is authorised.')}
+    finally{routeButton.disabled=false}
   }
   window.initSaahiRouteMap=initSaahiRouteMap;
   var mapsKey=window.SAAHI_GOOGLE_MAPS_API_KEY;
