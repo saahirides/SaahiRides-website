@@ -97,6 +97,16 @@
             height: 20px;
         }
     </style>
+<style>
+.sr-image-board{max-width:900px;margin:24px auto;padding:18px;border:1px solid #d4af37;border-radius:16px;background:linear-gradient(145deg,#0b1c3d,#10284d);color:#fff;font-family:Arial,sans-serif}
+.sr-image-board h2{margin:0 0 8px;color:#ffd700;text-align:center}
+.sr-image-board p{margin:0 0 14px;text-align:center;color:#e2e8f0;font-size:14px}
+.sr-image-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.sr-image-card{overflow:hidden;border:1px solid rgba(255,215,0,.45);border-radius:12px;background:#06122e}
+.sr-image-card img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:#fff}
+.sr-image-card strong{display:block;padding:10px;color:#ffd700;text-align:center;font-size:14px}
+@media(max-width:480px){.sr-image-board{margin:16px 10px;padding:13px}.sr-image-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
@@ -107,6 +117,7 @@
         <a href="#whatsappOnboardingForm">Apply to Join</a>
     </section>
 
+    <section class="sr-image-board"><h2>Driver Resources & Recruitment</h2><p>Join the SaahiRides driver network and review the onboarding and vehicle-readiness guides.</p><div class="sr-image-grid"><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/driver%20recruitment.jpg" alt="Driver Recruitment — Apply to Join"><strong>Driver Recruitment — Apply to Join</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/driver%20upload%20docs.jpg" alt="Driver Document Upload Guide"><strong>Driver Document Upload Guide</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/vehicle%20inspection%20checklist.jpg" alt="Vehicle Inspection Checklist"><strong>Vehicle Inspection Checklist</strong></article></div></section>
     <!-- PORTAL CONTAINER -->
     <div class="portal-wrapper">
         <h2>SaahiRides Driver Network</h2>
