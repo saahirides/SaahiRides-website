@@ -42,4 +42,6 @@ $('clear').onclick=()=>{['policyId','title','body','effective','review'].forEach
 $('save').onclick=async()=>{if(!client||!user||!allowed)return say('HR access is required.');const id=$('policyId').value;const payload={title:$('title').value.trim(),body:$('body').value.trim(),category:'HR',version:$('version').value.trim(),effective_date:$('effective').value||null,review_date:$('review').value||null,status:$('status').value,acknowledgement_required:$('ack').checked,author_id:user.id,updated_at:new Date().toISOString()};if(!payload.title||!payload.body||!payload.version)return say('Title, policy text and version are required.');let result=id?await client.from('policy_documents').update(payload).eq('id',id).select('id').single():await client.from('policy_documents').insert(payload).select('id').single();if(result.error)return say('Save failed: '+result.error.message);$('clear').click();say('HR policy saved. Review the text and submit it for governance approval before publication.');await load()};
 $('connect').click();
 })();
-</script></body></html>
+</script>
+<script src="saahi-promotions.js?v=20261031" defer></script>
+</body></html>
