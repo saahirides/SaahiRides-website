@@ -4,7 +4,7 @@
   const style = document.createElement('style');
   style.textContent = `
   #saahi-promo-launcher{position:fixed;right:16px;bottom:18px;z-index:99999;font-family:inherit}
-  #saahi-promo-toggle{border:2px solid #ffe27a;border-radius:999px;padding:12px 17px;background:linear-gradient(110deg,#b8860b,#ffe27a,#d4af37);color:#07152f;font-weight:900;font-size:14px;box-shadow:0 8px 26px #0008,0 0 0 3px #ffc10722;cursor:pointer;animation:saahiPromoPulse 1.8s ease-in-out infinite}
+  #saahi-driver-floater{position:fixed;left:16px;bottom:18px;z-index:99998;border:2px solid #9ed0ff;border-radius:999px;padding:12px 16px;background:linear-gradient(110deg,#123b70,#2f80c9,#b9e2ff);color:#06152b;font-weight:900;font-size:13px;box-shadow:0 8px 26px #0008;cursor:pointer;text-decoration:none;animation:saahiPromoPulse 1.9s ease-in-out infinite}\n  #saahi-promo-toggle{border:2px solid #ffe27a;border-radius:999px;padding:12px 17px;background:linear-gradient(110deg,#b8860b,#ffe27a,#d4af37);color:#07152f;font-weight:900;font-size:14px;box-shadow:0 8px 26px #0008,0 0 0 3px #ffc10722;cursor:pointer;animation:saahiPromoPulse 1.8s ease-in-out infinite}
   @keyframes saahiPromoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.055);box-shadow:0 10px 30px #ffc10766}}
   #saahi-promo-panel{display:none;position:absolute;right:0;bottom:60px;width:min( min(360px, calc(100vw - 28px)), 360px);max-height:min(76vh,650px);overflow:auto;background:#0b1832;color:#fff;border:1px solid #d4af37;border-radius:18px;padding:16px;box-shadow:0 18px 50px #000b}
   #saahi-promo-panel.open{display:block}
@@ -16,7 +16,7 @@
   .saahi-promo-card p{margin:5px 0;color:#e5edf8;font-size:13px;line-height:1.5}
   .saahi-promo-tag{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#63e8f1;font-weight:900}
   .saahi-promo-link{display:block;text-align:center;text-decoration:none;margin-top:10px;padding:10px 12px;border-radius:9px;background:#25d366;color:#062014;font-size:13px;font-weight:900}
-  @media(max-width:480px){#saahi-promo-launcher{right:10px;bottom:12px}#saahi-promo-toggle{font-size:12px;padding:11px 13px}#saahi-promo-panel{right:0}}
+  @media(max-width:480px){#saahi-driver-floater{left:10px;bottom:12px;font-size:11px;padding:11px 12px}#saahi-promo-launcher{right:10px;bottom:12px}#saahi-promo-toggle{font-size:12px;padding:11px 13px}#saahi-promo-panel{right:0}}
   @media(prefers-reduced-motion:reduce){#saahi-promo-toggle{animation:none}}
   `;
   document.head.appendChild(style);
@@ -29,7 +29,7 @@
       <article class="saahi-promo-card"><span class="saahi-promo-tag">Driver recruitment</span><h3>Join the SaahiRides driver network</h3><p>Interested in driving with SaahiRides? View the driver information and registration pathway.</p><a class="saahi-promo-link" href="driver.html">Driver details & registration</a></article>
     </section>
     <button id="saahi-promo-toggle" type="button" aria-expanded="false" aria-controls="saahi-promo-panel">🎁 OFFERS & BONANZA</button>`;
-  document.body.appendChild(root);
+  document.body.appendChild(root);\n  const driverLink=document.createElement("a");driverLink.id="saahi-driver-floater";driverLink.href="driver.html#driver-recruitment";driverLink.textContent="🚘 DRIVER RECRUITMENT";driverLink.setAttribute("aria-label","Open SaahiRides driver recruitment card");document.body.appendChild(driverLink);
   const toggle=root.querySelector('#saahi-promo-toggle'),panel=root.querySelector('#saahi-promo-panel');
   function close(){panel.classList.remove('open');toggle.setAttribute('aria-expanded','false')}
   toggle.addEventListener('click',function(){const open=panel.classList.toggle('open');toggle.setAttribute('aria-expanded',String(open))});
