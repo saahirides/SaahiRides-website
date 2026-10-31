@@ -1175,6 +1175,13 @@ img{height:auto}
   <p class="saahirides-back-row" style="text-align:center;margin:18px auto 0"><a class="saahirides-back-contents" href="#saahi-table-of-contents">↑ Back to Contents</a></p>
   </section>
 
+<style id="saahirides-offer-button-pulse">
+@keyframes saahiHomeOfferPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,193,7,.25)}50%{transform:scale(1.055);box-shadow:0 8px 24px rgba(255,193,7,.38)}}
+.offers-announcements-grid .offer-feature-card>a{display:inline-block;transform-origin:center;animation:saahiHomeOfferPulse 1.7s ease-in-out infinite}
+.offers-announcements-grid .offer-feature-card>a:hover,.offers-announcements-grid .offer-feature-card>a:focus-visible{animation-play-state:paused;transform:scale(1.07)}
+@media(prefers-reduced-motion:reduce){.offers-announcements-grid .offer-feature-card>a{animation:none}.offers-announcements-grid .offer-feature-card>a:hover{transform:none}}
+</style>
+
   <section class="upcoming-projects" id="upcoming-projects" aria-labelledby="upcoming-projects-heading">
     <div class="upcoming-projects-heading">
       <span class="upcoming-projects-kicker">The next chapter</span>
