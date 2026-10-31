@@ -198,12 +198,12 @@ footer a{color:#06122E;font-weight:800}
 (function(){
   var pickup=document.getElementById('custom-pickup'),drop=document.getElementById('custom-drop');
   var status=document.getElementById('saahi-trip-route-status'),distance=document.getElementById('saahi-trip-route-distance');
-  var map,service,renderer,pickupPlace=null,dropPlace=null,pickupMarker=null,dropMarker=null;
+  var map,RouteLibrary,routePolylines=[],pickupPlace=null,dropPlace=null,pickupMarker=null,dropMarker=null;
   function say(s){if(status)status.textContent=s}
-  function initSaahiTripMap(){
+  async function initSaahiTripMap(){
     if(!document.getElementById('saahi-trip-map')||!window.google||!google.maps)return;
     map=new google.maps.Map(document.getElementById('saahi-trip-map'),{center:{lat:17.385,lng:78.4867},zoom:5,mapTypeControl:false,streetViewControl:false});
-    service=new google.maps.DirectionsService();renderer=new google.maps.DirectionsRenderer({map:map,suppressMarkers:false});
+    var routeLibrary=await google.maps.importLibrary('routes');RouteLibrary=routeLibrary.Route;
     var opts={componentRestrictions:{country:'in'},fields:['formatted_address','geometry','name']};
     var pAuto=new google.maps.places.Autocomplete(pickup,opts),dAuto=new google.maps.places.Autocomplete(drop,opts);
     pAuto.addListener('place_changed',function(){pickupPlace=pAuto.getPlace();say(pickupPlace.geometry?'Pickup selected. Select your final drop.':'Choose a pickup suggestion.')});
@@ -213,17 +213,21 @@ footer a{color:#06122E;font-weight:800}
       if(!pickupPlace||dropPlace){pickupPlace=p;dropPlace=null;pickup.value=p.formatted_address;drop.value='';if(pickupMarker)pickupMarker.setMap(null);pickupMarker=new google.maps.Marker({map:map,position:e.latLng,label:'P'});if(dropMarker)dropMarker.setMap(null);say('Pickup pin placed. Tap map again for drop.')}
       else{dropPlace=p;drop.value=p.formatted_address;if(dropMarker)dropMarker.setMap(null);dropMarker=new google.maps.Marker({map:map,position:e.latLng,label:'D'});say('Drop pin placed. Calculate your route.')}
     });
-    document.getElementById('saahi-trip-route-calculate').addEventListener('click',function(){
+    document.getElementById('saahi-trip-route-calculate').addEventListener('click',async function(){
       if(!pickupPlace||!dropPlace||!pickupPlace.geometry||!dropPlace.geometry){say('Select both pickup and drop from suggestions or map pins.');return}
       say('Calculating driving route…');
-      service.route({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:google.maps.TravelMode.DRIVING},function(result,code){
-        if(code!=='OK'||!result.routes||!result.routes[0]||!result.routes[0].legs.length){say('Could not calculate this route. Please adjust the locations.');return}
-        renderer.setDirections(result);
-        var metres=result.routes[0].legs.reduce(function(s,l){return s+(l.distance?l.distance.value:0)},0);
+      try{
+        var result=await RouteLibrary.computeRoutes({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:'DRIVING',fields:['path','legs.distanceMeters']});
+        var route=result.routes&&result.routes[0];
+        if(!route||!route.legs||!route.legs.length){say('Could not calculate this route. Please adjust the locations.');return}
+        routePolylines.forEach(function(line){line.setMap(null)});
+        routePolylines=route.createPolylines();routePolylines.forEach(function(line){line.setMap(map)});
+        var metres=route.legs.reduce(function(s,l){return s+(l.distanceMeters||0)},0);
         var km=(metres/1000).toFixed(1);
+        if(route.path&&route.path.length){var bounds=new google.maps.LatLngBounds();route.path.forEach(function(point){bounds.extend(point)});map.fitBounds(bounds)}
         distance.textContent=km+' km';window.saahiTripRouteInfo=km+' km (Google Maps driving route)';
         say('Driving distance captured and will be included in your WhatsApp trip enquiry.');
-      });
+      }catch(error){say('Route calculation failed. Check that Routes API is enabled and the key is authorised.')}
     });
     say('Map ready. Search addresses or tap the map to set pickup and drop.');
   }
