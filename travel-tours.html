@@ -110,7 +110,9 @@ footer a{color:#06122E;font-weight:800}
   <p style="margin:12px auto;padding:12px 16px;max-width:760px;border:1px solid #f59e0b;border-radius:10px;background:rgba(245,158,11,.12);color:inherit;"><strong>Coming soon:</strong> The SaahiRides Tours &amp; Travel app is under construction and will be available soon. Until then, contact us on WhatsApp to plan your trip.</p>
   <p>Explore 20 SaahiRides travel offerings—from Hyderabad day trips and temple journeys to hill stations, beach holidays, honeymoon escapes and destination weddings. Each itinerary is a planning draft until dates, transport, tickets and inclusions are confirmed.</p>
   <div class="actions">
-    <a class="primary" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20plan%20a%20tour.%20Please%20contact%20me%20with%20details.">💬 Plan a Trip on WhatsApp</a>
+    <a class="primary" href="#state-trip-builder">🧭 Plan My Trip · Build My Route</a>
+    <a class="secondary" href="https://wa.me/919347946026?text=PLAN%20TRIP%0AHello%20SaahiRides%2C%20I%20want%20to%20plan%20a%20tour.%20Please%20help%20me%20with%20the%20route%20and%20quote.">💬 Send Plan to WhatsApp</a>
+    <a class="secondary" href="fare-estimator.html">🚕 Calculate a City Ride Fare</a>
     <a class="secondary" href="bengaluru-mysuru-hyderabad-family-combo.html">🎁 Family Combo: Bengaluru + Mysuru + Hyderabad</a>
     <a class="secondary" href="index.html">← Back to SaahiRides</a>
     <a class="secondary" href="travel-package-template.html">📐 View approved package design template</a>
@@ -140,7 +142,7 @@ footer a{color:#06122E;font-weight:800}
     </div>
     <div class="package-actions"><button class="primary" type="button" id="add-destination">＋ Add destination to trip</button></div>
     <p id="destination-hint" aria-live="polite">Choose a destination to begin.</p>
-    <div id="trip-cart" class="trip-tools" aria-live="polite"><h4>Your trip cart (<span id="cart-count">0</span>)</h4><p id="cart-empty">No destinations added yet.</p><ul id="cart-items"></ul><div class="package-actions"><button type="button" id="clear-trip-cart">Clear trip</button><button type="button" class="primary" id="send-cart-enquiry">Request route &amp; quote on WhatsApp</button></div><p class="form-note">Cart selections are held in this page session only. This is an enquiry cart, not a confirmed booking or live fare calculation.</p></div>
+    <div id="trip-cart" class="trip-tools" aria-live="polite"><h4>Your trip cart (<span id="cart-count">0</span>)</h4><p id="cart-empty">No destinations added yet.</p><ul id="cart-items"></ul><div class="package-actions"><button type="button" id="clear-trip-cart">Clear trip</button><button type="button" class="primary" id="send-cart-enquiry">Plan My Trip &amp; Request Quote on WhatsApp</button></div><p class="form-note">Cart selections are held in this page session only. This is an enquiry cart, not a confirmed booking or live fare calculation.</p></div>
   </section>
   <section class="trip-tools" id="custom-trip-builder" aria-labelledby="custom-trip-heading">
     <h3 id="custom-trip-heading">C. Build Your Own Trip</h3>
@@ -154,7 +156,7 @@ footer a{color:#06122E;font-weight:800}
       <div class="form-field"><label for="custom-travellers">Number of travellers</label><input id="custom-travellers" type="number" min="1" max="100" placeholder="e.g. 4"></div>
       <div class="form-field full"><label for="custom-notes">Special requirements</label><textarea id="custom-notes" placeholder="Trip duration, accessibility, meal/stay needs, sightseeing preferences, budget"></textarea></div>
     </div>
-    <div class="package-actions"><button type="button" class="primary" id="send-custom-trip">Send custom trip enquiry →</button></div>
+    <div class="package-actions"><button type="button" class="primary" id="send-custom-trip">Plan My Trip &amp; Request Quote →</button></div>
   </section>
   <section class="trip-tools" id="special-trip-enquiry" aria-labelledby="special-trip-heading">
     <h3 id="special-trip-heading">D &amp; F. Special Occasion Enquiry</h3>
@@ -166,7 +168,7 @@ footer a{color:#06122E;font-weight:800}
       <div class="form-field"><label for="special-group">Guests / travellers</label><input id="special-group" type="number" min="1" max="500" placeholder="Approximate number"></div>
       <div class="form-field full"><label for="special-notes">Transport and planning requirements</label><textarea id="special-notes" placeholder="Airport/rail pickups, venue transfers, duration, accommodation or experiences requested"></textarea></div>
     </div>
-    <div class="package-actions"><button type="button" class="primary" id="send-special-trip">Send special package enquiry →</button></div>
+    <div class="package-actions"><button type="button" class="primary" id="send-special-trip">Plan My Special Trip →</button></div>
   </section>
 </section>
 <style>
