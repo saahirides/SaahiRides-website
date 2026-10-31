@@ -43,6 +43,9 @@
     const bookHref=/fare-estimator\.html$/i.test(location.pathname)?'https://wa.me/919347946026?text=BOOK%0AHello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.':'fare-estimator.html';
     const planHref=/travel-tours\.html$/i.test(location.pathname)?'#state-trip-builder':'travel-tours.html';
     bookingStrip.innerHTML='<a class="saahi-book-ride" href="'+bookHref+'">🚕 BOOK MY RIDE</a><a class="saahi-plan-trip" href="'+planHref+'">🧭 PLAN MY TRIP</a>';
+    /* Inline layout guarantees the two primary actions remain visible above the mobile edge controls. */
+    Object.assign(bookingStrip.style,{position:'fixed',left:'50%',bottom:(window.matchMedia('(max-width:480px)').matches?'76px':'18px'),transform:'translateX(-50%)',zIndex:'2147483000',display:'flex',gap:'8px',width:'min(520px, calc(100vw - 24px))',maxWidth:'calc(100vw - 24px)',boxSizing:'border-box',visibility:'visible',opacity:'1',pointerEvents:'auto'});
+    bookingStrip.querySelectorAll('a').forEach(function(link){Object.assign(link.style,{display:'block',flex:'1 1 0',minWidth:'0',boxSizing:'border-box',textAlign:'center',whiteSpace:'nowrap',fontSize:(window.matchMedia('(max-width:480px)').matches?'12px':'13px'),fontWeight:'900',lineHeight:'1.2',padding:'13px 7px',borderRadius:'999px',textDecoration:'none'});});
     document.body.appendChild(bookingStrip);
   }
   const driverLink=document.createElement("a");driverLink.id="saahi-driver-floater";driverLink.href="driver.html#driver-recruitment";driverLink.textContent="🚘 DRIVER RECRUITMENT";driverLink.setAttribute("aria-label","Open SaahiRides driver recruitment card");document.body.appendChild(driverLink);
