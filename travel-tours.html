@@ -150,6 +150,13 @@ footer a{color:#06122E;font-weight:800}
     <div class="form-grid">
       <div class="form-field"><label for="custom-pickup">Pickup location</label><input id="custom-pickup" placeholder="e.g. Nagaram, Hyderabad"></div>
       <div class="form-field"><label for="custom-drop">Final drop location</label><input id="custom-drop" placeholder="e.g. Hyderabad"></div>
+      <div class="form-field full" id="saahi-trip-route-panel">
+        <label>Map route planner · Pickup to final drop</label>
+        <p class="form-note">Search both locations or tap the map to place pickup and drop pins. The driving route distance will be added to your trip enquiry.</p>
+        <div id="saahi-trip-map" role="application" aria-label="Trip pickup and drop map" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
+        <div class="package-actions"><button type="button" class="primary" id="saahi-trip-route-calculate">Calculate road distance</button><span id="saahi-trip-route-status" role="status" aria-live="polite">Configure Google Maps key to activate route planning.</span></div>
+        <p>Driving distance: <strong id="saahi-trip-route-distance">Not calculated</strong></p>
+      </div>
       <div class="form-field"><label for="custom-stops">Places to visit (in order)</label><textarea id="custom-stops" placeholder="Add one or more destinations, one per line"></textarea></div>
       <div class="form-field"><label for="custom-vehicle">Preferred travel mode</label><select id="custom-vehicle"><option>Recommend a suitable vehicle</option><option>Sedan</option><option>SUV / MUV</option><option>Tempo traveller</option><option>Bus / large group</option><option>Train/flight plus local transfers</option></select></div>
       <div class="form-field"><label for="custom-date">Travel start date</label><input id="custom-date" type="date"></div>
@@ -180,7 +187,53 @@ footer a{color:#06122E;font-weight:800}
 #saahi-travel-hub .package-actions button{color:#fff}
 #saahi-travel-hub .package-actions button.primary{color:#06122e}
 #saahi-travel-hub .card{height:100%}
+#saahi-trip-route-panel{grid-column:1/-1}
+#saahi-trip-route-panel .package-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#saahi-trip-route-status{font-size:13px;color:#9ca3af}
+#saahi-trip-map{width:100%}
+
 </style>
+<script src="maps-config.js"></script>
+<script>
+(function(){
+  var pickup=document.getElementById('custom-pickup'),drop=document.getElementById('custom-drop');
+  var status=document.getElementById('saahi-trip-route-status'),distance=document.getElementById('saahi-trip-route-distance');
+  var map,service,renderer,pickupPlace=null,dropPlace=null,pickupMarker=null,dropMarker=null;
+  function say(s){if(status)status.textContent=s}
+  function initSaahiTripMap(){
+    if(!document.getElementById('saahi-trip-map')||!window.google||!google.maps)return;
+    map=new google.maps.Map(document.getElementById('saahi-trip-map'),{center:{lat:17.385,lng:78.4867},zoom:5,mapTypeControl:false,streetViewControl:false});
+    service=new google.maps.DirectionsService();renderer=new google.maps.DirectionsRenderer({map:map,suppressMarkers:false});
+    var opts={componentRestrictions:{country:'in'},fields:['formatted_address','geometry','name']};
+    var pAuto=new google.maps.places.Autocomplete(pickup,opts),dAuto=new google.maps.places.Autocomplete(drop,opts);
+    pAuto.addListener('place_changed',function(){pickupPlace=pAuto.getPlace();say(pickupPlace.geometry?'Pickup selected. Select your final drop.':'Choose a pickup suggestion.')});
+    dAuto.addListener('place_changed',function(){dropPlace=dAuto.getPlace();say(dropPlace.geometry?'Both locations selected. Calculate the route.':'Choose a drop suggestion.')});
+    map.addListener('click',function(e){
+      var p={geometry:{location:e.latLng},formatted_address:e.latLng.lat().toFixed(6)+', '+e.latLng.lng().toFixed(6)};
+      if(!pickupPlace||dropPlace){pickupPlace=p;dropPlace=null;pickup.value=p.formatted_address;drop.value='';if(pickupMarker)pickupMarker.setMap(null);pickupMarker=new google.maps.Marker({map:map,position:e.latLng,label:'P'});if(dropMarker)dropMarker.setMap(null);say('Pickup pin placed. Tap map again for drop.')}
+      else{dropPlace=p;drop.value=p.formatted_address;if(dropMarker)dropMarker.setMap(null);dropMarker=new google.maps.Marker({map:map,position:e.latLng,label:'D'});say('Drop pin placed. Calculate your route.')}
+    });
+    document.getElementById('saahi-trip-route-calculate').addEventListener('click',function(){
+      if(!pickupPlace||!dropPlace||!pickupPlace.geometry||!dropPlace.geometry){say('Select both pickup and drop from suggestions or map pins.');return}
+      say('Calculating driving route…');
+      service.route({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:google.maps.TravelMode.DRIVING},function(result,code){
+        if(code!=='OK'||!result.routes||!result.routes[0]||!result.routes[0].legs.length){say('Could not calculate this route. Please adjust the locations.');return}
+        renderer.setDirections(result);
+        var metres=result.routes[0].legs.reduce(function(s,l){return s+(l.distance?l.distance.value:0)},0);
+        var km=(metres/1000).toFixed(1);
+        distance.textContent=km+' km';window.saahiTripRouteInfo=km+' km (Google Maps driving route)';
+        say('Driving distance captured and will be included in your WhatsApp trip enquiry.');
+      });
+    });
+    say('Map ready. Search addresses or tap the map to set pickup and drop.');
+  }
+  var key=window.SAAHI_GOOGLE_MAPS_API_KEY;
+  if(key&&key!=='PASTE_RESTRICTED_BROWSER_KEY_HERE'){
+    var s=document.createElement('script');s.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(key)+'&libraries=places&callback=initSaahiTripMap&v=weekly';s.async=true;s.defer=true;s.onerror=function(){say('Google Maps failed to load. Check your key and enabled APIs.')};document.head.appendChild(s);
+  }else say('Google Maps key is not configured yet. Your trip enquiry form remains available.');
+  window.initSaahiTripMap=initSaahiTripMap;
+})();
+</script>
 <script>
 (function(){
   // Combined catalogue: current SaahiRides package destinations plus additional state-wise research starters.
@@ -212,7 +265,7 @@ footer a{color:#06122E;font-weight:800}
   document.getElementById('add-destination').addEventListener('click',()=>{if(!destination.value)return;cart.push({region:region.value,name:destination.value});renderCart();document.getElementById('destination-hint').textContent=destination.value+' added to your trip cart.';});
   document.getElementById('clear-trip-cart').addEventListener('click',()=>{cart.length=0;renderCart();});
   document.getElementById('send-cart-enquiry').addEventListener('click',()=>{if(!cart.length){document.getElementById('destination-hint').textContent='Please add at least one destination before requesting a quote.';return;}send('Hello SaahiRides, please plan a state-wise trip and send an itemised quote.\nSelected destinations:\n'+cart.map((x,i)=>(i+1)+'. '+x.region+' — '+x.name).join('\n')+'\nPlease confirm route connectivity, approximate kilometres, travel time, suitable vehicle, itinerary, inclusions, taxes and availability.');});
-  document.getElementById('send-custom-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();if(!v('custom-pickup')||!v('custom-drop')||!v('custom-stops')){alert('Please enter pickup, final drop and at least one destination.');return;}send('Hello SaahiRides, please quote my custom trip.\nPickup: '+v('custom-pickup')+'\nFinal drop: '+v('custom-drop')+'\nStops in order: '+v('custom-stops')+'\nVehicle: '+v('custom-vehicle')+'\nStart date: '+(v('custom-date')||'Not decided')+'\nTravellers: '+(v('custom-travellers')||'Not decided')+'\nRequirements: '+(v('custom-notes')||'None stated')+'\nPlease verify connectivity, route, kilometres, timings and itemised package cost.');});
+  document.getElementById('send-custom-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();if(!v('custom-pickup')||!v('custom-drop')||!v('custom-stops')){alert('Please enter pickup, final drop and at least one destination.');return;}send('Hello SaahiRides, please quote my custom trip.\nPickup: '+v('custom-pickup')+'\nFinal drop: '+v('custom-drop')+'\nStops in order: '+v('custom-stops')+'\nMap driving distance: '+(window.saahiTripRouteInfo||'Not calculated — please verify')+'\nVehicle: '+v('custom-vehicle')+'\nStart date: '+(v('custom-date')||'Not decided')+'\nTravellers: '+(v('custom-travellers')||'Not decided')+'\nRequirements: '+(v('custom-notes')||'None stated')+'\nPlease verify route, intermediate stops, total trip kilometres, timings and itemised package cost.');});
   document.getElementById('send-special-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();send('Hello SaahiRides, please contact me about a special package.\nPackage: '+v('special-type')+'\nDestination: '+(v('special-location')||'To be decided')+'\nDate: '+(v('special-date')||'Not decided')+'\nGuests/travellers: '+(v('special-group')||'Not decided')+'\nRequirements: '+(v('special-notes')||'Please advise')+'\nPlease share availability, inclusions, transport options and an itemised quote.');});
   document.querySelectorAll('[data-special]').forEach(link=>link.addEventListener('click',()=>{document.getElementById('special-type').value=link.dataset.special; }));
   populate();renderCart();
