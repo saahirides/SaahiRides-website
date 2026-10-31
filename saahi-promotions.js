@@ -36,12 +36,12 @@
     </section>
     <button id="saahi-promo-toggle" type="button" aria-expanded="false" aria-controls="saahi-promo-panel">🎁 OFFERS & BONANZA</button>`;
   document.body.appendChild(root);
-  if (!/upload-images\\.html$/i.test(location.pathname)) {
+  if (!/upload-images\.html$/i.test(location.pathname)) {
     const bookingStrip=document.createElement('nav');
     bookingStrip.id='saahi-booking-strip';
     bookingStrip.setAttribute('aria-label','Quick booking actions');
-    const bookHref=/fare-estimator\\.html$/i.test(location.pathname)?'https://wa.me/919347946026?text=BOOK%0AHello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.':'fare-estimator.html';
-    const planHref=/travel-tours\\.html$/i.test(location.pathname)?'#state-trip-builder':'travel-tours.html';
+    const bookHref=/fare-estimator\.html$/i.test(location.pathname)?'https://wa.me/919347946026?text=BOOK%0AHello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride.':'fare-estimator.html';
+    const planHref=/travel-tours\.html$/i.test(location.pathname)?'#state-trip-builder':'travel-tours.html';
     bookingStrip.innerHTML='<a class="saahi-book-ride" href="'+bookHref+'">🚕 BOOK MY RIDE</a><a class="saahi-plan-trip" href="'+planHref+'">🧭 PLAN MY TRIP</a>';
     document.body.appendChild(bookingStrip);
   }
