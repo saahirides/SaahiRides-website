@@ -25,6 +25,10 @@ h2{color:var(--gold);font-size:23px;line-height:1.25;margin:9px 0}
 .card p,.card li{color:#e2e8f0}
 .card ul{padding-left:20px;margin:8px 0 18px}
 .cta{margin-top:auto;display:inline-block;text-align:center;padding:13px 17px;border-radius:10px;background:var(--green);color:#fff;text-decoration:none;font-weight:900}
+@keyframes saahiOfferPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 #25d36644}50%{transform:scale(1.055);box-shadow:0 8px 24px #25d36666}}
+.cta{transform-origin:center;animation:saahiOfferPulse 1.7s ease-in-out infinite}
+.cta:hover,.cta:focus-visible{animation-play-state:paused;transform:scale(1.07)}
+@media(prefers-reduced-motion:reduce){.cta{animation:none}.cta:hover,.cta:focus-visible{transform:none}}
 .terms{margin-top:18px;padding:16px 18px;border-left:4px solid var(--gold);background:#ffffff0c;border-radius:8px;color:#cbd5e1;font-size:13px}
 footer{text-align:center;color:#94a3b8;padding:18px;font-size:13px}
 @media(max-width:680px){.grid{grid-template-columns:1fr}.wrap{padding:12px 14px 34px}.card{padding:19px}.close{width:42px;height:42px}}
