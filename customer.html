@@ -50,11 +50,22 @@
             background-color: #0056b3;
         }
     </style>
+<style>
+.sr-image-board{max-width:900px;margin:24px auto;padding:18px;border:1px solid #d4af37;border-radius:16px;background:linear-gradient(145deg,#0b1c3d,#10284d);color:#fff;font-family:Arial,sans-serif}
+.sr-image-board h2{margin:0 0 8px;color:#ffd700;text-align:center}
+.sr-image-board p{margin:0 0 14px;text-align:center;color:#e2e8f0;font-size:14px}
+.sr-image-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.sr-image-card{overflow:hidden;border:1px solid rgba(255,215,0,.45);border-radius:12px;background:#06122e}
+.sr-image-card img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:#fff}
+.sr-image-card strong{display:block;padding:10px;color:#ffd700;text-align:center;font-size:14px}
+@media(max-width:480px){.sr-image-board{margin:16px 10px;padding:13px}.sr-image-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
     <!-- YOUR EXISTING NAVIGATION LINKS, REDIRECTIONS, AND WHATSAPP BUTTONS STAY HERE UNTOUCHED -->
 
+    <section class="sr-image-board"><h2>SaahiRides Customer Offers</h2><p>Latest customer offer posters and travel rates. Tap an image to view it in full size.</p><div class="sr-image-grid"><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/Diwali%20customer%20offer%201.jpg" alt="Diwali Customer Offer"><strong>Diwali Customer Offer</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/diwali%20offer%20v1.jpg" alt="Diwali Offer — Version 1"><strong>Diwali Offer — Version 1</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/diwali%20offer.jpg" alt="Diwali Special Offer"><strong>Diwali Special Offer</strong></article></div></section>
     <!-- CLEAN CUSTOMER BOOKING / DATA FORM -->
     <div class="customer-form-container">
         <h3>Customer Request Portal</h3>
