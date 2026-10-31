@@ -66,7 +66,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 <div class="estimator-container">
   <div class="page-top"><a class="brand" href="https://www.saahirides.co.in/">SaahiRides Transit Pvt. Ltd.</a><a class="back-link" href="index.html">← Back to main website</a></div>
   <header class="estimator-header-block">
-    <span class="estimator-mini-badge">REAL-TIME TELEMETRY</span>
+    <span class="estimator-mini-badge">FARE-FIRST BOOKING</span>
     <h1>Interactive Fare Estimator</h1>
     <p>Select your fleet tier and route distance to estimate On-Demand progressive slabs or 30-Day Subscription costs instantly.</p>
   </header>
@@ -168,16 +168,15 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     var onDemand = calculateFare(distance,baseRatePerKm);
     distanceOutput.textContent = distance + ' km';
     onDemandOutput.textContent = String(onDemand);
-    oneWayOutput.textContent = String(Math.round(onDemand * 30 + 199));
     var oneWay = Math.round(onDemand * 30 + 199);
     var bothWay = Math.round(onDemand * 60 + 299);
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
-    var message = 'BOOK\\nSaahiRides fare estimate\\nVehicle: ' + selectedVehicle +
-      '\\nDistance: ' + distance + ' km\\nEstimated on-demand fare: ₹' + onDemand +
-      '\\n30-day subscription one-way: ₹' + oneWay +
-      '\\n30-day subscription both-way: ₹' + bothWay +
-      '\\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
+    var message = 'BOOK\nSaahiRides fare estimate\nVehicle: ' + selectedVehicle +
+      '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
+      '\n30-day subscription one-way: ₹' + oneWay +
+      '\n30-day subscription both-way: ₹' + bothWay +
+      '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
   }
   vehicleButtons.forEach(function(button){
