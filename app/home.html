@@ -43,7 +43,7 @@ button.primary{background:linear-gradient(100deg,#d4af37,#ffe27a);border:0;borde
 <p class="muted" id="rateSummary">Select a vehicle to view the fare.</p>
 <div class="row">
 <div><label for="distance">Trip distance (km)</label><input id="distance" type="number" min="0.1" max="30" step="0.1" value="5"></div>
-<div><label for="service">Service level</label><select id="service"><option value="standard">Standard</option><option value="priority">Priority / Express</option><option value="premium">Premium / Super Fast</option></select></div>
+<div><label for="service">Service level</label><select id="service"><option value="standard">Standard</option><option value="priority">Express</option><option value="premium">Super Fast</option></select></div>
 </div>
 <div class="pricebox"><div class="muted">Estimated On-Demand fare</div><div class="price" id="fare">₹50.00</div><div class="muted" id="fareNote">Estimate based on the published progressive fare slabs.</div></div>
 <div class="notice">Fare estimate only. Trips above 30 km, night charges, and vehicle categories with a single published rate follow their separate approved rules. No surge pricing.</div>
@@ -65,12 +65,12 @@ button.primary{background:linear-gradient(100deg,#d4af37,#ffe27a);border:0;borde
 <script>
 const vehicles=[
  {id:'bike',name:'Bike',rates:{standard:10,priority:12,premium:13}},
- {id:'scooty',name:'Scooty',rates:{standard:14,priority:15,premium:17}},
+ {id:'scooty',name:'Scooty',rates:{standard:12,priority:13.5,premium:15}},
  {id:'scooty-ev',name:'Scooty EV',rates:{standard:16},singleRate:true},
- {id:'auto',name:'Auto Rickshaw',rates:{standard:23,priority:25,premium:26}},
- {id:'electric-auto',name:'Electric Auto Rickshaw',rates:{standard:25},singleRate:true},
- {id:'nonac',name:'Non-AC Cab',rates:{standard:25,priority:27,premium:28}},
- {id:'ac',name:'AC Cab',rates:{standard:30,priority:32,premium:33}}
+ {id:'auto',name:'Auto Rickshaw',rates:{standard:16.5,priority:17.5,premium:19}},
+ {id:'electric-auto',name:'Electric Auto Rickshaw',rates:{standard:19},singleRate:true},
+ {id:'nonac',name:'Non-AC Cab',rates:{standard:19.5,priority:21,premium:22}},
+ {id:'ac',name:'AC Cab',rates:{standard:22.5,priority:24,premium:25}}
 ];
 const serviceNames={standard:'Standard',priority:'Express',premium:'Super Fast'};
 let selected=vehicles[0],mode='on';
