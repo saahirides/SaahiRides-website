@@ -15,7 +15,7 @@
   - 25–30 km: 2.25× base rate
 - Do not apply a slab multiplier to the entire trip; each slab is calculated separately.
 - No city vehicle may continue under city pricing beyond 30 km.
-- The supplied calculator rounds the calculated fare to two decimal places.
+- Published fare tables and customer-facing fare estimates round the calculated trip fare to the nearest rupee.
 
 ## 2. Base rates per kilometre
 | Vehicle | Standard | Express | Super Fast |
