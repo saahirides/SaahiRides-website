@@ -63,14 +63,15 @@ Previously shared outstation rates and terms remain unchanged:
 **Important:** The 50 km / 100 km threshold is only for a city traveller crossing the 30 km city limit. It is not a replacement for the normal 350 km one-way or 300 km/day round-trip minimums for regular outstation bookings.
 
 
-## 5. Subscription model — confirmed published details
+## 5. Subscription model — approved pricing
 - Subscription period: 30 days.
-- Route-lock fee: ₹199 for all categories.
-- Calculation: monthly subscription price + ₹199 route-lock fee = 30-day total; divide the total by 30 for the daily one-way reference fare.
-- Confirmed example: Bike Standard monthly subscription ₹999 + ₹199 route lock = ₹1,198 total; ₹1,198 ÷ 30 = ₹39.93 (about ₹40) per day.
-- Eligible regular journeys are intended to be 10–15% cheaper than On-Demand pricing.
-- Published category subscription totals are listed on the main website and are recalculated from the current On-Demand rates using this formula.
-- Planned benefits documented on the website include route lock, dedicated driver, SOS and ride insurance at no extra charge subject to applicable coverage terms, eligible unused-balance carry-forward with a 5-day use window, and an expiry reminder 5 days before expiry. Automated bot handling for eligibility, balance deductions, carry-forward and reminders is planned.
+- Eligible subscription distances: 3 km, 5 km, 10 km and 15 km.
+- Subscription calculation: matching On-Demand fare × 30 one-way trips or × 60 trip legs for both-way service, then apply a straight 15% discount (multiply by 0.85).
+- Round the final 30-day subscription total to the nearest rupee.
+- No separate joining fee and no separate route-lock add-on. The 15% discount replaces the previous ₹199/₹299 route-lock add-on calculation.
+- Subscription savings are 15% against the comparable On-Demand total for every vehicle and service tier, including Bike and Scooty EV.
+- Planned benefits (route lock, dedicated driver, SOS and ride insurance subject to applicable coverage terms, eligible unused-balance carry-forward with a 5-day use window, and expiry reminder 5 days before expiry) remain subject to their separate operating and coverage rules.
+- Automated bot handling for eligibility, balance deductions, carry-forward and reminders is planned.
 - The 15-day free trial offer ran 1–15 October 2026 and is no longer a current offer.
 
 ## 6. Website and data safety
