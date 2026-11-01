@@ -201,6 +201,37 @@ footer {
 </div>
 </div>
 </div>
+<section class="card hidden" id="pricingHistory">
+<h2>Fare Rate History & Change Log</h2>
+<p class="hint">Admin-only reference. The previous schedule is retained for historical checks; the revised schedule is the active schedule from 2 November 2026.</p>
+<div class="policy">
+<h4>Previous on-demand rates · valid through 1 November 2026</h4>
+<p class="small">Archived schedule — do not use for new bookings dated on or after 2 November 2026.</p>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:540px"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Vehicle</th><th style="padding:8px;border-bottom:1px solid var(--line)">Standard</th><th style="padding:8px;border-bottom:1px solid var(--line)">Express</th><th style="padding:8px;border-bottom:1px solid var(--line)">Super Fast</th></tr></thead><tbody>
+<tr><td>Bike</td><td>₹10/km</td><td>₹12/km</td><td>₹13/km</td></tr>
+<tr><td>Scooty</td><td>₹14/km</td><td>₹15/km</td><td>₹17/km</td></tr>
+<tr><td>Scooty EV</td><td>₹16/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Auto Rickshaw</td><td>₹23/km</td><td>₹25/km</td><td>₹26/km</td></tr>
+<tr><td>Electric Auto</td><td>₹25/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Non-AC Cab</td><td>₹25/km</td><td>₹27/km</td><td>₹28/km</td></tr>
+<tr><td>AC Cab</td><td>₹30/km</td><td>₹32/km</td><td>₹33/km</td></tr>
+</tbody></table></div>
+</div>
+<div class="policy">
+<h4>Current on-demand rates · effective 2 November 2026</h4>
+<p class="small">Active schedule — use these rates for bookings dated 2 November 2026 onward.</p>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:540px"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Vehicle</th><th style="padding:8px;border-bottom:1px solid var(--line)">Standard</th><th style="padding:8px;border-bottom:1px solid var(--line)">Express</th><th style="padding:8px;border-bottom:1px solid var(--line)">Super Fast</th></tr></thead><tbody>
+<tr><td>Bike</td><td>₹10/km</td><td>₹12/km</td><td>₹13/km</td></tr>
+<tr><td>Scooty</td><td>₹12/km</td><td>₹13.50/km</td><td>₹15/km</td></tr>
+<tr><td>Scooty EV</td><td>₹16/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Auto Rickshaw</td><td>₹16.50/km</td><td>₹17.50/km</td><td>₹19/km</td></tr>
+<tr><td>Electric Auto</td><td>₹19/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Non-AC Cab</td><td>₹19.50/km</td><td>₹21/km</td><td>₹22/km</td></tr>
+<tr><td>AC Cab</td><td>₹22.50/km</td><td>₹24/km</td><td>₹25/km</td></tr>
+</tbody></table></div>
+</div>
+<p class="small">Rate history is recorded here for Admin reference. The fare calculator and customer-facing fare tables remain on the current schedule. Subscription pricing is separately governed by the 15% discount policy effective 2 November 2026.</p>
+</section>
 <div class="card">
 <h2>Policy Centre</h2>
 <p class="hint">Only authorized Admin/Owner or HR publishers can load records. This initial interface does not invent policy wording; paste only text approved by SaahiRides.</p>
@@ -285,6 +316,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
+  show('pricingHistory',admin);
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
   $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category==='Admin Governance'&&!owner)||(b.dataset.category!=='HR'&&!admin&&!governanceRoles.length);
