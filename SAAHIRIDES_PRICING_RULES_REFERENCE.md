@@ -21,14 +21,14 @@
 | Vehicle | Standard | Express | Super Fast |
 |---|---:|---:|---:|
 | Bike | ₹10/km | ₹12/km | ₹13/km |
-| Scooty | ₹14/km | ₹15/km | ₹17/km |
+| Scooty | ₹12/km | ₹13.50/km | ₹15/km |
 | Scooty EV | **Single rate: ₹16/km** | Not applicable | Not applicable |
-| Auto Rickshaw | ₹23/km | ₹25/km | ₹26/km |
-| Electric Auto Rickshaw | **Single rate: ₹25/km** | Not applicable | Not applicable |
-| Non-AC Cab | ₹25/km | ₹27/km | ₹28/km |
-| AC Cab | ₹30/km | ₹32/km | ₹33/km |
+| Auto Rickshaw | ₹16.50/km | ₹17.50/km | ₹19/km |
+| Electric Auto Rickshaw | **Single rate: ₹19/km** | Not applicable | Not applicable |
+| Non-AC Cab | ₹19.50/km | ₹21/km | ₹22/km |
+| AC Cab | ₹22.50/km | ₹24/km | ₹25/km |
 
-Scooty EV and Electric Auto Rickshaw use one rate each only. Express and Super Fast tiers do not apply to these two vehicle categories.
+Scooty EV and Electric Auto Rickshaw use one rate each only. Express and Super Fast tiers do not apply to these two vehicle categories. These rates supersede the earlier rate card.
 
 ## 3. City travellers whose actual trip exceeds 30 km
 This threshold rule applies only to a city traveller whose trip exceeds the 30 km city limit. Stop city fare calculation and hand off to the existing outstation pricing engine.
@@ -69,7 +69,7 @@ Previously shared outstation rates and terms remain unchanged:
 - Calculation: monthly subscription price + ₹199 route-lock fee = 30-day total; divide the total by 30 for the daily one-way reference fare.
 - Confirmed example: Bike Standard monthly subscription ₹999 + ₹199 route lock = ₹1,198 total; ₹1,198 ÷ 30 = ₹39.93 (about ₹40) per day.
 - Eligible regular journeys are intended to be 10–15% cheaper than On-Demand pricing.
-- Other vehicle/category monthly subscription prices are not confirmed in this reference and must not be invented.
+- Published category subscription totals are listed on the main website and are recalculated from the current On-Demand rates using this formula.
 - Planned benefits documented on the website include route lock, dedicated driver, SOS and ride insurance at no extra charge subject to applicable coverage terms, eligible unused-balance carry-forward with a 5-day use window, and an expiry reminder 5 days before expiry. Automated bot handling for eligibility, balance deductions, carry-forward and reminders is planned.
 - The 15-day free trial offer ran 1–15 October 2026 and is no longer a current offer.
 
