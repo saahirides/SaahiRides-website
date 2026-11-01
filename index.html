@@ -1488,5 +1488,32 @@ document.addEventListener('DOMContentLoaded',function(){
   <span class="ghost-body"><span class="ghost-face" aria-hidden="true"><i></i><i></i></span><span class="ghost-copy">NEED HELP?<br>CLICK ME!</span></span>
 </a>
 
+
+<style id="saahi-mobile-quick-actions-styles">
+#saahi-mobile-quick-actions{display:none}
+@media(max-width:650px){
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  #saahi-mobile-quick-actions{
+    position:fixed;left:0;right:0;bottom:0;z-index:9997;
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));
+    background:rgba(3,8,23,.97);border-top:2px solid #D4AF37;
+    box-shadow:0 -7px 22px rgba(0,0,0,.32);backdrop-filter:blur(10px)
+  }
+  #saahi-mobile-quick-actions a{
+    min-height:48px;display:flex;align-items:center;justify-content:center;
+    padding:9px 7px;border-radius:12px;text-align:center;text-decoration:none;
+    font-size:13px;line-height:1.2;font-weight:900
+  }
+  #saahi-mobile-quick-actions .quick-book{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E;border:1px solid #D4AF37}
+  #saahi-mobile-quick-actions .quick-trip{background:#102b55;color:#fff;border:2px solid #D4AF37}
+}
+@media(prefers-reduced-motion:reduce){#saahi-mobile-quick-actions a{transition:none}}
+</style>
+<nav id="saahi-mobile-quick-actions" aria-label="Quick booking and trip planning">
+  <a class="quick-book" href="fare-estimator.html" aria-label="Book My Ride and calculate fare">🚕 Book My Ride</a>
+  <a class="quick-trip" href="travel-tours.html" aria-label="Plan My Trip and explore tours">🧭 Plan My Trip</a>
+</nav>
+
 </body>
 </html>
