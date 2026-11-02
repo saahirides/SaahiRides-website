@@ -93,6 +93,15 @@ Deno.serve(async (req: Request) => {
       const listingData = listing.data && typeof listing.data === "object" ? listing.data as Record<string, unknown> : {};
       const profiles = Array.isArray(listingData.profiles) ? listingData.profiles as Array<Record<string, unknown>> : [];
       const exists = profiles.some((profile) => profile.username === username);
+      const profileLimit = Number(listingData.limit);
+      if (!exists && Number.isFinite(profileLimit) && profiles.length >= profileLimit) {
+        return json({
+          error: `Upload-Post profile limit reached (${profiles.length}/${profileLimit}). No new profile was created. Upgrade the Upload-Post plan or reuse an existing profile.`,
+          plan: listingData.plan || null,
+          limit: profileLimit,
+          profiles_used: profiles.length,
+        }, 403);
+      }
 
       if (!exists) {
         const created = await uploadPostRequest("/uploadposts/users", apiKey, {
