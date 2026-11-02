@@ -359,10 +359,10 @@ footer {
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
 <div class="grid">
- <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API connection is not configured yet. Your API key will be stored only as a Supabase Edge Function secret, never in this page.</p><a class="btn secondary" href="https://www.upload-post.com/" target="_blank" rel="noopener">Open Upload-Post</a></div>
+ <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API key has been placed in Supabase Edge Function Secrets. Click “Check API key, plan & connected accounts” above to verify the key and load all existing publishing profiles. No social account is treated as connected until Upload-Post confirms it.</p><a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Open Upload-Post account manager</a></div>
  <div class="tile"><h3>AI assistance</h3><div role="status" aria-label="AI caption setup pending" style="display:inline-flex;align-items:center;gap:7px;margin:2px 0 10px;padding:7px 11px;border:1px solid #f59e0b;border-radius:999px;background:#3b2607;color:#fde68a;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase"><span aria-hidden="true">●</span> AI CAPTION · SETUP PENDING</div><p class="small">AI caption and hashtag generation is not active yet. It will be enabled after the approved AI service and secure backend connection are configured.</p><button type="button" disabled aria-disabled="true">AI caption · unavailable</button></div>
 </div>
-<p class="small">No content is published from this preview. The final video composer, approval step and live publishing will be enabled after the provider account and secure API connection are verified.</p>
+<p class="small">Account linking and profile discovery are handled above. Campaign publishing remains locked until the API key and connected destinations are verified and the publishing composer is completed.</p>
 </div>
 <button type="button" id="ssPreviewBtn">Refresh media preview</button>
 <button type="button" disabled>Publish · testing connection pending</button>
@@ -487,7 +487,7 @@ footer {
    const result=await callSocial(target,{username});
    const rows=fb?(result.pages||[]):(result.locations||[]);
    $('ssDestinationDetails').textContent=rows.length
-    ? (fb?'Facebook Pages':'Google Business Profile locations')+' for '+username+': '+rows.map(x=>fb?(x.page_name+' (ID '+x.page_id+')'):(x.title+' ('+x.name+')')).join(' · ')
+    ? (fb?'Facebook Pages':'Google Business Profile locations')+' for '+username+': '+rows.map(x=>fb?((x.name||x.page_name||'Facebook Page')+' (ID '+(x.id||x.page_id||'not returned')+')'):((x.title||'Google location')+' ('+(x.name||'ID unavailable')+')')).join(' · ')
     : 'No '+(fb?'Facebook Pages':'Google Business Profile locations')+' were returned for '+username+'. Connect the account or check its permissions.';
   }catch(error){$('ssDestinationDetails').textContent=error.message;}
  });
