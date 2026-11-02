@@ -286,6 +286,26 @@ footer {
 <p>Joint Founder & at least one Director Approval — MANDATORY.</p>
 <p class="small">This page is an initial working interface, not a substitute for a complete dual-approval workflow. That workflow must be enforced server-side before sensitive approvals go live.</p>
 </div>
+
+<section class="card hidden" id="socialStudio">
+<h2>Social Studio</h2>
+<p class="hint">Admin-only publishing workspace · private testing phase</p>
+<div class="grid">
+ <div class="tile"><h3>1 · Select media</h3><p class="small">Choose multiple photos and video clips for a campaign.</p><label for="ssMedia">Photos / videos</label><input id="ssMedia" type="file" accept="image/*,video/*" multiple></div>
+ <div class="tile"><h3>2 · Add your music</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
+</div>
+<div id="ssMediaPreview" class="grid" style="margin-top:14px"></div>
+<label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
+<label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
+<div class="grid">
+ <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API connection is not configured yet. Your API key will be stored only as a Supabase Edge Function secret, never in this page.</p><a class="btn secondary" href="https://www.upload-post.com/" target="_blank" rel="noopener">Open Upload-Post</a></div>
+ <div class="tile"><h3>AI assistance</h3><p class="small">AI caption and hashtag generation will be enabled after the secure AI service connection is configured.</p><button type="button" disabled>AI caption · setup pending</button></div>
+</div>
+<p class="small">No content is published from this preview. The final video composer, approval step and live publishing will be enabled after the provider account and secure API connection are verified.</p>
+<button type="button" id="ssPreviewBtn">Refresh media preview</button>
+<button type="button" disabled>Publish · testing connection pending</button>
+<div id="ssStatus" class="status" aria-live="polite">Private preview only. Nothing has been sent to social media.</div>
+</section>
 </section>
 <footer>SaahiRides · SafeRide @ SaahiPrice · Staged admin workspace; production access and approval controls are not yet enabled.</footer>
 </main>
@@ -316,7 +336,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
-  show('pricingHistory',admin);
+  show('pricingHistory',admin);show('socialStudio',admin);
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
   $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category==='Admin Governance'&&!owner)||(b.dataset.category!=='HR'&&!admin&&!governanceRoles.length);
@@ -353,7 +373,37 @@ footer {
   say('Policy saved. Confirm approval and audience before relying on publication.');
   await loadPolicies(category);
   };
-$('connect').click();
+
+ const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
+ let ssObjectUrls=[];
+ function renderSocialMedia(){
+  if(!mediaPreview)return;
+  ssObjectUrls.forEach(u=>URL.revokeObjectURL(u));ssObjectUrls=[];
+  const files=Array.from(mediaInput?.files||[]);
+  mediaPreview.innerHTML='';
+  if(!files.length){mediaPreview.innerHTML='<p class="hint">No media selected yet.</p>';return}
+  files.forEach((file,i)=>{
+   const url=URL.createObjectURL(file);ssObjectUrls.push(url);
+   const card=document.createElement('div');card.className='tile';
+   const title=document.createElement('div');title.className='small';title.textContent=(i+1)+'. '+file.name+' · '+Math.round(file.size/1024)+' KB';
+   card.appendChild(title);
+   let media;
+   if(file.type.startsWith('image/')){media=document.createElement('img');media.alt=file.name;media.src=url;media.style.cssText='width:100%;max-height:190px;object-fit:contain;margin-top:8px;border-radius:8px'}
+   else if(file.type.startsWith('video/')){media=document.createElement('video');media.src=url;media.controls=true;media.playsInline=true;media.style.cssText='width:100%;max-height:190px;margin-top:8px;border-radius:8px'}
+   if(media)card.appendChild(media);mediaPreview.appendChild(card);
+  });
+  $('ssStatus').textContent=files.length+' media file(s) ready for private preview. Reordering and final video export will be added in the composer stage.';
+ }
+ if(mediaInput)mediaInput.addEventListener('change',renderSocialMedia);
+ if($('ssPreviewBtn'))$('ssPreviewBtn').addEventListener('click',renderSocialMedia);
+ if(musicInput)musicInput.addEventListener('change',()=>{
+  if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
+  const file=musicInput.files?.[0];
+  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio selected for preview only. Confirm you have publishing rights for this track.'}
+  else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden')}
+ });
+
+ $('connect').click();
 })();
 </script>
 <script src="saahi-promotions.js?v=20261031" defer></script>
