@@ -311,32 +311,50 @@ footer {
 </div>
 <div id="ssPublishingArea" class="hidden">
 <div class="tile" id="ssDestinationCard" style="margin-bottom:16px">
-<h3>SaahiRides publishing accounts</h3>
-<p class="small">These are the official destinations saved for the SaahiRides campaign. Facebook and Instagram connect through Upload-Post's secure account authorization; no social password is entered here.</p>
+<h3>SaahiRides multi-account publishing</h3>
+<p class="small">Manage multiple Facebook Pages, Instagram Business identities and Google Business Profile locations from one workspace. Social passwords are entered only on the provider's secure authorization screen.</p>
 <div class="grid" style="margin-top:12px">
  <div class="tile">
-  <h3>Facebook Page</h3>
+  <h3>Facebook Pages</h3>
   <p><strong>SaahiRides Transit Pvt. Ltd.</strong></p>
-  <p class="small">Page address: facebook.com/saahiridestransitpvt.ltd</p>
-  <a class="btn secondary" href="https://www.facebook.com/saahiridestransitpvt.ltd" target="_blank" rel="noopener">View official Facebook Page</a>
-  <a class="btn" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect Facebook account</a>
+  <p class="small">Official page: facebook.com/saahiridestransitpvt.ltd. A connected Facebook login can expose multiple Pages; choose the target Page when publishing.</p>
+  <a class="btn secondary" href="https://www.facebook.com/saahiridestransitpvt.ltd" target="_blank" rel="noopener">View SaahiRides Facebook Page</a>
  </div>
  <div class="tile">
   <h3>Instagram Business</h3>
   <p><strong>@saahirides</strong></p>
-  <p class="small">Instagram profile: instagram.com/saahirides</p>
-  <a class="btn secondary" href="https://www.instagram.com/saahirides/" target="_blank" rel="noopener">View Instagram profile</a>
-  <a class="btn" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect Instagram account</a>
+  <p class="small">Additional Instagram identities can be connected through separate publishing profiles, subject to the Upload-Post plan limit.</p>
+  <a class="btn secondary" href="https://www.instagram.com/saahirides/" target="_blank" rel="noopener">View @saahirides</a>
+ </div>
+ <div class="tile">
+  <h3>Google Business Profile</h3>
+  <p><strong>SaahiRides Transit Pvt. Ltd.</strong></p>
+  <p class="small">Connect the Google account that manages the Business Profile. All authorized locations can then be listed and selected for updates.</p>
+  <a class="btn secondary" href="https://business.google.com/" target="_blank" rel="noopener">Open Google Business Profile</a>
  </div>
  <div class="tile">
   <h3>WhatsApp Business</h3>
   <p><strong>+91 93479 46026</strong></p>
-  <p class="small">Use this number for campaign enquiries and customer replies.</p>
+  <p class="small">Use this number for campaign enquiries and customer replies. WhatsApp Status posting remains a separate in-app action.</p>
   <a class="btn secondary" href="https://wa.me/919347946026" target="_blank" rel="noopener">Open SaahiRides WhatsApp</a>
-  <p class="small">WhatsApp Status must be reviewed and posted from the WhatsApp Business app. The official WhatsApp Business API does not provide a Status-publishing endpoint.</p>
  </div>
 </div>
-<p class="small" style="margin-top:12px"><strong>Secure API setup:</strong> After Facebook/Instagram are authorized in Upload-Post, generate an API key in its API Keys dashboard. The server integration will use that key from Supabase Edge Function Secrets. The numeric Facebook Page ID is retrieved from Upload-Post after authorization; it cannot be derived from the public page URL.</p>
+<div class="tile" style="margin-top:14px">
+<h3>Connected account manager</h3>
+<p class="small">First check the Upload-Post plan and existing profiles. A publishing profile can connect a Facebook login, an Instagram Business account and a Google Business account. Facebook can return multiple Pages and Google can return multiple locations. Use an additional profile for another separate login/account set; the plan's profile limit applies.</p>
+<div style="display:flex;flex-wrap:wrap;gap:9px;align-items:end">
+ <button type="button" id="ssRefreshAccounts">Check API key, plan & connected accounts</button>
+ <div style="flex:1;min-width:230px">
+  <label for="ssProfileLabel">New account group name</label>
+  <input id="ssProfileLabel" maxlength="45" placeholder="e.g. SaahiRides Instagram 2">
+ </div>
+ <button type="button" id="ssGenerateConnect">Generate secure connection link</button>
+</div>
+<div id="ssAccountStatus" class="status" role="status" aria-live="polite">Account status has not been checked yet.</div>
+<div id="ssConnectLink" style="margin:10px 0"></div>
+<div id="ssProfileList" class="grid" style="margin-top:12px"></div>
+<div id="ssDestinationDetails" class="status hidden" role="status" aria-live="polite"></div>
+</div>
 </div>
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
@@ -397,6 +415,83 @@ footer {
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
  };
  $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
+ const socialEsc = value => esc(value ?? '');
+ async function callSocial(action, extra={}) {
+  if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
+  const {data,error}=await client.functions.invoke('upload-post-social',{body:{action,...extra}});
+  if(error) throw new Error(data?.error || error.message || 'Social account service request failed.');
+  if(data?.error) throw new Error(data.error);
+  return data;
+ }
+ function showSocialStatus(message,isError=false){
+  const el=$('ssAccountStatus');el.textContent=message;
+  el.style.border=isError?'1px solid #ef4444':'1px solid #28436d';
+  el.style.background=isError?'#3b1118':'#11294b';
+ }
+ function renderSocialProfiles(payload){
+  const profiles=Array.isArray(payload?.profiles)?payload.profiles:[];
+  const limit=payload?.limit ?? 'not reported';
+  const plan=payload?.plan ?? payload?.me?.plan ?? 'plan not reported';
+  const email=payload?.me?.email ?? payload?.me?.user?.email ?? 'API key verified';
+  showSocialStatus('Upload-Post connected · '+plan+' plan · '+profiles.length+' / '+limit+' profiles used · '+email);
+  const host=$('ssProfileList');host.innerHTML='';
+  if(!profiles.length){host.innerHTML='<p class="small">No publishing profiles exist yet. Enter a group name above to create the first one.</p>';return;}
+  profiles.forEach(profile=>{
+   const accounts=profile.social_accounts||{};
+   const labels={facebook:'Facebook',instagram:'Instagram',google_business:'Google Business'};
+   const items=Object.entries(labels).map(([key,label])=>{
+    const account=accounts[key];
+    const connected=!!account && account!=='' && account!==null;
+    const handle=typeof account==='object'?(account.handle||account.display_name||account.username||'Connected'):(connected?'Connected':'Not connected');
+    return '<div class="small">'+socialEsc(label)+': <strong>'+socialEsc(connected?handle:'Not connected')+'</strong></div>';
+   }).join('');
+   const card=document.createElement('div');card.className='tile';
+   card.innerHTML='<h3>'+socialEsc(profile.display_name||profile.username)+'</h3><p class="small">Profile: '+socialEsc(profile.username)+'</p>'+items+
+    '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:10px"><button type="button" class="secondary" data-social-pages="'+socialEsc(profile.username)+'">List Facebook Pages</button><button type="button" class="secondary" data-social-google="'+socialEsc(profile.username)+'">List Google locations</button></div>';
+   host.appendChild(card);
+  });
+ }
+ $('ssRefreshAccounts').onclick=async()=>{
+  const btn=$('ssRefreshAccounts');btn.disabled=true;btn.textContent='Checking…';showSocialStatus('Checking API key, Upload-Post plan and connected profiles…');
+  try{const data=await callSocial('overview');renderSocialProfiles(data);}
+  catch(error){showSocialStatus(error.message,true);}
+  finally{btn.disabled=false;btn.textContent='Check API key, plan & connected accounts';}
+ };
+ $('ssGenerateConnect').onclick=async()=>{
+  const btn=$('ssGenerateConnect');const label=$('ssProfileLabel').value.trim();
+  if(!label){showSocialStatus('Enter a name for this account group first.',true);return;}
+  const username='saahi_'+label.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,42);
+  if(username.length<8){showSocialStatus('Please use a longer account group name.',true);return;}
+  btn.disabled=true;btn.textContent='Preparing secure link…';$('ssConnectLink').innerHTML='';
+  showSocialStatus('Checking the Upload-Post profile limit and preparing a secure connection link…');
+  try{
+   const result=await callSocial('connect_profile',{username});
+   const link=new URL(result.access_url);
+   if(link.protocol!=='https:'||link.hostname!=='app.upload-post.com')throw new Error('Upload-Post returned an unexpected connection URL. It was not opened.');
+   const a=document.createElement('a');a.href=link.href;a.target='_blank';a.rel='noopener noreferrer';a.className='btn';a.textContent='Open secure connection page · valid '+(result.duration||'48h');
+   $('ssConnectLink').appendChild(a);
+   showSocialStatus((result.profile_created?'Publishing profile created: ':'Existing profile ready: ')+username+'. Connect Facebook, Instagram and/or Google on the secure Upload-Post page. No post has been published.');
+   $('ssProfileLabel').value='';
+   const refreshed=await callSocial('overview');renderSocialProfiles(refreshed);
+  }catch(error){showSocialStatus(error.message,true);}
+  finally{btn.disabled=false;btn.textContent='Generate secure connection link';}
+ };
+ $('ssProfileList').addEventListener('click',async e=>{
+  const fb=e.target.closest('button[data-social-pages]'),gb=e.target.closest('button[data-social-google]');
+  if(!fb&&!gb)return;
+  const username=(fb||gb).dataset.socialPages||(gb||{}).dataset?.socialGoogle;
+  if(!username)return;
+  const target=fb?'facebook_pages':'google_business_locations';
+  $('ssDestinationDetails').classList.remove('hidden');$('ssDestinationDetails').textContent='Loading '+(fb?'Facebook Pages':'Google Business locations')+' for '+username+'…';
+  try{
+   const result=await callSocial(target,{username});
+   const rows=fb?(result.pages||[]):(result.locations||[]);
+   $('ssDestinationDetails').textContent=rows.length
+    ? (fb?'Facebook Pages':'Google Business Profile locations')+' for '+username+': '+rows.map(x=>fb?(x.page_name+' (ID '+x.page_id+')'):(x.title+' ('+x.name+')')).join(' · ')
+    : 'No '+(fb?'Facebook Pages':'Google Business Profile locations')+' were returned for '+username+'. Connect the account or check its permissions.';
+  }catch(error){$('ssDestinationDetails').textContent=error.message;}
+ });
+
 
  $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
  async function loadPolicies(cat){$('policyList').innerHTML='<p class="hint">Loading policies…</p>';
