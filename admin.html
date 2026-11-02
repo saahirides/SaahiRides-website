@@ -310,6 +310,16 @@ footer {
  <div class="tile"><h3>Music & audio</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
 </div>
 <div id="ssPublishingArea" class="hidden">
+<div class="tile" id="ssDestinationCard" style="margin-bottom:16px">
+<h3>Publishing destinations</h3>
+<p class="small">Choose where this campaign is intended to go. These are destination selectors only; live account connections and publishing are still pending.</p>
+<div id="ssPlatforms" style="display:flex;flex-wrap:wrap;gap:9px;margin-top:12px">
+<button type="button" class="social-destination" data-social-platform="Facebook Page" aria-pressed="false" style="margin:0;background:#102b55;border:1px solid #60a5fa;color:#dbeafe">Facebook Page</button>
+<button type="button" class="social-destination" data-social-platform="Instagram Business" aria-pressed="false" style="margin:0;background:#3b1645;border:1px solid #e879f9;color:#fae8ff">Instagram Business</button>
+<button type="button" class="social-destination" data-social-platform="WhatsApp Status" aria-pressed="false" style="margin:0;background:#123d2b;border:1px solid #4ade80;color:#dcfce7">WhatsApp Status</button>
+</div>
+<p id="ssDestinationStatus" class="small" role="status" aria-live="polite" style="margin-top:12px">No destination selected. Nothing has been published.</p>
+</div>
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
 <div class="grid">
@@ -369,6 +379,18 @@ footer {
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
  };
  $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
+ const selectedSocialDestinations=new Set();
+ $('ssPlatforms').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-social-platform]');if(!b)return;
+  const platform=b.dataset.socialPlatform;
+  if(selectedSocialDestinations.has(platform))selectedSocialDestinations.delete(platform);else selectedSocialDestinations.add(platform);
+  b.setAttribute('aria-pressed',String(selectedSocialDestinations.has(platform)));
+  b.style.outline=selectedSocialDestinations.has(platform)?'3px solid #fcd34d':'none';
+  b.style.outlineOffset=selectedSocialDestinations.has(platform)?'2px':'0';
+  $('ssDestinationStatus').textContent=selectedSocialDestinations.size
+   ? 'Selected: '+Array.from(selectedSocialDestinations).join(', ')+'. Account connection is pending; this does not publish or send anything.'
+   : 'No destination selected. Nothing has been published.';
+ });
  $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
  async function loadPolicies(cat){$('policyList').innerHTML='<p class="hint">Loading policies…</p>';
   if(!client)return;
