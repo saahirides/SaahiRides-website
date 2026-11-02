@@ -356,17 +356,24 @@ footer {
 <div id="ssDestinationDetails" class="status hidden" role="status" aria-live="polite"></div>
 </div>
 </div>
+<div class="tile" style="margin-top:14px">
+<h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
+<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile"><option value="">Check connected accounts first</option></select>
+<div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto"> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto"> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
+<label for="ssFacebookPage">Facebook Page ID (optional)</label><input id="ssFacebookPage" placeholder="Facebook Page ID">
+<label for="ssGoogleLocation">Google Business location name (optional for single location)</label><input id="ssGoogleLocation" placeholder="accounts/.../locations/...">
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
+<p class="small">Attach either up to 10 photos or one video per post. Mixed photo/video batches are not accepted. Music selection is preview-only; custom audio embedding is not provided by this publishing endpoint.</p>
+<button type="button" id="ssPublishBtn">Publish selected content</button><div id="ssPublishResult" class="status" role="status" aria-live="polite">Available after a profile is connected. Your team can perform the live test.</div>
+</div>
 <div class="grid">
  <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API key has been placed in Supabase Edge Function Secrets. Click “Check API key, plan & connected accounts” above to verify the key and load all existing publishing profiles. No social account is treated as connected until Upload-Post confirms it.</p><a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Open Upload-Post account manager</a></div>
  <div class="tile"><h3>AI assistance</h3><div role="status" aria-label="AI caption setup pending" style="display:inline-flex;align-items:center;gap:7px;margin:2px 0 10px;padding:7px 11px;border:1px solid #f59e0b;border-radius:999px;background:#3b2607;color:#fde68a;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase"><span aria-hidden="true">●</span> AI CAPTION · SETUP PENDING</div><p class="small">AI caption and hashtag generation is not active yet. It will be enabled after the approved AI service and secure backend connection are configured.</p><button type="button" disabled aria-disabled="true">AI caption · unavailable</button></div>
 </div>
 <p class="small">Account linking and profile discovery are handled above. Campaign publishing remains locked until the API key and connected destinations are verified and the publishing composer is completed.</p>
 </div>
-<button type="button" id="ssPreviewBtn">Refresh media preview</button>
-<button type="button" disabled>Publish · testing connection pending</button>
-<div id="ssStatus" class="status" aria-live="polite">Private preview only. Nothing has been sent to social media.</div>
+<button type="button" id="ssPreviewBtn">Refresh media preview</button><div id="ssStatus" class="status" aria-live="polite">Private preview. Publishing is available after profile selection.</div>
 </section>
 </section>
 <footer>SaahiRides · SafeRide @ SaahiPrice · Staged admin workspace; production access and approval controls are not yet enabled.</footer>
@@ -435,6 +442,9 @@ footer {
   const email=payload?.me?.email ?? payload?.me?.user?.email ?? 'API key verified';
   showSocialStatus('Upload-Post connected · '+plan+' plan · '+profiles.length+' / '+limit+' profiles used · '+email);
   const host=$('ssProfileList');host.innerHTML='';
+  const profileSelect=$('ssPublishProfile');
+  profileSelect.innerHTML=profiles.length?'<option value="">Choose a connected profile</option>':'<option value="">No profiles available</option>';
+  profiles.forEach(profile=>{const option=document.createElement('option');option.value=profile.username;option.textContent=(profile.display_name||profile.username)+' · '+profile.username;profileSelect.appendChild(option);});
   if(!profiles.length){host.innerHTML='<p class="small">No publishing profiles exist yet. Enter a group name above to create the first one.</p>';return;}
   profiles.forEach(profile=>{
    const accounts=profile.social_accounts||{};
@@ -539,11 +549,31 @@ footer {
    else if(file.type.startsWith('video/')){media=document.createElement('video');media.src=url;media.controls=true;media.playsInline=true;media.style.cssText='width:100%;max-height:190px;margin-top:8px;border-radius:8px'}
    if(media)card.appendChild(media);mediaPreview.appendChild(card);
   });
-  $('ssStatus').textContent=files.length+' media file(s) ready for private preview. Reordering and final video export will be added in the composer stage.';
+  $('ssStatus').textContent=files.length+' media file(s) ready for preview. The composer accepts up to 10 photos or one video.';
  }
  if(mediaInput)mediaInput.addEventListener('change',renderSocialMedia);
  if($('ssPreviewBtn'))$('ssPreviewBtn').addEventListener('click',renderSocialMedia);
- if(musicInput)musicInput.addEventListener('change',()=>{
+ 
+  $('ssPublishBtn').addEventListener('click',async()=>{
+   const profile=$('ssPublishProfile').value, platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
+   const caption=[$('ssCaption').value.trim(),$('ssHashtags').value.trim()].filter(Boolean).join('\n\n'), files=Array.from(mediaInput?.files||[]), result=$('ssPublishResult');
+   if(!profile){result.textContent='Choose a connected publishing profile.';return}
+   if(!platforms.length){result.textContent='Select at least one platform.';return}
+   if(!caption&&!files.length){result.textContent='Add a caption or media.';return}
+   const videos=files.filter(f=>f.type.startsWith('video/'));
+   if(files.length>10||videos.length>1||(videos.length&&files.length>1)||files.some(f=>!f.type.startsWith('image/')&&!f.type.startsWith('video/'))){result.textContent='Choose up to 10 photos OR one video only.';return}
+   if(files.some(f=>f.size>100*1024*1024)){result.textContent='Each media file must be 100 MB or smaller.';return}
+   if(platforms.includes('instagram')&&!files.length){result.textContent='Instagram publishing requires media.';return}
+   const form=new FormData();form.append('action','publish');form.append('username',profile);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
+   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim();if(fb)form.append('facebook_page_id',fb);if(gb)form.append('gbp_location_id',gb);
+   files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
+   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Sending…';result.textContent='Submitting to Upload-Post. Team will verify delivery separately.';
+   try{const {data,error}=await client.functions.invoke('upload-post-social',{body:form});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);result.textContent='Upload-Post accepted the publishing request. Request ID: '+(data.request_id||'not returned')+'. Final platform status is available in the provider dashboard.'}
+   catch(error){result.textContent='Publishing request failed: '+error.message}
+   finally{btn.disabled=false;btn.textContent='Publish selected content'}
+  });
+
+  if(musicInput)musicInput.addEventListener('change',()=>{
   if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
   const file=musicInput.files?.[0];
   if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio selected for preview only. Social publishing is not connected yet.'}
