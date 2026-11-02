@@ -164,6 +164,57 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    if (action === "publish") {
+      const form = await req.formData();
+      const username = form.get("username");
+      if (!validUsername(username)) return json({ error: "A valid publishing profile is required." }, 400);
+      const allowed = new Set(["facebook", "instagram", "google_business"]);
+      const platforms = form.getAll("platform[]").filter((value): value is string => typeof value === "string");
+      const selected = [...new Set(platforms)];
+      if (!selected.length || selected.some((platform) => !allowed.has(platform))) {
+        return json({ error: "Select one or more supported platforms: Facebook, Instagram or Google Business Profile." }, 400);
+      }
+      const caption = String(form.get("description") || "").trim();
+      const photos = form.getAll("photos[]").filter((value): value is File => value instanceof File);
+      const video = form.get("video");
+      const hasVideo = video instanceof File;
+      if (!caption && photos.length === 0 && !hasVideo) return json({ error: "Add a caption or media before publishing." }, 400);
+      if (photos.length > 10 || (hasVideo && photos.length > 0)) return json({ error: "Use up to 10 photos or one video, not both." }, 400);
+      const media = hasVideo ? [video] : photos;
+      if (media.some((file) => file.size > 100 * 1024 * 1024)) return json({ error: "Each media file must be 100 MB or smaller." }, 413);
+      if (media.some((file) => !file.type.startsWith("image/") && !file.type.startsWith("video/"))) {
+        return json({ error: "Only image and video media are supported." }, 400);
+      }
+      if (selected.includes("instagram") && media.length === 0) {
+        return json({ error: "Instagram publishing requires photo or video media." }, 400);
+      }
+
+      const endpoint = hasVideo ? "/upload" : photos.length ? "/upload_photos" : "/upload_text";
+      const payload = new FormData();
+      payload.append("user", username);
+      selected.forEach((platform) => payload.append("platform[]", platform));
+      payload.append("description", caption);
+      payload.append("title", caption.slice(0, 80) || "SaahiRides update");
+      payload.append("async_upload", "true");
+      if (hasVideo) payload.append("video", video);
+      else photos.forEach((photo) => payload.append("photos[]", photo));
+      const facebookPageId = String(form.get("facebook_page_id") || "").trim();
+      const googleLocationId = String(form.get("gbp_location_id") || "").trim();
+      if (facebookPageId) payload.append("facebook_page_id", facebookPageId);
+      if (googleLocationId) payload.append("gbp_location_id", googleLocationId);
+
+      const published = await uploadPostRequest(endpoint, apiKey, { method: "POST", body: payload });
+      if (!published.ok) return json({
+        error: "Upload-Post rejected the publishing request.",
+        provider_status: published.status,
+        details: published.data,
+      }, published.status);
+      const responseData = published.data && typeof published.data === "object"
+        ? published.data as Record<string, unknown>
+        : {};
+      return json({ success: true, message: "Publishing request accepted by Upload-Post.", ...responseData });
+    }
+
     return json({ error: "Unsupported action." }, 400);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected server error.";
