@@ -358,7 +358,7 @@ footer {
 </div>
 <div class="tile" style="margin-top:14px">
 <h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
-<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile"><option value="">Check connected accounts first</option></select>
+<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile" multiple size="4" aria-describedby="ssProfileHelp"><option value="">Check connected accounts first</option></select><p id="ssProfileHelp" class="small">Select one or more connected profiles (use Ctrl/Command to select multiple).</p>
 <div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto"> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto"> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
 <label for="ssFacebookPage">Facebook Page ID (optional)</label><input id="ssFacebookPage" placeholder="Facebook Page ID">
 <label for="ssGoogleLocation">Google Business location name (optional for single location)</label><input id="ssGoogleLocation" placeholder="accounts/.../locations/...">
@@ -555,21 +555,28 @@ footer {
  if($('ssPreviewBtn'))$('ssPreviewBtn').addEventListener('click',renderSocialMedia);
  
   $('ssPublishBtn').addEventListener('click',async()=>{
-   const profile=$('ssPublishProfile').value, platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
+   const profiles=Array.from($('ssPublishProfile').selectedOptions).map(x=>x.value).filter(Boolean), platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
    const caption=[$('ssCaption').value.trim(),$('ssHashtags').value.trim()].filter(Boolean).join('\n\n'), files=Array.from(mediaInput?.files||[]), result=$('ssPublishResult');
-   if(!profile){result.textContent='Choose a connected publishing profile.';return}
+   if(!profiles.length){result.textContent='Choose one or more connected publishing profiles.';return}
    if(!platforms.length){result.textContent='Select at least one platform.';return}
    if(!caption&&!files.length){result.textContent='Add a caption or media.';return}
    const videos=files.filter(f=>f.type.startsWith('video/'));
    if(files.length>10||videos.length>1||(videos.length&&files.length>1)||files.some(f=>!f.type.startsWith('image/')&&!f.type.startsWith('video/'))){result.textContent='Choose up to 10 photos OR one video only.';return}
    if(files.some(f=>f.size>100*1024*1024)){result.textContent='Each media file must be 100 MB or smaller.';return}
    if(platforms.includes('instagram')&&!files.length){result.textContent='Instagram publishing requires media.';return}
-   const form=new FormData();form.append('action','publish');form.append('username',profile);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
-   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim();if(fb)form.append('facebook_page_id',fb);if(gb)form.append('gbp_location_id',gb);
-   files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
-   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Sending…';result.textContent='Submitting to Upload-Post. Team will verify delivery separately.';
-   try{const {data,error}=await client.functions.invoke('upload-post-social',{body:form});if(error)throw new Error(data?.error||error.message);if(data?.error)throw new Error(data.error);result.textContent='Upload-Post accepted the publishing request. Request ID: '+(data.request_id||'not returned')+'. Final platform status is available in the provider dashboard.'}
-   catch(error){result.textContent='Publishing request failed: '+error.message}
+   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Sending…';result.textContent='Submitting to Upload-Post for '+profiles.length+' selected profile(s). Team will verify delivery separately.';
+   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim(),accepted=[];
+   try{
+    for(const profile of profiles){
+     const form=new FormData();form.append('action','publish');form.append('username',profile);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
+     if(fb)form.append('facebook_page_id',fb);if(gb)form.append('gbp_location_id',gb);
+     files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
+     const {data,error}=await client.functions.invoke('upload-post-social',{body:form});
+     if(error)throw new Error(profile+': '+(data?.error||error.message));if(data?.error)throw new Error(profile+': '+data.error);
+     accepted.push(profile+' ('+(data.request_id||'request accepted')+')');
+    }
+    result.textContent='Upload-Post accepted requests for all selected profiles: '+accepted.join('; ')+'. Final platform statuses are available in the provider dashboard.';
+   }catch(error){result.textContent='Publishing stopped: '+error.message+(accepted.length?' Already accepted: '+accepted.join('; '):'')}
    finally{btn.disabled=false;btn.textContent='Publish selected content'}
   });
 
