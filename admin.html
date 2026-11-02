@@ -311,14 +311,32 @@ footer {
 </div>
 <div id="ssPublishingArea" class="hidden">
 <div class="tile" id="ssDestinationCard" style="margin-bottom:16px">
-<h3>Connect SaahiRides social accounts</h3>
-<p class="small">Use the secure Upload-Post connection page. Sign in to Upload-Post, choose Connect next to the platform, then approve SaahiRides' official account in the platform's login window.</p>
-<div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:12px">
-<a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect SaahiRides Facebook Page</a>
-<a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect @saahirides Instagram</a>
-<a class="btn secondary" href="https://www.facebook.com/saahiridestransitpvt.ltd" target="_blank" rel="noopener">View SaahiRides Facebook Page</a>
+<h3>SaahiRides publishing accounts</h3>
+<p class="small">These are the official destinations saved for the SaahiRides campaign. Facebook and Instagram connect through Upload-Post's secure account authorization; no social password is entered here.</p>
+<div class="grid" style="margin-top:12px">
+ <div class="tile">
+  <h3>Facebook Page</h3>
+  <p><strong>SaahiRides Transit Pvt. Ltd.</strong></p>
+  <p class="small">Page address: facebook.com/saahiridestransitpvt.ltd</p>
+  <a class="btn secondary" href="https://www.facebook.com/saahiridestransitpvt.ltd" target="_blank" rel="noopener">View official Facebook Page</a>
+  <a class="btn" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect Facebook account</a>
+ </div>
+ <div class="tile">
+  <h3>Instagram Business</h3>
+  <p><strong>@saahirides</strong></p>
+  <p class="small">Instagram profile: instagram.com/saahirides</p>
+  <a class="btn secondary" href="https://www.instagram.com/saahirides/" target="_blank" rel="noopener">View Instagram profile</a>
+  <a class="btn" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Connect Instagram account</a>
+ </div>
+ <div class="tile">
+  <h3>WhatsApp Business</h3>
+  <p><strong>+91 93479 46026</strong></p>
+  <p class="small">Use this number for campaign enquiries and customer replies.</p>
+  <a class="btn secondary" href="https://wa.me/919347946026" target="_blank" rel="noopener">Open SaahiRides WhatsApp</a>
+  <p class="small">WhatsApp Status must be reviewed and posted from the WhatsApp Business app. The official WhatsApp Business API does not provide a Status-publishing endpoint.</p>
+ </div>
 </div>
-<p class="small" style="margin-top:12px">Facebook Page ID is retrieved after account authorization; the public page address is not the numeric ID.</p>
+<p class="small" style="margin-top:12px"><strong>Secure API setup:</strong> After Facebook/Instagram are authorized in Upload-Post, generate an API key in its API Keys dashboard. The server integration will use that key from Supabase Edge Function Secrets. The numeric Facebook Page ID is retrieved from Upload-Post after authorization; it cannot be derived from the public page URL.</p>
 </div>
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
