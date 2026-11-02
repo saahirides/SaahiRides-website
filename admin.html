@@ -100,6 +100,12 @@ button:disabled {
   margin:16px 0}
 .tabs button.active {
   outline:2px solid white}
+.admin-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:18px}
+.admin-nav button{margin:0;min-height:54px;text-align:left}
+.admin-nav button.active{outline:2px solid #fff}
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+.subnav button{margin:0}
+.subnav button.active{outline:2px solid #fff}
 .status {
   padding:10px 12px;
   border-radius:8px;
@@ -200,6 +206,13 @@ footer {
 <p>Approval records, access controls, audits and operating rules.</p>
 </div>
 </div>
+<div class="admin-nav" id="adminNav" aria-label="Admin workspace sections">
+<button type="button" class="active" data-panel="overview">⌂ Overview</button>
+<button type="button" data-panel="pricingHistory">₹ Pricing & history</button>
+<button type="button" data-panel="policyCentre">▤ Policy Centre</button>
+<button type="button" data-panel="approvalNote">✓ Governance</button>
+<button type="button" data-panel="socialStudio">◉ Social Studio</button>
+</div>
 </div>
 <section class="card hidden" id="pricingHistory">
 <h2>Fare Rate History & Change Log</h2>
@@ -232,7 +245,7 @@ footer {
 </div>
 <p class="small">Rate history is recorded here for Admin reference. The fare calculator and customer-facing fare tables remain on the current schedule. Subscription pricing is separately governed by the 15% discount policy effective 2 November 2026.</p>
 </section>
-<div class="card">
+<div class="card hidden" id="policyCentre">
 <h2>Policy Centre</h2>
 <p class="hint">Only authorized Admin/Owner or HR publishers can load records. This initial interface does not invent policy wording; paste only text approved by SaahiRides.</p>
 <div class="tabs" id="tabs">
@@ -290,11 +303,21 @@ footer {
 <section class="card hidden" id="socialStudio">
 <h2>Social Studio</h2>
 <p class="hint">Admin-only publishing workspace · private testing phase</p>
+<div class="subnav" id="socialNav" aria-label="Social Studio sections">
+<button type="button" class="active" data-social-target="ssContentArea">Content & media</button>
+<button type="button" data-social-target="ssMusicArea">Music & audio</button>
+<button type="button" data-social-target="ssPublishingArea">Captions & publishing</button>
+</div>
+<div id="ssContentArea">
 <div class="grid">
- <div class="tile"><h3>1 · Select media</h3><p class="small">Choose multiple photos and video clips for a campaign.</p><label for="ssMedia">Photos / videos</label><input id="ssMedia" type="file" accept="image/*,video/*" multiple></div>
- <div class="tile"><h3>2 · Add your music</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
+ <div class="tile"><h3>Select media</h3><p class="small">Choose multiple photos and video clips for a campaign.</p><label for="ssMedia">Photos / videos</label><input id="ssMedia" type="file" accept="image/*,video/*" multiple></div>
+ </div>
+<div id="ssMusicArea" class="hidden">
+ <div class="tile"><h3>Music & audio</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
 </div>
 <div id="ssMediaPreview" class="grid" style="margin-top:14px"></div>
+</div>
+<div id="ssPublishingArea" class="hidden">
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
 <div class="grid">
@@ -302,6 +325,7 @@ footer {
  <div class="tile"><h3>AI assistance</h3><p class="small">AI caption and hashtag generation will be enabled after the secure AI service connection is configured.</p><button type="button" disabled>AI caption · setup pending</button></div>
 </div>
 <p class="small">No content is published from this preview. The final video composer, approval step and live publishing will be enabled after the provider account and secure API connection are verified.</p>
+</div>
 <button type="button" id="ssPreviewBtn">Refresh media preview</button>
 <button type="button" disabled>Publish · testing connection pending</button>
 <div id="ssStatus" class="status" aria-live="polite">Private preview only. Nothing has been sent to social media.</div>
@@ -336,7 +360,8 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
-  show('pricingHistory',admin);show('socialStudio',admin);
+  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);
+  $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
   $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category==='Admin Governance'&&!owner)||(b.dataset.category!=='HR'&&!admin&&!governanceRoles.length);
@@ -346,6 +371,12 @@ footer {
   }await loadPolicies(category);
   say('Signed in. Permissions checked against Supabase database records.');
   }
+ $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
+  ['pricingHistory','policyCentre','approvalNote','socialStudio'].forEach(id=>show(id,id===target));
+  $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
+  if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
+ };
+ $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
  $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
  async function loadPolicies(cat){$('policyList').innerHTML='<p class="hint">Loading policies…</p>';
   if(!client)return;
