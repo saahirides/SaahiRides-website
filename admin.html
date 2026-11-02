@@ -149,15 +149,7 @@ footer {
 <a class="btn secondary" href="./index.html">← Main website</a>
 </header>
 <div id="notice" class="status">SaahiRides Supabase connection is preconfigured with the public client key. Sign in with your authorized account.</div>
-<section id="config" class="card">
-<h2>Connect existing Supabase project</h2>
-<p class="hint">Enter the existing project URL and its public anon/publishable key. This form stores them only in this page's current memory; it does not save them to browser storage.</p>
-<label for="projectUrl">Supabase project URL</label>
-<input id="projectUrl" value="https://uzwubbzlytqqewqibobr.supabase.co" autocomplete="url">
-<label for="publicKey">Public anon/publishable key</label>
-<input id="publicKey" type="password" autocomplete="off" value="sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq">
-<button id="connect">Connect</button>
-</section>
+
 <section id="auth" class="card hidden">
 <h2>Secure sign-in</h2>
 <p class="hint">Use an account already created in Supabase Auth. Access is granted only when the database recognizes an active Admin/Owner or authorized HR publisher.</p>
@@ -341,7 +333,7 @@ footer {
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const config=(url,key)=>{if(!window.supabase?.createClient)throw Error('Supabase client library did not load. Check internet access and reload.');if(!url.startsWith('https://')||!key.trim())throw Error('Enter the HTTPS project URL and public anon/publishable key.');client=window.supabase.createClient(url.trim(),key.trim());show('auth');say('Project client configured for this page session. Sign in to check database permissions.');};
- $('connect').onclick=()=>{try{config($('projectUrl').value,$('publicKey').value)}catch(e){say(e.message)}};
+
  $('togglePassword').onclick=()=>{const input=$('password');const reveal=input.type==='password';input.type=reveal?'text':'password';$('togglePassword').textContent=reveal?'Hide':'Show';$('togglePassword').setAttribute('aria-pressed',String(reveal));};
  $('signIn').onclick=async()=>{if(!client)return say('Connect the project first.');const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;if(data.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('For security, change your initial password before continuing.');return}show('forcePassword',false);await checkAccess();};
  $('changePassword').onclick=async()=>{const btn=$('changePassword');const p=$('newPassword').value,c=$('confirmPassword').value;if(!client||!session)return say('Your sign-in session has expired. Please sign in again.');if(p.length<12)return say('Choose a password of at least 12 characters.');if(p!==c)return say('The passwords do not match.');btn.disabled=true;btn.textContent='Updating password…';say('Updating your password securely with Supabase…');try{const {data,error}=await client.auth.updateUser({password:p,data:{...(session?.user?.user_metadata||{}),must_change_password:false}});if(error)throw error;if(!data?.user)throw Error('Supabase did not confirm the password update.');session={...session,user:data.user};$('newPassword').value='';$('confirmPassword').value='';say('Password updated. Checking your Admin permissions…');await checkAccess();if(!$('workspace').classList.contains('hidden')){show('forcePassword',false);show('auth',false);say('Password updated. Admin access verified.');}else{say('Password updated, but Admin access could not be verified. Check the message above and confirm the account is active in Supabase.');}}catch(e){say('Password change did not complete: '+(e?.message||'Unexpected error')+'. Your password may be unchanged; try again or use Send password reset.');}finally{btn.disabled=false;btn.textContent='Change password and continue';}};
@@ -434,7 +426,7 @@ footer {
   else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden')}
  });
 
- $('connect').click();
+ try { config('https://uzwubbzlytqqewqibobr.supabase.co','sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq'); } catch(e) { say(e.message); }
 })();
 </script>
 <script src="saahi-promotions.js?v=20261031" defer></script>
