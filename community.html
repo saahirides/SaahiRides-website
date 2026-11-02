@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides Community | Stories, Driver Issues & Feedback</title>
+<meta name="description" content="Share your SaahiRides experience, driver stories, concerns, testimonials, photos, videos and suggestions. Submissions are reviewed before public sharing.">
+<meta name="robots" content="index,follow">
+<style>
+:root{color-scheme:dark;--navy:#06122e;--blue:#1e3a8a;--gold:#f5c842;--text:#f8fafc;--muted:#c5d1e4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17365f,var(--navy) 62%);font:16px/1.55 system-ui,Arial,sans-serif;color:var(--text)}
+main{max-width:900px;margin:auto;padding:20px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #345078;padding:8px 0 18px}
+.brand{font-weight:900;color:var(--gold);letter-spacing:.04em}.back{color:var(--gold);text-decoration:none;border:1px solid var(--gold);border-radius:9px;padding:9px 13px}
+.hero,.panel{background:rgba(11,28,61,.96);border:1px solid #28436d;border-radius:17px;padding:22px;margin:20px 0}
+.hero{text-align:center;padding:34px 22px}.hero h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:10px 0;color:var(--gold)}
+.hero p,.muted{color:var(--muted)}.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.tile{background:#0a1934;border:1px solid #345078;border-radius:13px;padding:15px}.tile h3{color:var(--gold);margin:0 0 5px}
+label{display:block;margin:13px 0 6px;color:var(--muted)}input,select,textarea{width:100%;padding:12px;border:1px solid #46618b;border-radius:9px;background:#06122e;color:#fff;font:inherit}
+textarea{min-height:145px;resize:vertical}.check{display:flex;gap:10px;align-items:flex-start}.check input{width:auto;margin-top:5px}
+button{background:linear-gradient(100deg,#d4af37,#ffe27a);color:#06122e;font-weight:900;border:0;border-radius:10px;padding:13px 18px;font:inherit;cursor:pointer;width:100%;margin-top:16px}
+.note{border-left:4px solid var(--gold);padding:12px 15px;background:#10284d;color:#e8eef8;margin-top:14px}
+footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}
+</style>
+</head>
+<body><main>
+<header class="top"><div><div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div><div class="muted">Community &amp; Voices</div></div><a class="back" href="./index.html">← Main website</a></header>
+<section class="hero"><div class="brand">YOUR VOICE MATTERS</div><h1>Welcome to the SaahiRides Community</h1><p>Share a ride story, appreciate a driver, raise a concern or suggest how we can do better. Customers, drivers and community members are welcome.</p></section>
+<section class="panel"><div class="tiles">
+<div class="tile"><h3>Driver stories &amp; concerns</h3><div class="muted">Appreciations, service concerns and safety issues.</div></div>
+<div class="tile"><h3>Testimonials</h3><div class="muted">Share your experience and memorable rides.</div></div>
+<div class="tile"><h3>Feedback &amp; ideas</h3><div class="muted">Help improve our service and operations.</div></div>
+<div class="tile"><h3>Photos &amp; videos</h3><div class="muted">Send ride moments and community content for review.</div></div>
+</div></section>
+<section class="panel"><h2 style="color:var(--gold);margin-top:0">Share with SaahiRides</h2><p class="muted">Complete the details below. WhatsApp will open with your message ready to send. You can attach photos or videos in that WhatsApp chat before sending.</p>
+<form id="communityForm">
+<label for="category">What would you like to share?</label>
+<select id="category" required><option value="">Choose a category</option><option>Driver appreciation / story</option><option>Driver service issue</option><option>Safety concern (private review)</option><option>Customer testimonial</option><option>Feedback / suggestion</option><option>Photo / video contribution</option></select>
+<label for="name">Your name (optional)</label><input id="name" maxlength="80" autocomplete="name" placeholder="Name">
+<label for="contact">Contact number or email (optional)</label><input id="contact" maxlength="100" placeholder="How we can reach you">
+<label for="message">Your message</label><textarea id="message" maxlength="2500" required placeholder="Tell us what happened, what you appreciated, or what you would like us to improve..."></textarea>
+<label class="check"><input id="consent" type="checkbox" required><span>I confirm this submission is genuine and I have permission to share any people, photos or videos I provide. I understand it will be reviewed before any public or social-media use.</span></label>
+<button type="submit">Continue to WhatsApp</button>
+</form>
+<div class="note"><strong>Privacy &amp; moderation:</strong> Your submission is sent privately to SaahiRides for review. It is not published automatically. Driver complaints and safety concerns are handled privately. Testimonials, names, photos and videos will only be shared publicly with appropriate consent.</div>
+</section>
+<section class="panel"><h2 style="color:var(--gold);margin-top:0">Need urgent help?</h2><p class="muted">For an active ride emergency, use the in-ride SOS process or contact local emergency services. For a SaahiRides service concern, choose the private issue option above.</p><a class="back" href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20need%20assistance." target="_blank" rel="noopener">Message SaahiRides on WhatsApp</a></section>
+<footer>SaahiRides Transit Pvt. Ltd. · SafeRide @ SaahiPrice</footer>
+</main>
+<script>
+document.getElementById('communityForm').addEventListener('submit',function(event){
+ event.preventDefault();
+ const category=document.getElementById('category').value;
+ const name=document.getElementById('name').value.trim()||'Not provided';
+ const contact=document.getElementById('contact').value.trim()||'Not provided';
+ const message=document.getElementById('message').value.trim();
+ if(!category||!message||!document.getElementById('consent').checked)return;
+ const text='SAAHIRIDES COMMUNITY SUBMISSION\nCategory: '+category+'\nName: '+name+'\nContact: '+contact+'\n\nMessage:\n'+message+'\n\nI confirm I have permission to share this content. Please review before any public use.';
+ window.open('https://wa.me/919347946026?text='+encodeURIComponent(text),'_blank','noopener');
+});
+</script></body></html>
