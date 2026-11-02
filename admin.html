@@ -444,7 +444,7 @@ footer {
  if(musicInput)musicInput.addEventListener('change',()=>{
   if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
   const file=musicInput.files?.[0];
-  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio selected for preview only. Confirm you have publishing rights for this track.'}
+  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio selected for preview only. Social publishing is not connected yet.'}
   else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden')}
  });
 
