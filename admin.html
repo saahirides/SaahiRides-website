@@ -249,9 +249,17 @@ footer {
 <label class="full">Note<textarea id="ccNoteSummary" maxlength="1200" rows="3" placeholder="Internal report, finding or follow-up"></textarea></label>
 </div>
 <button type="button" id="ccSaveNote">Save internal note</button>
+<h4>Daily agent work log & reports</h4>
+<p class="hint">Choose a date to retrieve every recorded work-log entry and archive a daily report. Dates use India Standard Time for display; stored timestamps remain UTC.</p>
+<div class="form-grid">
+<label>Report date<input id="ccReportDate" type="date"></label>
+<div><button type="button" id="ccGenerateReport">Generate / retrieve daily report</button></div>
+</div>
+<div id="ccReportStatus" class="status" aria-live="polite">Select a date and generate its report.</div>
+<div id="ccDailyReport" class="small"></div>
 <h4>Recent activity</h4>
 <div id="ccActivity" class="small">No activity loaded yet.</div>
-<p class="hint">Schedule: Intelligence & Social Manager 08:00 IST; Legal Watch 15:00 IST; Tourism Image Scout 19:00 IST. Four-hour reporting remains pending an external scheduler.</p>
+<p class="hint">Current scheduled workstreams: Intelligence & Social Manager 08:00 IST; Legal Watch 15:00 IST; Tourism Image Scout 19:00 IST. Four-hour reporting is not active. Agent-to-database logging still needs to be connected for automated work logs to appear here.</p>
 </div>
 </section>
 <section class="card hidden" id="pricingHistory">
@@ -472,6 +480,19 @@ footer {
  };
  $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
  $('ccRefresh').onclick=loadCommandCentre;
+ const reportDate=$('ccReportDate');
+ if(reportDate&&!reportDate.value){const now=new Date();const ist=new Date(now.getTime()+330*60000);reportDate.value=ist.toISOString().slice(0,10);}
+ $('ccGenerateReport').onclick=async()=>{
+  const btn=$('ccGenerateReport');btn.disabled=true;ccStatus('ccReportStatus','Generating report from recorded agent activity…');
+  try{
+   const data=await callCommandCentre('daily_report',{report_date:$('ccReportDate').value});
+   const r=data.report||{},entries=r.entries||[];
+   $('ccDailyReport').innerHTML='<div class="tile"><strong>'+esc(r.report_date)+'</strong><p>Total recorded entries: '+r.total_entries+'</p><p>By workstream: '+esc(JSON.stringify(r.by_module||{}))+'</p></div>'+entries.map(x=>'<div class="tile"><strong>'+esc(x.title)+'</strong><p>'+esc(x.summary)+'</p><div class="small">'+esc(x.module_key||'General')+' · '+esc(x.status)+' · '+esc(x.risk_level)+' · '+new Date(x.created_at).toLocaleString()+'</div></div>').join('');
+   ccStatus('ccReportStatus','Daily report generated and archived. '+entries.length+' recorded entries included.');
+  }catch(error){ccStatus('ccReportStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+
  async function callCommandCentre(action,extra={}) {
   if(!client||!session) throw new Error('Sign in to SaahiRides Admin first.');
   const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{action,...extra}});
