@@ -223,13 +223,35 @@ footer {
 </div>
 <div class="policy">
 <h3>Owner decision & approval queue</h3>
-<p class="hint">All publish, spend, account-setting, legal-commitment and company-decision actions must be presented for explicit approval. Joint Founder & at least one Director Approval — MANDATORY.</p>
-<div class="status">Approval queue interface: planned. No action is automatically approved or published from this dashboard yet.</div>
+<p class="hint">Publishing, spending, account settings, legal commitments and company decisions require explicit approval. Joint Founder & at least one Director Approval — MANDATORY. Requests recorded here are not approvals and do not execute actions.</p>
+<div id="ccApprovalStatus" class="status" aria-live="polite">Loading approval queue…</div>
+<div id="ccApprovals" class="small">No approval requests loaded yet.</div>
+<h4>Submit a decision for approval</h4>
+<div class="form-grid">
+<label>Decision type<input id="ccChangeType" maxlength="80" placeholder="e.g. Social post publication"></label>
+<label>Target system<input id="ccTarget" maxlength="100" placeholder="e.g. Facebook and Instagram"></label>
+<label>Risk level<select id="ccRisk"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical</option></select></label>
+<label class="full">Decision details<textarea id="ccSummary" maxlength="1200" rows="3" placeholder="Describe the exact action requiring approval"></textarea></label>
+</div>
+<button type="button" id="ccRequestApproval">Submit approval request</button>
 </div>
 <div class="policy">
 <h3>Reports & command-centre activity</h3>
-<p class="hint">The module registry and activity ledger have been created in the private Supabase schema. A secure admin-only server endpoint is still required to load live records here.</p>
-<div class="status">Current schedule: Intelligence & Social Manager daily 08:00 IST; Legal Watch daily 15:00 IST; Tourism Image Scout daily 19:00 IST. Four-hour reporting is not active yet.</div>
+<p class="hint">Live records are loaded through the authenticated SaahiRides Command Centre service.</p>
+<button type="button" class="secondary" id="ccRefresh">Refresh Command Centre</button>
+<div id="ccModuleStatus" class="status" aria-live="polite">Waiting for secure connection…</div>
+<div id="ccModules" class="grid"></div>
+<h4>Record an internal note</h4>
+<div class="form-grid">
+<label>Workstream<select id="ccModule"><option value="">General</option><option value="business_intelligence">Business Intelligence</option><option value="social_brand">Social & Brand</option><option value="legal_watch">Legal Watch</option><option value="tourism_image_scout">Tourism Image Scout</option><option value="growth_leads">Growth & Leads</option><option value="product_operations">Product & Operations</option><option value="finance_revenue">Finance & Revenue</option><option value="business_strategy">Business Strategy</option></select></label>
+<label>Risk<select id="ccNoteRisk"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select></label>
+<label class="full">Title<input id="ccNoteTitle" maxlength="160" placeholder="Short activity title"></label>
+<label class="full">Note<textarea id="ccNoteSummary" maxlength="1200" rows="3" placeholder="Internal report, finding or follow-up"></textarea></label>
+</div>
+<button type="button" id="ccSaveNote">Save internal note</button>
+<h4>Recent activity</h4>
+<div id="ccActivity" class="small">No activity loaded yet.</div>
+<p class="hint">Schedule: Intelligence & Social Manager 08:00 IST; Legal Watch 15:00 IST; Tourism Image Scout 19:00 IST. Four-hour reporting remains pending an external scheduler.</p>
 </div>
 </section>
 <section class="card hidden" id="pricingHistory">
@@ -446,8 +468,57 @@ footer {
   ['pricingHistory','policyCentre','approvalNote','socialStudio','commandCenter'].forEach(id=>show(id,id===target));
   $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
+  if(target==='commandCenter')loadCommandCentre();
  };
  $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
+ $('ccRefresh').onclick=loadCommandCentre;
+ async function callCommandCentre(action,extra={}) {
+  if(!client||!session) throw new Error('Sign in to SaahiRides Admin first.');
+  const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{action,...extra}});
+  if(error) throw new Error(data?.error||error.message||'Command Centre request failed.');
+  if(data?.error) throw new Error(data.error);
+  return data;
+ }
+ function ccStatus(id,message,isError=false){
+  const el=$(id);el.textContent=message;
+  el.style.border=isError?'1px solid #ef4444':'1px solid #28436d';
+  el.style.background=isError?'#3b1118':'#11294b';
+ }
+ function renderCommandCentre(data){
+  const modules=data.modules||[],activity=data.activity||[],approvals=data.approvals||[];
+  $('ccModules').innerHTML=modules.map(m=>'<div class="tile"><h3>'+esc(m.title)+'</h3><p>'+esc(m.description)+'</p><div class="small"><strong>'+esc(m.status)+'</strong> · '+esc(m.cadence||'Schedule not set')+'</div><div class="small">'+(m.approval_required?'Owner approval required':'Approval not required')+'</div></div>').join('');
+  $('ccApprovals').innerHTML=approvals.length?approvals.map(a=>'<div class="tile"><strong>'+esc(a.change_type)+'</strong> · '+esc(a.target_system)+'<p>'+esc(a.summary)+'</p><div class="small">Risk: '+esc(a.risk_level)+' · '+esc(a.status)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No pending approval requests.';
+  $('ccActivity').innerHTML=activity.length?activity.map(a=>'<div class="tile"><strong>'+esc(a.title)+'</strong><p>'+esc(a.summary)+'</p><div class="small">'+esc(a.module_key||'General')+' · '+esc(a.status)+' · '+esc(a.risk_level)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No activity has been recorded yet.';
+  ccStatus('ccModuleStatus','Loaded '+modules.length+' workstreams, '+activity.length+' activity records and '+approvals.length+' pending approvals. Signed in as '+esc(data.role||'Admin')+'.');
+  ccStatus('ccApprovalStatus',approvals.length+' pending approval request(s). No request has been approved or executed.');
+ }
+ async function loadCommandCentre(){
+  const btn=$('ccRefresh');if(btn)btn.disabled=true;
+  ccStatus('ccModuleStatus','Loading secure Command Centre records…');
+  try{const data=await callCommandCentre('overview');renderCommandCentre(data);}
+  catch(error){ccStatus('ccModuleStatus',error.message,true);ccStatus('ccApprovalStatus','Approval queue could not be loaded.',true);}
+  finally{if(btn)btn.disabled=false;}
+ }
+ $('ccRequestApproval').onclick=async()=>{
+  const btn=$('ccRequestApproval');btn.disabled=true;
+  try{
+   const result=await callCommandCentre('request_approval',{change_type:$('ccChangeType').value,target_system:$('ccTarget').value,summary:$('ccSummary').value,risk_level:$('ccRisk').value});
+   $('ccChangeType').value='';$('ccTarget').value='';$('ccSummary').value='';
+   ccStatus('ccApprovalStatus',result.note||'Approval request recorded; no action executed.');
+   await loadCommandCentre();
+  }catch(error){ccStatus('ccApprovalStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+ $('ccSaveNote').onclick=async()=>{
+  const btn=$('ccSaveNote');btn.disabled=true;
+  try{
+   await callCommandCentre('log_activity',{module_key:$('ccModule').value,title:$('ccNoteTitle').value,summary:$('ccNoteSummary').value,risk_level:$('ccNoteRisk').value,activity_type:'admin_note',status:'logged'});
+   $('ccNoteTitle').value='';$('ccNoteSummary').value='';
+   await loadCommandCentre();
+  }catch(error){ccStatus('ccModuleStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+
  const socialEsc = value => esc(value ?? '');
  async function callSocial(action, extra={}) {
   if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
