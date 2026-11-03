@@ -204,9 +204,34 @@ footer {
 <button type="button" data-panel="policyCentre">▤ Policy Centre</button>
 <button type="button" data-panel="approvalNote">✓ Governance</button>
 <button type="button" data-panel="socialStudio">◉ Social Studio</button>
+<button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
 <a class="btn secondary" href="./lead-engine.html" style="margin:0;min-height:54px;display:flex;align-items:center">▣ Lead & Growth Engine</a>
 </div>
 </div>
+<section class="card hidden" id="commandCenter">
+<h2>SaahiRides AI Command Centre</h2>
+<p class="hint">Central management desk · Owner / Admin only · Research and drafting may be assisted by AI; publishing, spending, legal commitments and company decisions remain subject to explicit approval.</p>
+<div class="grid">
+ <div class="tile"><h3>Business Intelligence</h3><p>Market, competitor, regulation, opportunity and threat monitoring.</p><span class="small">Configured · daily intelligence brief</span></div>
+ <div class="tile"><h3>Social & Brand Manager</h3><p>Facebook and Instagram posts, Reels, captions, hashtags, licensed audio, review and publishing workflow.</p><span class="small">Configured · direct publishing connection pending</span></div>
+ <div class="tile"><h3>Legal Watch</h3><p>Indian mobility, company, employment, tax, privacy and consumer-law monitoring.</p><span class="small">Configured · daily monitoring · lawyer review required</span></div>
+ <div class="tile"><h3>Tourism Image Scout</h3><p>Destination images with source, creator, commercial-use licence and attribution checks.</p><span class="small">Configured · daily scouting · owner approval before publication</span></div>
+ <div class="tile"><h3>Growth & Leads</h3><p>Customer, driver and fleet acquisition; consent-based lead pipeline.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Product & Operations</h3><p>Website, app, fares, service readiness and operational quality.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Finance & Revenue Analyst</h3><p>Costs, margins, cash flow, pricing and revenue forecasts.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Business Strategy</h3><p>Expansion, partnerships, commercial opportunities and decision support.</p><span class="small">Planned · build next</span></div>
+</div>
+<div class="policy">
+<h3>Owner decision & approval queue</h3>
+<p class="hint">All publish, spend, account-setting, legal-commitment and company-decision actions must be presented for explicit approval. Joint Founder & at least one Director Approval — MANDATORY.</p>
+<div class="status">Approval queue interface: planned. No action is automatically approved or published from this dashboard yet.</div>
+</div>
+<div class="policy">
+<h3>Reports & command-centre activity</h3>
+<p class="hint">The module registry and activity ledger have been created in the private Supabase schema. A secure admin-only server endpoint is still required to load live records here.</p>
+<div class="status">Current schedule: Intelligence & Social Manager daily 08:00 IST; Legal Watch daily 15:00 IST; Tourism Image Scout daily 19:00 IST. Four-hour reporting is not active yet.</div>
+</div>
+</section>
 <section class="card hidden" id="pricingHistory">
 <h2>Fare Rate History & Change Log</h2>
 <p class="hint">Admin-only reference. The previous schedule is retained for historical checks; the revised schedule is the active schedule from 2 November 2026.</p>
@@ -406,7 +431,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
-  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);
+  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('commandCenter',false);
   $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
@@ -417,8 +442,8 @@ footer {
   }await loadPolicies(category);
   say('Signed in. Permissions checked against Supabase database records.');
   }
- $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
-  ['pricingHistory','policyCentre','approvalNote','socialStudio'].forEach(id=>show(id,id===target));
+ $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
+  ['pricingHistory','policyCentre','approvalNote','socialStudio','commandCenter'].forEach(id=>show(id,id===target));
   $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
  };
