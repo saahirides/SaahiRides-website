@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides | Enquiries & Growth</title>
+<meta name="description" content="Contact SaahiRides for rides, driver opportunities, fleet partnerships and travel enquiries.">
+<meta name="theme-color" content="#1e3a8a">
+<style>
+:root{--blue:#1e3a8a;--blue2:#274b9f;--gold:#f59e0b;--ink:#13233f;--muted:#5b6b82;--bg:#f3f6fc;--line:#d9e2f1;--white:#fff;--green:#16794a;--red:#a52a2a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Arial,sans-serif}
+header{background:linear-gradient(120deg,#132d70,var(--blue),#3156a8);color:#fff;padding:22px max(18px,calc((100% - 1120px)/2));border-bottom:4px solid var(--gold)}
+header .brand{font-weight:900;letter-spacing:.04em;color:#ffd36b}header h1{margin:4px 0;font-size:clamp(25px,4vw,36px)}header p{margin:4px 0;color:#e6edff}
+main{max-width:1120px;margin:auto;padding:20px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 8px 26px rgba(25,48,90,.06);margin-bottom:18px}
+h2{margin:0 0 8px;color:var(--blue)}.muted{color:var(--muted)}label{display:block;font-weight:650;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #c7d3e6;border-radius:9px;background:#fff;color:var(--ink);font:inherit}
+textarea{min-height:88px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button,.btn{border:0;border-radius:9px;background:var(--gold);color:#182849;font-weight:800;padding:11px 16px;cursor:pointer;text-decoration:none;display:inline-block}
+button.secondary,.btn.secondary{background:#fff;color:var(--blue);border:1px solid var(--blue)}button:disabled{opacity:.55;cursor:wait}
+.status{padding:10px 12px;border-radius:9px;background:#edf3ff;color:var(--blue);margin:12px 0;white-space:pre-wrap}.success{background:#e8f7ef;color:var(--green)}.error{background:#fff0f0;color:var(--red)}
+.check{display:flex;gap:9px;align-items:flex-start;font-weight:500}.check input{width:auto;margin-top:5px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{padding:13px;border:1px solid var(--line);border-radius:11px;background:#f8faff}.metric strong{display:block;font-size:26px;color:var(--blue)}.metric span{font-size:12px;color:var(--muted)}
+.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#eef3fc;color:var(--blue)}td select{min-width:140px;padding:8px}
+.adminbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.hidden{display:none!important}.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+footer{text-align:center;color:var(--muted);padding:22px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}main{padding:12px}.panel{padding:15px}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div><h1>Enquiries & Growth Centre</h1><p>Rides · Driver opportunities · Fleet partnerships · Tours & travel</p></header>
+<main>
+<div class="layout">
+<section class="panel">
+<h2>Connect with SaahiRides</h2>
+<p class="muted">Tell us what you are looking for. Our team can follow up using the contact details you provide.</p>
+<form id="leadForm">
+<div class="row"><div><label for="name">Your name *</label><input id="name" name="name" required maxlength="100" autocomplete="name"></div><div><label for="phone">Mobile number *</label><input id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="+91 98765 43210" maxlength="24"></div></div>
+<div class="row"><div><label for="email">Email (optional)</label><input id="email" name="email" type="email" maxlength="180" autocomplete="email"></div><div><label for="leadType">I am interested in *</label><select id="leadType" required><option value="">Choose one</option><option value="customer">Book a ride / customer enquiry</option><option value="driver">Join as a driver</option><option value="fleet_partner">Fleet / vehicle partnership</option><option value="travel">Tours, holidays or destination wedding</option><option value="business_partner">Business partnership</option></select></div></div>
+<label for="location">City / State</label><input id="location" maxlength="180" placeholder="e.g. Hyderabad, Telangana">
+<label for="message">How can we help?</label><textarea id="message" maxlength="1000" placeholder="Share your route, travel plan or enquiry (optional)"></textarea>
+<label class="check"><input id="consent" type="checkbox" required><span>I agree that SaahiRides may contact me about this enquiry. I can ask to stop future contact.</span></label>
+<div class="hp" aria-hidden="true"><label for="website">Leave this field empty</label><input id="website" tabindex="-1" autocomplete="off"></div>
+<button id="submitLead" type="submit">Send enquiry</button><div id="formStatus" class="status" role="status" aria-live="polite">Your details are used to respond to this enquiry.</div>
+</form>
+</section>
+<section class="panel">
+<h2>One growth engine. Multiple opportunities.</h2>
+<div class="metric" style="margin:12px 0"><strong>India-wide</strong><span>Brand discovery and enquiry generation; ride availability is confirmed separately by location.</span></div>
+<p><strong>Customers:</strong> Ride, fare, subscription and travel enquiries.</p>
+<p><strong>Drivers:</strong> Applications and onboarding interest.</p>
+<p><strong>Fleet owners:</strong> Vehicle supply and operating partnerships.</p>
+<p><strong>Travel:</strong> Holiday packages, group tours and destination planning.</p>
+<p class="muted">Campaign source information is recorded where available, so SaahiRides can see which channels generate enquiries.</p>
+<a class="btn secondary" href="./index.html">Back to SaahiRides website</a>
+</section>
+</div>
+
+<section id="adminLogin" class="panel">
+<h2>Owner / Admin sign-in</h2><p class="muted">The lead dashboard is restricted to active SaahiRides Admin accounts. Public visitors cannot view lead records.</p>
+<div class="row"><div><label for="adminEmail">Admin email</label><input id="adminEmail" type="email" autocomplete="username"></div><div><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password"></div></div>
+<button id="adminSignIn">Sign in</button><button class="secondary" id="adminSignOut" type="button">Sign out</button><div id="adminStatus" class="status" role="status" aria-live="polite">Sign in to view lead records and campaign metrics.</div>
+</section>
+
+<section id="dashboard" class="panel hidden">
+<div class="adminbar"><div><h2>Lead & campaign dashboard</h2><p class="muted">Private Admin view · live data from SaahiRides Supabase</p></div><button class="secondary" id="refresh">Refresh dashboard</button></div>
+<div id="metrics" class="metrics"></div>
+<h3>Lead pipeline</h3>
+<div class="row"><div><label for="filterStatus">Lead status</label><select id="filterStatus"><option value="">All statuses</option><option>new</option><option>contacted</option><option>qualified</option><option>converted</option><option>closed</option><option>do_not_contact</option></select></div><div><label for="filterType">Enquiry type</label><select id="filterType"><option value="">All types</option><option value="customer">Customer</option><option value="driver">Driver</option><option value="fleet_partner">Fleet partner</option><option value="travel">Travel</option><option value="business_partner">Business partner</option></select></div></div>
+<div class="tablewrap"><table><thead><tr><th>Received</th><th>Contact</th><th>Type / location</th><th>Source</th><th>Status</th><th>Notes</th><th>Save</th></tr></thead><tbody id="leadRows"><tr><td colspan="7">Sign in to load leads.</td></tr></tbody></table></div>
+<h3>Campaigns</h3><div id="campaigns" class="muted">Campaign list will appear here.</div>
+<h3>Social channel connections</h3><div id="channels" class="muted">Connection status will appear here.</div>
+</section>
+</main>
+<footer>SaahiRides Transit Pvt. Ltd. · SafeRide @ SaahiPrice</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=> {
+const SUPABASE_URL="https://uzwubbzlytqqewqibobr.supabase.co";
+const SUPABASE_KEY="sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq";
+const $=id=>document.getElementById(id);
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let currentUser=null;
+function status(id,msg,kind){const el=$(id);el.textContent=msg;el.className="status"+(kind?" "+kind:"");}
+function params(){const q=new URLSearchParams(location.search);return {utm_source:q.get("utm_source")||"",utm_medium:q.get("utm_medium")||"",utm_campaign:q.get("utm_campaign")||""};}
+$("leadForm").addEventListener("submit",async e=>{
+ e.preventDefault();const btn=$("submitLead");btn.disabled=true;btn.textContent="Sending…";
+ const tracking=params();
+ const payload={action:"capture",name:$("name").value.trim(),phone:$("phone").value.trim(),email:$("email").value.trim(),lead_type:$("leadType").value,location:$("location").value.trim(),message:$("message").value.trim(),consent:$("consent").checked,website:$("website").value,source_channel:"website",source_detail:"lead-engine landing page",landing_page:location.pathname,...tracking};
+ try{
+  const {data,error}=await client.functions.invoke("saahirides-lead-manager",{body:payload});
+  if(error||data?.error)throw new Error(data?.error||error.message);
+  status("formStatus",data?.duplicate_suppressed?"Your recent enquiry is already recorded. Our team can follow up shortly.":"Thank you. Your enquiry has been received by SaahiRides.", "success");
+  $("leadForm").reset();
+ }catch(err){status("formStatus",err.message||"Enquiry could not be submitted. Please try again.","error");}
+ finally{btn.disabled=false;btn.textContent="Send enquiry";}
+});
+async function adminCheck(){
+ const {data:{user},error}=await client.auth.getUser();
+ if(error||!user){currentUser=null;$("dashboard").classList.add("hidden");status("adminStatus","Sign in with your SaahiRides Admin account.","");return false;}
+ const {data:row,error:adminError}=await client.from("admin_users").select("active,role").eq("user_id",user.id).maybeSingle();
+ if(adminError||!row?.active){currentUser=null;$("dashboard").classList.add("hidden");status("adminStatus","This account does not have active SaahiRides Admin permission.","error");return false;}
+ currentUser=user;$("dashboard").classList.remove("hidden");$("adminLogin").classList.add("hidden");
+ status("adminStatus","Admin access verified.","success");await loadDashboard();return true;
+}
+$("adminSignIn").onclick=async()=>{
+ const {error}=await client.auth.signInWithPassword({email:$("adminEmail").value.trim(),password:$("adminPassword").value});
+ if(error){status("adminStatus","Sign-in failed: "+error.message,"error");return;}await adminCheck();
+};
+$("adminSignOut").onclick=async()=>{await client.auth.signOut();currentUser=null;$("dashboard").classList.add("hidden");$("adminLogin").classList.remove("hidden");status("adminStatus","Signed out.","");};
+async function call(action,extra={}){
+ const {data,error}=await client.functions.invoke("saahirides-lead-manager",{body:{action,...extra}});
+ if(error||data?.error)throw new Error(data?.error||error.message);return data;
+}
+function metric(label,value){return '<div class="metric"><strong>'+esc(value)+'</strong><span>'+esc(label)+'</span></div>';}
+async function loadDashboard(){
+ try{
+  const d=await call("overview"),m=d.metrics||{};
+  $("metrics").innerHTML=metric("Total enquiries",m.total||0)+metric("New leads",m.new||0)+metric("Contacted",m.contacted||0)+metric("Qualified",m.qualified||0)+metric("Converted",m.converted||0)+metric("Driver leads · 30 days",m.drivers_30d||0)+metric("Fleet partners · 30 days",m.fleet_partners_30d||0)+metric("Travel leads · 30 days",m.travel_30d||0);
+  $("campaigns").innerHTML=(d.campaigns||[]).length?(d.campaigns||[]).map(c=>'<p><strong>'+esc(c.campaign_name)+'</strong> · '+esc(c.objective)+' · '+esc(c.status)+'</p>').join(""):"No campaigns have been created yet.";
+  $("channels").innerHTML=(d.channels||[]).length?(d.channels||[]).map(c=>'<span class="status">'+esc(c.platform)+": "+esc(c.connection_status)+'</span> ').join(""):"No channels registered yet.";
+  await loadLeads();
+ }catch(err){status("adminStatus","Dashboard error: "+err.message,"error");}
+}
+async function loadLeads(){
+ const data=await call("list",{status:$("filterStatus").value,lead_type:$("filterType").value,page:0});
+ const rows=data.leads||[];
+ $("leadRows").innerHTML=rows.length?rows.map(l=>'<tr data-id="'+esc(l.id)+'"><td>'+esc(new Date(l.created_at).toLocaleString())+'</td><td><strong>'+esc(l.contact_name)+'</strong><br>'+esc(l.contact_phone)+'<br>'+esc(l.contact_email||"")+'</td><td>'+esc(l.lead_type)+'<br>'+esc(l.contact_location||"")+'</td><td>'+esc(l.source_channel)+'<br>'+esc(l.utm_campaign||"")+'</td><td><select class="leadStatus">'+["new","contacted","qualified","converted","closed","do_not_contact"].map(s=>'<option value="'+s+'" '+(l.lead_status===s?"selected":"")+'>'+s.replace("_"," ")+'</option>').join("")+'</select></td><td><textarea class="leadNotes" style="min-height:55px">'+esc(l.notes||"")+'</textarea></td><td><button class="saveLead">Save</button></td></tr>').join(""):'<tr><td colspan="7">No leads match this filter.</td></tr>';
+ $("leadRows").querySelectorAll(".saveLead").forEach(btn=>btn.onclick=async()=>{
+  const tr=btn.closest("tr");btn.disabled=true;
+  try{await call("update_status",{lead_id:tr.dataset.id,lead_status:tr.querySelector(".leadStatus").value,notes:tr.querySelector(".leadNotes").value});status("adminStatus","Lead updated.","success");await loadDashboard();}
+  catch(err){status("adminStatus","Could not update lead: "+err.message,"error");btn.disabled=false;}
+ });
+}
+$("refresh").onclick=loadDashboard;$("filterStatus").onchange=loadLeads;$("filterType").onchange=loadLeads;
+client.auth.getSession().then(({data})=>{if(data.session)adminCheck();});
+})();
+</script>
+</body></html>
