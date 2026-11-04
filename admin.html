@@ -374,6 +374,18 @@ footer {
 <section class="card hidden" id="socialStudio">
 <h2>Social Studio</h2>
 <p class="hint">Admin-only publishing workspace · connected accounts · live publishing response</p>
+<div class="tile" id="ssReadyCampaign" style="margin:14px 0">
+<h3>READY CAMPAIGN · THE JOURNEY MATTERS 🦅</h3>
+<p><strong>SaahiRides — SafeRide @ SaahiPrice</strong></p>
+<p>Your next memorable journey starts with a good plan. From family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.</p>
+<p>✨ Plan your journey with confidence<br>🚘 Comfortable travel options<br>👨‍👩‍👧‍👦 Family-friendly travel planning<br>📍 Destinations across India<br>💙 Travel with Team SaahiRides</p>
+<p>Tell us where you want to go. We’ll help you plan the journey.</p>
+<p>📲 Enquire on WhatsApp: +91 93479 46026<br>🌐 https://saahirides.co.in</p>
+<p><strong>Hashtags</strong><br>#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides</p>
+<p><strong>Reel music brief</strong><br>20–25 second vertical Reel. Choose a business-account-licensed cinematic travel instrumental: gentle piano opening, uplifting orchestral build, confident finish. Search Meta/Instagram licensed audio for “cinematic travel instrumental” or “uplifting journey”. Add the selected track in Instagram’s Reel editor, or upload a video with audio licensed for both platforms. The connected publishing API does not attach Instagram’s licensed music selection.</p>
+<p class="small">Draft content is ready below in Captions & publishing. Add the final photo/video and licensed audio before publishing.</p>
+<button type="button" id="ssLoadCampaignTop">Load caption & hashtags into publishing composer</button>
+</div>
 <div class="subnav" id="socialNav" aria-label="Social Studio sections">
 <button type="button" class="active" data-social-target="ssContentArea">Content & media</button>
 <button type="button" data-social-target="ssMusicArea">Music & audio</button>
@@ -512,7 +524,8 @@ footer {
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
   if(target==='commandCenter')loadCommandCentre();
  };
- $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
+ $('ssLoadCampaignTop').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
+$('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
  $('ssLoadCampaign').onclick=()=>{
   const caption="THE JOURNEY MATTERS. PLAN IT WITH CONFIDENCE. 🦅\n\nSaahiRides — SafeRide @ SaahiPrice\n\nYour next memorable journey starts with a good plan.\n\nFrom family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.\n\n✨ Plan your journey with confidence\n🚘 Comfortable travel options\n👨‍👩‍👧‍👦 Family-friendly travel planning\n📍 Destinations across India\n💙 Travel with Team SaahiRides\n\nTell us where you want to go. We'll help you plan the journey.\n\n📲 Enquire on WhatsApp: +91 93479 46026\n🌐 https://saahirides.co.in";
   const hashtags="#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides";
