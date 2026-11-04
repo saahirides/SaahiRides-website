@@ -350,7 +350,7 @@ footer {
 
 <section class="card hidden" id="socialStudio">
 <h2>Social Studio</h2>
-<p class="hint">Admin-only publishing workspace · private testing phase</p>
+<p class="hint">Admin-only publishing workspace · connected accounts · live publishing response</p>
 <div class="subnav" id="socialNav" aria-label="Social Studio sections">
 <button type="button" class="active" data-social-target="ssContentArea">Content & media</button>
 <button type="button" data-social-target="ssMusicArea">Music & audio</button>
@@ -416,18 +416,18 @@ footer {
 <h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
 <label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile" multiple size="4" aria-describedby="ssProfileHelp"><option value="">Check connected accounts first</option></select><p id="ssProfileHelp" class="small">Select one or more connected profiles (use Ctrl/Command to select multiple).</p>
 <div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto"> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto"> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
-<label for="ssFacebookPage">Approved SaahiRides Facebook Page ID (required for Facebook)</label><input id="ssFacebookPage" placeholder="Facebook Page ID">
+<label for="ssFacebookPage">SaahiRides Facebook Page ID (leave blank if only one Page is connected)</label><input id="ssFacebookPage" placeholder="Optional when one Facebook Page is connected">
 <label for="ssGoogleLocation">Google Business location name (optional for single location)</label><input id="ssGoogleLocation" placeholder="accounts/.../locations/...">
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
 <label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
 <p class="small">Attach either up to 10 photos or one video per post. Mixed photo/video batches are not accepted. Music selection is preview-only; custom audio embedding is not provided by this publishing endpoint.</p>
-<button type="button" id="ssPublishBtn">Publish selected content</button><div id="ssPublishResult" class="status" role="status" aria-live="polite">Available after a profile is connected. Your team can perform the live test.</div>
+<button type="button" id="ssPublishBtn">Publish now</button><div id="ssPublishResult" class="status" role="status" aria-live="polite">Choose a connected profile and destination. A live post link will appear when the platform confirms publication.</div>
 </div>
 <div class="grid">
  <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API key has been placed in Supabase Edge Function Secrets. Click “Check API key, plan & connected accounts” above to verify the key and load all existing publishing profiles. No social account is treated as connected until Upload-Post confirms it.</p><a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Open Upload-Post account manager</a></div>
  <div class="tile"><h3>AI assistance</h3><div role="status" aria-label="AI caption setup pending" style="display:inline-flex;align-items:center;gap:7px;margin:2px 0 10px;padding:7px 11px;border:1px solid #f59e0b;border-radius:999px;background:#3b2607;color:#fde68a;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase"><span aria-hidden="true">●</span> AI CAPTION · SETUP PENDING</div><p class="small">AI caption and hashtag generation is not active yet. It will be enabled after the approved AI service and secure backend connection are configured.</p><button type="button" disabled aria-disabled="true">AI caption · unavailable</button></div>
 </div>
-<p class="small">Account linking, multi-profile selection and publishing are implemented. The team should complete the live authorization and delivery checks before using this workspace for production campaigns.</p>
+<p class="small">Publication is confirmed only when the platform returns a successful per-platform result. Background jobs are identified as pending, not reported as live.</p>
 </div>
 <button type="button" id="ssPreviewBtn">Refresh media preview</button><div id="ssStatus" class="status" aria-live="polite">Private preview. Publishing is available after profile selection.</div>
 </section>
@@ -682,8 +682,8 @@ footer {
    if(files.length>10||videos.length>1||(videos.length&&files.length>1)||files.some(f=>!f.type.startsWith('image/')&&!f.type.startsWith('video/'))){result.textContent='Choose up to 10 photos OR one video only.';return}
    if(files.some(f=>f.size>100*1024*1024)){result.textContent='Each media file must be 100 MB or smaller.';return}
    if(platforms.includes('instagram')&&!files.length){result.textContent='Instagram publishing requires media.';return}
-   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Sending…';result.textContent='Submitting to Upload-Post for '+profiles.length+' selected profile(s). Team will verify delivery separately.';
-   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim(),accepted=[];
+   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Publishing…';result.textContent='Sending the post to the selected platforms. Waiting for the platform response…';
+   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim(),outcomes=[];
    try{
     for(const profile of profiles){
      const form=new FormData();form.append('action','publish');form.append('username',profile);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
@@ -691,11 +691,30 @@ footer {
      files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
      const {data,error}=await client.functions.invoke('upload-post-social',{body:form});
      if(error)throw new Error(profile+': '+(data?.error||error.message));if(data?.error)throw new Error(profile+': '+data.error);
-     accepted.push(profile+' ('+(data.request_id||'request accepted')+')');
+     const platformResults=data.results||{};
+     for(const platform of platforms){
+      const item=platformResults[platform];
+      if(item?.success===true && item.url){outcomes.push({profile,platform,url:item.url,status:'published'});}
+      else if(item?.success===true && item.post_id){outcomes.push({profile,platform,url:'',postId:item.post_id,status:'published'});}
+      else if(item?.skipped===true || item?.success===false){throw new Error(profile+' · '+platform+': '+(item.error||item.skip_reason||'platform did not publish'));}
+      else if(data.request_id){outcomes.push({profile,platform,url:'',requestId:data.request_id,status:'pending'});}
+      else {throw new Error(profile+' · '+platform+': provider returned no confirmed publication result');}
+     }
     }
-    result.textContent='Upload-Post accepted requests for all selected profiles: '+accepted.join('; ')+'. Final platform statuses are available in the provider dashboard.';
+    result.textContent='';
+    const published=outcomes.filter(x=>x.status==='published'),pending=outcomes.filter(x=>x.status==='pending');
+    result.appendChild(document.createTextNode(published.length?'Platform confirmed publication: ':'No live publication confirmation received. '));
+    outcomes.forEach(item=>{
+     const line=document.createElement('div');line.style.marginTop='8px';
+     line.textContent=item.profile+' · '+item.platform+' · '+(item.status==='published'?'PUBLISHED':'PENDING · request '+item.requestId);
+     result.appendChild(line);
+     if(item.url){const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open live post';link.style.display='inline-block';link.style.margin='4px 0 0 8px';result.appendChild(link);}
+     else if(item.postId){const id=document.createElement('span');id.textContent=' · Post ID '+item.postId;result.appendChild(id);}
+    });
+    if(!published.length && pending.length)result.appendChild(document.createTextNode(' Background processing has started; this is not yet a confirmed live post.'));
+    if(published.length && pending.length)result.appendChild(document.createTextNode(' Some selected platforms are still processing.'));
    }catch(error){result.textContent='Publishing stopped: '+error.message+(accepted.length?' Already accepted: '+accepted.join('; '):'')}
-   finally{btn.disabled=false;btn.textContent='Publish selected content'}
+   finally{btn.disabled=false;btn.textContent='Publish now'}
   });
 
   if(musicInput)musicInput.addEventListener('change',()=>{
