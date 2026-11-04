@@ -366,6 +366,17 @@ footer {
  <div class="tile"><h3>Music & audio</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
 </div>
 <div id="ssPublishingArea" class="hidden">
+<div class="tile" id="ssCampaignKit" style="margin-top:14px">
+<h3>Ready campaign · India travel promotion</h3>
+<p class="small">Prepared inside Social Studio. Load the campaign to fill the caption and hashtags. Review and edit before publishing.</p>
+<div class="grid">
+ <div><strong>Campaign</strong><p class="small">The journey matters. Plan it with confidence.</p></div>
+ <div><strong>Reel format</strong><p class="small">Vertical 9:16 · 20–25 seconds · four scenes: scenic road, family travel, pilgrimage, SaahiRides brand end-card.</p></div>
+ <div><strong>Music direction</strong><p class="small">Use an uplifting cinematic instrumental: gentle piano opening, orchestral build, confident finish. Search Meta/Instagram's licensed music library for “cinematic travel instrumental” or “uplifting journey”. Choose a track available to your business account. This Upload-Post publishing endpoint does not embed licensed Instagram music; add it in Instagram's Reel editor or render licensed audio into the video before upload.</p></div>
+</div>
+<button type="button" id="ssLoadCampaign">Load prepared campaign into composer</button>
+<div id="ssCampaignStatus" class="status" role="status" aria-live="polite">Campaign kit is ready. Loading it will not publish anything.</div>
+</div>
 <div class="tile" id="ssDestinationCard" style="margin-bottom:16px">
 <h3>SaahiRides multi-account publishing</h3>
 <p class="small">Manage multiple Facebook Pages, Instagram Business identities and Google Business Profile locations from one workspace. Social passwords are entered only on the provider's secure authorization screen.</p>
@@ -411,17 +422,6 @@ footer {
 <div id="ssProfileList" class="grid" style="margin-top:12px"></div>
 <div id="ssDestinationDetails" class="status hidden" role="status" aria-live="polite"></div>
 </div>
-</div>
-<div class="tile" id="ssCampaignKit" style="margin-top:14px">
-<h3>Ready campaign · India travel promotion</h3>
-<p class="small">Prepared inside Social Studio. Load the campaign to fill the caption and hashtags. Review and edit before publishing.</p>
-<div class="grid">
- <div><strong>Campaign</strong><p class="small">The journey matters. Plan it with confidence.</p></div>
- <div><strong>Reel format</strong><p class="small">Vertical 9:16 · 20–25 seconds · four scenes: scenic road, family travel, pilgrimage, SaahiRides brand end-card.</p></div>
- <div><strong>Music direction</strong><p class="small">Use an uplifting cinematic instrumental: gentle piano opening, orchestral build, confident finish. Search Meta/Instagram's licensed music library for “cinematic travel instrumental” or “uplifting journey”. Choose a track available to your business account. This Upload-Post publishing endpoint does not embed licensed Instagram music; add it in Instagram's Reel editor or render licensed audio into the video before upload.</p></div>
-</div>
-<button type="button" id="ssLoadCampaign">Load prepared campaign into composer</button>
-<div id="ssCampaignStatus" class="status" role="status" aria-live="polite">Campaign kit is ready. Loading it will not publish anything.</div>
 </div>
 <div class="tile" style="margin-top:14px">
 <h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
@@ -502,6 +502,7 @@ footer {
   $('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x.dataset.socialTarget==='ssPublishingArea'));
   $('ssCaption').focus();
  };
+ $('ssLoadCampaign').onclick();
  $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));};
  $('ccRefresh').onclick=loadCommandCentre;
  const reportDate=$('ccReportDate');
