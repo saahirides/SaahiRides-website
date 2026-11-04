@@ -775,7 +775,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
     });
     if(!published.length && pending.length)result.appendChild(document.createTextNode(' Background processing has started; this is not yet a confirmed live post.'));
     if(published.length && pending.length)result.appendChild(document.createTextNode(' Some selected platforms are still processing.'));
-   }catch(error){result.textContent='Publishing stopped: '+error.message+(accepted.length?' Already accepted: '+accepted.join('; '):'')}
+   }catch(error){result.textContent='Publishing failed: '+(error?.message||String(error)); console.error('SaahiRides social publish error:',error);}
    finally{btn.disabled=false;btn.textContent='Publish now'}
   });
 
