@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.saahirides.co.in/sitemap.xml
+Sitemap: https://saahirides.co.in/sitemap.xml
