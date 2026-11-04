@@ -460,8 +460,8 @@ footer {
 </div>
 <div class="tile" style="margin-top:14px">
 <h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
-<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile" multiple size="4" aria-describedby="ssProfileHelp"><option value="">Check connected accounts first</option></select><p id="ssProfileHelp" class="small">Select one or more connected profiles (use Ctrl/Command to select multiple).</p>
-<div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto"> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto"> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
+<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile" size="1" aria-describedby="ssProfileHelp"><option value="">Check connected accounts first</option></select><p id="ssProfileHelp" class="small">Choose the connected SaahiRides publishing profile. Facebook and Instagram can be selected together below.</p>
+<div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto" checked> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto" checked> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
 <label for="ssFacebookPage">SaahiRides Facebook Page ID (leave blank if only one Page is connected)</label><input id="ssFacebookPage" placeholder="Optional when one Facebook Page is connected">
 <label for="ssGoogleLocation">Google Business location name (optional for single location)</label><input id="ssGoogleLocation" placeholder="accounts/.../locations/...">
 <label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
@@ -625,6 +625,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   const profileSelect=$('ssPublishProfile');
   profileSelect.innerHTML=profiles.length?'<option value="">Choose a connected profile</option>':'<option value="">No profiles available</option>';
   profiles.forEach(profile=>{const option=document.createElement('option');option.value=profile.username;option.textContent=(profile.display_name||profile.username)+' · '+profile.username;profileSelect.appendChild(option);});
+  if(profiles.length && !profileSelect.value) profileSelect.value=profiles[0].username;
   if(!profiles.length){host.innerHTML='<p class="small">No publishing profiles exist yet. Enter a group name above to create the first one.</p>';return;}
   profiles.forEach(profile=>{
    const accounts=profile.social_accounts||{};
@@ -735,7 +736,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  if($('ssPreviewBtn'))$('ssPreviewBtn').addEventListener('click',renderSocialMedia);
  
   $('ssPublishBtn').addEventListener('click',async()=>{
-   const profiles=Array.from($('ssPublishProfile').selectedOptions).map(x=>x.value).filter(Boolean), platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
+   const profiles=[$('ssPublishProfile').value].filter(Boolean), platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
    const caption=[$('ssCaption').value.trim(),$('ssHashtags').value.trim()].filter(Boolean).join('\n\n'), files=Array.from(mediaInput?.files||[]), result=$('ssPublishResult');
    if(!profiles.length){result.textContent='Choose one or more connected publishing profiles.';return}
    if(!platforms.length){result.textContent='Select at least one platform.';return}
@@ -782,7 +783,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(musicInput)musicInput.addEventListener('change',()=>{
   if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
   const file=musicInput.files?.[0];
-  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio selected for preview only. Social publishing is not connected yet.'}
+  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio preview ready. To publish music, attach this licensed track to a video/Reel before uploading; this composer sends the video file, not a separate audio track.'}
   else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden')}
  });
 
