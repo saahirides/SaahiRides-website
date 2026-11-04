@@ -204,10 +204,33 @@ footer {
 <button type="button" data-panel="policyCentre">▤ Policy Centre</button>
 <button type="button" data-panel="approvalNote">✓ Governance</button>
 <button type="button" data-panel="socialStudio">◉ Social Studio</button>
+<button type="button" data-panel="socialCampaign">✦ Social Campaign</button>
 <button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
 <a class="btn secondary" href="./lead-engine.html" style="margin:0;min-height:54px;display:flex;align-items:center">▣ Lead & Growth Engine</a>
 </div>
 </div>
+<section class="card hidden" id="socialCampaign">
+<h2>SaahiRides Social Campaign Desk</h2>
+<p class="hint">Dedicated campaign workspace · India travel promotion · Facebook + Instagram</p>
+<div class="tile">
+<h3>THE JOURNEY MATTERS. PLAN IT WITH CONFIDENCE. 🦅</h3>
+<p>SaahiRides — SafeRide @ SaahiPrice</p>
+<p>Your next memorable journey starts with a good plan. From family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.</p>
+<p>✨ Plan your journey with confidence<br>🚘 Comfortable travel options<br>👨‍👩‍👧‍👦 Family-friendly travel planning<br>📍 Destinations across India<br>💙 Travel with Team SaahiRides</p>
+<p>Tell us where you want to go. We'll help you plan the journey.</p>
+<p>📲 Enquire on WhatsApp: +91 93479 46026<br>🌐 https://saahirides.co.in</p>
+</div>
+<div class="tile">
+<h3>Hashtags</h3>
+<p>#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides</p>
+</div>
+<div class="tile">
+<h3>Publishing readiness</h3>
+<p>Caption and hashtags are prepared. The final photo or Reel/video asset must be attached before a social post can be submitted. Licensed Instagram music must be selected in Instagram or included in the finished video.</p>
+<p class="status" role="status">Draft only — no post has been published.</p>
+<button type="button" id="openSocialComposer">Open Facebook + Instagram publishing composer</button>
+</div>
+</section>
 <section class="card hidden" id="commandCenter">
 <h2>SaahiRides AI Command Centre</h2>
 <p class="hint">Central management desk · Owner / Admin only · Research and drafting may be assisted by AI; publishing, spending, legal commitments and company decisions remain subject to explicit approval.</p>
@@ -483,12 +506,13 @@ footer {
   }await loadPolicies(category);
   say('Signed in. Permissions checked against Supabase database records.');
   }
- $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
-  ['pricingHistory','policyCentre','approvalNote','socialStudio','commandCenter'].forEach(id=>show(id,id===target));
+ $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
+  ['pricingHistory','policyCentre','approvalNote','socialStudio','socialCampaign','commandCenter'].forEach(id=>show(id,id===target));
   $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
   if(target==='commandCenter')loadCommandCentre();
  };
+ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
  $('ssLoadCampaign').onclick=()=>{
   const caption="THE JOURNEY MATTERS. PLAN IT WITH CONFIDENCE. 🦅\n\nSaahiRides — SafeRide @ SaahiPrice\n\nYour next memorable journey starts with a good plan.\n\nFrom family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.\n\n✨ Plan your journey with confidence\n🚘 Comfortable travel options\n👨‍👩‍👧‍👦 Family-friendly travel planning\n📍 Destinations across India\n💙 Travel with Team SaahiRides\n\nTell us where you want to go. We'll help you plan the journey.\n\n📲 Enquire on WhatsApp: +91 93479 46026\n🌐 https://saahirides.co.in";
   const hashtags="#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides";
