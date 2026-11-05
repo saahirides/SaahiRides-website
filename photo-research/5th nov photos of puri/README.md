@@ -3,6 +3,7 @@
 - Scheduled date: 5 November 2026
 - Collection target: 20–30 distinct, high-quality destination photographs.
 - Current status: **18 source-linked preview candidates** gathered; final curation and asset-copy step remains.
+- **Owner-approved image lock:** Gallery entries 1 and 2 are the approved lead images. Preserve these exact two source files and use the same image files in the final Puri gallery and Puri blog; do not substitute lookalikes or alternate crops.
 - This is a review gallery only. Do not move images into live destination/package folders or publish them until the owner approves.
 - All photographs below are externally hosted by Wikimedia Commons. The gallery embeds previews and links to each original file page; it does **not** claim that binary image files have been copied into this GitHub folder.
 - Credits and licence labels are transcribed from the individual Commons file pages. Recheck the live file page and comply with attribution/share-alike terms before commercial publication.
