@@ -394,11 +394,15 @@ footer {
 </div>
 <div id="ssImageLibraryArea" class="hidden">
  <div class="tile">
-  <h3>SaahiRides Social Images Library</h3>
-  <p class="small">Central GitHub folder for campaign photos and graphics. Upload from your phone, keep originals, and organise assets by date or campaign. Select a downloaded image in Content & media when creating a post.</p>
-  <p><a class="btn" href="https://github.com/saahirides/SaahiRides-website/tree/main/assets/social-images" target="_blank" rel="noopener">Open Social Images folder</a>
-  <a class="btn secondary" href="https://github.com/saahirides/SaahiRides-website/blob/main/assets/social-images/README.md" target="_blank" rel="noopener">Mobile upload instructions</a></p>
-  <p class="status">Library created. GitHub upload is separate from social publishing: after uploading, download the chosen image to your phone and attach it under Content & media. No image is auto-published from this folder.</p>
+  <h3>SaahiRides Social Images</h3>
+  <p class="small">Upload campaign images directly from this Admin page. Files are stored in SaahiRides Supabase Storage; only active Admin accounts can upload, replace or delete them.</p>
+  <label for="ssLibraryFiles">Choose images (JPG, PNG, WEBP or GIF · up to 15 MB each)</label>
+  <input id="ssLibraryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+  <button type="button" id="ssLibraryUpload">Upload Images</button>
+  <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">Choose images from your phone, then tap Upload Images.</div>
+  <h3 style="margin-top:20px">Uploaded image library</h3>
+  <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
+  <div id="ssLibraryGrid" class="grid" style="margin-top:12px"><p class="small">Sign in as an active Admin to load the library.</p></div>
  </div>
 </div>
 <div id="ssContentArea">
@@ -721,6 +725,47 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   say('Policy saved. Confirm approval and audience before relying on publication.');
   await loadPolicies(category);
   };
+
+
+ const libraryFiles=$('ssLibraryFiles'), libraryGrid=$('ssLibraryGrid'), libraryStatus=$('ssLibraryStatus');
+ async function loadSocialImageLibrary(){
+  if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
+  libraryGrid.innerHTML='<p class="small">Loading uploaded images…</p>';
+  const {data,error}=await client.storage.from('social-images').list('',{limit:200,sortBy:{column:'created_at',order:'desc'}});
+  if(error){libraryGrid.textContent='Could not load image library: '+error.message;return;}
+  const images=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+  if(!images.length){libraryGrid.innerHTML='<p class="small">No images uploaded yet. Choose images above to start the library.</p>';return;}
+  libraryGrid.innerHTML='';
+  images.forEach(file=>{
+   const path=file.name, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
+   const card=document.createElement('div');card.className='tile';
+   const img=document.createElement('img');img.src=url;img.alt=path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
+   const name=document.createElement('p');name.className='small';name.textContent=path;
+   const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
+   const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete '+path+' from the Social Images library?'))return;del.disabled=true;const {error}=await client.storage.from('social-images').remove([path]);if(error){libraryStatus.textContent='Delete failed: '+error.message;del.disabled=false;return;}libraryStatus.textContent='Image deleted.';await loadSocialImageLibrary();};
+   card.append(img,name,link,del);libraryGrid.appendChild(card);
+  });
+ }
+ if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=loadSocialImageLibrary;
+ if($('ssLibraryUpload'))$('ssLibraryUpload').onclick=async()=>{
+  const files=Array.from(libraryFiles?.files||[]);
+  if(!client||!session?.user||!admin){libraryStatus.textContent='Admin sign-in is required to upload.';return;}
+  if(!files.length){libraryStatus.textContent='Choose at least one image first.';return;}
+  const allowed=['image/jpeg','image/png','image/webp','image/gif'];
+  if(files.some(f=>!allowed.includes(f.type))){libraryStatus.textContent='Only JPG, PNG, WEBP and GIF images are accepted.';return;}
+  if(files.some(f=>f.size>15*1024*1024)){libraryStatus.textContent='Each image must be 15 MB or smaller.';return;}
+  const btn=$('ssLibraryUpload');btn.disabled=true;btn.textContent='Uploading…';let ok=0;
+  try{
+   for(const file of files){
+    const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
+    const path=new Date().toISOString().slice(0,10)+'/'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+    const {error}=await client.storage.from('social-images').upload(path,file,{contentType:file.type,upsert:false});
+    if(error)throw new Error(file.name+': '+error.message);ok++;
+   }
+   libraryStatus.textContent=ok+' image(s) uploaded successfully.';libraryFiles.value='';await loadSocialImageLibrary();
+  }catch(e){libraryStatus.textContent=ok+' image(s) uploaded; remaining upload stopped: '+e.message;await loadSocialImageLibrary();}
+  finally{btn.disabled=false;btn.textContent='Upload Images';}
+ };
 
  const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
  let ssObjectUrls=[];
