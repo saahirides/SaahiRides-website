@@ -395,7 +395,7 @@ footer {
 <div id="ssImageLibraryArea" class="hidden">
  <div class="tile">
   <h3>SaahiRides Social Images</h3>
-  <p class="small">Upload campaign images directly from this Admin page. Files are stored in SaahiRides Supabase Storage; only active Admin accounts can upload, replace or delete them.</p>
+  <p class="small">Upload campaign images directly from this Admin page. Each upload is saved in the Social Images library and automatically synced to GitHub at assets/social-images/. Only active Admin accounts can upload or delete images.</p>
   <label for="ssLibraryFiles">Choose images (JPG, PNG, WEBP or GIF · up to 15 MB each)</label>
   <input id="ssLibraryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
   <button type="button" id="ssLibraryUpload">Upload Images</button>
@@ -742,7 +742,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    const img=document.createElement('img');img.src=url;img.alt=path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
    const name=document.createElement('p');name.className='small';name.textContent=path;
    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
-   const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete '+path+' from the Social Images library?'))return;del.disabled=true;const {error}=await client.storage.from('social-images').remove([path]);if(error){libraryStatus.textContent='Delete failed: '+error.message;del.disabled=false;return;}libraryStatus.textContent='Image deleted.';await loadSocialImageLibrary();};
+   const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete '+path+' from both the Social Images library and GitHub?'))return;del.disabled=true;try{const {data,error}=await client.functions.invoke('sync-social-image-to-github',{body:{action:'delete',storage_path:path}});if(error)throw error;if(!data?.success)throw new Error(data?.error||'Delete was not confirmed.');libraryStatus.textContent='Image deleted from Supabase Storage and GitHub.';await loadSocialImageLibrary();}catch(e){libraryStatus.textContent='Delete failed: '+(e?.message||String(e));del.disabled=false;}};
    card.append(img,name,link,del);libraryGrid.appendChild(card);
   });
  }
@@ -760,9 +760,13 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
     const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
     const path=new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
     const {error}=await client.storage.from('social-images').upload(path,file,{contentType:file.type,upsert:false});
-    if(error)throw new Error(file.name+': '+error.message);ok++;
+    if(error)throw new Error(file.name+': '+error.message);
+    const {data,error:syncError}=await client.functions.invoke('sync-social-image-to-github',{body:{action:'upload',storage_path:path}});
+    if(syncError)throw new Error(file.name+' was saved in Supabase but GitHub sync failed: '+syncError.message);
+    if(!data?.success)throw new Error(file.name+' was saved in Supabase but GitHub sync failed: '+(data?.error||'No confirmation returned'));
+    ok++;
    }
-   libraryStatus.textContent=ok+' image(s) uploaded successfully.';libraryFiles.value='';await loadSocialImageLibrary();
+   libraryStatus.textContent=ok+' image(s) uploaded to Supabase and synced to GitHub assets/social-images/.';libraryFiles.value='';await loadSocialImageLibrary();
   }catch(e){libraryStatus.textContent=ok+' image(s) uploaded; remaining upload stopped: '+e.message;await loadSocialImageLibrary();}
   finally{btn.disabled=false;btn.textContent='Upload Images';}
  };
