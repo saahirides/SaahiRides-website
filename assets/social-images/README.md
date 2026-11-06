@@ -11,7 +11,7 @@ Supabase Storage bucket `social-images` is the central image library used by Soc
 
 ## Existing GitHub assets
 
-The Admin → Social Studio → Social Images panel has **Import existing GitHub images**. It scans `assets/social-images/` recursively and copies JPG, JPEG, PNG, WEBP and GIF files to Supabase RAW. Existing GitHub files remain unchanged. Re-running the import skips items already registered.
+The Admin → Social Studio → Social Images panel has **Import existing GitHub images**. It scans the entire `assets/` directory recursively and copies JPG, JPEG, PNG, WEBP and GIF files from every asset subfolder to Supabase RAW, preserving the source folder path in metadata. Existing GitHub files remain unchanged. Re-running the import skips items already registered.
 
 ## New uploads and publishing
 
