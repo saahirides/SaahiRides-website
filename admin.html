@@ -395,11 +395,12 @@ footer {
 <div id="ssImageLibraryArea" class="hidden">
  <div class="tile">
   <h3>SaahiRides Social Images</h3>
-  <p class="small">Supabase is the central image library. New uploads enter RAW. Approve an image to move it into APPROVED. Existing GitHub images can be imported without changing or deleting GitHub originals.</p>
+  <p class="small">Supabase is the central image library. New uploads enter RAW. Approve an image to move it into APPROVED. Existing GitHub images and the Puri review set can be copied into RAW. Nothing is approved automatically; GitHub originals remain untouched.</p>
   <label for="ssLibraryFiles">Choose images (JPG, PNG, WEBP or GIF · up to 15 MB each)</label>
   <input id="ssLibraryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
   <button type="button" id="ssLibraryUpload">Upload to RAW</button>
-  <button type="button" class="secondary" id="ssImportGithub">Import existing GitHub images</button>
+  <button type="button" class="secondary" id="ssImportGithub">Import all GitHub images</button>
+  <button type="button" class="secondary" id="ssImportPuri">Import Puri review photos to RAW</button>
   <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">RAW and APPROVED folders will be initialized when the library is first loaded.</div>
   <h3 style="margin-top:20px">Central image library</h3>
   <div class="subnav" style="margin:8px 0">
@@ -781,10 +782,16 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=()=>loadSocialImageLibrary(libraryFilter);
  document.querySelectorAll('[data-library-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x===b));loadSocialImageLibrary(b.dataset.libraryFilter);});
  if($('ssImportGithub'))$('ssImportGithub').onclick=async()=>{
-  const btn=$('ssImportGithub');btn.disabled=true;btn.textContent='Importing…';libraryStatus.textContent='Scanning GitHub assets/ and copying image files into Supabase RAW. GitHub originals will remain untouched.';
+  const btn=$('ssImportGithub');btn.disabled=true;btn.textContent='Importing…';libraryStatus.textContent='Scanning the full GitHub repository and copying image files into Supabase RAW. GitHub originals will remain untouched.';
   try{await callLibraryManager('setup');const result=await callLibraryManager('import_github');libraryStatus.textContent='GitHub scan complete. Found '+result.found+', imported '+result.imported+', already present '+result.skipped+(result.failures?.length?'. Issues: '+result.failures.slice(0,5).join(' | '):'.');await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));}
   catch(e){libraryStatus.textContent='GitHub import could not complete: '+(e?.message||String(e));}
-  finally{btn.disabled=false;btn.textContent='Import existing GitHub images';}
+  finally{btn.disabled=false;btn.textContent='Import all GitHub images';}
+ };
+ if($('ssImportPuri'))$('ssImportPuri').onclick=async()=>{
+  const btn=$('ssImportPuri');btn.disabled=true;btn.textContent='Importing Puri photos…';libraryStatus.textContent='Copying the Puri review candidates from Wikimedia Commons into RAW/Puri. All will remain unapproved, with creator and licence notes recorded.';
+  try{await callLibraryManager('setup');const result=await callLibraryManager('import_puri');libraryStatus.textContent='Puri import complete. Found '+result.found+', imported '+result.imported+', already present '+result.skipped+(result.failures?.length?'. Issues: '+result.failures.slice(0,5).join(' | '):'.');await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));}
+  catch(e){libraryStatus.textContent='Puri import could not complete: '+(e?.message||String(e));}
+  finally{btn.disabled=false;btn.textContent='Import Puri review photos to RAW';}
  };
  if($('ssLibraryUpload'))$('ssLibraryUpload').onclick=async()=>{
   const files=Array.from(libraryFiles?.files||[]);
