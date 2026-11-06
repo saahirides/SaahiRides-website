@@ -395,12 +395,18 @@ footer {
 <div id="ssImageLibraryArea" class="hidden">
  <div class="tile">
   <h3>SaahiRides Social Images</h3>
-  <p class="small">Upload campaign images directly from this Admin page. Each upload is saved in the Social Images library and automatically synced to GitHub at assets/social-images/. Only active Admin accounts can upload or delete images.</p>
+  <p class="small">Supabase is the central image library. New uploads enter RAW. Approve an image to move it into APPROVED. Existing GitHub images can be imported without changing or deleting GitHub originals.</p>
   <label for="ssLibraryFiles">Choose images (JPG, PNG, WEBP or GIF · up to 15 MB each)</label>
   <input id="ssLibraryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
-  <button type="button" id="ssLibraryUpload">Upload Images</button>
-  <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">Choose images from your phone, then tap Upload Images.</div>
-  <h3 style="margin-top:20px">Uploaded image library</h3>
+  <button type="button" id="ssLibraryUpload">Upload to RAW</button>
+  <button type="button" class="secondary" id="ssImportGithub">Import existing GitHub images</button>
+  <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">RAW and APPROVED folders will be initialized when the library is first loaded.</div>
+  <h3 style="margin-top:20px">Central image library</h3>
+  <div class="subnav" style="margin:8px 0">
+   <button type="button" class="active" data-library-filter="approved">APPROVED</button>
+   <button type="button" data-library-filter="raw">RAW · Review</button>
+   <button type="button" data-library-filter="all">All images</button>
+  </div>
   <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
   <div id="ssLibraryGrid" class="grid" style="margin-top:12px"><p class="small">Sign in as an active Admin to load the library.</p></div>
  </div>
@@ -728,25 +734,55 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
 
 
  const libraryFiles=$('ssLibraryFiles'), libraryGrid=$('ssLibraryGrid'), libraryStatus=$('ssLibraryStatus');
- async function loadSocialImageLibrary(){
-  if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
-  libraryGrid.innerHTML='<p class="small">Loading uploaded images…</p>';
-  const {data,error}=await client.storage.from('social-images').list('',{limit:200,sortBy:{column:'created_at',order:'desc'}});
-  if(error){libraryGrid.textContent='Could not load image library: '+error.message;return;}
-  const images=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
-  if(!images.length){libraryGrid.innerHTML='<p class="small">No images uploaded yet. Choose images above to start the library.</p>';return;}
-  libraryGrid.innerHTML='';
-  images.forEach(file=>{
-   const path=file.name, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
-   const card=document.createElement('div');card.className='tile';
-   const img=document.createElement('img');img.src=url;img.alt=path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
-   const name=document.createElement('p');name.className='small';name.textContent=path;
-   const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
-   const del=document.createElement('button');del.type='button';del.className='secondary';del.textContent='Delete';del.onclick=async()=>{if(!confirm('Delete '+path+' from both the Social Images library and GitHub?'))return;del.disabled=true;try{const {data,error}=await client.functions.invoke('sync-social-image-to-github',{body:{action:'delete',storage_path:path}});if(error)throw error;if(!data?.success)throw new Error(data?.error||'Delete was not confirmed.');libraryStatus.textContent='Image deleted from Supabase Storage and GitHub.';await loadSocialImageLibrary();}catch(e){libraryStatus.textContent='Delete failed: '+(e?.message||String(e));del.disabled=false;}};
-   card.append(img,name,link,del);libraryGrid.appendChild(card);
-  });
+ let libraryFilter='approved';
+ async function callLibraryManager(action, extra={}){
+  const {data,error}=await client.functions.invoke('manage-social-image-library',{body:{action,...extra}});
+  if(error)throw new Error(data?.error||error.message);
+  if(!data?.success)throw new Error(data?.error||'Library action was not confirmed.');
+  return data;
  }
- if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=loadSocialImageLibrary;
+ async function loadSocialImageLibrary(filter=libraryFilter){
+  libraryFilter=filter;
+  if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
+  libraryGrid.innerHTML='<p class="small">Preparing the central image library…</p>';
+  try{
+   await callLibraryManager('setup');
+   let query=client.from('social_image_library').select('*').order('created_at',{ascending:false});
+   if(filter!=='all')query=query.eq('status',filter);
+   const {data,error}=await query.limit(500);
+   if(error)throw error;
+   const images=(data||[]).filter(x=>x.storage_path&&!x.storage_path.endsWith('/.keep.png'));
+   libraryGrid.innerHTML='';
+   if(!images.length){libraryGrid.innerHTML='<p class="small">'+(filter==='approved'?'No approved images yet. Review RAW images and approve the ones you want to use.':filter==='raw'?'RAW is empty. Upload images or import the existing GitHub library.':'No images have been registered yet.')+'</p>';return;}
+   images.forEach(file=>{
+    const path=file.storage_path, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
+    const card=document.createElement('div');card.className='tile';
+    const img=document.createElement('img');img.src=url;img.alt=file.original_filename||path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
+    const name=document.createElement('p');name.className='small';name.textContent=(file.original_filename||path)+' · '+file.source;
+    const status=document.createElement('p');status.className='small';status.textContent=file.status.toUpperCase()+' · '+path;
+    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
+    card.append(img,name,status,link);
+    if(file.status==='raw'){
+     const approve=document.createElement('button');approve.type='button';approve.textContent='Approve → APPROVED';
+     approve.onclick=async()=>{approve.disabled=true;try{await callLibraryManager('approve',{storage_path:path});libraryStatus.textContent='Approved and moved into the APPROVED folder.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Approval failed: '+(e?.message||String(e));approve.disabled=false;}};
+     card.appendChild(approve);
+    }else{
+     const use=document.createElement('button');use.type='button';use.className='secondary';use.textContent='Add to publishing composer';
+     use.onclick=async()=>{try{const response=await fetch(url);if(!response.ok)throw new Error('Image could not be loaded.');const blob=await response.blob();const fileObj=new File([blob],file.original_filename||path.split('/').pop(),{type:blob.type||file.mime_type||'image/jpeg'});const transfer=new DataTransfer();Array.from(mediaInput.files||[]).forEach(x=>transfer.items.add(x));if(transfer.files.length>=10)throw new Error('The composer already has 10 media files.');transfer.items.add(fileObj);mediaInput.files=transfer.files;renderSocialMedia();libraryStatus.textContent='Approved image added to the publishing composer.';}catch(e){libraryStatus.textContent='Could not add image: '+(e?.message||String(e));}};
+     card.appendChild(use);
+    }
+    libraryGrid.appendChild(card);
+   });
+  }catch(e){libraryGrid.textContent='Could not load image library: '+(e?.message||String(e));}
+ }
+ if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=()=>loadSocialImageLibrary(libraryFilter);
+ document.querySelectorAll('[data-library-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x===b));loadSocialImageLibrary(b.dataset.libraryFilter);});
+ if($('ssImportGithub'))$('ssImportGithub').onclick=async()=>{
+  const btn=$('ssImportGithub');btn.disabled=true;btn.textContent='Importing…';libraryStatus.textContent='Checking GitHub assets/social-images and copying image files into Supabase RAW. GitHub originals will remain untouched.';
+  try{await callLibraryManager('setup');const result=await callLibraryManager('import_github');libraryStatus.textContent='GitHub scan complete. Found '+result.found+', imported '+result.imported+', already present '+result.skipped+(result.failures?.length?'. Issues: '+result.failures.slice(0,5).join(' | '):'.');await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));}
+  catch(e){libraryStatus.textContent='GitHub import could not complete: '+(e?.message||String(e));}
+  finally{btn.disabled=false;btn.textContent='Import existing GitHub images';}
+ };
  if($('ssLibraryUpload'))$('ssLibraryUpload').onclick=async()=>{
   const files=Array.from(libraryFiles?.files||[]);
   if(!client||!session?.user||!admin){libraryStatus.textContent='Admin sign-in is required to upload.';return;}
@@ -756,21 +792,20 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(files.some(f=>f.size>15*1024*1024)){libraryStatus.textContent='Each image must be 15 MB or smaller.';return;}
   const btn=$('ssLibraryUpload');btn.disabled=true;btn.textContent='Uploading…';let ok=0;
   try{
+   await callLibraryManager('setup');
    for(const file of files){
     const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
-    const path=new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+    const path='raw/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
     const {error}=await client.storage.from('social-images').upload(path,file,{contentType:file.type,upsert:false});
     if(error)throw new Error(file.name+': '+error.message);
-    const {data,error:syncError}=await client.functions.invoke('sync-social-image-to-github',{body:{action:'upload',storage_path:path}});
-    if(syncError)throw new Error(file.name+' was saved in Supabase but GitHub sync failed: '+syncError.message);
-    if(!data?.success)throw new Error(file.name+' was saved in Supabase but GitHub sync failed: '+(data?.error||'No confirmation returned'));
+    const {error:metaError}=await client.from('social_image_library').insert({storage_path:path,original_filename:file.name,source:'admin_upload',status:'raw',mime_type:file.type,file_size_bytes:file.size,created_by:session.user.id});
+    if(metaError)throw new Error(file.name+' was stored in RAW, but its library record could not be saved: '+metaError.message);
     ok++;
    }
-   libraryStatus.textContent=ok+' image(s) uploaded to Supabase and synced to GitHub assets/social-images/.';libraryFiles.value='';await loadSocialImageLibrary();
-  }catch(e){libraryStatus.textContent=ok+' image(s) uploaded; remaining upload stopped: '+e.message;await loadSocialImageLibrary();}
-  finally{btn.disabled=false;btn.textContent='Upload Images';}
+   libraryStatus.textContent=ok+' image(s) uploaded into Supabase RAW. Nothing was deleted or overwritten.';libraryFiles.value='';await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));
+  }catch(e){libraryStatus.textContent=ok+' image(s) registered; upload stopped: '+(e?.message||String(e));await loadSocialImageLibrary('raw');}
+  finally{btn.disabled=false;btn.textContent='Upload to RAW';}
  };
-
  const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
  let ssObjectUrls=[];
  function renderSocialMedia(){
