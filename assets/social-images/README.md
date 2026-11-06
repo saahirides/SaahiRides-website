@@ -1,27 +1,25 @@
-# SaahiRides Social Images Library
+# SaahiRides Social Images — GitHub source archive
 
-Central image asset library for Facebook, Instagram, Google Business Profile and WhatsApp campaign preparation.
+Supabase Storage bucket `social-images` is the central image library used by Social Studio. GitHub keeps the original repository assets and is treated as an import source; importing copies image files into Supabase RAW and never edits or deletes GitHub originals.
 
-## Mobile upload
-1. Open this folder in GitHub: https://github.com/saahirides/SaahiRides-website/tree/main/assets/social-images
-2. Sign in with the GitHub account that has write access to this repository.
-3. Tap **Add file → Upload files**. If the option is hidden on mobile, use Chrome → **Desktop site**.
-4. Upload new images and commit. Use descriptive filenames such as `2026-11-05-diwali-travel.jpg` or `2026-11-06-goa-family-trip-01.jpg`.
-5. Do not overwrite existing files unless you deliberately intend to replace that exact asset.
+## Folder and approval structure
 
-## Organising campaigns
-Create a subfolder per campaign or date, for example:
-- `2026-11-festive-travel/`
-- `2026-11-driver-acquisition/`
-- `2026-11-tourism-destinations/`
+- Supabase `raw/`: new Admin uploads and imported GitHub images waiting for review.
+- Supabase `approved/`: images explicitly approved in Social Studio.
+- Supabase table `public.social_image_library`: filename, source, storage path, status, file type/size, and approval audit fields.
+- Social Studio opens on APPROVED images first. RAW is a separate review view.
 
-Keep approved final exports separate from drafts. Use JPG/PNG for images and MP4 for finished video/Reels. Prefer compressed images under 2 MB for phone uploads. Keep videos within the social provider's current upload limits.
+## Existing GitHub assets
 
-## Publishing workflow
-- Upload assets here as the durable GitHub library copy.
-- To create a post, open Admin → Social Studio → Content & media and attach the selected local file in the publishing composer. The GitHub folder link is a library/archive, not a direct auto-publish connection.
-- Review caption, target platforms and account profile before pressing Publish.
-- Treat a post as live only when the platform returns a post URL or ID.
-- Music must be licensed for the business account and destination platform. Instagram licensed audio may need to be added in Instagram's Reel editor or embedded in a properly licensed finished video.
+The Admin → Social Studio → Social Images panel has **Import existing GitHub images**. It scans `assets/social-images/` recursively and copies JPG, JPEG, PNG, WEBP and GIF files to Supabase RAW. Existing GitHub files remain unchanged. Re-running the import skips items already registered.
 
-Never upload private customer data or images without consent. Do not upload copyrighted music or imagery without permission.
+## New uploads and publishing
+
+1. Upload through Admin → Social Studio → Social Images. Files are saved in Supabase `raw/`.
+2. Review each RAW image and select **Approve → APPROVED** to move it into Supabase `approved/`.
+3. In APPROVED, select **Add to publishing composer** to attach it to the post draft.
+4. Review caption, platforms and profile before publishing.
+
+The library UI does not offer a delete action. GitHub originals are not deleted or overwritten by the import process.
+
+Use descriptive filenames. Only upload imagery SaahiRides has permission to use. Never upload private customer data or images without consent. Music must be licensed for the business account and destination platform.
