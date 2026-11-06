@@ -16,7 +16,7 @@ The Admin → Social Studio → Social Images panel has **Import existing GitHub
 ## New uploads and publishing
 
 1. Upload through Admin → Social Studio → Social Images. Files are saved in Supabase `raw/`.
-2. Review each RAW image and select **Approve → APPROVED** to move it into Supabase `approved/`.
+2. Review each RAW image. Use **Rename image** to give it a descriptive filename (keep its extension), then select **Approve → APPROVED** to move it into Supabase `approved/`.
 3. In APPROVED, select **Add to publishing composer** to attach it to the post draft.
 4. Review caption, platforms and profile before publishing.
 
