@@ -849,7 +849,7 @@ img{height:auto}
     <article class="highlight-card"><span class="highlight-icon">✓</span><h3>No Unilateral Ride Cancellation</h3><p>Ride cancellations are handled under SaahiRides policy—not unilaterally by one side.</p></article>
     <article class="highlight-card"><span class="highlight-icon">🚘</span><h3>Multiple Ride Categories</h3><p>Sawari, Premium, Rental and Outstation options across available vehicle categories.</p></article>
     <article class="highlight-card"><span class="highlight-icon">💬</span><h3>WhatsApp Booking</h3><p>Contact our team to enquire, plan your trip or request a booking.</p><a href="https://wa.me/919347946026?text=Hello%20SaahiRides%2C%20I%20want%20to%20book%20a%20ride." class="highlight-link">Book on WhatsApp ↗</a></article>
-    <article class="highlight-card"><span class="highlight-icon">🆘</span><h3>SOS & Safety Focus</h3><p>Safety is a priority. For urgent assistance, contact the SaahiRides team; use local emergency services when needed.</p><a href="tel:9347946026" class="highlight-link">Call SaahiRides ↗</a></article>
+    <article class="highlight-card"><span class="highlight-icon">🆘</span><h3><button type="button" class="sos-info-trigger" data-open-sos aria-haspopup="dialog" aria-controls="saahi-sos-dialog">SOS &amp; Safety Focus</button></h3><p>Tap SOS to learn how to seek help during a ride and what to do in an emergency.</p><button type="button" class="highlight-link sos-learn-link" data-open-sos aria-haspopup="dialog" aria-controls="saahi-sos-dialog">Understand SOS ↗</button><a href="tel:9347946026" class="highlight-link">Call SaahiRides ↗</a></article>
     <article class="highlight-card"><span class="highlight-icon">🤖</span><h3>WhatsApp Bot Help</h3><p>Get started with booking and service enquiries through WhatsApp. Automated help depends on the bot features currently enabled.</p><a href="https://wa.me/919347946026?text=Hi%20SaahiRides%2C%20please%20help%20me%20with%20booking%20and%20services." class="highlight-link">Ask for Help ↗</a></article>
   </div>
 <p class="saahirides-back-row" style="text-align:center;margin:18px auto 0"><a class="saahirides-back-contents" href="#saahi-table-of-contents">↑ Back to Contents</a></p>
@@ -1514,6 +1514,80 @@ document.addEventListener('DOMContentLoaded',function(){
   <a class="quick-book" href="fare-estimator.html" aria-label="Book My Ride and calculate fare">🚕 Book My Ride</a>
   <a class="quick-trip" href="travel-tours.html" aria-label="Plan My Trip and explore tours">🧭 Plan My Trip</a>
 </nav>
+
+
+<style id="saahi-sos-dialog-styles">
+.sos-info-trigger{appearance:none;border:0;background:transparent;color:inherit;font:inherit;font-weight:inherit;line-height:inherit;padding:0;text-align:left;cursor:pointer}
+.sos-info-trigger:hover,.sos-info-trigger:focus-visible{color:#fff;text-decoration:underline;text-decoration-color:#ffc107;text-underline-offset:4px;outline:none}
+.sos-learn-link{appearance:none;background:none;border:0;cursor:pointer;margin:0 12px 10px 0;padding:0 0 2px}
+#saahi-sos-dialog[hidden]{display:none}
+#saahi-sos-dialog{position:fixed;inset:0;z-index:10050;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(2,9,24,.78);backdrop-filter:blur(5px)}
+#saahi-sos-dialog .sos-dialog-panel{position:relative;width:min(100%,620px);max-height:min(88vh,760px);overflow:auto;background:linear-gradient(150deg,#f8fbff,#eaf2ff);color:#10264b;border:2px solid #f59e0b;border-radius:18px;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.45)}
+#saahi-sos-dialog .sos-dialog-close{position:absolute;right:12px;top:10px;width:40px;height:40px;border:0;border-radius:50%;background:#10264b;color:#fff;font-size:28px;line-height:1;cursor:pointer}
+#saahi-sos-dialog h2{margin:0 48px 12px 0;color:#173b7a;font-size:clamp(23px,4vw,30px)}
+#saahi-sos-dialog h3{margin:18px 0 6px;color:#173b7a;font-size:16px}
+#saahi-sos-dialog p,#saahi-sos-dialog li{font-size:14px;line-height:1.6}
+#saahi-sos-dialog ul{padding-left:21px;margin:6px 0}
+#saahi-sos-dialog .sos-emergency-note{padding:13px 15px;border-left:4px solid #d92d20;background:#fff0ee;border-radius:8px}
+#saahi-sos-dialog .sos-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+#saahi-sos-dialog .sos-action-link{display:inline-flex;align-items:center;justify-content:center;padding:11px 16px;border-radius:10px;background:#173b7a;color:#fff;text-decoration:none;font-weight:800}
+#saahi-sos-dialog .sos-action-link.emergency{background:#b42318}
+body.sos-dialog-open{overflow:hidden}
+@media(max-width:480px){#saahi-sos-dialog{padding:10px}#saahi-sos-dialog .sos-dialog-panel{padding:22px 18px;border-radius:14px}}
+</style>
+<div id="saahi-sos-dialog" hidden>
+  <section class="sos-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="saahi-sos-title" aria-describedby="saahi-sos-intro">
+    <button type="button" class="sos-dialog-close" data-close-sos aria-label="Close SOS information">×</button>
+    <h2 id="saahi-sos-title">🆘 SaahiRides SOS &amp; Ride Safety</h2>
+    <p id="saahi-sos-intro">Your safety matters. This guide explains how to seek assistance during a SaahiRides journey and what to do if you feel unsafe.</p>
+    <h3>Need urgent help?</h3>
+    <ul>
+      <li><strong>Immediate danger or a medical/police emergency:</strong> call India's emergency number <strong>112</strong> first.</li>
+      <li><strong>Contact SaahiRides:</strong> call <strong>9347946026</strong> for ride-related assistance from our team.</li>
+      <li>Move to a safe, public place if you can do so without increasing risk.</li>
+    </ul>
+    <h3>Keep these ride details ready</h3>
+    <ul>
+      <li>Your booking or ride reference, if available.</li>
+      <li>Vehicle registration number and driver details shown for your ride.</li>
+      <li>Your current location and a trusted person's contact details.</li>
+    </ul>
+    <h3>Before and during your ride</h3>
+    <ul>
+      <li>Check that the vehicle and driver match the details provided for your booking.</li>
+      <li>Share your trip or live location with someone you trust when possible.</li>
+      <li>If something feels wrong, contact the SaahiRides team and seek help from local authorities when necessary.</li>
+    </ul>
+    <p class="sos-emergency-note"><strong>Important:</strong> Opening this information panel does not send an SOS alert, share your location, or automatically dispatch police or emergency services. Use the emergency call option for immediate danger. Any in-app SOS alert functionality should only be described as active once it has been connected and tested.</p>
+    <div class="sos-actions">
+      <a class="sos-action-link emergency" href="tel:112">Call Emergency 112</a>
+      <a class="sos-action-link" href="tel:9347946026">Call SaahiRides</a>
+    </div>
+  </section>
+</div>
+<script id="saahi-sos-dialog-script">
+(function(){
+  var dialog=document.getElementById('saahi-sos-dialog');
+  if(!dialog)return;
+  var closeButton=dialog.querySelector('[data-close-sos]');
+  var previousFocus=null;
+  function openDialog(){
+    previousFocus=document.activeElement;
+    dialog.hidden=false;
+    document.body.classList.add('sos-dialog-open');
+    closeButton.focus();
+  }
+  function closeDialog(){
+    dialog.hidden=true;
+    document.body.classList.remove('sos-dialog-open');
+    if(previousFocus&&typeof previousFocus.focus==='function')previousFocus.focus();
+  }
+  document.querySelectorAll('[data-open-sos]').forEach(function(button){button.addEventListener('click',openDialog);});
+  dialog.querySelector('[data-close-sos]').addEventListener('click',closeDialog);
+  dialog.addEventListener('click',function(event){if(event.target===dialog)closeDialog();});
+  document.addEventListener('keydown',function(event){if(!dialog.hidden&&event.key==='Escape')closeDialog();});
+})();
+</script>
 
 </body>
 </html>
