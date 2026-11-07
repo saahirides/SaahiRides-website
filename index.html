@@ -702,11 +702,20 @@ img{height:auto}
 </style>
 </head>
 <body>
+<div class="saahi-news-marquee" role="region" aria-label="SaahiRides updates"><div class="saahi-news-track"><span>SAAHIRIDES TRANSIT PVT. LTD.</span><span>SafeRide @ SaahiPrice</span><span>No Surge Pricing</span><span>Explore Tours &amp; Travel</span><span>Read the SaahiRides Travel Journal</span></div></div>
+<style>
+.saahi-news-marquee{overflow:hidden;background:#123564;color:#fff;border-bottom:3px solid #f59e0b;padding:9px 0;font-weight:800;font-size:13px;letter-spacing:.04em}
+.saahi-news-track{display:flex;align-items:center;justify-content:space-around;gap:34px;min-width:max-content;padding:0 18px;animation:saahiTicker 32s linear infinite}
+.saahi-news-track span:before{content:"◆";color:#f59e0b;margin-right:10px}
+.saahi-news-marquee:hover .saahi-news-track{animation-play-state:paused}
+@keyframes saahiTicker{from{transform:translateX(0)}to{transform:translateX(-35%)}}
+@media(prefers-reduced-motion:reduce){.saahi-news-track{animation:none;flex-wrap:wrap;min-width:0;justify-content:center}}
+</style>
 <div class="container">
   <nav class="top-nav" aria-label="Main navigation">
     <a class="brand-mini" href="#home" aria-label="SaahiRides Transit Pvt. Ltd. home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span class="brand-full-name">SaahiRides Transit Pvt. Ltd.</span></a>
     <div class="nav-links">
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#pricing-model">Pricing</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a><a href="./community.html">Community</a><a href="./admin.html" aria-label="Admin and governance portal">Admin</a>
+      <a href="#home">Home</a><a href="#services">Services</a><a href="#pricing-model">Pricing</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a><a href="./community.html">Community</a><a href="./blog.html">Travel Journal</a><a href="./news-desk.html">News Desk</a><a href="./admin.html" aria-label="Admin and governance portal">Admin</a>
     </div>
   </nav>
 
