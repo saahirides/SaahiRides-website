@@ -253,9 +253,11 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     var bothWay = Math.round(onDemand * 60 + 299);
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
-    // Send the exact menu command recognised by the existing WhatsApp bot.
-    // The estimator remains visible in the browser; the bot then asks for pickup, drop and time.
-    var message = '1';
+    var message = 'BOOK\nSaahiRides fare estimate\nVehicle: ' + selectedVehicle +
+      '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
+      '\n30-day subscription one-way: ₹' + oneWay +
+      '\n30-day subscription both-way: ₹' + bothWay +
+      '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
   }
   vehicleButtons.forEach(function(button){
