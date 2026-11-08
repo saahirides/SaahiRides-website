@@ -1321,6 +1321,11 @@ document.addEventListener('DOMContentLoaded',function(){
  document.querySelectorAll('[data-saahi-tab]').forEach(function(link){link.addEventListener('click',function(){var tab=document.getElementById(link.getAttribute('data-saahi-tab'));if(tab){setTimeout(function(){tab.click();var panel=document.getElementById('panel-sawari');if(panel){panel.scrollIntoView({behavior:'smooth',block:'start'});}},80);}});});
 });
 </script>
+  <div class="saahi-flash-news" role="region" aria-label="SaahiRides Flash News">
+    <span class="saahi-flash-news-label">Flash News</span>
+    <div class="saahi-flash-news-track"><span>SaahiRides News Desk is open · Diwali offer rates effective 2 November 2026 · No surge pricing · Read CEO travel blogs and destination guides · <a href="news-desk.html">Open News Desk →</a></span></div>
+  </div>
+
 <footer id="saahi-footer-anchor" class="saahirides-footer-panel">
   <div class="footer-container">
     <div class="footer-brand-side">
@@ -1609,9 +1614,6 @@ body.sos-dialog-open{overflow:hidden}
 })();
 </script>
 
-  <div class="saahi-flash-news" role="region" aria-label="SaahiRides Flash News">
-    <span class="saahi-flash-news-label">Flash News</span>
-    <div class="saahi-flash-news-track"><span>SaahiRides News Desk is open · Diwali offer rates effective 2 November 2026 · No surge pricing · Read CEO travel blogs and destination guides · <a href="news-desk.html">Open News Desk →</a></span></div>
-  </div>
+
 </body>
 </html>
