@@ -710,6 +710,21 @@ img{height:auto}
     </div>
   </nav>
 
+  <style id="saahi-flash-news-styles">
+  .saahi-flash-news{display:flex;align-items:center;gap:0;overflow:hidden;background:#10284d;border-bottom:1px solid rgba(255,215,0,.35);min-height:42px;color:#fff}
+  .saahi-flash-news-label{flex:0 0 auto;background:#D4AF37;color:#06122E;padding:10px 14px;font-size:11px;font-weight:950;letter-spacing:1px;text-transform:uppercase}
+  .saahi-flash-news-track{min-width:0;overflow:hidden;white-space:nowrap;flex:1}
+  .saahi-flash-news-track span{display:inline-block;padding-left:100%;animation:saahiFlashNewsScroll 30s linear infinite;font-size:13px;font-weight:750;letter-spacing:.15px}
+  .saahi-flash-news-track a{color:#FFE27A;text-decoration:underline;text-underline-offset:3px}
+  .saahi-flash-news:hover .saahi-flash-news-track span,.saahi-flash-news:focus-within .saahi-flash-news-track span{animation-play-state:paused}
+  @keyframes saahiFlashNewsScroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+  @media(prefers-reduced-motion:reduce){.saahi-flash-news-track span{padding-left:12px;animation:none;white-space:normal}.saahi-flash-news-track{white-space:normal;padding:7px 10px}}
+  </style>
+  <div class="saahi-flash-news" role="region" aria-label="SaahiRides Flash News">
+    <span class="saahi-flash-news-label">Flash News</span>
+    <div class="saahi-flash-news-track"><span>SaahiRides News Desk is open · Diwali offer rates effective 2 November 2026 · No surge pricing · Read CEO travel blogs and destination guides · <a href="news-desk.html">Open News Desk →</a></span></div>
+  </div>
+
   <header class="hero landing-hero" id="home">
     <div class="hero-copy">
       <div class="hero-mark">Welcome to SaahiRides</div>
@@ -758,6 +773,7 @@ img{height:auto}
           <a href="travel-tours.html" class="matrix-row-link"><span class="link-num">04</span><span class="link-label">Tours &amp; Travel Packages</span><span class="arrow-indicator">↗</span></a>
           <a href="#saahi-table-of-contents" class="matrix-row-link coming-soon-row" aria-label="Garage Services — coming soon" title="Garage Services — coming soon"><span class="link-num">05</span><span class="link-label">Garage Services <small>COMING SOON</small></span><span class="arrow-indicator">⌛</span></a>
           <a href="#upcoming-projects" class="matrix-row-link"><span class="link-num">06</span><span class="link-label">Upcoming Projects from SaahiRides</span><span class="arrow-indicator">→</span></a>
+          <a href="news-desk.html" class="matrix-row-link gold-highlight-row"><span class="link-num">07</span><span class="link-label">News Desk &amp; CEO Blogs</span><span class="arrow-indicator">↗</span></a>
           <a href="#saahi-table-of-contents" class="matrix-row-link coming-soon-row" aria-label="Company Pitch Deck — coming soon" title="Company Pitch Deck — coming soon"><span class="link-num">07</span><span class="link-label">Company Pitch Deck <small>COMING SOON</small></span><span class="arrow-indicator">⌛</span></a>
         </div>
       </div>
@@ -1207,6 +1223,7 @@ img{height:auto}
         <span class="upcoming-project-number">04</span>
         <h3>Stories from the CEO’s Desk</h3>
         <p>Blogs from the CEO sharing travel insights, destination ideas, practical planning tips and ways to get better value from a package.</p>
+        <p style="margin-top:12px"><a href="news-desk.html" style="color:#FFE27A;font-weight:850;text-decoration:underline;text-underline-offset:3px">Visit News Desk &amp; Blogs →</a></p>
       </article>
       <article class="upcoming-project-card upcoming-project-feature">
         <span class="upcoming-project-number">05</span>
