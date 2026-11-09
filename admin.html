@@ -927,17 +927,33 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim(),outcomes=[];
    try{
     for(const profile of profiles){
-     const form=new FormData();form.append('action','publish');form.append('username',profile);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
+     const requestId=crypto.randomUUID();
+     const form=new FormData();form.append('action','publish');form.append('username',profile);form.append('request_id',requestId);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
      if(fb)form.append('facebook_page_id',fb);if(gb)form.append('gbp_location_id',gb);
      files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
      const {data,error}=await client.functions.invoke('upload-post-social',{body:form});
      if(error)throw new Error(profile+': '+(data?.error||error.message));if(data?.error)throw new Error(profile+': '+data.error);
-     const platformResults=data.results||{};
+     let finalData=data;
+     if(data.request_id){
+      result.textContent='Upload accepted by Upload-Post. Checking each platform until it confirms success or failure…';
+      for(let attempt=0;attempt<15;attempt++){
+       const state=String(finalData.status||'').toLowerCase();
+       if(['completed','failed','not_found'].includes(state))break;
+       await new Promise(resolve=>setTimeout(resolve,4000));
+       const polled=await callSocial('status',{request_id:data.request_id});
+       finalData=polled;
+       if(['completed','failed','not_found'].includes(String(finalData.status||'').toLowerCase()))break;
+      }
+      if(String(finalData.status||'').toLowerCase()==='failed')throw new Error(profile+': Upload-Post reports the upload failed.');
+      if(String(finalData.status||'').toLowerCase()==='not_found')throw new Error(profile+': Upload-Post could not find request '+data.request_id+'.');
+     }
+     const platformResults=finalData.results||{};
      for(const platform of platforms){
       const item=platformResults[platform];
-      if(item?.success===true && item.url){outcomes.push({profile,platform,url:item.url,status:'published'});}
-      else if(item?.success===true && item.post_id){outcomes.push({profile,platform,url:'',postId:item.post_id,status:'published'});}
-      else if(item?.skipped===true || item?.success===false){throw new Error(profile+' · '+platform+': '+(item.error||item.skip_reason||'platform did not publish'));}
+      if(item?.success===true && (item.url||item.post_url)){outcomes.push({profile,platform,url:item.url||item.post_url,status:'published'});}
+      else if(item?.success===true && (item.post_id||item.platform_post_id)){outcomes.push({profile,platform,url:'',postId:item.post_id||item.platform_post_id,status:'published'});}
+      else if(item?.status==='completed' && (item.url||item.post_url)){outcomes.push({profile,platform,url:item.url||item.post_url,status:'published'});}
+      else if(item?.skipped===true || item?.success===false || item?.status==='failed'){throw new Error(profile+' · '+platform+': '+(item.error||item.skip_reason||'platform did not publish'));}
       else if(data.request_id){outcomes.push({profile,platform,url:'',requestId:data.request_id,status:'pending'});}
       else {throw new Error(profile+' · '+platform+': provider returned no confirmed publication result');}
      }
