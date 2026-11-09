@@ -1,0 +1,61 @@
+name: SaahiRides Website QA
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 1 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: saahirides-website-qa
+  cancel-in-progress: false
+
+jobs:
+  website-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install browser test engine
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run website QA matrix
+        env:
+          TARGET_URL: https://saahirides.co.in
+          PAGE_CONCURRENCY: '4'
+          LOAD_WORKERS: '4'
+          LOAD_REQUESTS_PER_WORKER: '2'
+          MAX_PAGES: '40'
+        run: node automated_suite/orchestrator.js
+
+      - name: Save QA logs
+        if: always()
+        run: |
+          git config user.name "SaahiRides QA Agent"
+          git config user.email "qa-agent@users.noreply.github.com"
+          git add command_center/open_anomalies.json command_center/closed_anomalies.json command_center/latest_report.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(qa): update automated website test report"
+            git push
+          else
+            echo "No QA log changes to commit."
+          fi
+
+      - name: Upload run report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: saahirides-qa-report
+          path: command_center/latest_report.json
+          if-no-files-found: warn
