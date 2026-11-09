@@ -204,12 +204,21 @@ footer {
 <button type="button" data-panel="policyCentre">▤ Policy Centre</button>
 <button type="button" data-panel="approvalNote">✓ Governance</button>
 <button type="button" data-panel="socialStudio">◉ Social Studio</button>
+<button type="button" data-panel="talkBack">🎙 Talk Back · Video Studio</button>
 <button type="button" data-panel="socialCampaign">✦ Social Campaign</button>
 <button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
-<a class="btn secondary" href="./talkback.html" style="margin:0;min-height:54px;display:flex;align-items:center">🎙 Talk Back Studio</a>
+<span class="small" style="align-self:center">Talk Back is now inside this Admin workspace.</span>
 <a class="btn secondary" href="./lead-engine.html" style="margin:0;min-height:54px;display:flex;align-items:center">▣ Lead & Growth Engine</a>
 </div>
 </div>
+<section class="card hidden" id="talkBack">
+<h2>Talk Back · Multilingual Video Studio</h2>
+<p class="hint">Create campaign videos from one poster and language scripts. This embeds the existing Talk Back engine inside the authenticated Admin Portal; it does not replace or delete the standalone tool.</p>
+<div class="tile" style="padding:0;overflow:hidden">
+<iframe title="SaahiRides Talk Back multilingual video studio" src="./talkback.html?embedded=1" loading="lazy" style="display:block;width:100%;height:1100px;border:0;background:#06122e" allow="microphone; autoplay; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+</div>
+<p class="small">Video export and audio behaviour remain subject to the browser capabilities of the embedded engine. The existing engine currently exports WebM and uses microphone capture; MP4 export and automatic music ducking are not yet verified.</p>
+</section>
 <section class="card hidden" id="socialCampaign">
 <h2>SaahiRides Social Campaign Desk</h2>
 <p class="hint">Dedicated campaign workspace · India travel promotion · Facebook + Instagram</p>
@@ -536,7 +545,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
-  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('commandCenter',false);
+  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('socialCampaign',false);show('talkBack',false);show('commandCenter',false);
   $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
   $('welcome').textContent='Welcome';
   $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
@@ -547,8 +556,8 @@ footer {
   }await loadPolicies(category);
   say('Signed in. Permissions checked against Supabase database records.');
   }
- $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
-  ['pricingHistory','policyCentre','approvalNote','socialStudio','socialCampaign','commandCenter'].forEach(id=>show(id,id===target));
+ $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='talkBack'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
+  ['pricingHistory','policyCentre','approvalNote','socialStudio','socialCampaign','talkBack','commandCenter'].forEach(id=>show(id,id===target));
   $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
   if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
   if(target==='commandCenter')loadCommandCentre();
