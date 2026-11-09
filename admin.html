@@ -607,7 +607,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  async function loadCommandCentre(){
   const btn=$('ccRefresh');if(btn)btn.disabled=true;
   ccStatus('ccModuleStatus','Loading secure Command Centre records…');
-  try{const data=await callCommandCentre('overview');renderCommandCentre(data);}
+  try{const data=await callCommandCentre('overview');renderCommandCentre(data);await loadQaLogs();}
   catch(error){ccStatus('ccModuleStatus',error.message,true);ccStatus('ccApprovalStatus','Approval queue could not be loaded.',true);}
   finally{if(btn)btn.disabled=false;}
  }
