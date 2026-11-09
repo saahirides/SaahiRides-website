@@ -669,6 +669,15 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  $('qaRefresh').onclick=loadQaLogs;
  document.querySelectorAll('[data-qa-filter]').forEach(b=>b.onclick=()=>{qaFilter=b.dataset.qaFilter;document.querySelectorAll('[data-qa-filter]').forEach(x=>x.classList.toggle('active',x===b));loadQaLogs();});
  const socialEsc = value => esc(value ?? '');
+ async function logSocialPublishActivity({status,title,summary,payload,risk_level='low'}) {
+  if(!client||!session) throw new Error('Admin session unavailable for Command Centre logging.');
+  const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{
+   action:'log_activity',module_key:'social_brand',activity_type:'social_publish',
+   title,summary,status,risk_level,agent_name:'SaahiRides Social Studio',payload
+  }});
+  if(error||!data?.success) throw new Error(data?.error||error?.message||'Command Centre did not confirm the publishing log.');
+  return data.activity;
+ }
  async function callSocial(action, extra={}) {
   if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
   const {data,error}=await client.functions.invoke('upload-post-social',{body:{action,...extra}});
@@ -945,7 +954,24 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
     });
     if(!published.length && pending.length)result.appendChild(document.createTextNode(' Background processing has started; this is not yet a confirmed live post.'));
     if(published.length && pending.length)result.appendChild(document.createTextNode(' Some selected platforms are still processing.'));
-   }catch(error){result.textContent='Publishing failed: '+(error?.message||String(error)); console.error('SaahiRides social publish error:',error);}
+    const logStatus=pending.length?'needs_review':'logged';
+    const logSummary='Publishing response received for profile '+profiles.join(', ')+'. Confirmed: '+published.map(x=>x.platform).join(', ')+(pending.length?'; pending: '+pending.map(x=>x.platform).join(', '):'')+'.';
+    try {
+     await logSocialPublishActivity({status:logStatus,title:pending.length?'Social post accepted; platform confirmation pending':'Social post publication confirmed',summary:logSummary,risk_level:pending.length?'medium':'low',payload:{profiles,platforms,confirmed:published.map(x=>({platform:x.platform,url:x.url||null,post_id:x.postId||null})),pending:pending.map(x=>({platform:x.platform,request_id:x.requestId||null}))}});
+     result.appendChild(document.createTextNode(' Command Centre log saved.'));
+    } catch(logError) {
+     result.appendChild(document.createTextNode(' WARNING: Command Centre log was not saved: '+(logError?.message||String(logError))));
+    }
+   }catch(error){
+    result.textContent='Publishing failed: '+(error?.message||String(error));
+    try {
+     await logSocialPublishActivity({status:'blocked',title:'Social publishing failed',summary:'Publishing attempt failed for '+profiles.join(', ')+' on '+platforms.join(', ')+': '+String(error?.message||error).slice(0,1500),risk_level:'medium',payload:{profiles,platforms,media_count:files.length,error:String(error?.message||error).slice(0,1500)}});
+     result.appendChild(document.createTextNode(' Failure recorded in Command Centre.'));
+    } catch(logError) {
+     result.appendChild(document.createTextNode(' Command Centre logging also failed: '+(logError?.message||String(logError))));
+    }
+    console.error('SaahiRides social publish error:',error);
+   }
    finally{btn.disabled=false;btn.textContent='Publish now'}
   });
 
