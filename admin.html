@@ -285,6 +285,13 @@ footer {
 <div id="ccActivity" class="small">No activity loaded yet.</div>
 <p class="hint">Current scheduled workstreams: Intelligence & Social Manager 08:00 IST; Legal Watch 15:00 IST; Tourism Image Scout 19:00 IST. Four-hour reporting is not active. Agent-to-database logging still needs to be connected for automated work logs to appear here.</p>
 </div>
+<div class="policy" id="qaCommandPanel">
+<h3>Website QA · Open & Closed Logs</h3>
+<p class="hint">All QA anomalies are stored in the central Command Centre database. Open items stay here until repaired and verified. Closing requires a passing retest.</p>
+<div class="grid"><div class="tile"><h3 id="qaOpenCount">—</h3><p>Open / active anomalies</p></div><div class="tile"><h3 id="qaClosedCount">—</h3><p>Closed · verified</p></div><div class="tile"><h3 id="qaTotalCount">—</h3><p>Total recorded</p></div></div>
+<button type="button" class="secondary" id="qaRefresh">Refresh QA logs</button><div id="qaStatus" class="status" aria-live="polite">Loading central QA logs…</div>
+<div class="subnav"><button type="button" class="active" data-qa-filter="open">OPEN LOGS</button><button type="button" data-qa-filter="closed">CLOSED LOGS</button></div><div id="qaLogList" class="grid"></div>
+</div>
 </section>
 <section class="card hidden" id="pricingHistory">
 <h2>Fare Rate History & Change Log</h2>
@@ -624,6 +631,34 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   finally{btn.disabled=false;}
  };
 
+ let qaFilter='open';
+ async function loadQaLogs(){
+  const btn=$('qaRefresh');if(btn)btn.disabled=true;
+  ccStatus('qaStatus','Loading QA records from the central Command Centre…');
+  try{
+   const data=await callCommandCentre('qa_overview'),open=data.open||[],closed=data.closed||[];
+   $('qaOpenCount').textContent=open.length;$('qaClosedCount').textContent=closed.length;$('qaTotalCount').textContent=data.total||open.length+closed.length;
+   const rows=qaFilter==='closed'?closed:open,host=$('qaLogList');host.innerHTML='';
+   if(!rows.length)host.innerHTML='<p class="small">No '+qaFilter+' QA records.</p>';
+   rows.forEach(item=>{
+    const card=document.createElement('article');card.className='tile';
+    card.innerHTML='<h3>'+esc(item.category)+'</h3><p>'+esc(item.description)+'</p><div class="small">ID: '+esc(item.id)+' · '+esc(item.severity||'medium').toUpperCase()+' · '+esc(item.status)+' · Seen '+new Date(item.last_seen_at).toLocaleString()+' · Occurrences '+esc(item.occurrence_count)+'</div>';
+    if(item.source_url){const link=document.createElement('a');link.href=item.source_url;link.target='_blank';link.rel='noopener';link.textContent='Open affected page';link.className='btn secondary';card.appendChild(link);}
+    if(qaFilter!=='closed'){
+     const select=document.createElement('select');select.innerHTML='<option value="open">Open</option><option value="in_progress">In progress</option><option value="reopened">Reopened</option>';select.value=['open','in_progress','reopened'].includes(item.status)?item.status:'open';card.appendChild(select);
+     const save=document.createElement('button');save.type='button';save.className='secondary';save.textContent='Update status';save.onclick=async()=>{save.disabled=true;try{await callCommandCentre('qa_transition',{id:item.id,status:select.value});await loadQaLogs();}catch(e){ccStatus('qaStatus',e.message,true);save.disabled=false;}};card.appendChild(save);
+     const resolution=document.createElement('textarea');resolution.rows=2;resolution.placeholder='Resolution summary (required to close)';
+     const verify=document.createElement('label');verify.style.cssText='display:flex;align-items:center;gap:8px';verify.innerHTML='<input type="checkbox" style="width:auto"> Retest passed';
+     const close=document.createElement('button');close.type='button';close.textContent='Close after verified retest';close.onclick=async()=>{close.disabled=true;try{if(!verify.querySelector('input').checked)throw Error('Tick Retest passed only after rerunning the failed test.');if(!resolution.value.trim())throw Error('Enter the repair and verification summary.');await callCommandCentre('qa_transition',{id:item.id,status:'closed',resolution_summary:resolution.value.trim(),verification:{passed:true,verified_at:new Date().toISOString(),verified_by:'Admin UI'}});await loadQaLogs();}catch(e){ccStatus('qaStatus',e.message,true);close.disabled=false;}};card.append(resolution,verify,close);
+    }else{const note=document.createElement('p');note.className='small';note.textContent='Closed '+(item.closed_at?new Date(item.closed_at).toLocaleString():'')+' · '+(item.resolution_summary||'No resolution summary');card.appendChild(note);}
+    host.appendChild(card);
+   });
+   ccStatus('qaStatus','Central QA logs loaded. Open: '+open.length+' · Closed: '+closed.length+'. Only verified retests can be closed.');
+  }catch(e){ccStatus('qaStatus',e.message,true);}
+  finally{if(btn)btn.disabled=false;}
+ }
+ $('qaRefresh').onclick=loadQaLogs;
+ document.querySelectorAll('[data-qa-filter]').forEach(b=>b.onclick=()=>{qaFilter=b.dataset.qaFilter;document.querySelectorAll('[data-qa-filter]').forEach(x=>x.classList.toggle('active',x===b));loadQaLogs();});
  const socialEsc = value => esc(value ?? '');
  async function callSocial(action, extra={}) {
   if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
