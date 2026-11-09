@@ -85,6 +85,14 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    if (action === "status") {
+      const requestId = typeof body?.request_id === "string" ? body.request_id.trim() : "";
+      if (!/^[a-zA-Z0-9_-]{8,120}$/.test(requestId)) return json({ error: "A valid Upload-Post request ID is required." }, 400);
+      const result = await uploadPostRequest("/uploadposts/status?request_id=" + encodeURIComponent(requestId), apiKey);
+      if (!result.ok) return json({ error: "Could not retrieve the social publishing status.", provider_status: result.status, details: result.data }, result.status);
+      return json({ success: true, ...((result.data && typeof result.data === "object") ? result.data as Record<string, unknown> : {}) });
+    }
+
     if (action === "connect_profile") {
       const username = body?.username;
       if (!validUsername(username)) return json({ error: "Profile name must be 3–50 characters and use only letters, numbers, underscores or hyphens." }, 400);
@@ -200,10 +208,16 @@ Deno.serve(async (req: Request) => {
       else photos.forEach((photo) => payload.append("photos[]", photo));
       const facebookPageId = String(form.get("facebook_page_id") || "").trim();
       const googleLocationId = String(form.get("gbp_location_id") || "").trim();
+      const requestId = String(form.get("request_id") || crypto.randomUUID());
+      payload.append("request_id", requestId);
       if (facebookPageId) payload.append("facebook_page_id", facebookPageId);
       if (googleLocationId) payload.append("gbp_location_id", googleLocationId);
 
-      const published = await uploadPostRequest(endpoint, apiKey, { method: "POST", body: payload });
+      const published = await uploadPostRequest(endpoint, apiKey, {
+        method: "POST",
+        body: payload,
+        headers: { "Idempotency-Key": requestId },
+      });
       if (!published.ok) return json({
         error: "Upload-Post rejected the publishing request.",
         provider_status: published.status,
