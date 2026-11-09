@@ -1,0 +1,14 @@
+{
+  "name": "SaahiRides Development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "SaahiRides website preview",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    }
+  },
+  "postCreateCommand": "if [ -f package.json ]; then npm install; else echo 'No package.json found; skipping npm install for this static HTML repository.'; fi",
+  "postStartCommand": "bash -lc '(python3 -m http.server 8000 --bind 0.0.0.0 >/tmp/saahirides-preview.log 2>&1 &)'"
+}
