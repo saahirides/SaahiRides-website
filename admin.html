@@ -765,9 +765,29 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
     const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
     card.append(img,name,status,link);
     if(file.status==='raw'){
-     const rename=document.createElement('button');rename.type='button';rename.className='secondary';rename.textContent='Rename image';
-     rename.onclick=async()=>{const current=file.display_filename||path.split('/').pop()||file.original_filename||'';const proposed=window.prompt('Enter the new image filename. Keep the file extension (for example .jpg):',current);if(proposed===null)return;rename.disabled=true;try{const result=await callLibraryManager('rename',{storage_path:path,new_filename:proposed});libraryStatus.textContent=result.unchanged?'Filename unchanged.':'Image renamed to '+result.display_filename+'. Original filename remains recorded.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Rename failed: '+(e?.message||String(e));rename.disabled=false;}};
-     card.appendChild(rename);
+     const actions=document.createElement('details');actions.style.cssText='margin:10px 0;padding:8px;border:1px solid #46618b;border-radius:8px';
+     const summary=document.createElement('summary');summary.textContent='Image Actions ▾';summary.style.cssText='cursor:pointer;color:#f5b82e;font-weight:800';actions.appendChild(summary);
+     const actionBox=document.createElement('div');actionBox.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-top:10px';actions.appendChild(actionBox);
+     const makeAction=(label,handler)=>{const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent=label;b.onclick=handler;actionBox.appendChild(b);return b;};
+     makeAction('Identify image (OCR)',async ev=>{
+      const b=ev.currentTarget;b.disabled=true;libraryStatus.textContent='Reading visible text in '+(file.original_filename||path.split('/').pop())+'…';
+      try{
+       if(!window.Tesseract){await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';s.onload=resolve;s.onerror=()=>reject(new Error('OCR library could not load.'));document.head.appendChild(s);});}
+       const response=await fetch(url);if(!response.ok)throw new Error('Could not download image for OCR.');const blob=await response.blob();
+       const result=await Tesseract.recognize(blob,'eng');const text=(result.data.text||'').replace(/\s+/g,' ').trim();
+       if(!text){libraryStatus.textContent='No readable English text found. Try visual search from Image Actions.';return;}
+       const candidate=text.split(/[|•·\n]/).map(x=>x.trim()).filter(x=>x.length>2).sort((a,b)=>b.length-a.length)[0].slice(0,100);
+       libraryStatus.textContent='OCR text: '+text.slice(0,500);
+       const current=file.display_filename||path.split('/').pop()||file.original_filename||'image.jpg';
+       const ext=(current.match(/\.[a-z0-9]+$/i)||['.jpg'])[0];
+       const suggested=candidate.normalize('NFKD').replace(/[^A-Za-z0-9_-]+/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'').slice(0,90)||'identified_image';
+       if(window.confirm('Suggested filename from image text:\n'+suggested+ext+'\n\nRename this RAW image?')){const saved=await callLibraryManager('rename',{storage_path:path,new_filename:suggested+ext});libraryStatus.textContent='Renamed from OCR: '+saved.display_filename;await loadSocialImageLibrary(libraryFilter);}
+      }catch(e){libraryStatus.textContent='Image identification failed: '+(e?.message||String(e));}
+      finally{b.disabled=false;}
+     });
+     makeAction('Search image online',()=>{const target='https://www.google.com/searchbyimage?image_url='+encodeURIComponent(url);window.open(target,'_blank','noopener');libraryStatus.textContent='Opened Google visual search in a new tab. Confirm the match before renaming.';});
+     makeAction('Rename manually',async ev=>{const b=ev.currentTarget;const current=file.display_filename||path.split('/').pop()||file.original_filename||'';const proposed=window.prompt('Enter the new filename (include extension):',current);if(proposed===null)return;b.disabled=true;try{const result=await callLibraryManager('rename',{storage_path:path,new_filename:proposed});libraryStatus.textContent=result.unchanged?'Filename unchanged.':'Image renamed to '+result.display_filename+'. Original filename remains recorded.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Rename failed: '+(e?.message||String(e));b.disabled=false;}});
+     card.appendChild(actions);
      const approve=document.createElement('button');approve.type='button';approve.textContent='Approve → APPROVED';
      approve.onclick=async()=>{approve.disabled=true;try{await callLibraryManager('approve',{storage_path:path});libraryStatus.textContent='Approved and moved into the APPROVED folder.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Approval failed: '+(e?.message||String(e));approve.disabled=false;}};
      card.appendChild(approve);
