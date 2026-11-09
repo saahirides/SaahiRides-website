@@ -509,7 +509,7 @@ footer {
 </div>
 <div class="grid">
  <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API key has been placed in Supabase Edge Function Secrets. Click “Check API key, plan & connected accounts” above to verify the key and load all existing publishing profiles. No social account is treated as connected until Upload-Post confirms it.</p><a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Open Upload-Post account manager</a></div>
- <div class="tile"><h3>AI assistance</h3><div role="status" aria-label="AI caption setup pending" style="display:inline-flex;align-items:center;gap:7px;margin:2px 0 10px;padding:7px 11px;border:1px solid #f59e0b;border-radius:999px;background:#3b2607;color:#fde68a;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase"><span aria-hidden="true">●</span> AI CAPTION · SETUP PENDING</div><p class="small">AI caption and hashtag generation is not active yet. It will be enabled after the approved AI service and secure backend connection are configured.</p><button type="button" disabled aria-disabled="true">AI caption · unavailable</button></div>
+ <div class="tile"><h3>AI caption & hashtag assistant</h3><p class="small">Generate a draft with the secured SaahiRides AI service. Review every claim, price, date and offer before publishing.</p><label for="ssAiBrief">Campaign brief</label><textarea id="ssAiBrief" rows="3" placeholder="Describe the approved announcement, destination, offer or campaign facts…"></textarea><label for="ssAiLanguage">Caption language</label><select id="ssAiLanguage"><option>English</option><option>Hindi</option><option>Telugu</option></select><button type="button" id="ssGenerateCaption">Generate caption & hashtags</button><div id="ssAiStatus" class="status" role="status" aria-live="polite">Ready for an approved campaign brief.</div></div>
 </div>
 <p class="small">Publication is confirmed only when the platform returns a successful per-platform result. Background jobs are identified as pending, not reported as live.</p>
 </div>
@@ -678,6 +678,30 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(error||!data?.success) throw new Error(data?.error||error?.message||'Command Centre did not confirm the publishing log.');
   return data.activity;
  }
+ $('ssGenerateCaption').onclick=async()=>{
+  const btn=$('ssGenerateCaption'),brief=$('ssAiBrief').value.trim(),language=$('ssAiLanguage').value;
+  if(!brief){$('ssAiStatus').textContent='Enter the approved campaign facts first.';return;}
+  if(!client||!session||!admin){$('ssAiStatus').textContent='Sign in with an active Admin account first.';return;}
+  btn.disabled=true;btn.textContent='Generating…';$('ssAiStatus').textContent='Generating a draft with the SaahiRides AI service…';
+  try{
+   const platform=document.querySelector('input[name="ssPlatform"]:checked')?.value||'facebook';
+   const {data,error}=await client.functions.invoke('saahirides-ai-content',{body:{topic:brief,platform,language,tone:'warm, trustworthy and professional'}});
+   if(error||!data?.success||!data.generated_text)throw new Error(data?.error||error?.message||'AI service returned no caption.');
+   const generated=String(data.generated_text).trim();
+   const captionMatch=generated.match(/(?:^|\n)Caption\s*:\s*([\s\S]*?)(?=\n\s*Hashtags\s*:|\n\s*Call to action\s*:|$)/i);
+   const hashtagMatch=generated.match(/(?:^|\n)Hashtags\s*:\s*([\s\S]*?)(?=\n\s*Call to action\s*:|$)/i);
+   const ctaMatch=generated.match(/(?:^|\n)Call to action\s*:\s*([\s\S]*)$/i);
+   $('ssCaption').value=captionMatch?captionMatch[1].trim():generated;
+   $('ssHashtags').value=hashtagMatch?hashtagMatch[1].trim().replace(/\s+/g,' '):'';
+   if(ctaMatch&&ctaMatch[1].trim())$('ssCaption').value+='\n\n'+ctaMatch[1].trim();
+   $('ssAiStatus').textContent='Draft generated ('+language+'). Review and edit it before publishing.';
+   try{
+    const logged=await client.functions.invoke('saahirides-command-centre',{body:{action:'log_activity',module_key:'social_brand',activity_type:'social_caption_generated',title:'AI social caption generated',summary:'A '+language+' draft was generated for '+platform+'. It remains a draft until reviewed and explicitly published.',risk_level:'low',status:'logged',agent_name:'SaahiRides Social Studio',payload:{platform,language,brief_length:brief.length,model:data.model||null}}});
+    if(logged.error||!logged.data?.success)$('ssAiStatus').textContent+=' Command Centre log could not be confirmed.';
+   }catch(logError){$('ssAiStatus').textContent+=' Command Centre log could not be confirmed.';}
+  }catch(error){$('ssAiStatus').textContent='AI caption generation failed: '+(error?.message||String(error));}
+  finally{btn.disabled=false;btn.textContent='Generate caption & hashtags';}
+ };
  async function callSocial(action, extra={}) {
   if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
   const {data,error}=await client.functions.invoke('upload-post-social',{body:{action,...extra}});
