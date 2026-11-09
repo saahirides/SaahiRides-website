@@ -45,7 +45,8 @@ async function uploadPostRequest(path: string, apiKey: string, init: RequestInit
 }
 
 Deno.serve(async (req: Request) => {
-  const origin = req.headers.get("Origin");\n  const respond = (body: unknown, status = 200) => json(body, status, origin);\n  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeadersFor(origin) });
+  const origin = req.headers.get("Origin");
+  const respond = (body: unknown, status = 200) => json(body, status, origin);\n  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeadersFor(origin) });
   if (req.method !== "POST") return respond({ error: "Method not allowed." }, 405);
   const authHeader = req.headers.get("Authorization") || "";
   if (!authHeader.startsWith("Bearer ")) return respond({ error: "Sign in to SaahiRides Admin first." }, 401);
