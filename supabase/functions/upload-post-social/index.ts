@@ -1,15 +1,16 @@
 import { createClient } from "npm:@supabase/supabase-js@2.95.0";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://www.saahirides.co.in",
+const allowedOrigins = new Set(["https://saahirides.co.in", "https://www.saahirides.co.in"]);
+const corsHeadersFor = (origin: string | null) => ({
+  "Access-Control-Allow-Origin": origin && allowedOrigins.has(origin) ? origin : "https://saahirides.co.in",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Vary": "Origin",
-};
+});
 
-const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
+const json = (body: unknown, status = 200, origin: string | null = null) => new Response(JSON.stringify(body), {
   status,
-  headers: { ...corsHeaders, "Content-Type": "application/json" },
+  headers: { ...corsHeadersFor(origin), "Content-Type": "application/json" },
 });
 
 function getPublishableKey(): string {
@@ -44,10 +45,10 @@ async function uploadPostRequest(path: string, apiKey: string, init: RequestInit
 }
 
 Deno.serve(async (req: Request) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") return json({ error: "Method not allowed." }, 405);
+  const origin = req.headers.get("Origin");\n  const respond = (body: unknown, status = 200) => json(body, status, origin);\n  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeadersFor(origin) });
+  if (req.method !== "POST") return respond({ error: "Method not allowed." }, 405);
   const authHeader = req.headers.get("Authorization") || "";
-  if (!authHeader.startsWith("Bearer ")) return json({ error: "Sign in to SaahiRides Admin first." }, 401);
+  if (!authHeader.startsWith("Bearer ")) return respond({ error: "Sign in to SaahiRides Admin first." }, 401);
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
@@ -58,15 +59,15 @@ Deno.serve(async (req: Request) => {
     });
     const token = authHeader.slice("Bearer ".length);
     const { data: userData, error: userError } = await supabase.auth.getUser(token);
-    if (userError || !userData.user) return json({ error: "Your Admin session is invalid or expired. Sign in again." }, 401);
+    if (userError || !userData.user) return respond({ error: "Your Admin session is invalid or expired. Sign in again." }, 401);
 
     const { data: adminRow, error: adminError } = await supabase
       .from("admin_users").select("role,active").eq("user_id", userData.user.id).maybeSingle();
-    if (adminError) return json({ error: "Could not verify SaahiRides Admin permission: " + adminError.message }, 403);
-    if (!adminRow?.active) return json({ error: "Active SaahiRides Admin permission is required." }, 403);
+    if (adminError) return respond({ error: "Could not verify SaahiRides Admin permission: " + adminError.message }, 403);
+    if (!adminRow?.active) return respond({ error: "Active SaahiRides Admin permission is required." }, 403);
 
     const apiKey = Deno.env.get("UPLOAD_POST_API_KEY");
-    if (!apiKey) return json({ error: "UPLOAD_POST_API_KEY is not configured in Supabase Edge Function Secrets." }, 503);
+    if (!apiKey) return respond({ error: "UPLOAD_POST_API_KEY is not configured in Supabase Edge Function Secrets." }, 503);
 
     const body = await req.json().catch(() => ({}));
     const action = typeof body?.action === "string" ? body.action : "";
@@ -76,9 +77,9 @@ Deno.serve(async (req: Request) => {
         uploadPostRequest("/uploadposts/me", apiKey),
         uploadPostRequest("/uploadposts/users", apiKey),
       ]);
-      if (!me.ok) return json({ error: "Upload-Post account check failed.", provider_status: me.status, details: me.data }, me.status);
-      if (!users.ok) return json({ error: "Could not retrieve Upload-Post profiles.", provider_status: users.status, details: users.data }, users.status);
-      return json({
+      if (!me.ok) return respond({ error: "Upload-Post account check failed.", provider_status: me.status, details: me.data }, me.status);
+      if (!users.ok) return respond({ error: "Could not retrieve Upload-Post profiles.", provider_status: users.status, details: users.data }, users.status);
+      return respond({
         success: true,
         me: me.data,
         ...((users.data && typeof users.data === "object") ? users.data as Record<string, unknown> : {}),
@@ -87,23 +88,23 @@ Deno.serve(async (req: Request) => {
 
     if (action === "status") {
       const requestId = typeof body?.request_id === "string" ? body.request_id.trim() : "";
-      if (!/^[a-zA-Z0-9_-]{8,120}$/.test(requestId)) return json({ error: "A valid Upload-Post request ID is required." }, 400);
+      if (!/^[a-zA-Z0-9_-]{8,120}$/.test(requestId)) return respond({ error: "A valid Upload-Post request ID is required." }, 400);
       const result = await uploadPostRequest("/uploadposts/status?request_id=" + encodeURIComponent(requestId), apiKey);
-      if (!result.ok) return json({ error: "Could not retrieve the social publishing status.", provider_status: result.status, details: result.data }, result.status);
-      return json({ success: true, ...((result.data && typeof result.data === "object") ? result.data as Record<string, unknown> : {}) });
+      if (!result.ok) return respond({ error: "Could not retrieve the social publishing status.", provider_status: result.status, details: result.data }, result.status);
+      return respond({ success: true, ...((result.data && typeof result.data === "object") ? result.data as Record<string, unknown> : {}) });
     }
 
     if (action === "connect_profile") {
       const username = body?.username;
-      if (!validUsername(username)) return json({ error: "Profile name must be 3–50 characters and use only letters, numbers, underscores or hyphens." }, 400);
+      if (!validUsername(username)) return respond({ error: "Profile name must be 3–50 characters and use only letters, numbers, underscores or hyphens." }, 400);
       const listing = await uploadPostRequest("/uploadposts/users", apiKey);
-      if (!listing.ok) return json({ error: "Could not check the current Upload-Post profile limit.", details: listing.data }, listing.status);
+      if (!listing.ok) return respond({ error: "Could not check the current Upload-Post profile limit.", details: listing.data }, listing.status);
       const listingData = listing.data && typeof listing.data === "object" ? listing.data as Record<string, unknown> : {};
       const profiles = Array.isArray(listingData.profiles) ? listingData.profiles as Array<Record<string, unknown>> : [];
       const exists = profiles.some((profile) => profile.username === username);
       const profileLimit = Number(listingData.limit);
       if (!exists && Number.isFinite(profileLimit) && profiles.length >= profileLimit) {
-        return json({
+        return respond({
           error: `Upload-Post profile limit reached (${profiles.length}/${profileLimit}). No new profile was created. Upgrade the Upload-Post plan or reuse an existing profile.`,
           plan: listingData.plan || null,
           limit: profileLimit,
@@ -117,7 +118,7 @@ Deno.serve(async (req: Request) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username }),
         });
-        if (!created.ok) return json({
+        if (!created.ok) return respond({
           error: "Upload-Post could not create the publishing profile. Check the plan limit and profile name.",
           provider_status: created.status,
           details: created.data,
@@ -133,17 +134,17 @@ Deno.serve(async (req: Request) => {
           show_calendar: false,
           connect_title: "Connect SaahiRides social accounts",
           connect_description: "Securely connect a Facebook account, Instagram Business account, or Google Business Profile for SaahiRides publishing.",
-          redirect_url: "https://www.saahirides.co.in/admin.html",
-          logo_image: "https://www.saahirides.co.in/saahirides%20logo.jpg",
+          redirect_url: "https://saahirides.co.in/admin.html",
+          logo_image: "https://saahirides.co.in/saahirides%20logo.jpg",
         }),
       });
-      if (!link.ok) return json({
+      if (!link.ok) return respond({
         error: "The profile exists, but Upload-Post could not generate its secure connection link.",
         provider_status: link.status,
         details: link.data,
       }, link.status);
       const linkData = link.data && typeof link.data === "object" ? link.data as Record<string, unknown> : {};
-      return json({
+      return respond({
         success: true,
         username,
         profile_created: !exists,
@@ -154,18 +155,18 @@ Deno.serve(async (req: Request) => {
 
     if (action === "facebook_pages" || action === "google_business_locations") {
       const username = body?.username;
-      if (!validUsername(username)) return json({ error: "A valid Upload-Post profile name is required." }, 400);
+      if (!validUsername(username)) return respond({ error: "A valid Upload-Post profile name is required." }, 400);
       const query = new URLSearchParams({ profile: username });
       const path = action === "facebook_pages"
         ? `/uploadposts/facebook/pages?${query.toString()}`
         : `/uploadposts/google-business/locations?${query.toString()}`;
       const result = await uploadPostRequest(path, apiKey);
-      if (!result.ok) return json({
+      if (!result.ok) return respond({
         error: action === "facebook_pages" ? "Could not load Facebook Pages." : "Could not load Google Business Profile locations.",
         provider_status: result.status,
         details: result.data,
       }, result.status);
-      return json({
+      return respond({
         success: true,
         action,
         ...((result.data && typeof result.data === "object") ? result.data as Record<string, unknown> : {}),
@@ -175,26 +176,26 @@ Deno.serve(async (req: Request) => {
     if (action === "publish") {
       const form = await req.formData();
       const username = form.get("username");
-      if (!validUsername(username)) return json({ error: "A valid publishing profile is required." }, 400);
+      if (!validUsername(username)) return respond({ error: "A valid publishing profile is required." }, 400);
       const allowed = new Set(["facebook", "instagram", "google_business"]);
       const platforms = form.getAll("platform[]").filter((value): value is string => typeof value === "string");
       const selected = [...new Set(platforms)];
       if (!selected.length || selected.some((platform) => !allowed.has(platform))) {
-        return json({ error: "Select one or more supported platforms: Facebook, Instagram or Google Business Profile." }, 400);
+        return respond({ error: "Select one or more supported platforms: Facebook, Instagram or Google Business Profile." }, 400);
       }
       const caption = String(form.get("description") || "").trim();
       const photos = form.getAll("photos[]").filter((value): value is File => value instanceof File);
       const video = form.get("video");
       const hasVideo = video instanceof File;
-      if (!caption && photos.length === 0 && !hasVideo) return json({ error: "Add a caption or media before publishing." }, 400);
-      if (photos.length > 10 || (hasVideo && photos.length > 0)) return json({ error: "Use up to 10 photos or one video, not both." }, 400);
+      if (!caption && photos.length === 0 && !hasVideo) return respond({ error: "Add a caption or media before publishing." }, 400);
+      if (photos.length > 10 || (hasVideo && photos.length > 0)) return respond({ error: "Use up to 10 photos or one video, not both." }, 400);
       const media = hasVideo ? [video] : photos;
-      if (media.some((file) => file.size > 100 * 1024 * 1024)) return json({ error: "Each media file must be 100 MB or smaller." }, 413);
+      if (media.some((file) => file.size > 100 * 1024 * 1024)) return respond({ error: "Each media file must be 100 MB or smaller." }, 413);
       if (media.some((file) => !file.type.startsWith("image/") && !file.type.startsWith("video/"))) {
-        return json({ error: "Only image and video media are supported." }, 400);
+        return respond({ error: "Only image and video media are supported." }, 400);
       }
       if (selected.includes("instagram") && media.length === 0) {
-        return json({ error: "Instagram publishing requires photo or video media." }, 400);
+        return respond({ error: "Instagram publishing requires photo or video media." }, 400);
       }
 
       const endpoint = hasVideo ? "/upload" : photos.length ? "/upload_photos" : "/upload_text";
@@ -218,7 +219,7 @@ Deno.serve(async (req: Request) => {
         body: payload,
         headers: { "Idempotency-Key": requestId },
       });
-      if (!published.ok) return json({
+      if (!published.ok) return respond({
         error: "Upload-Post rejected the publishing request.",
         provider_status: published.status,
         details: published.data,
@@ -226,12 +227,12 @@ Deno.serve(async (req: Request) => {
       const responseData = published.data && typeof published.data === "object"
         ? published.data as Record<string, unknown>
         : {};
-      return json({ success: true, message: "Publishing request accepted by Upload-Post.", ...responseData });
+      return respond({ success: true, message: "Publishing request accepted by Upload-Post.", ...responseData });
     }
 
-    return json({ error: "Unsupported action." }, 400);
+    return respond({ error: "Unsupported action." }, 400);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unexpected server error.";
-    return json({ error: message }, 500);
+    return respond({ error: message }, 500);
   }
 });
