@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "id": "browser-runtime-error|https---saahirides.co.in-travel-tours.html|cannot-read-properties-of-null--reading--replacechildren--",
+    "category": "BROWSER_RUNTIME_ERROR",
+    "url": "https://saahirides.co.in/travel-tours.html",
+    "description": "Cannot read properties of null (reading 'replaceChildren')",
+    "details": {},
+    "firstSeenAt": "2026-11-10T08:41:14.515Z",
+    "lastSeenAt": "2026-11-10T08:41:14.515Z",
+    "occurrences": 1,
+    "status": "OPEN"
+  },
+  {
+    "id": "browser-runtime-error|https---saahirides.co.in-driver.html|missing---after-argument-list",
+    "category": "BROWSER_RUNTIME_ERROR",
+    "url": "https://saahirides.co.in/driver.html",
+    "description": "missing ) after argument list",
+    "details": {},
+    "firstSeenAt": "2026-11-10T08:41:16.434Z",
+    "lastSeenAt": "2026-11-10T08:41:16.434Z",
+    "occurrences": 1,
+    "status": "OPEN"
+  }
+]

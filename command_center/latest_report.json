@@ -1,4 +1,175 @@
 {
-  "status": "NOT_RUN_YET",
-  "note": "The first scheduled or manually triggered GitHub Actions run will populate this report."
+  "runAt": "2026-11-10T08:41:17.324Z",
+  "target": "https://saahirides.co.in",
+  "pagesDiscovered": 18,
+  "pagesInspected": 18,
+  "openAnomalies": 2,
+  "newlyDetected": 2,
+  "movedToClosedAfterCleanRun": 0,
+  "lightLoadProbe": {
+    "requests": 8,
+    "workers": 4,
+    "results": [
+      {
+        "status": 200,
+        "latencyMs": 50
+      },
+      {
+        "status": 200,
+        "latencyMs": 55
+      },
+      {
+        "status": 200,
+        "latencyMs": 4
+      },
+      {
+        "status": 200,
+        "latencyMs": 60
+      },
+      {
+        "status": 200,
+        "latencyMs": 61
+      },
+      {
+        "status": 200,
+        "latencyMs": 7
+      },
+      {
+        "status": 200,
+        "latencyMs": 3
+      },
+      {
+        "status": 200,
+        "latencyMs": 4
+      }
+    ]
+  },
+  "pageResults": [
+    {
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "status": 200,
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog.html",
+      "status": 200,
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/news-desk.html",
+      "status": 200,
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/",
+      "status": 200,
+      "title": "SaahiRides Transit Pvt. Ltd. | Safe & Affordable Rides in Hyderabad - Bikes, Auto, Cabs",
+      "forms": 0,
+      "buttons": 9
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-ramoji-yadadri.html",
+      "status": 200,
+      "title": "Ramoji Film City & Yadadri: Two Very Different Telangana Experiences | CEO’s Blog",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/fare-estimator.html",
+      "status": 200,
+      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 20
+    },
+    {
+      "url": "https://saahirides.co.in/offers.html",
+      "status": 200,
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/travel-tours.html",
+      "status": 200,
+      "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
+      "forms": 1,
+      "buttons": 30
+    },
+    {
+      "url": "https://saahirides.co.in/company-inception.html",
+      "status": 200,
+      "title": "Company Inception Details | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
+      "status": 200,
+      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "status": 200,
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
+      "status": 200,
+      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/on-demand-fare-chart.html",
+      "status": 200,
+      "title": "SaahiRides On-Demand Fare Chart",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/community.html",
+      "status": 200,
+      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
+      "forms": 1,
+      "buttons": 1
+    },
+    {
+      "url": "https://saahirides.co.in/driver.html",
+      "status": 200,
+      "title": "Driver Network - SaahiRides",
+      "forms": 1,
+      "buttons": 4
+    },
+    {
+      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
+      "status": 200,
+      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "status": 200,
+      "title": "Tirupati: A Complete Divine Journey | CEO’s Blog — SaahiRides",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "status": 200,
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    }
+  ]
 }
