@@ -423,6 +423,7 @@ footer {
   <div class="subnav" style="margin:8px 0">
    <button type="button" class="active" data-library-filter="approved">APPROVED</button>
    <button type="button" data-library-filter="raw">RAW · Review</button>
+   <button type="button" data-library-filter="rejected">REJECTED / Archive</button>
    <button type="button" data-library-filter="all">All images</button>
   </div>
   <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
@@ -820,6 +821,62 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(!data?.success)throw new Error(data?.error||'Library action was not confirmed.');
   return data;
  }
+ async function openSocialImageCrop(file,path,url){
+  const dlg=document.createElement('dialog');
+  dlg.style.cssText='width:min(96vw,760px);max-height:92vh;overflow:auto;border:1px solid #46618b;border-radius:14px;background:#0b1c3d;color:#f8fafc;padding:16px';
+  const heading=document.createElement('h3');heading.textContent='Edit / Crop image';dlg.appendChild(heading);
+  const note=document.createElement('p');note.className='small';note.textContent='Adjust the crop area. Save creates a separate edited RAW copy; the original file is preserved.';dlg.appendChild(note);
+  const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:100%;max-height:48vh;object-fit:contain;background:#06122e;border-radius:8px';dlg.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  const response=await fetch(url);if(!response.ok)throw new Error('Could not load original image.');
+  const sourceUrl=URL.createObjectURL(await response.blob()),image=new Image();image.src=sourceUrl;await image.decode();
+  const state={left:0,top:0,width:100,height:100},controls={};
+  const draw=()=>{
+   state.width=Math.max(1,Math.min(state.width,100-state.left));state.height=Math.max(1,Math.min(state.height,100-state.top));
+   controls.width.input.max=String(100-state.left);controls.height.input.max=String(100-state.top);
+   controls.width.input.value=String(state.width);controls.height.input.value=String(state.height);
+   controls.width.value.textContent=Math.round(state.width)+'%';controls.height.value.textContent=Math.round(state.height)+'%';
+   const sx=Math.round(image.naturalWidth*state.left/100),sy=Math.round(image.naturalHeight*state.top/100);
+   const sw=Math.max(1,Math.round(image.naturalWidth*state.width/100)),sh=Math.max(1,Math.round(image.naturalHeight*state.height/100));
+   canvas.width=Math.min(sw,1200);canvas.height=Math.max(1,Math.round(sh*canvas.width/sw));
+   ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+  };
+  const addSlider=(label,key)=>{
+   const wrap=document.createElement('label');wrap.style.cssText='display:block;margin:8px 0;color:#bac7dc';
+   const value=document.createElement('strong');value.textContent='100%';value.style.marginLeft='6px';
+   const input=document.createElement('input');input.type='range';input.min='0';input.max='100';input.value=String(state[key]);input.style.width='100%';
+   wrap.append(document.createTextNode(label+' '),value,input);dlg.appendChild(wrap);controls[key]={input,value};
+   input.oninput=()=>{state[key]=Number(input.value);draw();};
+  };
+  addSlider('Left','left');addSlider('Top','top');addSlider('Crop width','width');addSlider('Crop height','height');draw();
+  const footer=document.createElement('div');footer.style.cssText='display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px';
+  const cancel=document.createElement('button');cancel.type='button';cancel.className='secondary';cancel.textContent='Cancel';
+  const save=document.createElement('button');save.type='button';save.textContent='Save edited copy';footer.append(cancel,save);dlg.appendChild(footer);document.body.appendChild(dlg);
+  const close=()=>{try{dlg.close();}catch{}dlg.remove();URL.revokeObjectURL(sourceUrl);};
+  cancel.onclick=close;dlg.addEventListener('cancel',close);
+  save.onclick=async()=>{
+   save.disabled=true;save.textContent='Saving…';
+   try{
+    const outputMime=file.mime_type==='image/png'?'image/png':file.mime_type==='image/webp'?'image/webp':'image/jpeg';
+    const ext=outputMime==='image/png'?'png':outputMime==='image/webp'?'webp':'jpg';
+    const sx=Math.round(image.naturalWidth*state.left/100),sy=Math.round(image.naturalHeight*state.top/100);
+    const sw=Math.max(1,Math.round(image.naturalWidth*state.width/100)),sh=Math.max(1,Math.round(image.naturalHeight*state.height/100));
+    const output=document.createElement('canvas');output.width=sw;output.height=sh;output.getContext('2d').drawImage(image,sx,sy,sw,sh,0,0,sw,sh);
+    const blob=await new Promise(resolve=>output.toBlob(resolve,outputMime,0.92));
+    if(!blob)throw new Error('Browser could not export this crop.');
+    if(blob.size>15*1024*1024)throw new Error('Edited image exceeds the 15 MB limit.');
+    const filename=(file.display_filename||file.original_filename||path.split('/').pop()||'image').replace(/\.[^.]+$/,'')+'-edited.'+ext;
+    const editedPath='raw/edited/'+Date.now()+'-'+crypto.randomUUID()+'-'+filename.replace(/[^a-zA-Z0-9._-]/g,'-');
+    const {error:uploadError}=await client.storage.from('social-images').upload(editedPath,blob,{contentType:outputMime,upsert:false});
+    if(uploadError)throw new Error(uploadError.message);
+    try{await callLibraryManager('register_edit',{original_storage_path:path,edited_storage_path:editedPath,filename,mime_type:outputMime,file_size_bytes:blob.size});}
+    catch(error){await client.storage.from('social-images').remove([editedPath]);throw error;}
+    libraryStatus.textContent='Edited copy saved in RAW. Original file preserved and marked superseded; approve the edited copy when ready.';
+    close();await loadSocialImageLibrary('raw');
+   }catch(error){libraryStatus.textContent='Crop/save failed: '+(error?.message||String(error));save.disabled=false;save.textContent='Save edited copy';}
+  };
+  dlg.showModal();
+ }
  async function loadSocialImageLibrary(filter=libraryFilter){
   libraryFilter=filter;
   if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
@@ -864,14 +921,22 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
      });
      makeAction('Search image online',()=>{const target='https://www.google.com/searchbyimage?image_url='+encodeURIComponent(url);window.open(target,'_blank','noopener');libraryStatus.textContent='Opened Google visual search in a new tab. Confirm the match before renaming.';});
      makeAction('Rename manually',async ev=>{const b=ev.currentTarget;const current=file.display_filename||path.split('/').pop()||file.original_filename||'';const proposed=window.prompt('Enter the new filename (include extension):',current);if(proposed===null)return;b.disabled=true;try{const result=await callLibraryManager('rename',{storage_path:path,new_filename:proposed});libraryStatus.textContent=result.unchanged?'Filename unchanged.':'Image renamed to '+result.display_filename+'. Original filename remains recorded.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Rename failed: '+(e?.message||String(e));b.disabled=false;}});
-     card.appendChild(actions);
+     card.appendChild(actions); 
+     const crop=document.createElement('button');crop.type='button';crop.className='secondary';crop.textContent='Edit / Crop';
+     crop.onclick=async()=>{crop.disabled=true;try{await openSocialImageCrop(file,path,url);}catch(e){libraryStatus.textContent='Could not open crop editor: '+(e?.message||String(e));}finally{crop.disabled=false;}};
+     const reject=document.createElement('button');reject.type='button';reject.style.cssText='background:#7f1d1d;color:#fff';reject.textContent='Reject / Archive';
+     reject.onclick=async()=>{if(!window.confirm('Reject this image? It will be archived and excluded from approval and publishing. The original file will not be deleted.'))return;const note=window.prompt('Optional rejection reason:','');reject.disabled=true;try{await callLibraryManager('reject',{storage_path:path,rejection_note:note||''});libraryStatus.textContent='Image rejected and archived. Original file retained.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Reject failed: '+(e?.message||String(e));reject.disabled=false;}};
+     card.append(crop,reject);
      const approve=document.createElement('button');approve.type='button';approve.textContent='Approve → APPROVED';
      approve.onclick=async()=>{approve.disabled=true;try{await callLibraryManager('approve',{storage_path:path});libraryStatus.textContent='Approved and moved into the APPROVED folder.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Approval failed: '+(e?.message||String(e));approve.disabled=false;}};
      card.appendChild(approve);
-    }else{
+    }else if(file.status==='approved'){
      const use=document.createElement('button');use.type='button';use.className='secondary';use.textContent='Add to publishing composer';
      use.onclick=async()=>{try{const response=await fetch(url);if(!response.ok)throw new Error('Image could not be loaded.');const blob=await response.blob();const fileObj=new File([blob],file.original_filename||path.split('/').pop(),{type:blob.type||file.mime_type||'image/jpeg'});const transfer=new DataTransfer();Array.from(mediaInput.files||[]).forEach(x=>transfer.items.add(x));if(transfer.files.length>=10)throw new Error('The composer already has 10 media files.');transfer.items.add(fileObj);mediaInput.files=transfer.files;renderSocialMedia();libraryStatus.textContent='Approved image added to the publishing composer.';}catch(e){libraryStatus.textContent='Could not add image: '+(e?.message||String(e));}};
      card.appendChild(use);
+    }else{
+     const archived=document.createElement('p');archived.className='small';archived.textContent=file.status==='rejected'?'Archived — excluded from publishing.':file.status==='superseded'?'Original retained — edited copy created.':'Not available for publishing.';
+     card.appendChild(archived);
     }
     libraryGrid.appendChild(card);
    });
