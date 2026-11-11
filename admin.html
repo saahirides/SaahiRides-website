@@ -270,6 +270,19 @@ footer {
 </div>
 <div class="policy">
 <h3>Reports & command-centre activity</h3>
+<div class="tile" id="ccNotificationPanel">
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  <strong>Owner & operations notifications</strong>
+  <span class="small" id="ccUnreadCount">0 unread</span>
+ </div>
+ <p class="hint">Private live alerts from Supabase. Phone pop-ups require notification permission and this admin page to remain connected. Background push setup is a separate next step.</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <button type="button" class="secondary" id="ccEnablePhoneAlerts">Enable phone alerts</button>
+  <button type="button" class="secondary" id="ccNotificationRefresh">Refresh notifications</button>
+ </div>
+ <div id="ccNotificationStatus" class="status" aria-live="polite">Waiting for secure admin connection…</div>
+ <div id="ccNotificationList" class="small">No notifications loaded yet.</div>
+</div>
 <p class="hint">Live records are loaded through the authenticated SaahiRides Command Centre service.</p>
 <button type="button" class="secondary" id="ccRefresh">Refresh Command Centre</button>
 <div id="ccModuleStatus" class="status" aria-live="polite">Waiting for secure connection…</div>
@@ -522,7 +535,7 @@ footer {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
- const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR';
+ const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR', notificationChannel=null;
  const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -532,7 +545,7 @@ footer {
  $('signIn').onclick=async()=>{if(!client)return say('Connect the project first.');const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;if(data.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('For security, change your initial password before continuing.');return}show('forcePassword',false);await checkAccess();};
  $('changePassword').onclick=async()=>{const btn=$('changePassword');const p=$('newPassword').value,c=$('confirmPassword').value;if(!client||!session)return say('Your sign-in session has expired. Please sign in again.');if(p.length<12)return say('Choose a password of at least 12 characters.');if(p!==c)return say('The passwords do not match.');btn.disabled=true;btn.textContent='Updating password…';say('Updating your password securely with Supabase…');try{const {data,error}=await client.auth.updateUser({password:p,data:{...(session?.user?.user_metadata||{}),must_change_password:false}});if(error)throw error;if(!data?.user)throw Error('Supabase did not confirm the password update.');session={...session,user:data.user};$('newPassword').value='';$('confirmPassword').value='';say('Password updated. Checking your Admin permissions…');await checkAccess();if(!$('workspace').classList.contains('hidden')){show('forcePassword',false);show('auth',false);say('Password updated. Admin access verified.');}else{say('Password updated, but Admin access could not be verified. Check the message above and confirm the account is active in Supabase.');}}catch(e){say('Password change did not complete: '+(e?.message||'Unexpected error')+'. Your password may be unchanged; try again or use Send password reset.');}finally{btn.disabled=false;btn.textContent='Change password and continue';}};
  $('reset').onclick=async()=>{if(!client)return say('Connect the project first.');const email=$('email').value.trim();if(!email)return say('Enter your account email first.');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});say(error?'Reset request failed: '+error.message:'If the account exists and email delivery is configured, a password-reset email will be sent.');};
- $('logout').onclick=async()=>{if(client)await client.auth.signOut();session=null;admin=false;owner=false;hr=false;governanceRoles=[];show('workspace',false);show('forcePassword',false);show('auth',true);say('Signed out.');};
+ $('logout').onclick=async()=>{if(notificationChannel&&client){await client.removeChannel(notificationChannel).catch(()=>{});notificationChannel=null;}if(client)await client.auth.signOut();session=null;admin=false;owner=false;hr=false;governanceRoles=[];show('workspace',false);show('forcePassword',false);show('auth',true);say('Signed out.');};
  async function checkAccess(){const {data:{user}}=await client.auth.getUser();
   if(!user){say('No authenticated user returned.');
   return}session={user};
@@ -555,6 +568,7 @@ footer {
   if(!admin&&!owner){category='HR';
   $('tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category==='HR'));
   }await loadPolicies(category);
+  if(admin)startNotificationChannel();
   say('Signed in. Permissions checked against Supabase database records.');
   }
  $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='talkBack'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
@@ -594,6 +608,34 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   finally{btn.disabled=false;}
  };
 
+ async function loadNotifications(){
+  if(!admin||!session)return;
+  const data=await callCommandCentre('notifications_list');
+  const items=data.notifications||[];
+  $('ccUnreadCount').textContent=(data.unread||0)+' unread';
+  const host=$('ccNotificationList');
+  host.innerHTML=items.length?items.map(n=>'<div class="tile" style="margin-top:8px"><strong>'+esc(n.title)+'</strong><p>'+esc(n.body)+'</p><div class="small">'+esc(n.severity).toUpperCase()+' · '+esc(n.status)+' · '+new Date(n.created_at).toLocaleString()+'</div>'+(n.status!=='acknowledged'?'<button type="button" class="secondary" data-notification-ack="'+esc(n.id)+'">Acknowledge</button>':'<span class="small">Acknowledged</span>')+'</div>').join(''):'No notifications yet.';
+  host.querySelectorAll('[data-notification-ack]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await callCommandCentre('notification_mark',{id:btn.dataset.notificationAck,status:'acknowledged'});await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);btn.disabled=false;}}));
+  ccStatus('ccNotificationStatus','Secure notification inbox connected. '+items.length+' recent alert(s) loaded.');
+ }
+ function showPhoneNotification(n){
+  if(!('Notification' in window)||Notification.permission!=='granted'||document.visibilityState==='visible')return;
+  try{new Notification(String(n.title||'SaahiRides alert'),{body:String(n.body||'A new Command Centre alert needs attention.'),tag:'saahirides-'+String(n.id||Date.now())});}catch(e){console.warn('Browser notification could not be shown',e);}
+ }
+ async function startNotificationChannel(){
+  if(!admin||!client||!session)return;
+  try{await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
+  if(notificationChannel)await client.removeChannel(notificationChannel).catch(()=>{});
+  notificationChannel=client.channel('saahirides:admin-notifications',{config:{private:true}})
+   .on('broadcast',{event:'notification'},message=>{const n=message.payload||message;showPhoneNotification(n);loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));})
+   .subscribe((status,error)=>{if(status==='SUBSCRIBED')ccStatus('ccNotificationStatus','Private live alerts connected. Dashboard updates are active.');else if(error)ccStatus('ccNotificationStatus','Live alert connection: '+(error.message||status),true);});
+ }
+ $('ccEnablePhoneAlerts').onclick=async()=>{
+  if(!('Notification' in window)){ccStatus('ccNotificationStatus','This browser does not support desktop notifications. Use the admin dashboard inbox.',true);return;}
+  try{const permission=await Notification.requestPermission();if(permission==='granted')ccStatus('ccNotificationStatus','Phone notifications enabled for this browser while the admin page is connected.');else ccStatus('ccNotificationStatus,'Notification permission was not granted. You can still see alerts in the dashboard.',true);}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
+ };
+ $('ccNotificationRefresh').onclick=()=>loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));
+ $('ccNotificationList').addEventListener('click',e=>{const btn=e.target.closest('[data-notification-ack]');if(btn)return;});
  async function callCommandCentre(action,extra={}) {
   if(!client||!session) throw new Error('Sign in to SaahiRides Admin first.');
   const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{action,...extra}});
