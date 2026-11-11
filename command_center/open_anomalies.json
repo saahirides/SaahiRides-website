@@ -6,8 +6,8 @@
     "description": "Cannot read properties of null (reading 'replaceChildren')",
     "details": {},
     "firstSeenAt": "2026-11-10T08:41:14.515Z",
-    "lastSeenAt": "2026-11-10T08:41:14.515Z",
-    "occurrences": 1,
+    "lastSeenAt": "2026-11-11T07:58:26.544Z",
+    "occurrences": 2,
     "status": "OPEN"
   },
   {
@@ -17,8 +17,8 @@
     "description": "missing ) after argument list",
     "details": {},
     "firstSeenAt": "2026-11-10T08:41:16.434Z",
-    "lastSeenAt": "2026-11-10T08:41:16.434Z",
-    "occurrences": 1,
+    "lastSeenAt": "2026-11-11T07:58:26.544Z",
+    "occurrences": 2,
     "status": "OPEN"
   }
 ]
