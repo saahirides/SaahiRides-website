@@ -632,10 +632,9 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  }
  $('ccEnablePhoneAlerts').onclick=async()=>{
   if(!('Notification' in window)){ccStatus('ccNotificationStatus','This browser does not support desktop notifications. Use the admin dashboard inbox.',true);return;}
-  try{const permission=await Notification.requestPermission();if(permission==='granted')ccStatus('ccNotificationStatus','Phone notifications enabled for this browser while the admin page is connected.');else ccStatus('ccNotificationStatus,'Notification permission was not granted. You can still see alerts in the dashboard.',true);}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
+  try{const permission=await Notification.requestPermission();if(permission==='granted')ccStatus('ccNotificationStatus','Phone notifications enabled for this browser while the admin page is connected.');else ccStatus('ccNotificationStatus','Notification permission was not granted. You can still see alerts in the dashboard.',true);}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
  };
  $('ccNotificationRefresh').onclick=()=>loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));
- $('ccNotificationList').addEventListener('click',e=>{const btn=e.target.closest('[data-notification-ack]');if(btn)return;});
  async function callCommandCentre(action,extra={}) {
   if(!client||!session) throw new Error('Sign in to SaahiRides Admin first.');
   const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{action,...extra}});
