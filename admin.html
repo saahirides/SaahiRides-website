@@ -434,8 +434,8 @@ footer {
   <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">RAW and APPROVED folders will be initialized when the library is first loaded.</div>
   <h3 style="margin-top:20px">Central image library</h3>
   <div class="subnav" style="margin:8px 0">
-   <button type="button" class="active" data-library-filter="approved">APPROVED</button>
-   <button type="button" data-library-filter="raw">RAW · Review</button>
+   <button type="button" data-library-filter="approved">APPROVED</button>
+   <button type="button" class="active" data-library-filter="raw">RAW · Review</button>
    <button type="button" data-library-filter="rejected">REJECTED / Archive</button>
    <button type="button" data-library-filter="all">All images</button>
   </div>
@@ -593,7 +593,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   $('ssCaption').focus();
  };
  $('ssLoadCampaign').onclick();
- $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea','ssImageLibraryArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.socialTarget==='ssImageLibraryArea')loadSocialImageLibrary();};
+ $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea','ssImageLibraryArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.socialTarget==='ssImageLibraryArea')loadSocialImageLibrary('raw');};
  $('ccRefresh').onclick=loadCommandCentre;
  const reportDate=$('ccReportDate');
  if(reportDate&&!reportDate.value){const now=new Date();const ist=new Date(now.getTime()+330*60000);reportDate.value=ist.toISOString().slice(0,10);}
@@ -855,7 +855,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
 
 
  const libraryFiles=$('ssLibraryFiles'), libraryGrid=$('ssLibraryGrid'), libraryStatus=$('ssLibraryStatus');
- let libraryFilter='approved';
+ let libraryFilter='raw';
  async function callLibraryManager(action, extra={}){
   const {data,error}=await client.functions.invoke('manage-social-image-library',{body:{action,...extra}});
   if(error)throw new Error(data?.error||error.message);
@@ -876,7 +876,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    state.width=Math.max(1,Math.min(state.width,100-state.left));state.height=Math.max(1,Math.min(state.height,100-state.top));
    controls.width.input.max=String(100-state.left);controls.height.input.max=String(100-state.top);
    controls.width.input.value=String(state.width);controls.height.input.value=String(state.height);
-   controls.width.value.textContent=Math.round(state.width)+'%';controls.height.value.textContent=Math.round(state.height)+'%';
+   controls.left.value.textContent=Math.round(state.left)+'%';controls.top.value.textContent=Math.round(state.top)+'%';controls.width.value.textContent=Math.round(state.width)+'%';controls.height.value.textContent=Math.round(state.height)+'%';
    const sx=Math.round(image.naturalWidth*state.left/100),sy=Math.round(image.naturalHeight*state.top/100);
    const sw=Math.max(1,Math.round(image.naturalWidth*state.width/100)),sh=Math.max(1,Math.round(image.naturalHeight*state.height/100));
    canvas.width=Math.min(sw,1200);canvas.height=Math.max(1,Math.round(sh*canvas.width/sw));
@@ -884,7 +884,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   };
   const addSlider=(label,key)=>{
    const wrap=document.createElement('label');wrap.style.cssText='display:block;margin:8px 0;color:#bac7dc';
-   const value=document.createElement('strong');value.textContent='100%';value.style.marginLeft='6px';
+   const value=document.createElement('strong');value.textContent=Math.round(state[key])+'%';value.style.marginLeft='6px';
    const input=document.createElement('input');input.type='range';input.min='0';input.max='100';input.value=String(state[key]);input.style.width='100%';
    wrap.append(document.createTextNode(label+' '),value,input);dlg.appendChild(wrap);controls[key]={input,value};
    input.oninput=()=>{state[key]=Number(input.value);draw();};
