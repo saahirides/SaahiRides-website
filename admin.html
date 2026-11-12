@@ -426,6 +426,7 @@ footer {
 </div>
 <div class="subnav" id="socialNav" aria-label="Social Studio sections">
 <button type="button" class="active" data-social-target="ssContentArea">Content & media</button>
+<button type="button" data-social-target="ssVideoUploadArea">Video Upload</button>
 <button type="button" data-social-target="ssMusicArea">Music & audio</button>
 <button type="button" data-social-target="ssPublishingArea">Captions & publishing</button>
 <button type="button" data-social-target="ssImageLibraryArea">Social Images</button>
@@ -449,6 +450,20 @@ footer {
   </div>
   <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
   <div id="ssLibraryGrid" class="grid" style="margin-top:12px"><p class="small">Sign in as an active Admin to load the library.</p></div>
+ </div>
+</div>
+<div id="ssVideoUploadArea" class="hidden">
+ <div class="tile">
+  <h3>Tirupati & project video uploads</h3>
+  <p class="small">A dedicated video-only staging area for finished project videos. Select multiple videos, preview them, then send one video at a time to the existing publishing composer. Files stay on this device until you publish; nothing is uploaded or published by selecting them here.</p>
+  <label for="ssVideoFiles">Choose project videos (MP4, MOV or WebM · up to 100 MB each)</label>
+  <input id="ssVideoFiles" type="file" accept="video/mp4,video/quicktime,video/webm,video/*" multiple>
+  <div id="ssVideoUploadStatus" class="status" role="status" aria-live="polite">No project videos selected yet.</div>
+  <div id="ssVideoPreviewGrid" class="grid" style="margin-top:12px"></div>
+  <label for="ssVideoChoose">Choose one video to prepare for publishing</label>
+  <select id="ssVideoChoose" disabled><option value="">Select a video after choosing files</option></select>
+  <button type="button" id="ssVideoUseBtn" disabled>Use selected video in publishing composer</button>
+  <p class="small">The publishing composer accepts one video per post. Repeat for each of your four videos, review the caption and platforms, then publish. Facebook and Instagram results are checked independently.</p>
  </div>
 </div>
 <div id="ssContentArea">
@@ -1052,6 +1067,47 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   finally{btn.disabled=false;btn.textContent='Upload to RAW';}
  };
  const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
+ const videoFilesInput=$('ssVideoFiles'), videoChoose=$('ssVideoChoose'), videoUseBtn=$('ssVideoUseBtn'), videoStatus=$('ssVideoUploadStatus'), videoPreviewGrid=$('ssVideoPreviewGrid');
+ let stagedVideoFiles=[], stagedVideoUrls=[];
+ function renderStagedVideos(){
+  stagedVideoUrls.forEach(url=>URL.revokeObjectURL(url));stagedVideoUrls=[];
+  stagedVideoFiles=Array.from(videoFilesInput?.files||[]);
+  videoChoose.innerHTML='';
+  videoPreviewGrid.innerHTML='';
+  if(!stagedVideoFiles.length){
+   videoChoose.add(new Option('Select a video after choosing files',''));
+   videoChoose.disabled=true;videoUseBtn.disabled=true;
+   videoStatus.textContent='No project videos selected yet.';return;
+  }
+  if(stagedVideoFiles.some(file=>!file.type.startsWith('video/'))){
+   videoStatus.textContent='One or more selected files are not recognized as video. Choose video files only.';return;
+  }
+  if(stagedVideoFiles.some(file=>file.size>100*1024*1024)){
+   videoStatus.textContent='Each video must be 100 MB or smaller. Remove oversized files and choose again.';return;
+  }
+  videoChoose.add(new Option('Choose a video…',''));
+  stagedVideoFiles.forEach((file,index)=>{
+   const url=URL.createObjectURL(file);stagedVideoUrls.push(url);
+   videoChoose.add(new Option((index+1)+'. '+file.name,index));
+   const card=document.createElement('div');card.className='tile';
+   const title=document.createElement('p');title.className='small';title.textContent=(index+1)+'. '+file.name+' · '+(file.size/1024/1024).toFixed(1)+' MB';
+   const preview=document.createElement('video');preview.src=url;preview.controls=true;preview.playsInline=true;preview.preload='metadata';preview.style.cssText='width:100%;max-height:260px;margin-top:8px;border-radius:8px;background:#06122e';
+   card.append(title,preview);videoPreviewGrid.appendChild(card);
+  });
+  videoChoose.disabled=false;videoUseBtn.disabled=true;
+  videoStatus.textContent=stagedVideoFiles.length+' video(s) staged for review. Select one below to send it to the publishing composer.';
+ }
+ if(videoFilesInput)videoFilesInput.addEventListener('change',renderStagedVideos);
+ if(videoChoose)videoChoose.addEventListener('change',()=>{videoUseBtn.disabled=videoChoose.value==='';});
+ if(videoUseBtn)videoUseBtn.addEventListener('click',()=>{
+  const index=Number(videoChoose.value),file=stagedVideoFiles[index];
+  if(!file||!mediaInput)return;
+  const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;
+  renderSocialMedia();
+  videoStatus.textContent=file.name+' is ready in the publishing composer. Open Captions & publishing to review and publish it.';
+  document.querySelector('[data-social-target="ssPublishingArea"]')?.click();
+ });
+ 
  let ssObjectUrls=[];
  function renderSocialMedia(){
   if(!mediaPreview)return;
