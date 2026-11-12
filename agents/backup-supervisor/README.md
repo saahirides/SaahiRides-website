@@ -8,10 +8,10 @@ It is inspired by full-stack AI builder workflows: understand the existing proje
 ## Operating modes
 
 ### 1. Independent supervisor (scheduled)
-The supervisor audits the daily website QA report and open anomalies. It records its own execution history and never marks partial/infrastructure-blocked QA as passed.
+When explicitly enabled, the supervisor audits the daily website QA report and open anomalies. Its schedule and QA-completion trigger are dormant by default; production access requires the owner-set repository variable or a manual dispatch with the write-approval input. It never marks partial/infrastructure-blocked QA as passed.
 
 ### 2. Master research and advisory (manual)
-The research workflow uses the OpenAI Responses API with live web search, retrieves relevant long-term memory from Supabase, produces a cited Markdown report, and stores the result in the proposed private memory system.
+The research workflow uses the OpenAI Responses API with live web search and produces a cited Markdown report. Supabase memory retrieval and persistence are disabled by default and require an explicit manual workflow input after migration review.
 
 ### 3. Controlled coding workspace (manual; draft PR only)
 The coding workflow accepts a task, reads tracked source context from the trusted main branch, and asks the model to produce a unified diff. It has three isolated jobs:
