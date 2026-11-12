@@ -1,0 +1,151 @@
+name: Watchtower X Coding Workspace
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Describe the code repair or feature to implement"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: watchtower-x-coding-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Generate isolated patch
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout trusted base branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate patch (generated code is not executed)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          WATCHTOWER_TASK: ${{ inputs.task }}
+          WATCHTOWER_CODING_MODEL: gpt-6-astra
+        run: node scripts/backup-agent/coding-agent.mjs
+
+      - name: Upload patch for isolated validation
+        uses: actions/upload-artifact@v4
+        with:
+          name: watchtower-x-patch
+          path: |
+            watchtower.patch
+            watchtower-task.txt
+          if-no-files-found: error
+          retention-days: 7
+
+  validate:
+    name: Validate patch without secrets
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout trusted base branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Download generated patch
+        uses: actions/download-artifact@v4
+        with:
+          name: watchtower-x-patch
+
+      - name: Validate and apply patch in ephemeral workspace
+        run: node scripts/backup-agent/validate-patch.mjs
+
+      - name: Upload validated patch only
+        uses: actions/upload-artifact@v4
+        with:
+          name: watchtower-x-validated-patch
+          path: |
+            watchtower.patch
+            watchtower-task.txt
+          if-no-files-found: error
+          retention-days: 7
+
+  propose-draft-pr:
+    name: Open draft pull request (no merge or deploy)
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout trusted base branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download validated patch
+        uses: actions/download-artifact@v4
+        with:
+          name: watchtower-x-validated-patch
+
+      - name: Apply validated patch and create isolated branch
+        env:
+          TASK: ${{ inputs.task }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          git apply --check watchtower.patch
+          git apply watchtower.patch
+          git diff --check
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No code changes to propose."
+            exit 1
+          fi
+          BRANCH="watchtower/repair-$RUN_ID"
+          rm -f watchtower.patch watchtower-task.txt
+          git config user.name "Watchtower X"
+          git config user.email "watchtower-x@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "feat(watchtower): proposed repair $RUN_ID"
+          git push origin "HEAD:refs/heads/$BRANCH"
+          node -e 'const fs=require("node:fs"); const task=process.env.TASK||""; fs.writeFileSync("watchtower-pr-body.md", "## Watchtower X proposed code change\n\n**Task:**\n"+task+"\n\n## Review gates\n- Generated in an isolated workspace from the trusted main branch.\n- Patch passed path allow-list, protected-path, size, secret-pattern and whitespace checks.\n- JavaScript syntax checks passed for changed .js/.mjs files.\n- This is a draft proposal only. No merge, deployment, production database write, migration or social publication was performed.\n- Human review and required Joint Founder + Director approval remain mandatory for production/IP/business decisions.\n\n## Required review\nInspect the full diff, run relevant browser/functional tests in a non-production preview, verify any API assumptions, and approve explicitly before merging.")'
+
+      - name: Open draft pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: watchtower/repair-${{ github.run_id }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --draft \
+            --title "Watchtower X proposed repair $RUN_ID" \
+            --body-file watchtower-pr-body.md
+
+      - name: Report proposal
+        if: always()
+        run: |
+          echo "Watchtower X coding run finished. Check the Actions run and draft PR."
+          echo "No merge or deployment is performed by this workflow."
