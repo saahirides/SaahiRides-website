@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: watchtower-x-coding-\${{ github.ref }}
+  group: watchtower-x-coding-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -36,8 +36,8 @@ jobs:
 
       - name: Generate patch (generated code is not executed)
         env:
-          OPENAI_API_KEY: \${{ secrets.OPENAI_API_KEY }}
-          WATCHTOWER_TASK: \${{ inputs.task }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          WATCHTOWER_TASK: ${{ inputs.task }}
           WATCHTOWER_CODING_MODEL: gpt-6-astra
         run: node scripts/backup-agent/coding-agent.mjs
 
@@ -109,14 +109,14 @@ jobs:
 
       - name: Apply validated patch and create isolated branch
         env:
-          TASK: \${{ inputs.task }}
-          RUN_ID: \${{ github.run_id }}
+          TASK: ${{ inputs.task }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
           git apply --check watchtower.patch
           git apply watchtower.patch
           git diff --check
-          if git diff --quiet; then
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No code changes to propose."
             exit 1
           fi
@@ -132,9 +132,9 @@ jobs:
 
       - name: Open draft pull request
         env:
-          GH_TOKEN: \${{ github.token }}
-          BRANCH: watchtower/repair-\${{ github.run_id }}
-          RUN_ID: \${{ github.run_id }}
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: watchtower/repair-${{ github.run_id }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           gh pr create \
             --repo "$GITHUB_REPOSITORY" \
