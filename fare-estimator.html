@@ -299,7 +299,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   }
   function isNightTime(){var value=billPickupTime.value;if(!value||value.length<13)return null;var h=Number(value.slice(11,13));return h>=22||h<6}
   function istTimestamp(){return new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date())+' IST'}
-  if(billPickupTime&&!billPickupTime.value)billPickupTime.value=istLocalDateTime();
+  if(billPickupTime){if(!billPickupTime.value)billPickupTime.value=istLocalDateTime();billPickupTime.min=istLocalDateTime();}
   function billCustomer(){
     return bookingPurpose==='someone-else'
       ? {name:otherRiderName.value.trim(),phone:otherRiderPhone.value.trim()}
@@ -448,7 +448,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   billSend.addEventListener('click',function(){
     var route=window.saahiRouteContext,customer=billCustomer(),choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
     var recipient=choice&&choice.value==='alternate'?normalizedPhone(billAlternateInput.value):normalizedPhone(customer.phone);
-    if(!route||route.distanceKm>30||isNightTime()||!customer.name||!normalizedPhone(customer.phone)||!recipient){updateBill();return}
+    if(!route||route.distanceKm>30||isNightTime()!==false||!customer.name||!normalizedPhone(customer.phone)||!recipient){updateBill();return}
     window.open('https://wa.me/'+recipient+'?text='+encodeURIComponent(buildBillMessage()),'_blank','noopener');
   });
   updateBill();
