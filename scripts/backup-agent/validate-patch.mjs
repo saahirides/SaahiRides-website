@@ -24,7 +24,7 @@ if (paths.length > 12) throw new Error("Patch touches more than 12 files.");
 const added = [...patch.matchAll(/^\+(?!\+\+)(.*)$/gm)].length, removed = [...patch.matchAll(/^-(?!--)(.*)$/gm)].length;
 if (added + removed > 1200) throw new Error("Patch exceeds 1200 changed lines.");
 const addedLines = [...patch.matchAll(/^\+(?!\+\+)(.*)$/gm)].map(m => m[1]).join("\n");
-const secretPatterns = [/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/, /\bsk-[A-Za-z0-9_-]{24,}\b/, /\bsb_secret_[A-Za-z0-9_-]{20,}\b/, /\bgh[pousr]_[A-Za-z0-9]{30,}\b/, /\bAKIA[0-9A-Z]{16}\b/, /service_role\s*[:=]\s*["'][^"']{12,}["']/i];
+const secretPatterns = [/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/, /\bsk-[A-Za-z0-9_-]{24,}\b/, /\bsb_secret_[A-Za-z0-9_-]{20,}\b/, /\bgh[pousr]_[A-Za-z0-9]{30,}\b/, /\bAKIA[0-9A-Z]{16}\b/, /service_role\s*[:=]\s*["'][^"']{12,}["']/i, /AIza[0-9A-Za-z_-]{30,}/, /(?:api[_-]?key|secret|token)\s*[:=]\s*["'][A-Za-z0-9._-]{24,}["']/i];
 for (const pattern of secretPatterns) if (pattern.test(addedLines)) throw new Error("Potential secret or credential detected.");
 await exec("git", ["apply", "--check", "watchtower.patch"]);
 await exec("git", ["apply", "watchtower.patch"]);
