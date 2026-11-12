@@ -1,152 +1,182 @@
 {
-  "runAt": "2026-11-12T02:26:57.748Z",
-  "reportDate": "2026-11-12",
+  "runAt": "2026-11-12T08:37:42.110Z",
   "target": "https://saahirides.co.in",
-  "repository": "saahirides/SaahiRides-website",
-  "branch": "main",
+  "pagesDiscovered": 18,
+  "pagesInspected": 18,
+  "openAnomalies": 2,
+  "newlyDetected": 0,
+  "reopenedDefectCount": 0,
+  "notReproducedPendingVerification": 2,
+  "movedToClosedAfterCleanRun": 0,
+  "currentBrowserRun": true,
+  "fullSuiteExecuted": false,
   "executionStatus": "partial",
   "reportClosed": false,
-  "executionRecordClosed": false,
-  "closureState": "INCOMPLETE — current-day Playwright suite did not execute; 12 defects remain open.",
-  "sourceCommit": "e96ff3d7b4eb5ed2cb1bef5ca969fae6ce95bfef",
-  "currentMainCommit": "eaebd44b466b698bf1d43263f2e30538ba4ff11f",
-  "currentBrowserRun": false,
-  "pagesDiscovered": 18,
-  "pagesInspected": 0,
-  "pageResults": [],
-  "openAnomalies": 12,
-  "movedToClosedAfterCleanRun": 0,
-  "passedCheckCount": 8,
-  "failedCheckCount": 11,
-  "blockedTestCount": 9,
-  "skippedTestCount": 4,
-  "criticalRisks": [],
-  "highRisks": [
-    "Driver activation remains unavailable until a verified server-side payment and entitlement flow is implemented; mock success and client token generation are disabled.",
-    "GitHub Actions QA still lacks secured Supabase ingestion and a current-day dispatch/verification path.",
-    "The current browser runner remains a partial sitemap smoke suite; forms, booking, WhatsApp, SOS, tours, responsive and authenticated journeys are not yet covered."
-  ],
-  "openDefects": [
-    "driver-root-js-syntax",
-    "driver-activation-mock-flow",
-    "fare-estimator-subscription-pricing",
-    "google-maps-key-placeholder",
-    "legacy-customer-firebase-placeholder",
-    "github-actions-qa-workflow-not-run",
-    "github-supabase-qa-ingestion-missing",
-    "qa-orchestrator-defect-lifecycle",
-    "qa-orchestrator-coverage-gap",
-    "non-sitemap-image-alt-gaps",
-    "travel-tours-destination-cart-runtime",
-    "qa-run-success-with-browser-errors"
-  ],
-  "blockedTests": [
-    "Current-day Playwright run: no workflow-dispatch action is exposed; local Playwright is not installed and outbound DNS is unavailable.",
-    "Current production HTTP/browser-console checks from this runtime.",
-    "Interactive driver/customer form validation and submission.",
-    "Fare calculator interaction and live Google Maps route calculation.",
-    "WhatsApp bot end-to-end conversation with a safe test number.",
-    "SOS dialog runtime interaction and in-ride emergency dispatch.",
-    "Responsive viewport/browser layout testing.",
-    "Authenticated Admin/HR workflows.",
-    "External asset HTTP status checks."
-  ],
-  "failedChecks": [
-    "At the QA snapshot, root driver.html had a JavaScript parse error and a placeholder form URL; the script and URL were corrected after the run, with browser retest pending.",
-    "At the QA snapshot, root and app activation pages had malformed scripts and client-generated mock activation; the mock success/token flow has since been removed and online activation disabled pending a verified server-side payment flow.",
-    "At the QA snapshot, the fare estimator used obsolete add-ons; the approved 15% discount formula and visible pricing copy have since been corrected, with browser retest pending.",
-    "maps-config.js contains the browser-key placeholder, disabling Google Maps Places/Routes initialisation.",
-    "At the QA snapshot, root customer.html used placeholder Firebase credentials; it has since been replaced by a redirect to the current app/customer.html form, browser retest pending.",
-    "At the QA snapshot, the Nov 11 Playwright run observed a travel-tours.html replaceChildren null-reference error; null guards have since been added, browser retest pending.",
-    "At the QA snapshot, three non-sitemap images lacked alt text; descriptive alt text has since been added, scan retest pending.",
-    "At the QA snapshot, the runner could auto-close unresolved anomalies; the lifecycle logic has since been corrected to retain and reopen defects, pending workflow retest.",
-    "The runner still does not cover forms, booking, fare calculation, WhatsApp, SOS, tour cart/map, responsive viewports or authenticated Admin/HR journeys.",
-    "At the QA snapshot, browser runtime errors did not fail the workflow; the runner now exits non-zero while any anomaly remains open, pending workflow retest.",
-    "GitHub Actions does not ingest QA runs/events/anomalies into Supabase through the secured Command Centre action."
-  ],
-  "passedChecks": [
-    "Latest scheduled Playwright run on Nov 11 inspected 18 sitemap pages; all returned HTTP 200.",
-    "Latest scheduled run performed 8 bounded homepage probes; all returned HTTP 200 with 3–130 ms observed latency.",
-    "Previous full static scan covered 37 HTML files and 18 sitemap URLs with no unresolved same-origin references.",
-    "All 18 sitemap pages were reported with title and meta description; no missing-alt images were reported on those pages.",
-    "The separate app/driver.html page contains the Google Form URL; all three driver recruitment image assets exist on the image-assets branch.",
-    "The /book/ route redirects to fare-estimator.html and the homepage quick-book entry point links to the fare estimator.",
-    "app/home.html calculates subscription totals with the approved 15% discount factor of 0.85.",
-    "The homepage SOS panel explicitly states it does not send alerts or share location and provides tel:112 and SaahiRides contact links."
-  ],
-  "skippedTests": [
-    "Real booking submissions.",
-    "Payment or activation transactions.",
-    "Outbound WhatsApp/customer/driver messages.",
-    "Production stress/load testing."
-  ],
-  "previousBrowserEvidence": {
-    "date": "2026-11-11",
-    "workflowRunId": 42983319938,
-    "workflowRunUrl": "https://github.com/saahirides/SaahiRides-website/actions/runs/42983319938",
-    "testedCommit": "b219f5850034b154530c3bf8e53528cca7339cef",
-    "pagesDiscovered": 18,
-    "pagesInspected": 18,
-    "http200Pages": 18,
-    "browserRuntimeErrors": 2,
-    "latencyMsMin": 3,
-    "latencyMsMax": 130
+  "coverageScope": "Sitemap navigation, title/meta, image alt, same-origin references, browser errors and homepage light-load probe only. Forms, booking, WhatsApp, SOS, tours, responsive and authenticated Admin/HR journeys remain outside this runner.",
+  "lightLoadProbe": {
+    "requests": 8,
+    "workers": 4,
+    "results": [
+      {
+        "status": 200,
+        "latencyMs": 67
+      },
+      {
+        "status": 200,
+        "latencyMs": 71
+      },
+      {
+        "status": 200,
+        "latencyMs": 8
+      },
+      {
+        "status": 200,
+        "latencyMs": 8
+      },
+      {
+        "status": 200,
+        "latencyMs": 92
+      },
+      {
+        "status": 200,
+        "latencyMs": 94
+      },
+      {
+        "status": 200,
+        "latencyMs": 7
+      },
+      {
+        "status": 200,
+        "latencyMs": 9
+      }
+    ]
   },
-  "workflowStatus": {
-    "workflowCron": "30 1 * * *",
-    "workflowDispatchPresent": true,
-    "currentDayRunVisibleBy0757IST": false,
-    "workflowDispatchActionAvailableInConnector": false,
-    "latestCompletedRunConclusion": "success despite 2 browser runtime errors"
-  },
-  "currentStaticRecheck": {
-    "missingAltImages": 0,
-    "currentBrowserRun": false,
-    "sosDispatchActive": false,
-    "driverFormRootPageBroken": false,
-    "mapsKeyPlaceholderPresent": true,
-    "activationScriptTagMismatch": false,
-    "legacyCustomerFirebasePlaceholderPresent": false,
-    "qaRunnerAutoCloseDisabled": true,
-    "qaRunnerFailsOnOpenAnomalies": true,
-    "travelToursNullGuardsAdded": true
-  },
-  "postRunChanges": {
-    "fareSubscriptionFormula": "Corrected to one-way = On-Demand × 30 × 0.85 and both-way = On-Demand × 60 × 0.85; no joining fee or route-lock add-on.",
-    "driverRegistration": "Root script repaired, phone validation added and correct Google Form URL restored; browser retest pending.",
-    "driverActivation": "Mock success and client token generation removed from root and app activation pages; online activation disabled until verified server-side payment is implemented.",
-    "browserRetestPending": true,
-    "commits": [
-      "26283bdbd7166b530e065017af3135f8111ecaa3",
-      "5a899f2189dc87138924708bb93ba190bec24ae5",
-      "91b33b7648d0747e25c03f47b738b20a844ddddc",
-      "eb10fdae3572ec15f16c87c781bca52684fb1e6b",
-      "8dbafd6db2c77b684204b651567d28bedd5df785",
-      "a0361dc10fd047b738c11c5bcb4759d338fcef0c",
-      "7e5533a74a56d7d4a843141e26286146e43806a9",
-      "18d6e00474af33f26c938e7dd286dd0e9b374f23",
-      "1c1971368af5ffba846263a41dfd48a57b2fe80b",
-      "e2053db1201c1b9bdeeb534b43cec7d5710f68da",
-      "08992a29e89adb5dfa3613dcce8f78415723904b",
-      "cef070e56390f58fb3eba8c2f73af3a9b7f3d621",
-      "eaebd44b466b698bf1d43263f2e30538ba4ff11f"
-    ],
-    "qaLifecycle": "Runner retains unreproduced defects as OPEN_PENDING_VERIFICATION, reopens recurrence, and never auto-closes.",
-    "tourCart": "Null guards added around destination/cart replaceChildren calls; browser retest pending.",
-    "imageAlt": "Alt text added to app/index.html, rates.html and vision.html; scan retest pending.",
-    "legacyCustomer": "Root customer.html now redirects to the current app/customer.html form; browser retest pending.",
-    "incompleteRunPolicy": "Runner exits non-zero whenever anomalies remain or fullSuiteExecuted is false; full interactive suite still needs implementation."
-  },
-  "safety": {
-    "paymentsAttempted": false,
-    "outboundMessagesSent": false,
-    "sosDispatchAttempted": false,
-    "realBookingsAttempted": false,
-    "productionStressTestAttempted": false
-  },
-  "notes": [
-    "This is not a clean daily QA pass and must not be closed.",
-    "No current-day browser run was executed; prior browser evidence is from Nov 11.",
-    "All 12 anomalies remain open pending fixes and verified retests."
+  "pageResults": [
+    {
+      "url": "https://saahirides.co.in/news-desk.html",
+      "status": 200,
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog.html",
+      "status": 200,
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "status": 200,
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/",
+      "status": 200,
+      "title": "SaahiRides Transit Pvt. Ltd. | Safe & Affordable Rides in Hyderabad - Bikes, Auto, Cabs",
+      "forms": 0,
+      "buttons": 9
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-ramoji-yadadri.html",
+      "status": 200,
+      "title": "Ramoji Film City & Yadadri: Two Very Different Telangana Experiences | CEO’s Blog",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/offers.html",
+      "status": 200,
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/travel-tours.html",
+      "status": 200,
+      "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
+      "forms": 1,
+      "buttons": 30
+    },
+    {
+      "url": "https://saahirides.co.in/fare-estimator.html",
+      "status": 200,
+      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 11
+    },
+    {
+      "url": "https://saahirides.co.in/company-inception.html",
+      "status": 200,
+      "title": "Company Inception Details | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
+      "status": 200,
+      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
+      "status": 200,
+      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "status": 200,
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/on-demand-fare-chart.html",
+      "status": 200,
+      "title": "SaahiRides On-Demand Fare Chart",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/community.html",
+      "status": 200,
+      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
+      "forms": 1,
+      "buttons": 1
+    },
+    {
+      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
+      "status": 200,
+      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/driver.html",
+      "status": 200,
+      "title": "Driver Network - SaahiRides",
+      "forms": 1,
+      "buttons": 4
+    },
+    {
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "status": 200,
+      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "status": 200,
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    }
   ]
 }
