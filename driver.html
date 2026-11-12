@@ -150,36 +150,60 @@
 
     <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Driver onboarding: open an addressed WhatsApp message to official SaahiRides support.
+        // Save a consented driver enquiry to the existing SaahiRides lead manager before opening WhatsApp.
         (function () {
             const form = document.getElementById('whatsappOnboardingForm');
+            const nameInput = document.getElementById('driverName');
             const phoneInput = document.getElementById('driverWhatsApp');
-            const googleFormUrl = 'https://forms.gle/gzAUZCfi1ETX5MLw7';
+            const consentInput = document.getElementById('driverConsent');
+            const status = document.getElementById('driverApplyStatus');
+            const formUrl = 'https://forms.gle/gzAUZCfi1ETX5MLw7';
+            const supabaseUrl = 'https://uzwubbzlytqqewqibobr.supabase.co';
+            const publishableKey = 'sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq';
 
-            form.addEventListener('submit', function (event) {
+            form.addEventListener('submit', async function (event) {
                 event.preventDefault();
+                const name = nameInput.value.trim();
                 const digits = phoneInput.value.replace(/\D/g, '');
-                const indianMobile = digits.length === 10 ? '91' + digits : digits;
+                if (!form.reportValidity() || !name || !/^([6-9]\d{9})$/.test(digits) || !consentInput.checked) return;
 
-                if (!/^91[6-9]\d{9}$/.test(indianMobile)) {
-                    phoneInput.setCustomValidity('Enter a valid 10-digit Indian mobile number.');
-                    phoneInput.reportValidity();
-                    phoneInput.setCustomValidity('');
-                    return;
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                status.textContent = 'Submitting your driver enquiry securely…';
+                try {
+                    const response = await fetch(supabaseUrl + '/functions/v1/saahirides-lead-manager', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': publishableKey
+                        },
+                        body: JSON.stringify({
+                            action: 'capture',
+                            name,
+                            phone: digits,
+                            lead_type: 'driver',
+                            source_channel: 'website',
+                            location: 'Hyderabad',
+                            landing_page: window.location.href,
+                            consent: true
+                        })
+                    });
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || result.error) throw new Error(result.error || 'Could not save your enquiry. Please retry.');
+                    status.textContent = 'Your driver enquiry has been recorded. Opening the official registration form and support chat…';
+                    const message = encodeURIComponent(
+                        'Hello SaahiRides, I have submitted my driver registration interest. Name: ' +
+                        name + '. WhatsApp mobile: +91' + digits +
+                        '. Please guide me through the official registration and verification. Form: ' + formUrl
+                    );
+                    window.location.assign('https://wa.me/919347946026?text=' + message);
+                } catch (error) {
+                    status.textContent = error instanceof Error ? error.message : 'Submission failed. Please try again.';
+                    submitButton.disabled = false;
                 }
-
-                const supportMessage = encodeURIComponent(
-                    'Hello SaahiRides, I want to register as a driver. My WhatsApp mobile number is +' +
-                    indianMobile +
-                    '. Please guide me through verification. Official registration form: ' +
-                    googleFormUrl
-                );
-                const whatsappUrl = 'https://wa.me/919347946026?text=' + supportMessage;
-                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
             });
         })();
 
-        // Routes registered drivers to the existing activation page.
         function navigateToDashboard() {
             window.location.href = 'app/activation.html';
         }
