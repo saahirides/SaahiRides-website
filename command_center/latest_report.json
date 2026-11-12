@@ -9,7 +9,7 @@
   "executionRecordClosed": false,
   "closureState": "INCOMPLETE — current-day Playwright suite did not execute; 12 defects remain open.",
   "sourceCommit": "e96ff3d7b4eb5ed2cb1bef5ca969fae6ce95bfef",
-  "currentMainCommit": "91b33b7648d0747e25c03f47b738b20a844ddddc",
+  "currentMainCommit": "a0361dc10fd047b738c11c5bcb4759d338fcef0c",
   "currentBrowserRun": false,
   "pagesDiscovered": 18,
   "pagesInspected": 0,
@@ -53,9 +53,9 @@
     "External asset HTTP status checks."
   ],
   "failedChecks": [
-    "Root driver.html has a JavaScript parse error; its submit handler cannot register and its Google Form destination is only https://google.com.",
-    "Root activation.html and app/activation.html contain malformed JavaScript; app/activation.html has an unterminated script block and mock localStorage activation.",
-    "The fare estimator subscription formula was stale at scan time; it has since been corrected to the approved 15% discount, pending browser retest.",
+    "At the QA snapshot, root driver.html had a JavaScript parse error and a placeholder form URL; the script and URL were corrected after the run, with browser retest pending.",
+    "At the QA snapshot, root and app activation pages had malformed scripts and client-generated mock activation; the mock success/token flow has since been removed and online activation disabled pending a verified server-side payment flow.",
+    "At the QA snapshot, the fare estimator used obsolete add-ons; the approved 15% discount formula and visible pricing copy have since been corrected, with browser retest pending.",
     "maps-config.js contains the browser-key placeholder, disabling Google Maps Places/Routes initialisation.",
     "Legacy root customer.html loads gstatic.com and contains placeholder Firebase credentials.",
     "The Nov 11 Playwright run observed a travel-tours.html replaceChildren null-reference runtime error.",
@@ -104,18 +104,23 @@
     "missingAltImages": 3,
     "currentBrowserRun": false,
     "sosDispatchActive": false,
-    "driverFormRootPageBroken": true,
+    "driverFormRootPageBroken": false,
     "mapsKeyPlaceholderPresent": true,
-    "activationScriptTagMismatch": true,
+    "activationScriptTagMismatch": false,
     "legacyCustomerFirebasePlaceholderPresent": true
   },
   "postRunChanges": {
-    "fareSubscriptionFormula": "Corrected after the QA snapshot to one-way = On-Demand × 30 × 0.85; both-way = On-Demand × 60 × 0.85. No joining fee or route-lock add-on.",
+    "fareSubscriptionFormula": "Corrected to one-way = On-Demand × 30 × 0.85 and both-way = On-Demand × 60 × 0.85; no joining fee or route-lock add-on.",
+    "driverRegistration": "Root script repaired, phone validation added and correct Google Form URL restored; browser retest pending.",
+    "driverActivation": "Mock success and client token generation removed from root and app activation pages; online activation disabled until verified server-side payment is implemented.",
     "browserRetestPending": true,
     "commits": [
       "26283bdbd7166b530e065017af3135f8111ecaa3",
       "5a899f2189dc87138924708bb93ba190bec24ae5",
-      "91b33b7648d0747e25c03f47b738b20a844ddddc"
+      "91b33b7648d0747e25c03f47b738b20a844ddddc",
+      "eb10fdae3572ec15f16c87c781bca52684fb1e6b",
+      "8dbafd6db2c77b684204b651567d28bedd5df785",
+      "a0361dc10fd047b738c11c5bcb4759d338fcef0c"
     ]
   },
   "safety": {
