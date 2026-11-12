@@ -391,7 +391,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var bothWay = Math.round(onDemand * 60 + 299);
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
-    var passengerDetails = bookingPurpose === 'someone-else' ? '\nBooking for: Someone else\nPassenger name: ' + (otherRiderName.value.trim() || 'To be provided') + '\nPassenger mobile: ' + (otherRiderPhone.value.trim() || 'To be provided') : '\nBooking for: Myself';
+    var passengerDetails = bookingPurpose === 'someone-else' ? '\nBooking for: Someone else\nPassenger name: ' + (otherRiderName.value.trim() || 'To be provided') + '\nPassenger mobile: ' + (otherRiderPhone.value.trim() || 'To be provided') + '\nRide OTP recipient (passenger): ' + otherRiderPhone.value.trim() : '\nBooking for: Myself\nCustomer name: ' + billNameInput.value.trim() + '\nCustomer mobile: ' + billPhoneInput.value.trim() + '\nRide OTP recipient (passenger): ' + billPhoneInput.value.trim();
     var message = 'BOOK\nSaahiRides fare estimate' + passengerDetails + '\nVehicle: ' + selectedVehicle +
       '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
       '\n30-day subscription one-way: ₹' + oneWay +
@@ -421,6 +421,11 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
         otherRiderPhone.reportValidity();
         otherRiderPhone.focus();
       }else{otherRiderPhone.setCustomValidity('');}
+    }
+    } else if(!billNameInput.value.trim() || !normalizedPhone(billPhoneInput.value)) {
+      event.preventDefault();
+      alert('Enter the customer name and mobile number so the booking team can send the ride OTP to the correct passenger.');
+      if(!billNameInput.value.trim())billNameInput.focus();else billPhoneInput.focus();
     }
   });
   slider.addEventListener('input',updateEstimate);
