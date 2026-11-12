@@ -422,7 +422,6 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
         otherRiderPhone.reportValidity();
         otherRiderPhone.focus();
       }else{otherRiderPhone.setCustomValidity('');}
-    }
     } else if(!billNameInput.value.trim() || !normalizedPhone(billPhoneInput.value)) {
       event.preventDefault();
       alert('Enter the customer name and mobile number so the booking team can send the ride OTP to the correct passenger.');
