@@ -171,7 +171,7 @@ function coords(p){return p.lat.toFixed(6)+', '+p.lng.toFixed(6)}
 function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop';var fareSlider=document.getElementById('estimator-distance-slider');if(fareSlider){fareSlider.disabled=true;fareSlider.dispatchEvent(new Event('input',{bubbles:true}))}}
 function setPin(which,ll,auto,addressLabel){
 var p={lat:ll.lat,lng:ll.lng};clearRoute();var marker=which==='pickup'?pickupMarker:dropMarker;
-if(!marker){marker=L.marker(ll,{draggable:true}).addTo(map);marker.on('dragend',function(e){setPin(which,e.target.getLatLng(),true)});if(which==='pickup')pickupMarker=marker;else dropMarker=marker}else marker.setLatLng(ll);
+if(!marker){marker=L.marker(ll,{draggable:true}).addTo(map);marker.on('dragend',function(e){var moved=e.target.getLatLng();setPin(which,moved,true);reverseGeocode(moved).then(function(label){if(which==='pickup')pickupInput.value=label;else dropInput.value=label;if(window.saahiRouteContext){if(which==='pickup')window.saahiRouteContext.pickupAddress=label;else window.saahiRouteContext.dropAddress=label}}).catch(function(){})});if(which==='pickup')pickupMarker=marker;else dropMarker=marker}else marker.setLatLng(ll);
 if(which==='pickup'){pickupPoint=p;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=addressLabel||coords(p)}else{dropPoint=p;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=addressLabel||coords(p)}
 say(which+' selected. '+(pickupPoint&&dropPoint?'Calculating driving distance…':'Select the '+(which==='pickup'?'drop':'pickup')+' location.'));
 if(pickupPoint&&dropPoint&&auto!==false)calculateRoute()
@@ -199,11 +199,12 @@ if(km<=30){var bill=Math.ceil(km*10)/10,slider=document.getElementById('estimato
 else say('Route calculated: '+km.toFixed(2)+' km. City fare limit is 30 km; request an outstation quote.')
 }).catch(function(e){if(id!==routeRequest)return;window.saahiRouteContext=null;routeDistance.textContent='Not available';say(e.message||'Could not calculate road distance. Retry.')}).finally(function(){if(id===routeRequest){routeButton.disabled=false;routeButton.textContent='Calculate distance & fare'}})
 }
-function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}\nfunction reverseGeocode(ll){return fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(ll.lat)+'&lon='+encodeURIComponent(ll.lng)+'&zoom=18&addressdetails=1',{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address lookup unavailable');return r.json()}).then(function(d){return d&&d.display_name?d.display_name:coords(ll)})}
+function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}
+function reverseGeocode(ll){return fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(ll.lat)+'&lon='+encodeURIComponent(ll.lng)+'&zoom=18&addressdetails=1',{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address lookup unavailable');return r.json()}).then(function(d){return d&&d.display_name?d.display_name:coords(ll)})}
 locateButton.addEventListener('click',function(){if(bookingForOther){say('For someone else, search the passenger’s actual pickup and drop addresses.');return}
 if(!navigator.geolocation){say('Browser does not support GPS. Search addresses or tap the map.');return}if(!map){say('Map is not ready. Reload and retry.');return}
 say('Requesting phone location permission…');
-navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Fresh GPS fix received. Resolving pickup address…');reverseGeocode(p).then(function(label){pickupInput.value=label;say('Fresh current location set as pickup. Search the drop address.')}).catch(function(){say('Fresh GPS pickup set. Search the drop address.')})},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
+navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Fresh GPS fix received. Resolving pickup address…');reverseGeocode(p).then(function(label){pickupInput.value=label;if(window.saahiRouteContext)window.saahiRouteContext.pickupAddress=label;say('Fresh current location set as pickup. Search the drop address.')}).catch(function(){say('Fresh GPS pickup set. Search the drop address.')})},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
 });
 addressButton.addEventListener('click',function(){
 var a=pickupInput.value.trim(),b=dropInput.value.trim();if(!a||!b){say('Enter both pickup and drop addresses first.');return}
@@ -214,7 +215,7 @@ function resolveAddressInput(input,which){
 var q=input.value.trim();if(!q)return;
 say('Finding '+which+' address…');
 geocode(q).then(function(ll){
-setPin(which,ll,false);
+setPin(which,ll,false,q);
 if(map){map.setView(ll,15)}
 if(pickupPoint&&dropPoint)calculateRoute();
 else say(which+' found. Set the '+(which==='pickup'?'drop':'pickup')+' location to calculate road distance.');
