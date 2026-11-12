@@ -577,7 +577,7 @@ footer {
   $('tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category==='HR'));
   }await loadPolicies(category);
   if(admin)startNotificationChannel();
-  say('Signed in. Permissions checked against Supabase database records.');
+  say('Signed in. Permissions checked against Supabase database records.');if(admin)await loadSocialAudio();
   }
  $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='talkBack'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
   ['pricingHistory','policyCentre','approvalNote','socialStudio','socialCampaign','talkBack','commandCenter'].forEach(id=>show(id,id===target));
