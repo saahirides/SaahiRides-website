@@ -84,7 +84,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       <div id="saahi-route-map" role="application" aria-label="Map for selecting pickup and drop" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
       <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Confirm to calculate road distance and fare.</span></div>
       <p class="route-distance-line">Driving-road distance: <strong id="saahi-route-distance">Waiting for pickup and drop</strong></p>
-      <p class="readout-calculation-note">The driving-road distance is calculated by Ola Maps. Fares update automatically for city routes up to 30 km. Longer trips need an outstation quote. If routing is unavailable, the distance slider remains as a manual fallback.</p>
+      <p class="readout-calculation-note">The driving-road distance is calculated using OpenStreetMap routing (OSRM). Fares update automatically for city routes up to 30 km. Longer trips need an outstation quote. If routing is unavailable, the distance slider remains as a manual fallback.</p>
     </div>
   </section>
   <div class="estimator-interface-grid">
@@ -150,12 +150,15 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   var locateButton=document.getElementById('saahi-use-location');
   var routeStatus=document.getElementById('saahi-route-status');
   var routeDistance=document.getElementById('saahi-route-distance');
-  var map=null, pickupMarker=null, dropMarker=null, nextPin='pickup';
+  var map=null, pickupMarker=null, dropMarker=null, routeLine=null, nextPin='pickup';
   var pickupPoint=null, dropPoint=null;
   function say(message){routeStatus.textContent=message}
   function coords(point){return point.lat.toFixed(6)+', '+point.lng.toFixed(6)}
   function setPin(which,latlng){
     var point={lat:latlng.lat,lng:latlng.lng};
+    window.saahiRouteContext=null;
+    if(routeLine&&map){map.removeLayer(routeLine);routeLine=null;}
+    routeDistance.textContent='Waiting for pickup and drop';
     var marker=which==='pickup'?pickupMarker:dropMarker;
     if(!marker){
       marker=L.marker(latlng,{draggable:true}).addTo(map);
@@ -176,7 +179,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';
       setPin(which,event.latlng);nextPin=which==='pickup'?'drop':'pickup';
     });
-    say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust. Address lookup and road routing require a configured provider.');
+    say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust, then confirm to calculate the driving route.');
   }
   locateButton.addEventListener('click',function(){
     if(!navigator.geolocation){say('This browser does not provide location access. Enter an address note or tap the map.');return}
@@ -191,44 +194,45 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     routeButton.disabled=true;
     routeButton.textContent='Calculating road route…';
     routeDistance.textContent='Calculating…';
-    say('Calculating the driving-road distance and fare…');
+    say('Calculating the driving-road distance…');
     try{
-      var response=await fetch('https://uzwubbzlytqqewqibobr.supabase.co/functions/v1/saahi-route-distance',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtCncdpnbe9ZZiHVZVE',
-          'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtCncdpnbe9ZZiHVZVE'
-        },
-        body:JSON.stringify({pickup:pickupPoint,drop:dropPoint})
-      });
+      var routeUrl='https://router.project-osrm.org/route/v1/driving/'+
+        pickupPoint.lng+','+pickupPoint.lat+';'+dropPoint.lng+','+dropPoint.lat+
+        '?overview=full&geometries=geojson&steps=false';
+      var response=await fetch(routeUrl,{method:'GET',headers:{'Accept':'application/json'}});
+      if(!response.ok) throw new Error('The road-routing service is temporarily unavailable. Please retry or use the manual distance control.');
       var result=await response.json();
-      if(!response.ok) throw new Error(result.code==='ROUTING_NOT_CONFIGURED'?'Ola Maps key is not configured in SaahiRides yet.':'Could not calculate this road route. Please adjust the pins and retry.');
-      var distanceKm=Number(result.distance_km);
-      if(!Number.isFinite(distanceKm)||distanceKm<=0) throw new Error('The route service returned an invalid distance.');
+      var route=result&&result.code==='Ok'&&result.routes&&result.routes[0];
+      var distanceKm=route?Number(route.distance)/1000:NaN;
+      if(!Number.isFinite(distanceKm)||distanceKm<=0) throw new Error('No driving route was found between these pins. Adjust the pins and retry.');
       var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
       var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
-      window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pickupNav,dropNav:dropNav,distanceKm:distanceKm,durationSeconds:result.duration_seconds||null};
+      window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pickupNav,dropNav:dropNav,distanceKm:distanceKm,durationSeconds:route.duration||null};
+      if(routeLine&&map)map.removeLayer(routeLine);
+      if(route.geometry&&route.geometry.coordinates&&map){
+        var latlngs=route.geometry.coordinates.map(function(pair){return [pair[1],pair[0]];});
+        routeLine=L.polyline(latlngs,{color:'#ffd700',weight:5,opacity:.9}).addTo(map);
+        map.fitBounds(routeLine.getBounds(),{padding:[24,24]});
+      }
       routeDistance.textContent=distanceKm.toFixed(2)+' km';
       if(distanceKm>30){
-        say('Road route is '+distanceKm.toFixed(2)+' km. This is above the 30 km city fare estimator; request an outstation quote.');
+        say('Driving route: '+distanceKm.toFixed(2)+' km. This exceeds the 30 km city estimator; request an outstation quote. Route details will be included in WhatsApp.');
       }else{
         var billableDistance=Math.ceil(distanceKm*10)/10;
         var slider=document.getElementById('estimator-distance-slider');
         slider.value=Math.max(0.1,billableDistance).toFixed(1);
         slider.dispatchEvent(new Event('input',{bubbles:true}));
-        say('Road route confirmed: '+distanceKm.toFixed(2)+' km. Fare automatically calculated using '+billableDistance.toFixed(1)+' km. Your driver will call near pickup to confirm the meeting point.');
+        say('Driving route confirmed: '+distanceKm.toFixed(2)+' km. Fare updated using '+billableDistance.toFixed(1)+' km.');
       }
-      var msg='BOOK\\nSaahiRides pickup: '+coords(pickupPoint)+'\\nPickup navigation: '+pickupNav+'\\nPickup note: '+pickupInput.value+'\\nDrop: '+coords(dropPoint)+'\\nDrop navigation: '+dropNav+'\\nDrop note: '+dropInput.value+'\\nDriving-road distance: '+distanceKm.toFixed(2)+' km\\nPlease call customer near the pickup point to confirm exact meeting position.';
-      document.getElementById('estimator-booking-link').href='https://wa.me/919347946026?text='+encodeURIComponent(msg);
     }catch(error){
+      window.saahiRouteContext=null;
       routeDistance.textContent='Not available';
-      say(error.message||'Routing is temporarily unavailable. You can still use the manual distance slider.');
+      say(error.message||'Road routing is temporarily unavailable. You can still use the manual distance slider.');
     }finally{
       routeButton.disabled=false;
       routeButton.textContent='Confirm pickup & drop';
     }
-  });;
+  });
   initMap();
 })();
 </script>
