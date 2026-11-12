@@ -1,0 +1,35 @@
+import { readFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+const exec = promisify(execFile);
+const patch = await readFile("watchtower.patch", "utf8");
+if (!patch.startsWith("diff --git ")) throw new Error("Patch must start with a git diff header.");
+if (Buffer.byteLength(patch) > 180000) throw new Error("Patch exceeds 180 KB.");
+if (/GIT binary patch|^new file mode 120000|^deleted file mode|^old mode |^new mode |^rename from |^rename to /m.test(patch)) throw new Error("Binary, symlink, deletion, rename or file-mode changes are prohibited.");
+const headers = [...patch.matchAll(/^diff --git a\/(.+?) b\/(.+)$/gm)];
+if (!headers.length) throw new Error("No valid diff headers found.");
+const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|node_modules\/|vendor\/|dist\/|build\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
+const allowedExt = new Set([".html", ".js", ".mjs", ".css", ".md", ".txt"]), paths = [];
+for (const match of headers) {
+  const a = match[1], b = match[2], path = b;
+  if (a !== b) throw new Error("New/deleted/renamed paths are prohibited.");
+  if (path.startsWith("/") || path.split("/").includes("..") || path.includes("\\") || deny.test(path)) throw new Error("Protected or unsafe path rejected: " + path);
+  const name = path.split("/").pop(), dot = name.lastIndexOf(".");
+  if (dot < 1 || !allowedExt.has(name.slice(dot).toLowerCase())) throw new Error("File extension outside allow-list: " + path);
+  if (!/^(?:[^/]+|app\/|automated_suite\/|assets\/|scripts\/|agents\/|tests\/)/.test(path)) throw new Error("Path outside allowed workspace: " + path);
+  if (paths.includes(path)) throw new Error("Duplicate path: " + path);
+  paths.push(path);
+}
+if (paths.length > 12) throw new Error("Patch touches more than 12 files.");
+const added = [...patch.matchAll(/^\+(?!\+\+)(.*)$/gm)].length, removed = [...patch.matchAll(/^-(?!--)(.*)$/gm)].length;
+if (added + removed > 1200) throw new Error("Patch exceeds 1200 changed lines.");
+const addedLines = [...patch.matchAll(/^\+(?!\+\+)(.*)$/gm)].map(m => m[1]).join("\n");
+const secretPatterns = [/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/, /\bsk-[A-Za-z0-9_-]{24,}\b/, /\bsb_secret_[A-Za-z0-9_-]{20,}\b/, /\bgh[pousr]_[A-Za-z0-9]{30,}\b/, /\bAKIA[0-9A-Z]{16}\b/, /service_role\s*[:=]\s*["'][^"']{12,}["']/i];
+for (const pattern of secretPatterns) if (pattern.test(addedLines)) throw new Error("Potential secret or credential detected.");
+await exec("git", ["apply", "--check", "watchtower.patch"]);
+await exec("git", ["apply", "watchtower.patch"]);
+await exec("git", ["diff", "--check"]);
+const diff = (await exec("git", ["diff", "--numstat"])).stdout.trim();
+const jsFiles = paths.filter(path => /\.(?:m?js)$/i.test(path));
+for (const file of jsFiles) await exec("node", ["--check", file]);
+console.log(JSON.stringify({ status: "validated", files: paths, added_lines: added, removed_lines: removed, javascript_syntax_checks: jsFiles.length, git_diff_numstat: diff, checks: ["path allow-list", "protected path deny-list", "no deletes/renames/binaries", "size limits", "secret-pattern scan", "git apply --check", "git diff --check", "node --check"] }, null, 2));
