@@ -8,7 +8,7 @@ if (Buffer.byteLength(patch) > 180000) throw new Error("Patch exceeds 180 KB.");
 if (/GIT binary patch|^new file mode 120000|^deleted file mode|^old mode |^new mode |^rename from |^rename to /m.test(patch)) throw new Error("Binary, symlink, deletion, rename or file-mode changes are prohibited.");
 const headers = [...patch.matchAll(/^diff --git a\/(.+?) b\/(.+)$/gm)];
 if (!headers.length) throw new Error("No valid diff headers found.");
-const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|node_modules\/|vendor\/|dist\/|build\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
+const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|node_modules\/|vendor\/|dist\/|build\/|scripts\/backup-agent\/|agents\/backup-supervisor\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
 const allowedExt = new Set([".html", ".js", ".mjs", ".css", ".md", ".txt"]), paths = [];
 for (const match of headers) {
   const a = match[1], b = match[2], path = b;
@@ -16,7 +16,7 @@ for (const match of headers) {
   if (path.startsWith("/") || path.split("/").includes("..") || path.includes("\\") || deny.test(path)) throw new Error("Protected or unsafe path rejected: " + path);
   const name = path.split("/").pop(), dot = name.lastIndexOf(".");
   if (dot < 1 || !allowedExt.has(name.slice(dot).toLowerCase())) throw new Error("File extension outside allow-list: " + path);
-  if (!/^(?:[^/]+|app\/|automated_suite\/|assets\/|scripts\/|agents\/|tests\/)/.test(path)) throw new Error("Path outside allowed workspace: " + path);
+  if (!/^(?:[^/]+|(?:app|automated_suite|assets|scripts|agents|tests)\/.+)$/.test(path)) throw new Error("Path outside allowed workspace: " + path);
   if (paths.includes(path)) throw new Error("Duplicate path: " + path);
   paths.push(path);
 }
