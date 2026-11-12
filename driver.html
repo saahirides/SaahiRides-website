@@ -130,8 +130,13 @@
             <div class="action-title" style="color: #25D366;">New Driver Registration</div>
             <div class="action-desc">Enter your WhatsApp Mobile Number to securely receive the verification paperwork and registration links directly to your chat.</div>
             <form id="whatsappOnboardingForm">
-                <input type="tel" id="driverWhatsApp" class="whatsapp-input" placeholder="Enter WhatsApp Mobile Number" required>
-                <button type="submit" class="btn-registration">Get Registration Form via WhatsApp</button>
+                <label for="driverName">Full Name</label>
+                <input type="text" id="driverName" class="whatsapp-input" placeholder="Enter your full name" required maxlength="100" autocomplete="name">
+                <label for="driverWhatsApp">WhatsApp Mobile Number</label>
+                <input type="tel" id="driverWhatsApp" class="whatsapp-input" placeholder="Enter 10-digit mobile number" required inputmode="numeric" autocomplete="tel" pattern="[0-9]{10}">
+                <label><input type="checkbox" id="driverConsent" required> I agree that SaahiRides may contact me about driver registration and verification.</label>
+                <p id="driverApplyStatus" role="status" aria-live="polite"></p>
+                <button type="submit" class="btn-registration">Submit Registration Interest</button>
             </form>
         </div>
 
