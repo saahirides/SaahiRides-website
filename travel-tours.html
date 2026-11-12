@@ -263,12 +263,24 @@ footer a{color:#06122E;font-weight:800}
   };
   const region=document.getElementById('travel-region'), destination=document.getElementById('travel-destination');
   const cart=[], cartItems=document.getElementById('cart-items'), cartEmpty=document.getElementById('cart-empty'), cartCount=document.getElementById('cart-count');
-  function populate(){destination.replaceChildren();(data[region.value]||[]).forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;destination.appendChild(option);});document.getElementById('destination-hint').textContent=(data[region.value]||[]).length+' starter destinations shown for '+region.value+'. More verified destinations can be added to this catalogue.';}
-  function renderCart(){cartItems.replaceChildren();cart.forEach((item,index)=>{const li=document.createElement('li');li.textContent=item.region+' — '+item.name+' ';const btn=document.createElement('button');btn.type='button';btn.textContent='Remove';btn.setAttribute('aria-label','Remove '+item.name);btn.addEventListener('click',()=>{cart.splice(index,1);renderCart();});li.appendChild(btn);cartItems.appendChild(li);});cartCount.textContent=cart.length;cartEmpty.hidden=cart.length>0;}
+  function populate(){
+    if(!region||!destination){const hint=document.getElementById('destination-hint');if(hint)hint.textContent='The destination selector is unavailable. Please refresh or contact SaahiRides.';return;}
+    destination.replaceChildren();
+    (data[region.value]||[]).forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;destination.appendChild(option);});
+    const hint=document.getElementById('destination-hint');
+    if(hint)hint.textContent=(data[region.value]||[]).length+' starter destinations shown for '+region.value+'. More verified destinations can be added to this catalogue.';
+  }
+  function renderCart(){
+    if(!cartItems){if(cartEmpty)cartEmpty.textContent='Trip cart unavailable. Please refresh the page.';return;}
+    cartItems.replaceChildren();
+    cart.forEach((item,index)=>{const li=document.createElement('li');li.textContent=item.region+' — '+item.name+' ';const btn=document.createElement('button');btn.type='button';btn.textContent='Remove';btn.setAttribute('aria-label','Remove '+item.name);btn.addEventListener('click',()=>{cart.splice(index,1);renderCart();});li.appendChild(btn);cartItems.appendChild(li);});
+    if(cartCount)cartCount.textContent=cart.length;
+    if(cartEmpty)cartEmpty.hidden=cart.length>0;
+  }
   function send(message){window.location.href='https://wa.me/919347946026?text='+encodeURIComponent(message);}
-  region.addEventListener('change',populate);
-  document.getElementById('add-destination').addEventListener('click',()=>{if(!destination.value)return;cart.push({region:region.value,name:destination.value});renderCart();document.getElementById('destination-hint').textContent=destination.value+' added to your trip cart.';});
-  document.getElementById('clear-trip-cart').addEventListener('click',()=>{cart.length=0;renderCart();});
+  if(region)region.addEventListener('change',populate);
+  document.getElementById('add-destination')?.addEventListener('click',()=>{if(!destination||!region||!destination.value)return;cart.push({region:region.value,name:destination.value});renderCart();const hint=document.getElementById('destination-hint');if(hint)hint.textContent=destination.value+' added to your trip cart.';});
+  document.getElementById('clear-trip-cart')?.addEventListener('click',()=>{cart.length=0;renderCart();});
   document.getElementById('send-cart-enquiry').addEventListener('click',()=>{if(!cart.length){document.getElementById('destination-hint').textContent='Please add at least one destination before requesting a quote.';return;}send('Hello SaahiRides, please plan a state-wise trip and send an itemised quote.\nSelected destinations:\n'+cart.map((x,i)=>(i+1)+'. '+x.region+' — '+x.name).join('\n')+'\nPlease confirm route connectivity, approximate kilometres, travel time, suitable vehicle, itinerary, inclusions, taxes and availability.');});
   document.getElementById('send-custom-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();if(!v('custom-pickup')||!v('custom-drop')||!v('custom-stops')){alert('Please enter pickup, final drop and at least one destination.');return;}send('Hello SaahiRides, please quote my custom trip.\nPickup: '+v('custom-pickup')+'\nFinal drop: '+v('custom-drop')+'\nStops in order: '+v('custom-stops')+'\nMap driving distance: '+(window.saahiTripRouteInfo||'Not calculated — please verify')+'\nVehicle: '+v('custom-vehicle')+'\nStart date: '+(v('custom-date')||'Not decided')+'\nTravellers: '+(v('custom-travellers')||'Not decided')+'\nRequirements: '+(v('custom-notes')||'None stated')+'\nPlease verify route, intermediate stops, total trip kilometres, timings and itemised package cost.');});
   document.getElementById('send-special-trip').addEventListener('click',()=>{const v=id=>document.getElementById(id).value.trim();send('Hello SaahiRides, please contact me about a special package.\nPackage: '+v('special-type')+'\nDestination: '+(v('special-location')||'To be decided')+'\nDate: '+(v('special-date')||'Not decided')+'\nGuests/travellers: '+(v('special-group')||'Not decided')+'\nRequirements: '+(v('special-notes')||'Please advise')+'\nPlease share availability, inclusions, transport options and an itemised quote.');});
