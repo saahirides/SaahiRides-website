@@ -76,13 +76,13 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   <section class="estimator-controls-card" style="margin:0 0 24px;gap:16px" aria-label="Pickup and drop route">
     <div class="control-group-block">
       <label class="input-panel-label">LIVE ROUTE · PICKUP & DROP</label>
-      <p class="readout-calculation-note">Enter both addresses or select points on the map. SaahiRides will use the driving-road distance for the fare estimate.</p>
+      <p class="readout-calculation-note">Set pickup and drop pins on the map. Your driver will call to confirm the practical meeting point.</p>
       <div class="route-fields">
-        <label for="saahi-pickup">Pickup location<input id="saahi-pickup" type="text" placeholder="Enter pickup address" autocomplete="off"></label>
-        <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Enter destination" autocomplete="off"></label>
+        <label for="saahi-pickup">Pickup location<input id="saahi-pickup" type="text" placeholder="Pickup landmark / address note" autocomplete="off"></label>
+        <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Drop landmark / address note" autocomplete="off"></label>
       </div>
       <div id="saahi-route-map" role="application" aria-label="Map for selecting pickup and drop" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
-      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap the map to place pins. Address lookup will be added when the approved provider key is configured.</span></div>
+      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Drag pins to adjust.</span></div>
       <p class="route-distance-line">Calculated road distance: <strong id="saahi-route-distance">Not calculated</strong></p>
       <p class="readout-calculation-note">Pickup/drop pins can be placed and adjusted on the map. The driver can call you to confirm the exact meeting point. Road distance is not guessed: until a routing-provider key is configured, use the distance control below or confirm the road distance with the customer.</p>
     </div>
@@ -190,7 +190,9 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     if(!pickupPoint||!dropPoint){say('Set both pickup and drop pins before confirming.');return}
     routeDistance.textContent='Not calculated — routing provider not configured';
     say('Pickup and drop coordinates confirmed. Driver should call to confirm the exact meeting point. No straight-line fare distance has been substituted.');
-    var message='SaahiRides pickup: '+coords(pickupPoint)+'\nPickup note: '+pickupInput.value+'\nDrop: '+coords(dropPoint)+'\nDrop note: '+dropInput.value+'\nPlease call customer to confirm exact meeting point.';
+    var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
+    var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
+    var message='SaahiRides pickup: '+coords(pickupPoint)+'\nPickup navigation: '+pickupNav+'\nPickup note: '+pickupInput.value+'\nDrop: '+coords(dropPoint)+'\nDrop navigation: '+dropNav+'\nDrop note: '+dropInput.value+'\nPlease call customer near the pickup point to confirm exact meeting position.';
     document.getElementById('estimator-booking-link').href='https://wa.me/919347946026?text='+encodeURIComponent('BOOK\n'+message);
   });
   initMap();
