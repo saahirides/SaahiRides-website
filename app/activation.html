@@ -117,12 +117,9 @@
 
     <div class="container">
         <h2>Driver Plan Activation</h2>
-        <div class="subtitle">Complete your tier activation within the designated time frame window.</div>
+        <div class="subtitle">Request driver verification and activation assistance from SaahiRides support.</div>
 
-        <!-- DYNAMIC 5-DAY ACTIVATION DEADLINE CLOCK WARNING -->
-        <div class="alert-window" id="deadlineAlert">
-            ⚠️ Setup Complete! Your activation window expires on: <span id="expDate">Loading...</span> (5 days remaining to clear payment)
-        </div>
+        <div class="alert-window" id="deadlineAlert">Driver accounts are activated only after SaahiRides completes verification and confirms the official payment process.</div>
 
         <form id="paymentActivationForm">
             <!-- MOBILE VALIDATION -->
@@ -134,7 +131,7 @@
             <!-- VEHICLE SELECTION SWITCH -->
             <div class="form-group">
                 <label for="vehicleCategory">Select Vehicle Category</label>
-                <select id="vehicleCategory" class="form-control" required onchange="calculateTierPlan()">
+                <select id="vehicleCategory" class="form-control" required>
                     <option value="">-- Choose Category --</option>
                     <option value="bike">Bike Driver</option>
                     <option value="scooty">Scooty Driver</option>
@@ -144,87 +141,30 @@
                 </select>
             </div>
 
-            <!-- DYNAMIC MATHEMATICAL PRICING CARD CARD -->
-            <div id="planSummaryCard" class="plan-summary-card">
-                <div class="plan-title" id="displayPlanTitle">Standard Pack</div>
-                <div class="plan-badge" id="displayOffer">1 Month Free Included</div>
-                <div class="plan-pricing-math" id="displayMath">₹0</div>
-                <div style="font-size: 13px; color: #555;" id="displayTerms">Plan valid for 90 Days cycle window.</div>
-            </div>
+            <p class="note">Plan pricing and eligibility must be confirmed by SaahiRides support. No payment is collected on this page.</p>
 
-            <button type="submit" class="btn-submit">Secure Payment Checkout (Mock)</button>
+            <button type="submit" class="btn-submit">Contact Support to Activate</button>
         </form>
 
-        <!-- SECURE ONE-TIME VALID 90-DAY KEY GENERATOR BOX -->
-        <div id="successBox" class="success-box">
-            <h3>🎉 Activation Successful!</h3>
-            <p>Your subscription is verified and active for the next 90 days.</p>
-            <p>Here is your new secure one-time token access key to open your dashboard portal:</p>
-            <div class="access-key" id="generatedKey">SR-XXXX-XXXX</div>
-            <p style="font-size: 12px; font-weight: bold; color: #c00000;">⚠️ This token key is strictly valid for 1 execution login. Keep it secure.</p>
-            <button class="btn-submit" style="background: #385723; margin-top: 10px;" onclick="enterDashboard()">Enter Driver Dashboard</button>
-        </div>
     </div>
 
     <script>
-        // Set exact dynamic 5-day expiration calendar limits upon load
-        const today = new Date();
-        const expirationDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000));
-        document.getElementById('expDate').innerText = expirationDate.toLocaleDateString('en-IN', { 
-            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
-        });
-
-        // Exact operational pricing data model requested
-        const pricingMatrix = {
-            bike: { title: "Bike Driver Plan", math: "₹699 x 2 = ₹1,398", total: 1398, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            scooty: { title: "Scooty Driver Plan", math: "₹899 x 2 = ₹1,798", total: 1798, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            auto: { title: "Auto Driver Plan", math: "₹1,199 x 2 = ₹2,398", total: 2398, terms: "3 Months Plan Bundle (Includes 1 Month OFF Protection)" },
-            nonac: { title: "Non-AC Cab Plan", math: "₹1,499 x 2 = ₹2,998", total: 2998, terms: "3 Months Plan Bundle (Includes 1 Month FREE Protection)" },
-            accab: { title: "AC Cab Premium Plan", math: "₹1,699 x 2 = ₹3,998", total: 3998, terms: "3 Months Plan Bundle (Includes 1 Month Discount Applied)" }
-        };
-
-        function calculateTierPlan() {
-            const selection = document.getElementById('vehicleCategory').value;
-            const summaryCard = document.getElementById('planSummaryCard');
-            
-            if (!selection) {
-                summaryCard.style.display = "none";
-                return;
-            }
-            
-            const selectedPlan = pricingMatrix[selection];
-            document.getElementById('displayPlanTitle').innerText = selectedPlan.title;
-            document.getElementById('displayMath').innerText = selectedPlan.math;
-            document.getElementById('displayTerms').innerText = selectedPlan.terms;
-            
-            summaryCard.style.display = "block";
-        }
-
-        // Mock Payment Processing & Secure Lifecycle Key Creation Logic
-        document.getElementById('paymentActivationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const phone = document.getElementById('driverPhone').value;
+        // This page only requests human-assisted activation. It does not take payment or grant access.
+        document.getElementById('paymentActivationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const phone = document.getElementById('driverPhone').value.trim();
             const category = document.getElementById('vehicleCategory').value;
-            const targetPlan = pricingMatrix[category];
+            if (!event.currentTarget.reportValidity() || !category) return;
 
-            // Trigger Mock Checkout window
-            alert(Connecting Secure Gateway...\nProcessing transaction total of ₹${targetPlan.total} for your ${targetPlan.title}.\nAccount: +91 ${phone});
-
-            // Hide Form Inputs cleanly
-            document.getElementById('paymentActivationForm').style.display = "none";
-            document.getElementById('deadlineAlert').style.display = "none";
-
-            // Generate a secure crypto-random one-time valid token key string
-            const randomString = Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-            const secureKey = SR-${category.toUpperCase()}-${randomString};
-            
-            // Set browser tracking local states variables to simulate 90-day execution limits
-            localStorage.setItem('driver_access_token', secureKey);
-            localStorage.setItem('subscription_cycle_start', new Date().getTime());
-            localStorage.setItem('subscription_days_limit', 90);
-
-            // Display Success Elements container panel
-            document.getElementById('generatedKey').innerText = secureKey;
-            document.getElementById('successBox').style.display = "block";
+            const message = encodeURIComponent(
+                'Hello SaahiRides, I need assistance with driver account activation. ' +
+                'My registered mobile number is ' + phone +
+                '. My vehicle category is ' + category +
+                '. Please confirm verification status, current plan pricing and the official payment process.'
+            );
+            window.open('https://wa.me/919347946026?text=' + message, '_blank', 'noopener,noreferrer');
+            alert('No payment has been taken and your account has not been activated. SaahiRides support must verify your details and confirm the official payment process.');
         });
+    </script>
+</body>
+</html>

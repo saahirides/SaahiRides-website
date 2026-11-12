@@ -130,8 +130,13 @@
             <div class="action-title" style="color: #25D366;">New Driver Registration</div>
             <div class="action-desc">Enter your WhatsApp Mobile Number to securely receive the verification paperwork and registration links directly to your chat.</div>
             <form id="whatsappOnboardingForm">
-                <input type="tel" id="driverWhatsApp" class="whatsapp-input" placeholder="Enter WhatsApp Mobile Number" required>
-                <button type="submit" class="btn-registration">Get Registration Form via WhatsApp</button>
+                <label for="driverName">Full Name</label>
+                <input type="text" id="driverName" class="whatsapp-input" placeholder="Enter your full name" required maxlength="100" autocomplete="name">
+                <label for="driverWhatsApp">WhatsApp Mobile Number</label>
+                <input type="tel" id="driverWhatsApp" class="whatsapp-input" placeholder="Enter 10-digit mobile number" required inputmode="numeric" autocomplete="tel" pattern="[0-9]{10}">
+                <label><input type="checkbox" id="driverConsent" required> I agree that SaahiRides may contact me about driver registration and verification.</label>
+                <p id="driverApplyStatus" role="status" aria-live="polite"></p>
+                <button type="submit" class="btn-registration">Submit Registration Interest</button>
             </form>
         </div>
 
@@ -150,29 +155,64 @@
 
     <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Securely hooks the Google Form destination and dispatches via official WhatsApp API
-        document.getElementById('whatsappOnboardingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const rawPhone = document.getElementById('driverWhatsApp').value;
-            const cleanPhone = rawPhone.replace(/\D/g, ''); // Strips out special characters or symbols
-            
-            const googleFormUrl = "https://google.com";
-            
-            // Professional automated onboarding message template
-            const message = encodeURIComponent(Welcome to SaahiRides! 🎉\n\nPlease complete your driver onboarding verification paperwork by filling out the official form link below:\n\n🔗 ${googleFormUrl}\n\nOnce completed, return to the platform to activate your profile plan.);
-            
-            // Redirects safely using standard window handler
-            window.open(https://wa.me{cleanPhone}?text=${message}, '_blank');
-        });
+        // Save a consented driver enquiry to the existing SaahiRides lead manager before opening WhatsApp.
+        (function () {
+            const form = document.getElementById('whatsappOnboardingForm');
+            const nameInput = document.getElementById('driverName');
+            const phoneInput = document.getElementById('driverWhatsApp');
+            const consentInput = document.getElementById('driverConsent');
+            const status = document.getElementById('driverApplyStatus');
+            const formUrl = 'https://forms.gle/gzAUZCfi1ETX5MLw7';
+            const supabaseUrl = 'https://uzwubbzlytqqewqibobr.supabase.co';
+            const publishableKey = 'sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq';
 
-        // Routes verified drivers to their payment options and account portals
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const name = nameInput.value.trim();
+                const digits = phoneInput.value.replace(/\D/g, '');
+                if (!form.reportValidity() || !name || !/^([6-9]\d{9})$/.test(digits) || !consentInput.checked) return;
+
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                status.textContent = 'Submitting your driver enquiry securely…';
+                try {
+                    const response = await fetch(supabaseUrl + '/functions/v1/saahirides-lead-manager', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'apikey': publishableKey
+                        },
+                        body: JSON.stringify({
+                            action: 'capture',
+                            name,
+                            phone: digits,
+                            lead_type: 'driver',
+                            source_channel: 'website',
+                            location: 'Hyderabad',
+                            landing_page: window.location.href,
+                            consent: true
+                        })
+                    });
+                    const result = await response.json().catch(() => ({}));
+                    if (!response.ok || result.error) throw new Error(result.error || 'Could not save your enquiry. Please retry.');
+                    status.textContent = 'Your driver enquiry has been recorded. Opening the official registration form and support chat…';
+                    const message = encodeURIComponent(
+                        'Hello SaahiRides, I have submitted my driver registration interest. Name: ' +
+                        name + '. WhatsApp mobile: +91' + digits +
+                        '. Please guide me through the official registration and verification. Form: ' + formUrl
+                    );
+                    window.location.assign('https://wa.me/919347946026?text=' + message);
+                } catch (error) {
+                    status.textContent = error instanceof Error ? error.message : 'Submission failed. Please try again.';
+                    submitButton.disabled = false;
+                }
+            });
+        })();
+
         function navigateToDashboard() {
-    // Forces the browser to look inside your app subfolder for activation
-    window.location.href = "app/activation.html"; 
-}
+            window.location.href = 'app/activation.html';
         }
-    </script>
+</script>
 
 <script src="saahi-promotions.js?v=20261031" defer></script>
 </body>
