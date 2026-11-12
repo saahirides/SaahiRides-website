@@ -28,6 +28,7 @@ const secretPatterns = [/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/, /\b
 for (const pattern of secretPatterns) if (pattern.test(addedLines)) throw new Error("Potential secret or credential detected.");
 await exec("git", ["apply", "--check", "watchtower.patch"]);
 await exec("git", ["apply", "watchtower.patch"]);
+await exec("git", ["add", "-N", "--", ...paths]);
 await exec("git", ["diff", "--check"]);
 const diff = (await exec("git", ["diff", "--numstat"])).stdout.trim();
 const jsFiles = paths.filter(path => /\.(?:m?js)$/i.test(path));
