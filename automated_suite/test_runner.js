@@ -198,7 +198,7 @@ async function runMasterTestMatrix() {
   }, null, 2));
 
   // Any open anomaly keeps the run red. A clean scan alone never closes a defect.
-  if (stillOpen.length > 0 || found.length > 0) process.exitCode = 1;
+  if (stillOpen.length > 0 || found.length > 0 || !report.fullSuiteExecuted) process.exitCode = 1;
   return report;
 }
 module.exports = { runMasterTestMatrix };
