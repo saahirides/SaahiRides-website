@@ -2,65 +2,46 @@
 <script src="saahi-promotions.js?v=20261031" defer></script>
 </body> TAG -->
     <script>
-        // Set dynamic 5-day expiration limits
-        const today = new Date();
-        const expirationDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000));
-        document.getElementById('expDate').innerText = expirationDate.toLocaleDateString('en-IN', { 
-            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
-        });
-
-        // Your specific operational pricing data model matrix
-        const pricingMatrix = {
-            bike: { title: "Bike Driver Plan", math: "₹699 x 2 = ₹1,398", total: 1398, terms: "3 Months Bundle (Includes 1 Month OFF)" },
-            scooty: { title: "Scooty Driver Plan", math: "₹899 x 2 = ₹1,798", total: 1798, terms: "3 Months Bundle (Includes 1 Month OFF)" },
-            auto: { title: "Auto Driver Plan", math: "₹1,199 x 2 = ₹2,398", total: 2398, terms: "3 Months Bundle (Includes 1 Month OFF)" },
-            nonac: { title: "Non-AC Cab Plan", math: "₹1,499 x 2 = ₹2,998", total: 2998, terms: "3 Months Bundle (Includes 1 Month FREE)" },
-            accab: { title: "AC Cab Premium Plan", math: "₹1,699 x 2 = ₹3,998", total: 3998, terms: "3 Months Bundle (Includes 1 Month Discount)" }
-        };
-
-        function calculateTierPlan() {
-            const selection = document.getElementById('vehicleCategory').value;
-            const summaryCard = document.getElementById('planSummaryCard');
-            
-            if (!selection) {
-                summaryCard.style.display = "none";
-                return;
-            }
-            
-            const selectedPlan = pricingMatrix[selection];
-            document.getElementById('displayPlanTitle').innerText = selectedPlan.title;
-            document.getElementById('displayMath').innerText = selectedPlan.math;
-            document.getElementById('displayTerms').innerText = selectedPlan.terms;
-            
-            summaryCard.style.display = "block";
-        }
-
-        // Mock Checkout Form Form Submission Handler
-        document.getElementById('paymentActivationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const phone = document.getElementById('driverPhone').value;
-            const category = document.getElementById('vehicleCategory').value;
-            const targetPlan = pricingMatrix[category];
-
-            alert(Connecting Gateway...\nProcessing transaction total of ₹${targetPlan.total} for your ${targetPlan.title}.\nAccount: +91 ${phone});
-
-            document.getElementById('paymentActivationForm').style.display = "none";
-            document.getElementById('deadlineAlert').style.display = "none";
-
-            // Generate secure 90-day cycle unique token keys
-            const randomString = Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-            const secureKey = SR-${category.toUpperCase()}-${randomString};
-            
-            localStorage.setItem('subscription_cycle_start', new Date().getTime());
-
-            document.getElementById('generatedKey').innerText = secureKey;
-            document.getElementById('successBox').style.display = "block";
-        });
-
-        // CRUCIAL MISSING REDIRECTION LINE FIXED
-        function enterDashboard() {
-            // Because this file sits in the root folder, we route them down into the app directory!
-            window.location.href = "app/dashboard.html";
-        }
-    </script>
+(function(){
+  const form=document.getElementById('paymentActivationForm');
+  const summary=document.getElementById('planSummaryCard');
+  const success=document.getElementById('successBox');
+  const deadline=document.getElementById('deadlineAlert');
+  if(deadline)deadline.style.display='none';
+  if(success)success.style.display='none';
+  if(summary)summary.style.display='none';
+  function calculateTierPlan(){
+    const selection=document.getElementById('vehicleCategory')?.value||'';
+    if(!summary||!selection){if(summary)summary.style.display='none';return;}
+    const title=document.getElementById('displayPlanTitle');
+    const offer=document.getElementById('displayOffer');
+    const math=document.getElementById('displayMath');
+    const terms=document.getElementById('displayTerms');
+    if(title)title.textContent='Online activation unavailable';
+    if(offer)offer.textContent='No payment due through this page';
+    if(math)math.textContent='Awaiting approved plan and verified payment gateway';
+    if(terms)terms.textContent='No payment is accepted and no driver access key is generated here.';
+    summary.style.display='block';
+  }
+  window.calculateTierPlan=calculateTierPlan;
+  if(form){
+    const button=form.querySelector('button[type="submit"]');
+    if(button){button.disabled=true;button.textContent='Online activation unavailable';}
+    const notice=document.createElement('p');
+    notice.className='alert-window';
+    notice.textContent='Payment activation is not connected to a verified gateway. Do not make a payment or share an OTP on this page. No account will be activated here.';
+    form.prepend(notice);
+    form.addEventListener('submit',function(event){
+      event.preventDefault();
+      alert('Online activation is unavailable. No payment has been taken and no activation key has been generated.');
+    });
+  }
+  const enter=document.querySelector('[onclick="enterDashboard()"]');
+  if(enter)enter.disabled=true;
+  window.enterDashboard=function(){
+    alert('Driver access is available only after server-side verification. This page cannot activate an account.');
+  };
+})();
+</script>
+</body>
+</html>
