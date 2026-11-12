@@ -150,27 +150,37 @@
 
     <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Securely hooks the Google Form destination and dispatches via official WhatsApp API
-        document.getElementById('whatsappOnboardingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const rawPhone = document.getElementById('driverWhatsApp').value;
-            const cleanPhone = rawPhone.replace(/\D/g, ''); // Strips out special characters or symbols
-            
-            const googleFormUrl = "https://google.com";
-            
-            // Professional automated onboarding message template
-            const message = encodeURIComponent(Welcome to SaahiRides! 🎉\n\nPlease complete your driver onboarding verification paperwork by filling out the official form link below:\n\n🔗 ${googleFormUrl}\n\nOnce completed, return to the platform to activate your profile plan.);
-            
-            // Redirects safely using standard window handler
-            window.open(https://wa.me{cleanPhone}?text=${message}, '_blank');
-        });
+        // Driver onboarding: send the verified Google Form link through the user's WhatsApp app.
+        (function () {
+            const form = document.getElementById('whatsappOnboardingForm');
+            const phoneInput = document.getElementById('driverWhatsApp');
+            const googleFormUrl = 'https://forms.gle/gzAUZCfi1ETX5MLw7';
 
-        // Routes verified drivers to their payment options and account portals
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const digits = phoneInput.value.replace(/\\D/g, '');
+                const indianMobile = digits.length === 10 ? '91' + digits : digits;
+
+                if (!/^91[6-9]\\d{9}$/.test(indianMobile)) {
+                    phoneInput.setCustomValidity('Enter a valid 10-digit Indian mobile number.');
+                    phoneInput.reportValidity();
+                    phoneInput.setCustomValidity('');
+                    return;
+                }
+
+                const message = encodeURIComponent(
+                    'Welcome to SaahiRides! Please complete your driver registration and KYC using the official form: ' +
+                    googleFormUrl +
+                    '\\nAfter submitting, our team will review your details and contact you about verification.'
+                );
+                const whatsappUrl = 'https://wa.me/' + indianMobile + '?text=' + message;
+                window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+            });
+        })();
+
+        // Routes registered drivers to the existing activation page.
         function navigateToDashboard() {
-    // Forces the browser to look inside your app subfolder for activation
-    window.location.href = "app/activation.html"; 
-}
+            window.location.href = 'app/activation.html';
         }
     </script>
 
