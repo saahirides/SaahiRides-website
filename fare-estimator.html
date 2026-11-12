@@ -71,20 +71,20 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   <header class="estimator-header-block">
     <span class="estimator-mini-badge">FARE-FIRST BOOKING</span>
     <h1>Interactive Fare Estimator</h1>
-    <p>Select your fleet tier and route distance to estimate On-Demand progressive slabs or 30-Day Subscription costs instantly.</p>
+    <p>Select your fleet tier and set pickup and drop. Your driving-road distance and On-Demand / 30-Day Subscription fares update automatically.</p>
   </header>
   <section class="estimator-controls-card" style="margin:0 0 24px;gap:16px" aria-label="Pickup and drop route">
     <div class="control-group-block">
       <label class="input-panel-label">LIVE ROUTE · PICKUP & DROP</label>
-      <p class="readout-calculation-note">Set pickup and drop pins on the map. Your driver will call to confirm the practical meeting point.</p>
+      <p class="readout-calculation-note">Set pickup and drop pins. SaahiRides calculates the driving-road distance and updates your fare automatically. Your driver will call to confirm the practical meeting point.</p>
       <div class="route-fields">
         <label for="saahi-pickup">Pickup location<input id="saahi-pickup" type="text" placeholder="Pickup landmark / address note" autocomplete="off"></label>
         <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Drop landmark / address note" autocomplete="off"></label>
       </div>
       <div id="saahi-route-map" role="application" aria-label="Map for selecting pickup and drop" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
-      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Drag pins to adjust.</span></div>
-      <p class="route-distance-line">Calculated road distance: <strong id="saahi-route-distance">Not calculated</strong></p>
-      <p class="readout-calculation-note">Pickup/drop pins can be placed and adjusted on the map. The driver can call you to confirm the exact meeting point. Road distance is not guessed: until a routing-provider key is configured, use the distance control below or confirm the road distance with the customer.</p>
+      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Confirm to calculate road distance and fare.</span></div>
+      <p class="route-distance-line">Driving-road distance: <strong id="saahi-route-distance">Waiting for pickup and drop</strong></p>
+      <p class="readout-calculation-note">The driving-road distance is calculated by Ola Maps. Fares update automatically for city routes up to 30 km. Longer trips need an outstation quote. If routing is unavailable, the distance slider remains as a manual fallback.</p>
     </div>
   </section>
   <div class="estimator-interface-grid">
@@ -112,7 +112,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
         </div>
       </div>
       <div class="control-group-block">
-        <div class="slider-header-row"><label class="input-panel-label" for="estimator-distance-slider">2. ROUTE DISTANCE</label><output id="display-distance-val" class="slider-counter-txt" for="estimator-distance-slider">15 km</output></div>
+        <div class="slider-header-row"><label class="input-panel-label" for="estimator-distance-slider">2. ROUTE DISTANCE · AUTOMATIC</label><output id="display-distance-val" class="slider-counter-txt" for="estimator-distance-slider">15 km</output></div>
         <input type="range" id="estimator-distance-slider" min="0.1" max="30" value="15" step="0.1" class="saahi-custom-range" aria-describedby="distance-bounds">
         <div id="distance-bounds" class="slider-bounds-indicators"><span>1 km</span><span>City Limit Threshold (30 km)</span></div>
       </div>
@@ -186,15 +186,49 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       setPin('pickup',point);map.setView(point,18);nextPin='drop';
     },function(error){say(error.code===1?'Location permission was denied. Enter an address note or tap the map.':'Could not get your location. Enter an address note or tap the map.')},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
   });
-  routeButton.addEventListener('click',function(){
+  routeButton.addEventListener('click',async function(){
     if(!pickupPoint||!dropPoint){say('Set both pickup and drop pins before confirming.');return}
-    routeDistance.textContent='Not calculated — routing provider not configured';
-    say('Pickup and drop coordinates confirmed. Driver should call to confirm the exact meeting point. No straight-line fare distance has been substituted.');
-    var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
-    var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
-    var message='SaahiRides pickup: '+coords(pickupPoint)+'\nPickup navigation: '+pickupNav+'\nPickup note: '+pickupInput.value+'\nDrop: '+coords(dropPoint)+'\nDrop navigation: '+dropNav+'\nDrop note: '+dropInput.value+'\nPlease call customer near the pickup point to confirm exact meeting position.';
-    document.getElementById('estimator-booking-link').href='https://wa.me/919347946026?text='+encodeURIComponent('BOOK\n'+message);
-  });
+    routeButton.disabled=true;
+    routeButton.textContent='Calculating road route…';
+    routeDistance.textContent='Calculating…';
+    say('Calculating the driving-road distance and fare…');
+    try{
+      var response=await fetch('https://uzwubbzlytqqewqibobr.supabase.co/functions/v1/saahi-route-distance',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtCncdpnbe9ZZiHVZVE',
+          'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtCncdpnbe9ZZiHVZVE'
+        },
+        body:JSON.stringify({pickup:pickupPoint,drop:dropPoint})
+      });
+      var result=await response.json();
+      if(!response.ok) throw new Error(result.code==='ROUTING_NOT_CONFIGURED'?'Ola Maps key is not configured in SaahiRides yet.':'Could not calculate this road route. Please adjust the pins and retry.');
+      var distanceKm=Number(result.distance_km);
+      if(!Number.isFinite(distanceKm)||distanceKm<=0) throw new Error('The route service returned an invalid distance.');
+      var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
+      var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
+      window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pickupNav,dropNav:dropNav,distanceKm:distanceKm,durationSeconds:result.duration_seconds||null};
+      routeDistance.textContent=distanceKm.toFixed(2)+' km';
+      if(distanceKm>30){
+        say('Road route is '+distanceKm.toFixed(2)+' km. This is above the 30 km city fare estimator; request an outstation quote.');
+      }else{
+        var billableDistance=Math.ceil(distanceKm*10)/10;
+        var slider=document.getElementById('estimator-distance-slider');
+        slider.value=Math.max(0.1,billableDistance).toFixed(1);
+        slider.dispatchEvent(new Event('input',{bubbles:true}));
+        say('Road route confirmed: '+distanceKm.toFixed(2)+' km. Fare automatically calculated using '+billableDistance.toFixed(1)+' km. Your driver will call near pickup to confirm the meeting point.');
+      }
+      var msg='BOOK\\nSaahiRides pickup: '+coords(pickupPoint)+'\\nPickup navigation: '+pickupNav+'\\nPickup note: '+pickupInput.value+'\\nDrop: '+coords(dropPoint)+'\\nDrop navigation: '+dropNav+'\\nDrop note: '+dropInput.value+'\\nDriving-road distance: '+distanceKm.toFixed(2)+' km\\nPlease call customer near the pickup point to confirm exact meeting position.';
+      document.getElementById('estimator-booking-link').href='https://wa.me/919347946026?text='+encodeURIComponent(msg);
+    }catch(error){
+      routeDistance.textContent='Not available';
+      say(error.message||'Routing is temporarily unavailable. You can still use the manual distance slider.');
+    }finally{
+      routeButton.disabled=false;
+      routeButton.textContent='Confirm pickup & drop';
+    }
+  });;
   initMap();
 })();
 </script>
@@ -252,6 +286,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
       '\n30-day subscription one-way: ₹' + oneWay +
       '\n30-day subscription both-way: ₹' + bothWay +
+      (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + window.saahiRouteContext.pickup + '\nDrop: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
       '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
   }
