@@ -19,7 +19,7 @@ const context = [];
 let remaining = 92000;
 for (const path of sourcePaths) {
   if (remaining <= 0) break;
-  if (/(?:^|\/)(?:admin\.html|maps-config\.js)$/i.test(path)) continue;
+  if (/(?:^|\/)(?:admin\.html|maps-config\.js)$/i.test(path) || path.toLowerCase() === "harvey-sales-crm.md") continue;
   try {
     const value = await readFile(path, "utf8");
     if (value.includes("\u0000")) continue;
