@@ -122,33 +122,83 @@ async function runMasterTestMatrix() {
   const previousClosed = await readJson(CLOSED_FILE);
   const now = new Date().toISOString();
   const openById = new Map(previousOpen.map(item => [item.id, item]));
-  for (const item of found) {
-    const prior = openById.get(item.id);
-    if (prior) {
-      prior.lastSeenAt = now;
-      prior.occurrences = (prior.occurrences || 1) + 1;
-      prior.details = item.details;
-    } else openById.set(item.id, item);
-  }
-  const currentIds = new Set(found.map(item => item.id));
-  const stillOpen = [...openById.values()].filter(item => currentIds.has(item.id));
-  const resolved = [...openById.values()].filter(item => !currentIds.has(item.id)).map(item => ({
-    ...item, status: 'CLOSED_VERIFIED', resolvedAt: now,
-    resolutionNote: 'Not reproduced in this complete QA run; no source code was modified.'
-  }));
   const closedById = new Map(previousClosed.map(item => [item.id, item]));
-  for (const item of resolved) closedById.set(item.id, item);
+  const reopened = [];
+  let newlyDetected = 0;
+
+  for (const item of found) {
+    const priorOpen = openById.get(item.id);
+    if (priorOpen) {
+      priorOpen.lastSeenAt = now;
+      priorOpen.occurrences = (priorOpen.occurrences || 1) + 1;
+      priorOpen.details = item.details;
+      priorOpen.status = priorOpen.status || 'OPEN';
+      continue;
+    }
+
+    const priorClosed = closedById.get(item.id);
+    const next = {
+      ...item,
+      status: priorClosed ? 'OPEN_REOPENED' : 'OPEN',
+      firstSeenAt: priorClosed?.firstSeenAt || item.firstSeenAt || now,
+      lastSeenAt: now,
+      occurrences: (priorClosed?.occurrences || 0) + 1
+    };
+    if (priorClosed) {
+      next.reopenedAt = now;
+      next.previouslyClosedAt = priorClosed.resolvedAt || null;
+      closedById.delete(item.id);
+      reopened.push(next);
+    } else {
+      newlyDetected++;
+    }
+    openById.set(item.id, next);
+  }
+
+  const currentIds = new Set(found.map(item => item.id));
+  const notReproduced = [...openById.values()].filter(item => !currentIds.has(item.id));
+  for (const item of notReproduced) {
+    item.status = item.status === 'OPEN_REOPENED' ? 'OPEN_REOPENED' : 'OPEN_PENDING_VERIFICATION';
+    item.lastCheckedAt = now;
+    item.notReproducedInRunAt = now;
+    item.cleanRunsWithoutReproduction = (item.cleanRunsWithoutReproduction || 0) + 1;
+  }
+
+  const stillOpen = [...openById.values()];
   await writeJson(OPEN_FILE, stillOpen);
   await writeJson(CLOSED_FILE, [...closedById.values()]);
+
   const report = {
-    runAt: now, target: BASE_URL, pagesDiscovered: urls.length,
-    pagesInspected: pageResults.length, openAnomalies: stillOpen.length,
-    newlyDetected: found.length, movedToClosedAfterCleanRun: resolved.length,
-    lightLoadProbe: load, pageResults
+    runAt: now,
+    target: BASE_URL,
+    pagesDiscovered: urls.length,
+    pagesInspected: pageResults.length,
+    openAnomalies: stillOpen.length,
+    newlyDetected,
+    reopenedDefectCount: reopened.length,
+    notReproducedPendingVerification: notReproduced.length,
+    movedToClosedAfterCleanRun: 0,
+    currentBrowserRun: true,
+    fullSuiteExecuted: false,
+    executionStatus: 'partial',
+    reportClosed: false,
+    coverageScope: 'Sitemap navigation, title/meta, image alt, same-origin references, browser errors and homepage light-load probe only. Forms, booking, WhatsApp, SOS, tours, responsive and authenticated Admin/HR journeys remain outside this runner.',
+    lightLoadProbe: load,
+    pageResults
   };
   await writeJson(path.join(COMMAND_CENTER, 'latest_report.json'), report);
-  console.log(JSON.stringify({ pages: urls.length, newFindings: found.length, open: stillOpen.length, closedThisRun: resolved.length, loadRequests: load.requests }, null, 2));
-  if (stillOpen.some(item => ['HTTP_ERROR', 'PAGE_NAVIGATION_FAILURE', 'NO_HTTP_RESPONSE'].includes(item.category))) process.exitCode = 1;
+  console.log(JSON.stringify({
+    pages: urls.length,
+    newFindings: newlyDetected,
+    reopened: reopened.length,
+    notReproducedPendingVerification: notReproduced.length,
+    open: stillOpen.length,
+    closedThisRun: 0,
+    loadRequests: load.requests
+  }, null, 2));
+
+  // Any open anomaly keeps the run red. A clean scan alone never closes a defect.
+  if (stillOpen.length > 0 || found.length > 0) process.exitCode = 1;
   return report;
 }
 module.exports = { runMasterTestMatrix };
