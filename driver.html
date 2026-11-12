@@ -158,22 +158,23 @@
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
-                const digits = phoneInput.value.replace(/\\D/g, '');
+                const digits = phoneInput.value.replace(/\D/g, '');
                 const indianMobile = digits.length === 10 ? '91' + digits : digits;
 
-                if (!/^91[6-9]\\d{9}$/.test(indianMobile)) {
+                if (!/^91[6-9]\d{9}$/.test(indianMobile)) {
                     phoneInput.setCustomValidity('Enter a valid 10-digit Indian mobile number.');
                     phoneInput.reportValidity();
                     phoneInput.setCustomValidity('');
                     return;
                 }
 
-                const message = encodeURIComponent(
-                    'Welcome to SaahiRides! Please complete your driver registration and KYC using the official form: ' +
-                    googleFormUrl +
-                    '\\nAfter submitting, our team will review your details and contact you about verification.'
+                const supportMessage = encodeURIComponent(
+                    'Hello SaahiRides, I want to register as a driver. My WhatsApp mobile number is +' +
+                    indianMobile +
+                    '. Please guide me through verification. Official registration form: ' +
+                    googleFormUrl
                 );
-                const supportMessage = encodeURIComponent('Hello SaahiRides, I want to register as a driver. My WhatsApp mobile number is +' + indianMobile + '. Please guide me through verification. Official registration form: ' + googleFormUrl);\n                const whatsappUrl = 'https://wa.me/919347946026?text=' + supportMessage;
+                const whatsappUrl = 'https://wa.me/919347946026?text=' + supportMessage;
                 window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
             });
         })();
@@ -182,7 +183,7 @@
         function navigateToDashboard() {
             window.location.href = 'app/activation.html';
         }
-    </script>
+</script>
 
 <script src="saahi-promotions.js?v=20261031" defer></script>
 </body>
