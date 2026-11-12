@@ -22,10 +22,10 @@
   "skippedTestCount": 4,
   "criticalRisks": [],
   "highRisks": [
-    "Root driver registration cannot register its submit handler and points to a generic Google URL.",
-    "Driver activation pages contain malformed JavaScript and can display a client-generated mock success token without verified payment.",
-    "QA defect lifecycle can auto-close unresolved defects and does not reopen recurrence.",
-    "GitHub Actions QA is not connected to secured Supabase ingestion."
+    "Driver activation remains unavailable until a verified server-side payment and entitlement flow is implemented; mock success and client token generation are now disabled.",
+    "QA defect lifecycle can auto-close unresolved anomalies after one clean run and does not reopen recurrence.",
+    "GitHub Actions QA is not connected to secured Supabase ingestion.",
+    "Driver registration and approved subscription-pricing fixes are committed but still require current-browser retests."
   ],
   "openDefects": [
     "driver-root-js-syntax",
