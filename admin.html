@@ -616,7 +616,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   $('ssCaption').focus();
  };
  $('ssLoadCampaign').onclick();
- $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssMusicArea','ssPublishingArea','ssImageLibraryArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.socialTarget==='ssImageLibraryArea')loadSocialImageLibrary('raw');};
+ $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssVideoUploadArea','ssMusicArea','ssPublishingArea','ssImageLibraryArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.socialTarget==='ssImageLibraryArea')loadSocialImageLibrary('raw');};
  $('ccRefresh').onclick=loadCommandCentre;
  const reportDate=$('ccReportDate');
  if(reportDate&&!reportDate.value){const now=new Date();const ist=new Date(now.getTime()+330*60000);reportDate.value=ist.toISOString().slice(0,10);}
