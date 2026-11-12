@@ -28,7 +28,7 @@ The coding workflow is manual only. It is not scheduled and has no merge, deploy
 - private_core.agent_memory is intended as an append-only, searchable memory store for project facts, decisions, preferences, lessons, research, risks and task outcomes.
 - private_core.command_center_execution_runs records executions.
 - Never store API keys, passwords, access tokens, personal secrets or raw credentials in memory.
-- The migration has not been applied. Research workflow activation requires owner review and approval before any production Supabase access.
+- The migration has not been applied. Research runs with Supabase memory disabled by default; the manual workflow input must be explicitly enabled before any production Supabase read/write. The scheduled supervisor is also gated: it remains dormant unless the owner explicitly sets the WATCHTOWER_PRODUCTION_SUPERVISION_ENABLED repository variable to true, or manually dispatches it with enable_supabase_write=true.
 
 ## Required GitHub Actions secrets (only after approval)
 - OPENAI_API_KEY
