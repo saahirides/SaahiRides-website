@@ -60,7 +60,19 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-</head>
+<style id="saahi-booking-picker-styles">
+.vehicle-select-wrap{position:relative}
+.vehicle-select-wrap select{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;left:0;bottom:0}
+.vehicle-picker-trigger{width:100%;min-height:48px;padding:12px 38px 12px 12px;border:1px solid rgba(255,193,7,.62);border-radius:10px;background:linear-gradient(135deg,#17365f,#0c2344);color:#fff;text-align:left;font:inherit;font-size:.9rem;font-weight:800;cursor:pointer;position:relative}
+.vehicle-picker-trigger:after{content:"▾";position:absolute;right:13px;color:#ffd166}
+#saahi-vehicle-picker-backdrop[hidden]{display:none!important}
+#saahi-vehicle-picker-backdrop{position:fixed;inset:0;z-index:10080;background:rgba(3,10,25,.62);display:flex;align-items:center;justify-content:center;padding:18px}
+#saahi-vehicle-picker-panel{width:min(100%,380px);max-height:min(76vh,560px);overflow:auto;background:linear-gradient(145deg,#fff7d6,#ffe7a3);color:#10264b;border:2px solid #e5a000;border-radius:16px;padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+#saahi-vehicle-picker-panel h3{margin:2px 4px 12px;font-size:17px;color:#173b7a}
+#saahi-vehicle-picker-options{display:grid;gap:7px}
+#saahi-vehicle-picker-options button{width:100%;border:1px solid #d69a16;border-radius:9px;background:#fff;color:#17304f;padding:12px;text-align:left;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+#saahi-vehicle-picker-close{display:block;margin:12px 0 0 auto;border:0;border-radius:8px;background:#173b7a;color:#fff;padding:9px 15px;font-weight:800}
+</style></head>
 <body>
 <main id="saahi-fare-estimator" class="estimator-dashboard-panel">
 <div class="estimator-container">
@@ -153,14 +165,14 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 var pickupInput=document.getElementById('saahi-pickup'),dropInput=document.getElementById('saahi-drop');
 var routeButton=document.getElementById('saahi-calculate-route'),locateButton=document.getElementById('saahi-use-location'),addressButton=document.getElementById('saahi-find-addresses');
 var routeStatus=document.getElementById('saahi-route-status'),routeDistance=document.getElementById('saahi-route-distance');
-var map=null,pickupMarker=null,dropMarker=null,routeLine=null,nextPin='pickup',pickupPoint=null,dropPoint=null,routeRequest=0;
+var map=null,pickupMarker=null,dropMarker=null,routeLine=null,nextPin='pickup',pickupPoint=null,dropPoint=null,routeRequest=0,bookingForOther=false;
 function say(m){routeStatus.textContent=m}
 function coords(p){return p.lat.toFixed(6)+', '+p.lng.toFixed(6)}
-function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop'}
-function setPin(which,ll,auto){
+function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop';var fareSlider=document.getElementById('estimator-distance-slider');if(fareSlider)fareSlider.disabled=true}
+function setPin(which,ll,auto,addressLabel){
 var p={lat:ll.lat,lng:ll.lng};clearRoute();var marker=which==='pickup'?pickupMarker:dropMarker;
 if(!marker){marker=L.marker(ll,{draggable:true}).addTo(map);marker.on('dragend',function(e){setPin(which,e.target.getLatLng(),true)});if(which==='pickup')pickupMarker=marker;else dropMarker=marker}else marker.setLatLng(ll);
-if(which==='pickup'){pickupPoint=p;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=coords(p)}else{dropPoint=p;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=coords(p)}
+if(which==='pickup'){pickupPoint=p;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=addressLabel||coords(p)}else{dropPoint=p;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=addressLabel||coords(p)}
 say(which+' selected. '+(pickupPoint&&dropPoint?'Calculating driving distance…':'Select the '+(which==='pickup'?'drop':'pickup')+' location.'));
 if(pickupPoint&&dropPoint&&auto!==false)calculateRoute()
 }
@@ -168,7 +180,7 @@ function initMap(){
 if(!window.L){say('Map library did not load. Check connection and reload.');return}
 map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-map.on('click',function(e){var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';setPin(which,e.latlng,true);nextPin=which==='pickup'?'drop':'pickup'});
+map.on('click',function(e){if(bookingForOther){say('For someone else, search both passenger addresses manually. GPS and map taps are disabled.');return}var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';setPin(which,e.latlng,true);nextPin=which==='pickup'?'drop':'pickup';reverseGeocode(e.latlng).then(function(label){setPin(which,e.latlng,false,label)}).catch(function(){})});
 setTimeout(function(){map.invalidateSize()},300);say('Map ready. Tap pickup then drop; road distance and fare calculate automatically.')
 }
 function calculateRoute(){
@@ -180,23 +192,23 @@ if(id!==routeRequest)return;var route=data&&data.code==='Ok'&&data.routes&&data.
 if(!Number.isFinite(km)||km<=0)throw new Error('No driving route found. Check both locations.');
 var pn='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
 var dn='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
-window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pn,dropNav:dn,distanceKm:km,durationSeconds:route.duration||null};
+window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupAddress:pickupInput.value,dropAddress:dropInput.value,pickupNav:pn,dropNav:dn,distanceKm:km,durationSeconds:route.duration||null};
 if(routeLine&&map)map.removeLayer(routeLine);if(route.geometry&&map){routeLine=L.geoJSON(route.geometry,{style:{color:'#ffd700',weight:5,opacity:.9}}).addTo(map);map.fitBounds(routeLine.getBounds(),{padding:[24,24]})}
 routeDistance.textContent=km.toFixed(2)+' km';
-if(km<=30){var bill=Math.ceil(km*10)/10,slider=document.getElementById('estimator-distance-slider');slider.value=bill.toFixed(1);slider.dispatchEvent(new Event('input',{bubbles:true}));say('Route calculated: '+km.toFixed(2)+' km. Fare updated automatically.')}
+if(km<=30){var bill=Math.ceil(km*10)/10,slider=document.getElementById('estimator-distance-slider');slider.disabled=false;slider.value=bill.toFixed(1);slider.dispatchEvent(new Event('input',{bubbles:true}));say('Route calculated: '+km.toFixed(2)+' km. Fare updated automatically.')}
 else say('Route calculated: '+km.toFixed(2)+' km. City fare limit is 30 km; request an outstation quote.')
 }).catch(function(e){if(id!==routeRequest)return;window.saahiRouteContext=null;routeDistance.textContent='Not available';say(e.message||'Could not calculate road distance. Retry.')}).finally(function(){if(id===routeRequest){routeButton.disabled=false;routeButton.textContent='Calculate distance & fare'}})
 }
-function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}
-locateButton.addEventListener('click',function(){
+function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}\nfunction reverseGeocode(ll){return fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(ll.lat)+'&lon='+encodeURIComponent(ll.lng)+'&zoom=18&addressdetails=1',{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address lookup unavailable');return r.json()}).then(function(d){return d&&d.display_name?d.display_name:coords(ll)})}
+locateButton.addEventListener('click',function(){if(bookingForOther){say('For someone else, search the passenger’s actual pickup and drop addresses.');return}
 if(!navigator.geolocation){say('Browser does not support GPS. Search addresses or tap the map.');return}if(!map){say('Map is not ready. Reload and retry.');return}
 say('Requesting phone location permission…');
-navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Current GPS location set as pickup. Now search the drop address or tap the map.')},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
+navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Fresh GPS fix received. Resolving pickup address…');reverseGeocode(p).then(function(label){setPin('pickup',p,false,label);say('Fresh current location set as pickup. Search the drop address.')}).catch(function(){say('Fresh GPS pickup set. Search the drop address.')})},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
 });
 addressButton.addEventListener('click',function(){
 var a=pickupInput.value.trim(),b=dropInput.value.trim();if(!a||!b){say('Enter both pickup and drop addresses first.');return}
 addressButton.disabled=true;say('Finding pickup address…');
-geocode(a).then(function(p){setPin('pickup',p,false);map.setView(p,14);say('Pickup found. Finding drop address…');return new Promise(function(ok){setTimeout(ok,1100)}).then(function(){return geocode(b)})}).then(function(d){setPin('drop',d,false);map.fitBounds(L.latLngBounds([pickupPoint.lat,pickupPoint.lng],[d.lat,d.lng]).pad(.18));calculateRoute()}).catch(function(e){say(e.message||'Could not find one of the addresses.')}).finally(function(){addressButton.disabled=false})
+geocode(a).then(function(p){setPin('pickup',p,false,a);map.setView(p,14);say('Pickup found. Finding drop address…');return new Promise(function(ok){setTimeout(ok,1100)}).then(function(){return geocode(b)})}).then(function(d){setPin('drop',d,false,b);map.fitBounds(L.latLngBounds([pickupPoint.lat,pickupPoint.lng],[d.lat,d.lng]).pad(.18));calculateRoute()}).catch(function(e){say(e.message||'Could not find one of the addresses.')}).finally(function(){addressButton.disabled=false})
 });
 function resolveAddressInput(input,which){
 var q=input.value.trim();if(!q)return;
@@ -212,7 +224,7 @@ pickupInput.addEventListener('change',function(){resolveAddressInput(pickupInput
 pickupInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();resolveAddressInput(pickupInput,'pickup')}});
 dropInput.addEventListener('change',function(){resolveAddressInput(dropInput,'drop')});
 dropInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();resolveAddressInput(dropInput,'drop')}});
-routeButton.addEventListener('click',calculateRoute);initMap();
+routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('input[name="booking-purpose"]').forEach(function(radio){radio.addEventListener('change',function(){bookingForOther=radio.value==='someone-else';locateButton.hidden=bookingForOther;if(bookingForOther){clearRoute();pickupPoint=null;dropPoint=null;if(pickupMarker&&map){map.removeLayer(pickupMarker);pickupMarker=null}if(dropMarker&&map){map.removeLayer(dropMarker);dropMarker=null}pickupInput.value='';dropInput.value='';nextPin='pickup';say('Enter and search the passenger’s actual pickup and drop addresses. Do not use the booking owner’s GPS.')}else{say('For your own booking, use a fresh GPS fix or search your pickup address.')}})});initMap();
 })();
 </script>
 <script>
@@ -231,7 +243,7 @@ routeButton.addEventListener('click',calculateRoute);initMap();
   var otherRiderFields = document.getElementById('other-rider-fields');
   var otherRiderName = document.getElementById('other-rider-name');
   var otherRiderPhone = document.getElementById('other-rider-phone');
-  var bookingPurpose = 'self';
+  var bookingPurpose = 'self';\n  slider.disabled = true;
   function calculateFare(distance, rate){
     var total = 0;
     if(distance <= 3){ total = rate * distance; }
@@ -305,6 +317,20 @@ routeButton.addEventListener('click',calculateRoute);initMap();
 })();
 </script>
 
-<script src="saahi-promotions.js?v=20261031" defer></script>
+<script id="saahi-custom-vehicle-picker">
+(function(){
+ var selects=Array.prototype.slice.call(document.querySelectorAll('.vehicle-category-select'));if(!selects.length)return;
+ var backdrop=document.createElement('div');backdrop.id='saahi-vehicle-picker-backdrop';backdrop.hidden=true;
+ backdrop.innerHTML='<section id="saahi-vehicle-picker-panel" role="dialog" aria-modal="true" aria-labelledby="saahi-vehicle-picker-title"><h3 id="saahi-vehicle-picker-title">Choose vehicle option</h3><div id="saahi-vehicle-picker-options"></div><button type="button" id="saahi-vehicle-picker-close">Close</button></section>';
+ document.body.appendChild(backdrop);
+ var box=backdrop.querySelector('#saahi-vehicle-picker-options'),title=backdrop.querySelector('#saahi-vehicle-picker-title'),close=backdrop.querySelector('#saahi-vehicle-picker-close'),activeTrigger=null;
+ function shut(){backdrop.hidden=true;if(activeTrigger)activeTrigger.focus();activeTrigger=null}
+ selects.forEach(function(select){var trigger=document.createElement('button');trigger.type='button';trigger.className='vehicle-picker-trigger';var current=select.options[select.selectedIndex];trigger.textContent=current&&!current.disabled?current.textContent.trim():'Choose '+select.getAttribute('aria-label');select.parentNode.insertBefore(trigger,select.nextSibling);
+ trigger.addEventListener('click',function(){activeTrigger=trigger;title.textContent='Choose '+select.getAttribute('aria-label');box.innerHTML='';Array.prototype.forEach.call(select.options,function(option){if(option.disabled||!option.value)return;var b=document.createElement('button');b.type='button';b.textContent=option.textContent.trim();b.addEventListener('click',function(){select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));trigger.textContent=option.textContent.trim();shut()});box.appendChild(b)});backdrop.hidden=false;var first=box.querySelector('button');if(first)first.focus()});
+ select.addEventListener('change',function(){var o=select.options[select.selectedIndex];trigger.textContent=o?o.textContent.trim():'Choose vehicle'});
+ });
+ close.addEventListener('click',shut);backdrop.addEventListener('click',function(e){if(e.target===backdrop)shut()});document.addEventListener('keydown',function(e){if(!backdrop.hidden&&e.key==='Escape')shut()});
+})();
+</script><script src="saahi-promotions.js?v=20261031" defer></script>
 </body>
 </html>
