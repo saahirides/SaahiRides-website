@@ -150,29 +150,29 @@
 
     <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Securely hooks the Google Form destination and dispatches via official WhatsApp API
-        document.getElementById('whatsappOnboardingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const rawPhone = document.getElementById('driverWhatsApp').value;
-            const cleanPhone = rawPhone.replace(/\D/g, ''); // Strips out special characters or symbols
-            
-            const googleFormUrl = "https://google.com";
-            
-            // Professional automated onboarding message template
-            const message = encodeURIComponent(Welcome to SaahiRides! 🎉\n\nPlease complete your driver onboarding verification paperwork by filling out the official form link below:\n\n🔗 ${googleFormUrl}\n\nOnce completed, return to the platform to activate your profile plan.);
-            
-            // Redirects safely using standard window handler
-            window.open(https://wa.me{cleanPhone}?text=${message}, '_blank');
-        });
+document.getElementById('whatsappOnboardingForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  let cleanPhone = (document.getElementById('driverWhatsApp')?.value || '').replace(/\\D/g, '');
+  if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+  if (!/^[0-9]{10,15}$/.test(cleanPhone)) {
+    alert('Enter a valid driver WhatsApp number, including country code if outside India.');
+    return;
+  }
+  const googleFormUrl = 'https://forms.gle/gzAUZCfi1ETX5MLw7';
+  const message = encodeURIComponent(`Welcome to SaahiRides! 🎉
 
-        // Routes verified drivers to their payment options and account portals
-        function navigateToDashboard() {
-    // Forces the browser to look inside your app subfolder for activation
-    window.location.href = "app/activation.html"; 
+Please complete your driver onboarding verification by filling out the official registration form:
+
+🔗 ${googleFormUrl}
+
+After submitting the form, return to SaahiRides for the next verification step.`);
+  window.open('https://wa.me/' + cleanPhone + '?text=' + message, '_blank', 'noopener');
+});
+
+function navigateToDashboard() {
+  window.location.href = 'app/activation.html';
 }
-        }
-    </script>
+</script>
 
 <script src="saahi-promotions.js?v=20261031" defer></script>
 </body>
