@@ -105,13 +105,13 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
             <option value="bike-standard" data-label="Bike Standard" data-rate="10" selected>Bike Standard · ₹10/km</option><option value="bike-express" data-label="Bike Express" data-rate="12">Bike Express · ₹12/km</option><option value="bike-super-fast" data-label="Bike Super Fast" data-rate="13">Bike Super Fast · ₹13/km</option>
           </select></label>
           <label class="vehicle-select-wrap">🛵 Scooty<select class="vehicle-category-select" id="vehicle-scooty" aria-label="Scooty options">
-            <option value="scooty-standard" data-label="Scooty Standard" data-rate="12">Scooty Standard · ₹12/km</option><option value="scooty-express" data-label="Scooty Express" data-rate="13.50">Scooty Express · ₹13.50/km</option><option value="scooty-super-fast" data-label="Scooty Super Fast" data-rate="15">Scooty Super Fast · ₹15/km</option><option value="scooty-ev" data-label="Scooty EV" data-rate="16">Scooty EV · ₹16/km</option>
+            <option value="" disabled selected>Choose a scooty</option><option value="scooty-standard" data-label="Scooty Standard" data-rate="12">Scooty Standard · ₹12/km</option><option value="scooty-express" data-label="Scooty Express" data-rate="13.50">Scooty Express · ₹13.50/km</option><option value="scooty-super-fast" data-label="Scooty Super Fast" data-rate="15">Scooty Super Fast · ₹15/km</option><option value="scooty-ev" data-label="Scooty EV" data-rate="16">Scooty EV · ₹16/km</option>
           </select></label>
           <label class="vehicle-select-wrap">🛺 Auto<select class="vehicle-category-select" id="vehicle-auto" aria-label="Auto options">
-            <option value="auto-standard" data-label="Auto Standard" data-rate="16.50">Auto Standard · ₹16.50/km</option><option value="auto-express" data-label="Auto Express" data-rate="17.50">Auto Express · ₹17.50/km</option><option value="auto-super-fast" data-label="Auto Super Fast" data-rate="19">Auto Super Fast · ₹19/km</option><option value="ev-auto" data-label="Electric Auto" data-rate="19">Electric Auto · ₹19/km</option>
+            <option value="" disabled selected>Choose an auto</option><option value="auto-standard" data-label="Auto Standard" data-rate="16.50">Auto Standard · ₹16.50/km</option><option value="auto-express" data-label="Auto Express" data-rate="17.50">Auto Express · ₹17.50/km</option><option value="auto-super-fast" data-label="Auto Super Fast" data-rate="19">Auto Super Fast · ₹19/km</option><option value="ev-auto" data-label="Electric Auto" data-rate="19">Electric Auto · ₹19/km</option>
           </select></label>
           <label class="vehicle-select-wrap">🚘 Cabs<select class="vehicle-category-select" id="vehicle-cab" aria-label="Cab options">
-            <option value="non-ac-standard" data-label="Non-AC Cab Standard" data-rate="19.50">Non-AC Cab Standard · ₹19.50/km</option><option value="non-ac-express" data-label="Non-AC Cab Express" data-rate="21">Non-AC Cab Express · ₹21/km</option><option value="non-ac-super-fast" data-label="Non-AC Cab Super Fast" data-rate="22">Non-AC Cab Super Fast · ₹22/km</option><option value="ac-standard" data-label="AC Cab Standard" data-rate="22.50">AC Cab Standard · ₹22.50/km</option><option value="ac-express" data-label="AC Cab Express" data-rate="24">AC Cab Express · ₹24/km</option><option value="ac-super-fast" data-label="AC Cab Super Fast" data-rate="25">AC Cab Super Fast · ₹25/km</option>
+            <option value="" disabled selected>Choose a cab</option><option value="non-ac-standard" data-label="Non-AC Cab Standard" data-rate="19.50">Non-AC Cab Standard · ₹19.50/km</option><option value="non-ac-express" data-label="Non-AC Cab Express" data-rate="21">Non-AC Cab Express · ₹21/km</option><option value="non-ac-super-fast" data-label="Non-AC Cab Super Fast" data-rate="22">Non-AC Cab Super Fast · ₹22/km</option><option value="ac-standard" data-label="AC Cab Standard" data-rate="22.50">AC Cab Standard · ₹22.50/km</option><option value="ac-express" data-label="AC Cab Express" data-rate="24">AC Cab Express · ₹24/km</option><option value="ac-super-fast" data-label="AC Cab Super Fast" data-rate="25">AC Cab Super Fast · ₹25/km</option>
           </select></label>
         </div>
       </div>
@@ -267,7 +267,7 @@ routeButton.addEventListener('click',calculateRoute);initMap();
     var option=select.options[select.selectedIndex];if(!option)return;
     baseRatePerKm=Number(option.getAttribute('data-rate'));
     selectedVehicle=option.getAttribute('data-label')||option.textContent.trim();
-    vehicleSelects.forEach(function(other){if(other!==select){var match=Array.prototype.find.call(other.options,function(item){return item.value===option.value;});if(match)other.selectedIndex=-1;}});
+    vehicleSelects.forEach(function(other){if(other!==select)other.selectedIndex=0;});
     updateEstimate();
   }
   vehicleSelects.forEach(function(select){select.addEventListener('change',function(){applyVehicleSelection(select);});});
