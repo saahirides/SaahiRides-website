@@ -168,7 +168,7 @@ var routeStatus=document.getElementById('saahi-route-status'),routeDistance=docu
 var map=null,pickupMarker=null,dropMarker=null,routeLine=null,nextPin='pickup',pickupPoint=null,dropPoint=null,routeRequest=0,bookingForOther=false;
 function say(m){routeStatus.textContent=m}
 function coords(p){return p.lat.toFixed(6)+', '+p.lng.toFixed(6)}
-function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop';var fareSlider=document.getElementById('estimator-distance-slider');if(fareSlider)fareSlider.disabled=true}
+function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop';var fareSlider=document.getElementById('estimator-distance-slider');if(fareSlider){fareSlider.disabled=true;fareSlider.dispatchEvent(new Event('input',{bubbles:true}))}}
 function setPin(which,ll,auto,addressLabel){
 var p={lat:ll.lat,lng:ll.lng};clearRoute();var marker=which==='pickup'?pickupMarker:dropMarker;
 if(!marker){marker=L.marker(ll,{draggable:true}).addTo(map);marker.on('dragend',function(e){setPin(which,e.target.getLatLng(),true)});if(which==='pickup')pickupMarker=marker;else dropMarker=marker}else marker.setLatLng(ll);
@@ -180,7 +180,7 @@ function initMap(){
 if(!window.L){say('Map library did not load. Check connection and reload.');return}
 map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-map.on('click',function(e){if(bookingForOther){say('For someone else, search both passenger addresses manually. GPS and map taps are disabled.');return}var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';setPin(which,e.latlng,true);nextPin=which==='pickup'?'drop':'pickup';reverseGeocode(e.latlng).then(function(label){setPin(which,e.latlng,false,label)}).catch(function(){})});
+map.on('click',function(e){if(bookingForOther){say('For someone else, search both passenger addresses manually. GPS and map taps are disabled.');return}var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';setPin(which,e.latlng,true);nextPin=which==='pickup'?'drop':'pickup';reverseGeocode(e.latlng).then(function(label){if(which==='pickup')pickupInput.value=label;else dropInput.value=label;if(window.saahiRouteContext){if(which==='pickup')window.saahiRouteContext.pickupAddress=label;else window.saahiRouteContext.dropAddress=label}}).catch(function(){})});
 setTimeout(function(){map.invalidateSize()},300);say('Map ready. Tap pickup then drop; road distance and fare calculate automatically.')
 }
 function calculateRoute(){
@@ -203,7 +203,7 @@ function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?for
 locateButton.addEventListener('click',function(){if(bookingForOther){say('For someone else, search the passenger’s actual pickup and drop addresses.');return}
 if(!navigator.geolocation){say('Browser does not support GPS. Search addresses or tap the map.');return}if(!map){say('Map is not ready. Reload and retry.');return}
 say('Requesting phone location permission…');
-navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Fresh GPS fix received. Resolving pickup address…');reverseGeocode(p).then(function(label){setPin('pickup',p,false,label);say('Fresh current location set as pickup. Search the drop address.')}).catch(function(){say('Fresh GPS pickup set. Search the drop address.')})},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
+navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Fresh GPS fix received. Resolving pickup address…');reverseGeocode(p).then(function(label){pickupInput.value=label;say('Fresh current location set as pickup. Search the drop address.')}).catch(function(){say('Fresh GPS pickup set. Search the drop address.')})},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
 });
 addressButton.addEventListener('click',function(){
 var a=pickupInput.value.trim(),b=dropInput.value.trim();if(!a||!b){say('Enter both pickup and drop addresses first.');return}
@@ -274,6 +274,8 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     return Math.round(total);
   }
   function updateEstimate(){
+    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';return}
+    bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
     var distance = parseFloat(slider.value);
     var onDemand = calculateFare(distance,baseRatePerKm);
     distanceOutput.textContent = distance + ' km';
@@ -287,7 +289,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
       '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
       '\n30-day subscription one-way: ₹' + oneWay +
       '\n30-day subscription both-way: ₹' + bothWay +
-      (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + window.saahiRouteContext.pickup + '\nDrop: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
+      (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + (window.saahiRouteContext.pickupAddress||window.saahiRouteContext.pickup) + '\nDrop: ' + (window.saahiRouteContext.dropAddress||window.saahiRouteContext.drop) + '\nPickup coordinates: ' + window.saahiRouteContext.pickup + '\nDrop coordinates: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
       '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
   }
@@ -302,6 +304,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   purposeRadios.forEach(function(radio){radio.addEventListener('change',function(){bookingPurpose=radio.value;otherRiderFields.hidden=bookingPurpose!=='someone-else';updateEstimate();});});
   [otherRiderName,otherRiderPhone].forEach(function(input){input.addEventListener('input',updateEstimate);});
   bookingLink.addEventListener('click',function(event){
+    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){event.preventDefault();alert('Resolve both pickup and drop addresses and calculate a valid city route before booking.');return}
     if(bookingPurpose==='someone-else'){
       var phone=otherRiderPhone.value.replace(/[\s()-]/g,'');
       if(!/^\+?[0-9]{10,15}$/.test(phone)){
