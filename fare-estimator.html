@@ -82,7 +82,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
         <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Drop landmark / address note" autocomplete="off"></label>
       </div>
       <div id="saahi-route-map" role="application" aria-label="Map for selecting pickup and drop" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
-      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Confirm to calculate road distance and fare.</span></div>
+      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-find-addresses">Find pickup &amp; drop</button><button type="button" id="saahi-calculate-route">Calculate distance &amp; fare</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Confirm to calculate road distance and fare.</span></div>
       <p class="route-distance-line">Driving-road distance: <strong id="saahi-route-distance">Waiting for pickup and drop</strong></p>
       <p class="readout-calculation-note">The driving-road distance is calculated using OpenStreetMap routing (OSRM). Fares update automatically for city routes up to 30 km. Longer trips need an outstation quote. If routing is unavailable, the distance slider remains as a manual fallback.</p>
     </div>
@@ -143,97 +143,56 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 (function(){
-  'use strict';
-  var pickupInput=document.getElementById('saahi-pickup');
-  var dropInput=document.getElementById('saahi-drop');
-  var routeButton=document.getElementById('saahi-calculate-route');
-  var locateButton=document.getElementById('saahi-use-location');
-  var routeStatus=document.getElementById('saahi-route-status');
-  var routeDistance=document.getElementById('saahi-route-distance');
-  var map=null, pickupMarker=null, dropMarker=null, routeLine=null, nextPin='pickup';
-  var pickupPoint=null, dropPoint=null;
-  function say(message){routeStatus.textContent=message}
-  function coords(point){return point.lat.toFixed(6)+', '+point.lng.toFixed(6)}
-  function setPin(which,latlng){
-    var point={lat:latlng.lat,lng:latlng.lng};
-    window.saahiRouteContext=null;
-    if(routeLine&&map){map.removeLayer(routeLine);routeLine=null;}
-    routeDistance.textContent='Waiting for pickup and drop';
-    var marker=which==='pickup'?pickupMarker:dropMarker;
-    if(!marker){
-      marker=L.marker(latlng,{draggable:true}).addTo(map);
-      marker.on('dragend',function(event){setPin(which,event.target.getLatLng())});
-      if(which==='pickup') pickupMarker=marker; else dropMarker=marker;
-    }else marker.setLatLng(latlng);
-    if(which==='pickup'){pickupPoint=point;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=coords(point)}
-    else{dropPoint=point;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=coords(point)}
-    say((which==='pickup'?'Pickup':'Drop')+' pin set: '+coords(point)+'. '+(which==='pickup'?'Tap to set drop.':'Drag either pin to adjust, then confirm.'));
-  }
-  function initMap(){
-    if(!window.L){say('Map library could not load. Address fields and manual distance remain available.');return}
-    map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    map.on('click',function(event){
-      var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';
-      setPin(which,event.latlng);nextPin=which==='pickup'?'drop':'pickup';
-    });
-    say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust, then confirm to calculate the driving route.');
-  }
-  locateButton.addEventListener('click',function(){
-    if(!navigator.geolocation){say('This browser does not provide location access. Enter an address note or tap the map.');return}
-    say('Getting your current location…');
-    navigator.geolocation.getCurrentPosition(function(position){
-      var point=L.latLng(position.coords.latitude,position.coords.longitude);
-      setPin('pickup',point);map.setView(point,18);nextPin='drop';
-    },function(error){say(error.code===1?'Location permission was denied. Enter an address note or tap the map.':'Could not get your location. Enter an address note or tap the map.')},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
-  });
-  routeButton.addEventListener('click',async function(){
-    if(!pickupPoint||!dropPoint){say('Set both pickup and drop pins before confirming.');return}
-    routeButton.disabled=true;
-    routeButton.textContent='Calculating road route…';
-    routeDistance.textContent='Calculating…';
-    say('Calculating the driving-road distance…');
-    try{
-      var routeUrl='https://router.project-osrm.org/route/v1/driving/'+
-        pickupPoint.lng+','+pickupPoint.lat+';'+dropPoint.lng+','+dropPoint.lat+
-        '?overview=full&geometries=geojson&steps=false';
-      var response=await fetch(routeUrl,{method:'GET',headers:{'Accept':'application/json'}});
-      if(!response.ok) throw new Error('The road-routing service is temporarily unavailable. Please retry or use the manual distance control.');
-      var result=await response.json();
-      var route=result&&result.code==='Ok'&&result.routes&&result.routes[0];
-      var distanceKm=route?Number(route.distance)/1000:NaN;
-      if(!Number.isFinite(distanceKm)||distanceKm<=0) throw new Error('No driving route was found between these pins. Adjust the pins and retry.');
-      var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
-      var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
-      window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pickupNav,dropNav:dropNav,distanceKm:distanceKm,durationSeconds:route.duration||null};
-      if(routeLine&&map)map.removeLayer(routeLine);
-      if(route.geometry&&route.geometry.coordinates&&map){
-        var latlngs=route.geometry.coordinates.map(function(pair){return [pair[1],pair[0]];});
-        routeLine=L.polyline(latlngs,{color:'#ffd700',weight:5,opacity:.9}).addTo(map);
-        map.fitBounds(routeLine.getBounds(),{padding:[24,24]});
-      }
-      routeDistance.textContent=distanceKm.toFixed(2)+' km';
-      if(distanceKm>30){
-        say('Driving route: '+distanceKm.toFixed(2)+' km. This exceeds the 30 km city estimator; request an outstation quote. Route details will be included in WhatsApp.');
-      }else{
-        var billableDistance=Math.ceil(distanceKm*10)/10;
-        var slider=document.getElementById('estimator-distance-slider');
-        slider.value=Math.max(0.1,billableDistance).toFixed(1);
-        slider.dispatchEvent(new Event('input',{bubbles:true}));
-        say('Driving route confirmed: '+distanceKm.toFixed(2)+' km. Fare updated using '+billableDistance.toFixed(1)+' km.');
-      }
-    }catch(error){
-      window.saahiRouteContext=null;
-      routeDistance.textContent='Not available';
-      say(error.message||'Road routing is temporarily unavailable. You can still use the manual distance slider.');
-    }finally{
-      routeButton.disabled=false;
-      routeButton.textContent='Confirm pickup & drop';
-    }
-  });
-  initMap();
+'use strict';
+var pickupInput=document.getElementById('saahi-pickup'),dropInput=document.getElementById('saahi-drop');
+var routeButton=document.getElementById('saahi-calculate-route'),locateButton=document.getElementById('saahi-use-location'),addressButton=document.getElementById('saahi-find-addresses');
+var routeStatus=document.getElementById('saahi-route-status'),routeDistance=document.getElementById('saahi-route-distance');
+var map=null,pickupMarker=null,dropMarker=null,routeLine=null,nextPin='pickup',pickupPoint=null,dropPoint=null,routeRequest=0;
+function say(m){routeStatus.textContent=m}
+function coords(p){return p.lat.toFixed(6)+', '+p.lng.toFixed(6)}
+function clearRoute(){routeRequest++;window.saahiRouteContext=null;if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}routeDistance.textContent='Waiting for pickup and drop'}
+function setPin(which,ll,auto){
+var p={lat:ll.lat,lng:ll.lng};clearRoute();var marker=which==='pickup'?pickupMarker:dropMarker;
+if(!marker){marker=L.marker(ll,{draggable:true}).addTo(map);marker.on('dragend',function(e){setPin(which,e.target.getLatLng(),true)});if(which==='pickup')pickupMarker=marker;else dropMarker=marker}else marker.setLatLng(ll);
+if(which==='pickup'){pickupPoint=p;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=coords(p)}else{dropPoint=p;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=coords(p)}
+say(which+' selected. '+(pickupPoint&&dropPoint?'Calculating driving distance…':'Select the '+(which==='pickup'?'drop':'pickup')+' location.'));
+if(pickupPoint&&dropPoint&&auto!==false)calculateRoute()
+}
+function initMap(){
+if(!window.L){say('Map library did not load. Check connection and reload.');return}
+map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+map.on('click',function(e){var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';setPin(which,e.latlng,true);nextPin=which==='pickup'?'drop':'pickup'});
+setTimeout(function(){map.invalidateSize()},300);say('Map ready. Tap pickup then drop; road distance and fare calculate automatically.')
+}
+function calculateRoute(){
+if(!pickupPoint||!dropPoint){say('Choose both pickup and drop locations first.');return}
+var id=++routeRequest;routeButton.disabled=true;routeButton.textContent='Calculating…';routeDistance.textContent='Calculating…';say('Calculating driving-road distance…');
+var url='https://router.project-osrm.org/route/v1/driving/'+pickupPoint.lng+','+pickupPoint.lat+';'+dropPoint.lng+','+dropPoint.lat+'?overview=full&geometries=geojson&steps=false';
+fetch(url,{headers:{'Accept':'application/json'}}).then(function(r){if(!r.ok)throw new Error('Road-routing service unavailable ('+r.status+'). Retry shortly.');return r.json()}).then(function(data){
+if(id!==routeRequest)return;var route=data&&data.code==='Ok'&&data.routes&&data.routes[0],km=route?Number(route.distance)/1000:NaN;
+if(!Number.isFinite(km)||km<=0)throw new Error('No driving route found. Check both locations.');
+var pn='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
+var dn='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
+window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pickupNav:pn,dropNav:dn,distanceKm:km,durationSeconds:route.duration||null};
+if(routeLine&&map)map.removeLayer(routeLine);if(route.geometry&&map){routeLine=L.geoJSON(route.geometry,{style:{color:'#ffd700',weight:5,opacity:.9}}).addTo(map);map.fitBounds(routeLine.getBounds(),{padding:[24,24]})}
+routeDistance.textContent=km.toFixed(2)+' km';
+if(km<=30){var bill=Math.ceil(km*10)/10,slider=document.getElementById('estimator-distance-slider');slider.value=bill.toFixed(1);slider.dispatchEvent(new Event('input',{bubbles:true}));say('Route calculated: '+km.toFixed(2)+' km. Fare updated automatically.')}
+else say('Route calculated: '+km.toFixed(2)+' km. City fare limit is 30 km; request an outstation quote.')
+}).catch(function(e){if(id!==routeRequest)return;window.saahiRouteContext=null;routeDistance.textContent='Not available';say(e.message||'Could not calculate road distance. Retry.')}).finally(function(){if(id===routeRequest){routeButton.disabled=false;routeButton.textContent='Calculate distance & fare'}})
+}
+function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}
+locateButton.addEventListener('click',function(){
+if(!navigator.geolocation){say('Browser does not support GPS. Search addresses or tap the map.');return}if(!map){say('Map is not ready. Reload and retry.');return}
+say('Requesting phone location permission…');
+navigator.geolocation.getCurrentPosition(function(pos){var p=L.latLng(pos.coords.latitude,pos.coords.longitude);setPin('pickup',p,false);map.setView(p,17);nextPin='drop';say('Current GPS location set as pickup. Now search the drop address or tap the map.')},function(e){say(e.code===1?'Location permission denied. Allow location for saahirides.co.in in browser site settings.':e.code===2?'Phone could not determine GPS. Enable device Location/GPS and retry.':'GPS timed out. Enable device GPS or move outdoors and retry.')},{enableHighAccuracy:true,timeout:20000,maximumAge:0})
+});
+addressButton.addEventListener('click',function(){
+var a=pickupInput.value.trim(),b=dropInput.value.trim();if(!a||!b){say('Enter both pickup and drop addresses first.');return}
+addressButton.disabled=true;say('Finding pickup address…');
+geocode(a).then(function(p){setPin('pickup',p,false);map.setView(p,14);say('Pickup found. Finding drop address…');return new Promise(function(ok){setTimeout(ok,1100)}).then(function(){return geocode(b)})}).then(function(d){setPin('drop',d,false);map.fitBounds(L.latLngBounds([pickupPoint.lat,pickupPoint.lng],[d.lat,d.lng]).pad(.18));calculateRoute()}).catch(function(e){say(e.message||'Could not find one of the addresses.')}).finally(function(){addressButton.disabled=false})
+});
+routeButton.addEventListener('click',calculateRoute);initMap();
 })();
 </script>
 <script>
