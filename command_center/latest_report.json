@@ -9,7 +9,7 @@
   "executionRecordClosed": false,
   "closureState": "INCOMPLETE — current-day Playwright suite did not execute; 12 defects remain open.",
   "sourceCommit": "e96ff3d7b4eb5ed2cb1bef5ca969fae6ce95bfef",
-  "currentMainCommit": "a0361dc10fd047b738c11c5bcb4759d338fcef0c",
+  "currentMainCommit": "7e5533a74a56d7d4a843141e26286146e43806a9",
   "currentBrowserRun": false,
   "pagesDiscovered": 18,
   "pagesInspected": 0,
@@ -22,10 +22,9 @@
   "skippedTestCount": 4,
   "criticalRisks": [],
   "highRisks": [
-    "Driver activation remains unavailable until a verified server-side payment and entitlement flow is implemented; mock success and client token generation are now disabled.",
-    "QA defect lifecycle can auto-close unresolved anomalies after one clean run and does not reopen recurrence.",
+    "Driver activation remains unavailable until a verified server-side payment and entitlement flow is implemented; mock success and client token generation are disabled.",
     "GitHub Actions QA is not connected to secured Supabase ingestion.",
-    "Driver registration and approved subscription-pricing fixes are committed but still require current-browser retests."
+    "Driver registration, subscription pricing and QA lifecycle fixes are committed but still require current-browser/workflow retests."
   ],
   "openDefects": [
     "driver-root-js-syntax",
@@ -60,9 +59,9 @@
     "Legacy root customer.html loads gstatic.com and contains placeholder Firebase credentials.",
     "The Nov 11 Playwright run observed a travel-tours.html replaceChildren null-reference runtime error.",
     "Three non-sitemap images lack alt attributes: app/index.html, rates.html and vision.html.",
-    "The QA runner can auto-close unresolved anomalies after one clean run and does not reopen recurrence.",
+    "At the QA snapshot, the runner could auto-close unresolved anomalies; the lifecycle logic has since been corrected to retain and reopen defects, pending workflow retest.",
     "The QA runner does not cover forms, booking, fare calculator, WhatsApp, SOS, tour cart/map, responsive viewports or authenticated Admin/HR journeys.",
-    "The QA runner can conclude success despite BROWSER_RUNTIME_ERROR findings.",
+    "At the QA snapshot, browser runtime errors did not fail the workflow; the runner now exits non-zero while any anomaly remains open, pending workflow retest.",
     "GitHub Actions does not ingest QA runs/events/anomalies into Supabase through the secured Command Centre action."
   ],
   "passedChecks": [
@@ -107,7 +106,9 @@
     "driverFormRootPageBroken": false,
     "mapsKeyPlaceholderPresent": true,
     "activationScriptTagMismatch": false,
-    "legacyCustomerFirebasePlaceholderPresent": true
+    "legacyCustomerFirebasePlaceholderPresent": true,
+    "qaRunnerAutoCloseDisabled": true,
+    "qaRunnerFailsOnOpenAnomalies": true
   },
   "postRunChanges": {
     "fareSubscriptionFormula": "Corrected to one-way = On-Demand × 30 × 0.85 and both-way = On-Demand × 60 × 0.85; no joining fee or route-lock add-on.",
@@ -120,8 +121,10 @@
       "91b33b7648d0747e25c03f47b738b20a844ddddc",
       "eb10fdae3572ec15f16c87c781bca52684fb1e6b",
       "8dbafd6db2c77b684204b651567d28bedd5df785",
-      "a0361dc10fd047b738c11c5bcb4759d338fcef0c"
-    ]
+      "a0361dc10fd047b738c11c5bcb4759d338fcef0c",
+      "7e5533a74a56d7d4a843141e26286146e43806a9"
+    ],
+    "qaLifecycle": "Runner now retains unreproduced defects as OPEN_PENDING_VERIFICATION, reopens recurring closed defects, and never auto-closes; workflow retest pending."
   },
   "safety": {
     "paymentsAttempted": false,
