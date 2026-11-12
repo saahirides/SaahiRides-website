@@ -458,7 +458,7 @@ footer {
 <div id="ssMediaPreview" class="grid" style="margin-top:14px"></div>
 </div>
 <div id="ssMusicArea" class="hidden">
- <div class="tile"><h3>Music & audio</h3><p class="small">Use audio you own or are licensed to publish.</p><label for="ssMusic">Music / audio file</label><input id="ssMusic" type="file" accept="audio/*"><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio></div>
+ <div class="tile"><h3>Music & audio library</h3><p class="small">Upload an audio file to private Supabase storage. Original files are retained; nothing is overwritten. The saved master track can be selected in Talk Back Studio.</p><label for="ssMusic">Choose music / master voice audio</label><input id="ssMusic" type="file" accept="audio/*"><button type="button" id="ssMusicUpload" style="margin-top:10px">Upload and save audio</button><div id="ssMusicStatus" class="status" role="status" aria-live="polite">No new audio selected.</div><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio><h4 style="margin-top:18px">Saved audio</h4><button type="button" class="secondary" id="ssMusicRefresh">Refresh saved audio</button><div id="ssMusicLibrary" class="grid" style="margin-top:10px"><p class="small">Sign in as an active Admin to load saved audio.</p></div></div>
 </div>
 <div id="ssPublishingArea" class="hidden">
 <div class="tile" id="ssCampaignKit" style="margin-top:14px">
@@ -1152,12 +1152,48 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    finally{btn.disabled=false;btn.textContent='Publish now'}
   });
 
-  if(musicInput)musicInput.addEventListener('change',()=>{
+  const musicStatus=$('ssMusicStatus'),musicLibrary=$('ssMusicLibrary'),musicUpload=$('ssMusicUpload');
+ async function loadSocialAudio(){
+  if(!client||!session?.user||!admin){musicLibrary.innerHTML='<p class="small">Sign in with an active Admin account to view saved audio.</p>';return;}
+  musicLibrary.innerHTML='<p class="small">Loading saved audio…</p>';
+  const {data,error}=await client.storage.from('social-audio').list('master',{limit:100,sortBy:{column:'created_at',order:'desc'}});
+  if(error){musicLibrary.textContent='Could not load saved audio: '+error.message;return;}
+  musicLibrary.innerHTML='';
+  const files=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+  if(!files.length){musicLibrary.innerHTML='<p class="small">No audio files saved yet.</p>';return;}
+  for(const file of files){
+   const path='master/'+file.name,card=document.createElement('div');card.className='tile';
+   const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+Math.round((file.metadata?.size||0)/1024)+' KB';
+   const play=document.createElement('button');play.type='button';play.className='secondary';play.textContent='Preview / select for Talk Back';
+   play.addEventListener('click',async()=>{const {data,error}=await client.storage.from('social-audio').createSignedUrl(path,3600);if(error){musicStatus.textContent='Could not open audio: '+error.message;return;}audioPreview.src=data.signedUrl;audioPreview.classList.remove('hidden');musicStatus.textContent='Saved audio selected: '+file.name+'. Private signed preview link is valid for one hour.';});
+   card.append(label,play);musicLibrary.appendChild(card);
+  }
+ }
+ if(musicInput)musicInput.addEventListener('change',()=>{
   if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
   const file=musicInput.files?.[0];
-  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');$('ssStatus').textContent='Audio preview ready. To publish music, attach this licensed track to a video/Reel before uploading; this composer sends the video file, not a separate audio track.'}
-  else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden')}
+  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');musicStatus.textContent='Local preview ready. Select Upload and save audio to persist it in Supabase.'}
+  else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden');musicStatus.textContent='No new audio selected.'}
  });
+ if(musicUpload)musicUpload.addEventListener('click',async()=>{
+  const file=musicInput.files?.[0];
+  if(!client||!session?.user||!admin){musicStatus.textContent='Sign in with an active Admin account before uploading.';return;}
+  if(!file){musicStatus.textContent='Choose an audio file first.';return;}
+  if(!file.type.startsWith('audio/')){musicStatus.textContent='This file is not recognized as audio.';return;}
+  if(file.size>50*1024*1024){musicStatus.textContent='Audio must be 50 MB or smaller.';return;}
+  musicUpload.disabled=true;musicUpload.textContent='Uploading…';
+  try{
+   const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
+   const path='master/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+   const {error}=await client.storage.from('social-audio').upload(path,file,{contentType:file.type,upsert:false});
+   if(error)throw error;
+   musicStatus.textContent='Saved securely in Supabase: '+file.name+'. Original preserved. Refreshing audio library…';
+   musicInput.value='';await loadSocialAudio();
+  }catch(error){musicStatus.textContent='Audio upload failed: '+(error?.message||String(error));}
+  finally{musicUpload.disabled=false;musicUpload.textContent='Upload and save audio';}
+ });
+ if($('ssMusicRefresh'))$('ssMusicRefresh').addEventListener('click',loadSocialAudio);
+ loadSocialAudio();
 
  try { config('https://uzwubbzlytqqewqibobr.supabase.co','sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq').catch(e=>{show('workspace',false);show('auth',true);say('Session restore failed: '+(e?.message||'Please sign in again.'));}); } catch(e) { say(e.message); }
 })();
