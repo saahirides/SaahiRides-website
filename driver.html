@@ -150,7 +150,7 @@
 
     <!-- SYSTEM AUTOMATION LAYER -->
     <script>
-        // Driver onboarding: send the verified Google Form link through the user's WhatsApp app.
+        // Driver onboarding: open an addressed WhatsApp message to official SaahiRides support.
         (function () {
             const form = document.getElementById('whatsappOnboardingForm');
             const phoneInput = document.getElementById('driverWhatsApp');
@@ -173,7 +173,7 @@
                     googleFormUrl +
                     '\\nAfter submitting, our team will review your details and contact you about verification.'
                 );
-                const whatsappUrl = 'https://wa.me/' + indianMobile + '?text=' + message;
+                const supportMessage = encodeURIComponent('Hello SaahiRides, I want to register as a driver. My WhatsApp mobile number is +' + indianMobile + '. Please guide me through verification. Official registration form: ' + googleFormUrl);\n                const whatsappUrl = 'https://wa.me/919347946026?text=' + supportMessage;
                 window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
             });
         })();
