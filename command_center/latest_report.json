@@ -9,7 +9,7 @@
   "executionRecordClosed": false,
   "closureState": "INCOMPLETE — current-day Playwright suite did not execute; 12 defects remain open.",
   "sourceCommit": "e96ff3d7b4eb5ed2cb1bef5ca969fae6ce95bfef",
-  "currentMainCommit": "7e5533a74a56d7d4a843141e26286146e43806a9",
+  "currentMainCommit": "eaebd44b466b698bf1d43263f2e30538ba4ff11f",
   "currentBrowserRun": false,
   "pagesDiscovered": 18,
   "pagesInspected": 0,
@@ -23,8 +23,8 @@
   "criticalRisks": [],
   "highRisks": [
     "Driver activation remains unavailable until a verified server-side payment and entitlement flow is implemented; mock success and client token generation are disabled.",
-    "GitHub Actions QA is not connected to secured Supabase ingestion.",
-    "Driver registration, subscription pricing and QA lifecycle fixes are committed but still require current-browser/workflow retests."
+    "GitHub Actions QA still lacks secured Supabase ingestion and a current-day dispatch/verification path.",
+    "The current browser runner remains a partial sitemap smoke suite; forms, booking, WhatsApp, SOS, tours, responsive and authenticated journeys are not yet covered."
   ],
   "openDefects": [
     "driver-root-js-syntax",
@@ -56,11 +56,11 @@
     "At the QA snapshot, root and app activation pages had malformed scripts and client-generated mock activation; the mock success/token flow has since been removed and online activation disabled pending a verified server-side payment flow.",
     "At the QA snapshot, the fare estimator used obsolete add-ons; the approved 15% discount formula and visible pricing copy have since been corrected, with browser retest pending.",
     "maps-config.js contains the browser-key placeholder, disabling Google Maps Places/Routes initialisation.",
-    "Legacy root customer.html loads gstatic.com and contains placeholder Firebase credentials.",
-    "The Nov 11 Playwright run observed a travel-tours.html replaceChildren null-reference runtime error.",
-    "Three non-sitemap images lack alt attributes: app/index.html, rates.html and vision.html.",
+    "At the QA snapshot, root customer.html used placeholder Firebase credentials; it has since been replaced by a redirect to the current app/customer.html form, browser retest pending.",
+    "At the QA snapshot, the Nov 11 Playwright run observed a travel-tours.html replaceChildren null-reference error; null guards have since been added, browser retest pending.",
+    "At the QA snapshot, three non-sitemap images lacked alt text; descriptive alt text has since been added, scan retest pending.",
     "At the QA snapshot, the runner could auto-close unresolved anomalies; the lifecycle logic has since been corrected to retain and reopen defects, pending workflow retest.",
-    "The QA runner does not cover forms, booking, fare calculator, WhatsApp, SOS, tour cart/map, responsive viewports or authenticated Admin/HR journeys.",
+    "The runner still does not cover forms, booking, fare calculation, WhatsApp, SOS, tour cart/map, responsive viewports or authenticated Admin/HR journeys.",
     "At the QA snapshot, browser runtime errors did not fail the workflow; the runner now exits non-zero while any anomaly remains open, pending workflow retest.",
     "GitHub Actions does not ingest QA runs/events/anomalies into Supabase through the secured Command Centre action."
   ],
@@ -100,15 +100,16 @@
     "latestCompletedRunConclusion": "success despite 2 browser runtime errors"
   },
   "currentStaticRecheck": {
-    "missingAltImages": 3,
+    "missingAltImages": 0,
     "currentBrowserRun": false,
     "sosDispatchActive": false,
     "driverFormRootPageBroken": false,
     "mapsKeyPlaceholderPresent": true,
     "activationScriptTagMismatch": false,
-    "legacyCustomerFirebasePlaceholderPresent": true,
+    "legacyCustomerFirebasePlaceholderPresent": false,
     "qaRunnerAutoCloseDisabled": true,
-    "qaRunnerFailsOnOpenAnomalies": true
+    "qaRunnerFailsOnOpenAnomalies": true,
+    "travelToursNullGuardsAdded": true
   },
   "postRunChanges": {
     "fareSubscriptionFormula": "Corrected to one-way = On-Demand × 30 × 0.85 and both-way = On-Demand × 60 × 0.85; no joining fee or route-lock add-on.",
@@ -122,9 +123,19 @@
       "eb10fdae3572ec15f16c87c781bca52684fb1e6b",
       "8dbafd6db2c77b684204b651567d28bedd5df785",
       "a0361dc10fd047b738c11c5bcb4759d338fcef0c",
-      "7e5533a74a56d7d4a843141e26286146e43806a9"
+      "7e5533a74a56d7d4a843141e26286146e43806a9",
+      "18d6e00474af33f26c938e7dd286dd0e9b374f23",
+      "1c1971368af5ffba846263a41dfd48a57b2fe80b",
+      "e2053db1201c1b9bdeeb534b43cec7d5710f68da",
+      "08992a29e89adb5dfa3613dcce8f78415723904b",
+      "cef070e56390f58fb3eba8c2f73af3a9b7f3d621",
+      "eaebd44b466b698bf1d43263f2e30538ba4ff11f"
     ],
-    "qaLifecycle": "Runner now retains unreproduced defects as OPEN_PENDING_VERIFICATION, reopens recurring closed defects, and never auto-closes; workflow retest pending."
+    "qaLifecycle": "Runner retains unreproduced defects as OPEN_PENDING_VERIFICATION, reopens recurrence, and never auto-closes.",
+    "tourCart": "Null guards added around destination/cart replaceChildren calls; browser retest pending.",
+    "imageAlt": "Alt text added to app/index.html, rates.html and vision.html; scan retest pending.",
+    "legacyCustomer": "Root customer.html now redirects to the current app/customer.html form; browser retest pending.",
+    "incompleteRunPolicy": "Runner exits non-zero whenever anomalies remain or fullSuiteExecuted is false; full interactive suite still needs implementation."
   },
   "safety": {
     "paymentsAttempted": false,
