@@ -41,7 +41,7 @@ footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}
 <label for="contact">Contact number or email (optional)</label><input id="contact" maxlength="100" placeholder="How we can reach you">
 <label for="message">Your message</label><textarea id="message" maxlength="2500" required placeholder="Tell us what happened, what you appreciated, or what you would like us to improve..."></textarea>
 <label class="check"><input id="consent" type="checkbox" required><span>I confirm this submission is genuine and I have permission to share any people, photos or videos I provide. I understand it will be reviewed before any public or social-media use.</span></label>
-<button type="submit">Continue to WhatsApp</button>
+<div style="position:absolute;left:-10000px" aria-hidden="true"><label for="websiteTrap">Leave this field empty</label><input id="websiteTrap" name="website" tabindex="-1" autocomplete="off"></div><button type="submit">Send privately to SaahiRides</button><p id="submissionStatus" class="note" role="status" aria-live="polite"></p>
 </form>
 <div class="note"><strong>Privacy &amp; moderation:</strong> Your submission is sent privately to SaahiRides for review. It is not published automatically. Driver complaints and safety concerns are handled privately. Testimonials, names, photos and videos will only be shared publicly with appropriate consent.</div>
 </section>
@@ -49,15 +49,30 @@ footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}
 <footer>SaahiRides Transit Pvt. Ltd. · SafeRide @ SaahiPrice</footer>
 </main>
 <script>
-document.getElementById('communityForm').addEventListener('submit',function(event){
+document.getElementById('communityForm').addEventListener('submit',async function(event){
  event.preventDefault();
+ const form=event.currentTarget,button=form.querySelector('button[type="submit"]');
  const category=document.getElementById('category').value;
  const rating=document.getElementById('rating').value;
  const name=document.getElementById('name').value.trim()||'Not provided';
  const contact=document.getElementById('contact').value.trim()||'Not provided';
  const message=document.getElementById('message').value.trim();
- if(!category||!rating||!message||!document.getElementById('consent').checked)return;
- const text='SAAHIRIDES COMMUNITY SUBMISSION\nCategory: '+category+'\nRating: '+rating+'\nName: '+name+'\nContact: '+contact+'\n\nMessage:\n'+message+'\n\nI confirm I have permission to share this content. Please review before any public use.';
- window.open('https://wa.me/919347946026?text='+encodeURIComponent(text),'_blank','noopener');
+ const consent=document.getElementById('consent').checked;
+ const status=document.getElementById('submissionStatus');
+ if(!category||!rating||!message||!consent){status.textContent='Please complete the required fields and consent.';return;}
+ button.disabled=true;button.textContent='Sending privately…';status.textContent='Securely sending your feedback to SaahiRides for review…';
+ try{
+  const response=await fetch('https://uzwubbzlytqqewqibobr.supabase.co/functions/v1/community-feedback',{
+   method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({category,rating,name,contact,message,consent,website:document.getElementById('websiteTrap')?.value||''})
+  });
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok||!result.success)throw new Error(result.error||'Submission could not be saved.');
+  status.textContent=result.alert_status==='queued'
+   ?'Thank you. Your feedback has been saved privately and a TalkBack alert has been sent to the SaahiRides Admin inbox.'
+   :'Thank you. Your feedback has been saved privately. The Admin alert needs attention, but your submission is safe.';
+  form.reset();
+ }catch(error){status.textContent='We could not submit your feedback: '+(error?.message||String(error))+'. Please use the WhatsApp assistance link below.';}
+ finally{button.disabled=false;button.textContent='Send privately to SaahiRides';}
 });
 </script></body></html>
