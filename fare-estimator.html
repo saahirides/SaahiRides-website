@@ -163,6 +163,9 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       
       <div class="readout-tier-box" id="saahi-bill-card">
         <div class="readout-tier-header"><h2>SaahiRides Bill</h2><span class="readout-tag-pill gold-pill">Itemised quote</span></div>
+                <div class="saahi-bill-fields">
+          <label>Expected pickup date &amp; time (IST)<input id="saahi-bill-pickup-time" type="datetime-local" required></label>
+        </div>
         <div id="saahi-bill-details" class="saahi-bill-details" aria-live="polite">Resolve pickup and drop locations to prepare your bill.</div>
         <div id="saahi-bill-customer-fields" class="saahi-bill-fields">
           <label>Customer name<input id="saahi-bill-customer-name" type="text" maxlength="100" autocomplete="name" placeholder="Customer name"></label>
@@ -284,12 +287,19 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   var billDetails=document.getElementById('saahi-bill-details');
   var billStatus=document.getElementById('saahi-bill-status');
   var billSend=document.getElementById('saahi-bill-send');
+  var billPickupTime=document.getElementById('saahi-bill-pickup-time');
+  function istLocalDateTime(){
+    var parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+    var value=function(type){return parts.find(function(p){return p.type===type}).value};
+    return value('year')+'-'+value('month')+'-'+value('day')+'T'+value('hour')+':'+value('minute');
+  }
   function istHour(){
     var parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
     return Number(parts.find(function(p){return p.type==='hour'}).value);
   }
-  function isNightTime(){var h=istHour();return h>=22||h<6}
+  function isNightTime(){var value=billPickupTime.value;if(!value||value.length<13)return null;var h=Number(value.slice(11,13));return h>=22||h<6}
   function istTimestamp(){return new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date())+' IST'}
+  if(billPickupTime&&!billPickupTime.value)billPickupTime.value=istLocalDateTime();
   function billCustomer(){
     return bookingPurpose==='someone-else'
       ? {name:otherRiderName.value.trim(),phone:otherRiderPhone.value.trim()}
@@ -316,25 +326,28 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
       billStatus.textContent='Waiting for a verified route.';
       billSend.disabled=true;return;
     }
+    if(!billPickupTime.value){billDetails.textContent='Enter the expected pickup date and time to determine whether night charges apply.';billStatus.textContent='Expected pickup date/time is required before sending a final bill.';billSend.disabled=true;return;}
     var distance=Math.ceil(route.distanceKm*10)/10;
     var onDemand=calculateFare(distance,baseRatePerKm);
     var lines=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)});
-    var nightLine=night?'Night charge (10 PM–6 AM): NOT INCLUDED — approved amount is not configured.':'Night charge: ₹0 (outside 10 PM–6 AM)';
-    var totalLine=night?'Final amount: Pending approved night-charge tariff':'Final amount: ₹'+onDemand;
+    var nightLine=night===true?'Night charge (10 PM–6 AM): NOT INCLUDED — approved amount is not configured.':'Night charge: ₹0 (pickup is outside 10 PM–6 AM)';
+    var totalLine=night===true?'Final amount: Pending approved night-charge tariff':'Final amount: ₹'+onDemand;
     var text='SaahiRides Bill\nCustomer: '+(customer.name||'Name required')+'\nCustomer mobile: '+(customer.phone||'Mobile required')+
       '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
-      '\nVehicle: '+selectedVehicle+'\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
+      '\nVehicle: '+selectedVehicle+'\nExpected pickup: '+billPickupTime.value.replace('T',' ')+' IST\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
       '\nQuote time: '+istTimestamp()+'\nApplicable fare slabs:\n'+lines.join('\n')+
       '\nOn-demand subtotal: ₹'+onDemand+'\n'+nightLine+'\n'+totalLine+'\nNo surge pricing; no undisclosed extras.';
     billDetails.textContent=text;
     var choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
     var recipient=choice&&choice.value==='alternate'?normalizedPhone(billAlternateInput.value):normalizedPhone(customer.phone);
     var customerValid=Boolean(customer.name&&normalizedPhone(customer.phone));
-    var valid=customerValid&&Boolean(recipient)&&!night;
+    var valid=customerValid&&Boolean(recipient)&&night===false;
     billSend.disabled=!valid;
-    billStatus.textContent=night
-      ? 'Bill sending is paused: the approved night-charge amount is not configured. Do not issue a misleading final total.'
-      : !customerValid
+    billStatus.textContent=night===null
+      ? 'Enter expected pickup date and time to check night-charge applicability.'
+      : night===true
+        ? 'Bill sending is paused: the approved night-charge amount is not configured. Do not issue a misleading final total.'
+        : !customerValid
         ? 'Enter the customer name and a valid mobile number before sending the bill.'
         : !recipient
           ? 'Enter a valid alternative WhatsApp number.'
@@ -346,7 +359,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var slabs=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)}).join('\n');
     return 'SaahiRides Bill\nCustomer: '+customer.name+'\nCustomer mobile: '+customer.phone+
       '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
-      '\nVehicle: '+selectedVehicle+'\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
+      '\nVehicle: '+selectedVehicle+'\nExpected pickup: '+billPickupTime.value.replace('T',' ')+' IST\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
       '\nQuote time: '+istTimestamp()+'\nApplicable fare slabs:\n'+slabs+
       '\nOn-demand fare: ₹'+onDemand+'\nNight charge: ₹0 (outside 10 PM–6 AM)'+
       '\nFinal amount: ₹'+onDemand+'\nNo surge pricing; no undisclosed extras.';
@@ -385,7 +398,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
     var distance = parseFloat(slider.value);
     var onDemand = calculateFare(distance,baseRatePerKm);
-    var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=isNightTime()?'Daytime fare subtotal only. Night charge applies from 10 PM to 6 AM; approved amount is not configured, so this is not a final night quote.':'Calculated using the progressive distance slabs and selected vehicle base rate.';
+    var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=isNightTime()===true?'Daytime fare subtotal only. Night charge applies from 10 PM to 6 AM; approved amount is not configured, so this is not a final night quote.':isNightTime()===null?'Select expected pickup time to determine night-charge applicability.':'Calculated using the progressive distance slabs and selected vehicle base rate.';
     distanceOutput.textContent = distance + ' km';
     onDemandOutput.textContent = String(onDemand);
     var oneWay = Math.round(onDemand * 30 + 199);
@@ -393,7 +406,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
     var passengerDetails = bookingPurpose === 'someone-else' ? '\nBooking for: Someone else\nPassenger name: ' + (otherRiderName.value.trim() || 'To be provided') + '\nPassenger mobile: ' + (otherRiderPhone.value.trim() || 'To be provided') + '\nRide OTP recipient (passenger): ' + otherRiderPhone.value.trim() : '\nBooking for: Myself\nCustomer name: ' + billNameInput.value.trim() + '\nCustomer mobile: ' + billPhoneInput.value.trim() + '\nRide OTP recipient (passenger): ' + billPhoneInput.value.trim();
-    var message = 'BOOK\nSaahiRides fare estimate' + passengerDetails + '\nVehicle: ' + selectedVehicle +
+    var message = 'BOOK\nSaahiRides fare estimate' + passengerDetails + '\nExpected pickup: ' + (billPickupTime.value||'Not supplied') + ' IST\nVehicle: ' + selectedVehicle +
       '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
       '\n30-day subscription one-way: ₹' + oneWay +
       '\n30-day subscription both-way: ₹' + bothWay +
@@ -414,6 +427,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   [otherRiderName,otherRiderPhone].forEach(function(input){input.addEventListener('input',updateEstimate);});
   bookingLink.addEventListener('click',function(event){
     if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){event.preventDefault();alert('Resolve both pickup and drop addresses and calculate a valid city route before booking.');return}
+    if(!billPickupTime.value){event.preventDefault();billPickupTime.focus();alert('Enter the expected pickup date and time so the correct fare rules can be applied.');return}
     if(bookingPurpose==='someone-else'){
       var phone=otherRiderPhone.value.replace(/[\s()-]/g,'');
       if(!/^\+?[0-9]{10,15}$/.test(phone)){
@@ -429,7 +443,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     }
   });
   slider.addEventListener('input',updateEstimate);
-  [billNameInput,billPhoneInput].forEach(function(input){input.addEventListener('input',updateEstimate)});billAlternateInput.addEventListener('input',updateBill);
+  [billNameInput,billPhoneInput].forEach(function(input){input.addEventListener('input',updateEstimate)});billAlternateInput.addEventListener('input',updateBill);billPickupTime.addEventListener('change',function(){updateEstimate()});
   document.querySelectorAll('input[name="saahi-bill-recipient"]').forEach(function(radio){radio.addEventListener('change',function(){billAlternateWrap.hidden=radio.value!=='alternate';updateBill()})});
   billSend.addEventListener('click',function(){
     var route=window.saahiRouteContext,customer=billCustomer(),choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
