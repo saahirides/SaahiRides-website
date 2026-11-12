@@ -1,137 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Portal - SaahiRides</title>
-    <!-- Matching Firebase SDKs for Shared Sync -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    
-    <style>
-        /* Modern, non-intrusive styling for your customer portal */
-        .customer-form-container {
-            max-width: 450px;
-            margin: 30px auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            font-family: Arial, sans-serif;
-            border: 1px solid #eee;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            background-color: #007bff; /* Distinct color for Customer actions */
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .submit-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-<style>
-.sr-image-board{max-width:900px;margin:24px auto;padding:18px;border:1px solid #d4af37;border-radius:16px;background:linear-gradient(145deg,#0b1c3d,#10284d);color:#fff;font-family:Arial,sans-serif}
-.sr-image-board h2{margin:0 0 8px;color:#ffd700;text-align:center}
-.sr-image-board p{margin:0 0 14px;text-align:center;color:#e2e8f0;font-size:14px}
-.sr-image-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.sr-image-card{overflow:hidden;border:1px solid rgba(255,215,0,.45);border-radius:12px;background:#06122e}
-.sr-image-card img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:#fff}
-.sr-image-card strong{display:block;padding:10px;color:#ffd700;text-align:center;font-size:14px}
-@media(max-width:480px){.sr-image-board{margin:16px 10px;padding:13px}.sr-image-grid{grid-template-columns:1fr}}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="refresh" content="0;url=app/customer.html">
+<link rel="canonical" href="https://saahirides.co.in/app/customer.html">
+<title>SaahiRides Customer Portal</title>
+<meta name="description" content="Continue to the official SaahiRides customer registration and booking portal.">
+<script>window.location.replace('app/customer.html');</script>
 </head>
 <body>
-
-    <!-- YOUR EXISTING NAVIGATION LINKS, REDIRECTIONS, AND WHATSAPP BUTTONS STAY HERE UNTOUCHED -->
-
-    <section class="sr-image-board"><h2>SaahiRides Customer Offers</h2><p>Latest customer offer posters and travel rates. Tap an image to view it in full size.</p><div class="sr-image-grid"><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/Diwali%20customer%20offer%201.jpg" alt="Diwali Customer Offer"><strong>Diwali Customer Offer</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/diwali%20offer%20v1.jpg" alt="Diwali Offer — Version 1"><strong>Diwali Offer — Version 1</strong></article><article class="sr-image-card"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/image-assets/diwali%20offer.jpg" alt="Diwali Special Offer"><strong>Diwali Special Offer</strong></article></div><article class="sr-image-card"><a href="https://raw.githubusercontent.com/saahirides/SaahiRides-website/main/Diwali%20Dhamaka.jpg" target="_blank" rel="noopener"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/main/Diwali%20Dhamaka.jpg" alt="Diwali Dhamaka"></a><strong>Diwali Dhamaka</strong></article><article class="sr-image-card"><a href="https://raw.githubusercontent.com/saahirides/SaahiRides-website/main/new%20rates%20diwali%20offer.jpg" target="_blank" rel="noopener"><img loading="lazy" src="https://raw.githubusercontent.com/saahirides/SaahiRides-website/main/new%20rates%20diwali%20offer.jpg" alt="New Rates Diwali Offer — Effective 2 November 2026"></a><strong>New Rates Diwali Offer — Effective 2 November 2026</strong></article></section>
-    <!-- CLEAN CUSTOMER BOOKING / DATA FORM -->
-    <div class="customer-form-container">
-        <h3>Customer Request Portal</h3>
-        <form id="customerRequestForm">
-            <div class="form-group">
-                <label for="custName">Your Name</label>
-                <input type="text" id="custName" required placeholder="Enter your name">
-            </div>
-            <div class="form-group">
-                <label for="custPhone">Phone Number</label>
-                <input type="tel" id="custPhone" required placeholder="Enter contact number">
-            </div>
-            <div class="form-group">
-                <label for="pickupLocation">Pickup Location</label>
-                <input type="text" id="pickupLocation" required placeholder="Where should we pick you up?">
-            </div>
-            <div class="form-group">
-                <label for="dropLocation">Drop Location</label>
-                <input type="text" id="dropLocation" required placeholder="Where are you going?">
-            </div>
-            <button type="submit" class="submit-btn">Submit Request</button>
-        </form>
-    </div>
-
-    <!-- SHARED REAL-TIME DATABASE SYNC SCRIPT -->
-    <script>
-        // Matching configuration to sync data with the driver files seamlessly
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "://firebaseapp.com",
-            projectId: "saahirides-website",
-            storageBucket: "://appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // Handle Customer Request Submission smoothly without page reloading
-        document.getElementById('customerRequestForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const customerData = {
-                customerName: document.getElementById('custName').value,
-                customerPhone: document.getElementById('custPhone').value,
-                pickup: document.getElementById('pickupLocation').value,
-                dropoff: document.getElementById('dropLocation').value,
-                status: "Pending", // Drivers will be able to read this and change it to "Accepted"
-                createdAt: new Date()
-            };
-
-            // Save records directly into a live cloud collection shared with the driver portal
-            db.collection("requests").add(customerData)
-            .then(() => {
-                alert("Your ride request has been sent to active drivers in real-time!");
-                document.getElementById('customerRequestForm').reset();
-            })
-            .catch((error) => {
-                console.error("Error creating entry: ", error);
-                alert("Database sync failed. Please check setup keys.");
-            });
-        });
-    </script>
-
-<script src="saahi-promotions.js?v=20261031" defer></script>
+<main>
+<h1>SaahiRides Customer Portal</h1>
+<p>Redirecting to the current customer registration and booking page.</p>
+<p><a href="app/customer.html">Continue to SaahiRides Customer Portal</a></p>
+</main>
 </body>
 </html>
