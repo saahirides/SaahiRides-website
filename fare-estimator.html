@@ -72,6 +72,16 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 #saahi-vehicle-picker-options{display:grid;gap:7px}
 #saahi-vehicle-picker-options button{width:100%;border:1px solid #d69a16;border-radius:9px;background:#fff;color:#17304f;padding:12px;text-align:left;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
 #saahi-vehicle-picker-close{display:block;margin:12px 0 0 auto;border:0;border-radius:8px;background:#173b7a;color:#fff;padding:9px 15px;font-weight:800}
+</style><style id="saahi-bill-styles">
+.saahi-bill-details{white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;border:1px solid rgba(255,193,7,.25);border-radius:9px;background:rgba(3,12,30,.45);font-size:.82rem;line-height:1.55;color:#e8f0ff;margin-bottom:12px}
+.saahi-bill-fields{display:grid;gap:9px;margin:12px 0}
+.saahi-bill-fields label{display:grid;gap:5px;color:#dbeafe;font-size:.8rem;font-weight:750}
+.saahi-bill-fields input:not([type=radio]){width:100%;padding:10px;border:1px solid #42618c;border-radius:8px;background:#07152f;color:#fff;font:inherit}
+.saahi-bill-fields .bill-choice{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:#07152f}
+.saahi-bill-fields .bill-choice input{accent-color:#ffc107;width:16px;height:16px}
+#saahi-bill-alternate-wrap[hidden],#saahi-bill-customer-fields[hidden],#saahi-bill-passenger-note[hidden]{display:none!important}
+#saahi-bill-send{width:100%;border:0;cursor:pointer}
+#saahi-bill-send:disabled{opacity:.45;cursor:not-allowed}
 </style></head>
 <body>
 <main id="saahi-fare-estimator" class="estimator-dashboard-panel">
@@ -150,6 +160,25 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
         </div>
         <p class="readout-calculation-note gold-note">Uses the supplied 30-trip / 60-trip equations and their route-lock processing fees.</p>
       </div>
+      
+      <div class="readout-tier-box" id="saahi-bill-card">
+        <div class="readout-tier-header"><h2>SaahiRides Bill</h2><span class="readout-tag-pill gold-pill">Itemised quote</span></div>
+        <div id="saahi-bill-details" class="saahi-bill-details" aria-live="polite">Resolve pickup and drop locations to prepare your bill.</div>
+        <div id="saahi-bill-customer-fields" class="saahi-bill-fields">
+          <label>Customer name<input id="saahi-bill-customer-name" type="text" maxlength="100" autocomplete="name" placeholder="Customer name"></label>
+          <label>Customer mobile<input id="saahi-bill-customer-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="10–15 digit mobile number"></label>
+        </div>
+        <p id="saahi-bill-passenger-note" class="readout-calculation-note" hidden>Passenger name and mobile from the “Booking for someone else” section will be printed on this bill.</p>
+        <div class="saahi-bill-fields">
+          <span class="input-panel-label">SEND BILL TO WHATSAPP</span>
+          <label class="bill-choice"><input type="radio" name="saahi-bill-recipient" value="customer" checked> Customer’s WhatsApp number</label>
+          <label class="bill-choice"><input type="radio" name="saahi-bill-recipient" value="alternate"> Another WhatsApp number</label>
+          <label id="saahi-bill-alternate-wrap" hidden>Alternative WhatsApp number<input id="saahi-bill-alternate-phone" type="tel" inputmode="tel" placeholder="Enter recipient mobile number"></label>
+        </div>
+        <button type="button" id="saahi-bill-send" class="estimator-submit-cta-btn" disabled>Send SaahiRides Bill on WhatsApp</button>
+        <p id="saahi-bill-status" class="readout-calculation-note" role="status" aria-live="polite">Bill will be enabled after a valid route and customer number are supplied.</p>
+      </div>
+
       <a id="estimator-booking-link" href="https://wa.me/919347946026?text=BOOK" class="estimator-submit-cta-btn" target="_blank" rel="noopener noreferrer">🚕 Book My Ride · Send Fare to WhatsApp</a>
     </section>
   </div>
@@ -244,7 +273,84 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   var otherRiderFields = document.getElementById('other-rider-fields');
   var otherRiderName = document.getElementById('other-rider-name');
   var otherRiderPhone = document.getElementById('other-rider-phone');
-  var bookingPurpose = 'self';\n  slider.disabled = true;
+  var bookingPurpose = 'self';
+  slider.disabled = true;
+  var billNameInput=document.getElementById('saahi-bill-customer-name');
+  var billPhoneInput=document.getElementById('saahi-bill-customer-phone');
+  var billAlternateInput=document.getElementById('saahi-bill-alternate-phone');
+  var billAlternateWrap=document.getElementById('saahi-bill-alternate-wrap');
+  var billCustomerFields=document.getElementById('saahi-bill-customer-fields');
+  var billPassengerNote=document.getElementById('saahi-bill-passenger-note');
+  var billDetails=document.getElementById('saahi-bill-details');
+  var billStatus=document.getElementById('saahi-bill-status');
+  var billSend=document.getElementById('saahi-bill-send');
+  function istHour(){
+    var parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+    return Number(parts.find(function(p){return p.type==='hour'}).value);
+  }
+  function isNightTime(){var h=istHour();return h>=22||h<6}
+  function istTimestamp(){return new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date())+' IST'}
+  function billCustomer(){
+    return bookingPurpose==='someone-else'
+      ? {name:otherRiderName.value.trim(),phone:otherRiderPhone.value.trim()}
+      : {name:billNameInput.value.trim(),phone:billPhoneInput.value.trim()};
+  }
+  function applicableSlabs(distance,rate){
+    var slabs=[{from:0,to:3,m:1},{from:3,to:5,m:1.15},{from:5,to:10,m:1.25},{from:10,to:15,m:1.5},{from:15,to:20,m:1.75},{from:20,to:25,m:2},{from:25,to:30,m:2.25}];
+    return slabs.filter(function(x){return distance>x.from}).map(function(x){
+      var km=Math.max(0,Math.min(distance,x.to)-x.from);
+      return {label:x.from+'–'+Math.min(distance,x.to)+' km × '+x.m.toFixed(2)+'×',amount:rate*km*x.m};
+    }).filter(function(x){return x.amount>0});
+  }
+  function normalizedPhone(value){
+    var digits=String(value||'').replace(/\D/g,'');
+    if(digits.length===10)digits='91'+digits;
+    return /^[0-9]{10,15}$/.test(digits)?digits:'';
+  }
+  function updateBill(){
+    var route=window.saahiRouteContext,customer=billCustomer(),night=isNightTime();
+    billCustomerFields.hidden=bookingPurpose==='someone-else';
+    billPassengerNote.hidden=bookingPurpose!=='someone-else';
+    if(!route||route.distanceKm>30){
+      billDetails.textContent='Resolve pickup and drop addresses and calculate a valid city route before preparing the bill.';
+      billStatus.textContent='Waiting for a verified route.';
+      billSend.disabled=true;return;
+    }
+    var distance=Math.ceil(route.distanceKm*10)/10;
+    var onDemand=calculateFare(distance,baseRatePerKm);
+    var lines=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)});
+    var nightLine=night?'Night charge (10 PM–6 AM): NOT INCLUDED — approved amount is not configured.':'Night charge: ₹0 (outside 10 PM–6 AM)';
+    var totalLine=night?'Final amount: Pending approved night-charge tariff':'Final amount: ₹'+onDemand;
+    var text='SaahiRides Bill\nCustomer: '+(customer.name||'Name required')+'\nCustomer mobile: '+(customer.phone||'Mobile required')+
+      '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
+      '\nVehicle: '+selectedVehicle+'\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
+      '\nQuote time: '+istTimestamp()+'\nApplicable fare slabs:\n'+lines.join('\n')+
+      '\nOn-demand subtotal: ₹'+onDemand+'\n'+nightLine+'\n'+totalLine+'\nNo surge pricing; no undisclosed extras.';
+    billDetails.textContent=text;
+    var choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
+    var recipient=choice&&choice.value==='alternate'?normalizedPhone(billAlternateInput.value):normalizedPhone(customer.phone);
+    var customerValid=Boolean(customer.name&&normalizedPhone(customer.phone));
+    var valid=customerValid&&Boolean(recipient)&&!night;
+    billSend.disabled=!valid;
+    billStatus.textContent=night
+      ? 'Bill sending is paused: the approved night-charge amount is not configured. Do not issue a misleading final total.'
+      : !customerValid
+        ? 'Enter the customer name and a valid mobile number before sending the bill.'
+        : !recipient
+          ? 'Enter a valid alternative WhatsApp number.'
+          : 'Bill total matches the on-demand calculator. Review the details, then send.';
+  }
+  function buildBillMessage(){
+    var route=window.saahiRouteContext,customer=billCustomer(),distance=Math.ceil(route.distanceKm*10)/10;
+    var onDemand=calculateFare(distance,baseRatePerKm);
+    var slabs=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)}).join('\n');
+    return 'SaahiRides Bill\nCustomer: '+customer.name+'\nCustomer mobile: '+customer.phone+
+      '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
+      '\nVehicle: '+selectedVehicle+'\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
+      '\nQuote time: '+istTimestamp()+'\nApplicable fare slabs:\n'+slabs+
+      '\nOn-demand fare: ₹'+onDemand+'\nNight charge: ₹0 (outside 10 PM–6 AM)'+
+      '\nFinal amount: ₹'+onDemand+'\nNo surge pricing; no undisclosed extras.';
+  }
   function calculateFare(distance, rate){
     var total = 0;
     if(distance <= 3){ total = rate * distance; }
@@ -275,7 +381,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     return Math.round(total);
   }
   function updateEstimate(){
-    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';return}
+    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';updateBill();return}
     bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
     var distance = parseFloat(slider.value);
     var onDemand = calculateFare(distance,baseRatePerKm);
@@ -293,6 +399,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
       (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + (window.saahiRouteContext.pickupAddress||window.saahiRouteContext.pickup) + '\nDrop: ' + (window.saahiRouteContext.dropAddress||window.saahiRouteContext.drop) + '\nPickup coordinates: ' + window.saahiRouteContext.pickup + '\nDrop coordinates: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
       '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
+    updateBill();
   }
   function applyVehicleSelection(select){
     var option=select.options[select.selectedIndex];if(!option)return;
@@ -317,6 +424,15 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     }
   });
   slider.addEventListener('input',updateEstimate);
+  [billNameInput,billPhoneInput,billAlternateInput].forEach(function(input){input.addEventListener('input',updateBill)});
+  document.querySelectorAll('input[name="saahi-bill-recipient"]').forEach(function(radio){radio.addEventListener('change',function(){billAlternateWrap.hidden=radio.value!=='alternate';updateBill()})});
+  billSend.addEventListener('click',function(){
+    var route=window.saahiRouteContext,customer=billCustomer(),choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
+    var recipient=choice&&choice.value==='alternate'?normalizedPhone(billAlternateInput.value):normalizedPhone(customer.phone);
+    if(!route||route.distanceKm>30||isNightTime()||!customer.name||!normalizedPhone(customer.phone)||!recipient){updateBill();return}
+    window.open('https://wa.me/'+recipient+'?text='+encodeURIComponent(buildBillMessage()),'_blank','noopener');
+  });
+  updateBill();
   updateEstimate();
 })();
 </script>
