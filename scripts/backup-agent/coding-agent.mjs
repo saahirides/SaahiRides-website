@@ -6,7 +6,7 @@ const env = process.env;
 for (const key of ["OPENAI_API_KEY", "WATCHTOWER_TASK"]) if (!env[key]) throw new Error("Missing required input: " + key);
 const task = env.WATCHTOWER_TASK.trim().slice(0, 8000);
 if (!task) throw new Error("Task must not be empty.");
-const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|node_modules\/|vendor\/|dist\/|build\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
+const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|scripts\/backup-agent\/|agents\/backup-supervisor\/|node_modules\/|vendor\/|dist\/|build\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
 const allowedExt = new Set([".html", ".js", ".mjs", ".css", ".md", ".txt"]);
 const tracked = (await exec("git", ["ls-files"], { maxBuffer: 4 * 1024 * 1024 })).stdout.split("\n").filter(Boolean);
 const sourcePaths = tracked.filter(path => {
