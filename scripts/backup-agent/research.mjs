@@ -1,11 +1,17 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 const env = process.env;
-for (const key of ["OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "WATCHTOWER_TASK"]) {
+for (const key of ["OPENAI_API_KEY", "WATCHTOWER_TASK"]) {
   if (!env[key]) throw new Error(`Missing required secret/input: ${key}`);
 }
-const supabase = env.SUPABASE_URL.replace(/\/$/, "");
-const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY;
+const memoryEnabled = env.WATCHTOWER_ENABLE_SUPABASE_MEMORY === "true";
+if (memoryEnabled) {
+  for (const key of ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"]) {
+    if (!env[key]) throw new Error(`Supabase memory is enabled but ${key} is missing.`);
+  }
+}
+const supabase = memoryEnabled ? env.SUPABASE_URL.replace(/\/$/, "") : null;
+const serviceKey = memoryEnabled ? env.SUPABASE_SERVICE_ROLE_KEY : null;
 const headers = {
   apikey: serviceKey,
   Authorization: `Bearer ${serviceKey}`,
@@ -22,10 +28,10 @@ async function db(path, options = {}) {
   return body ? JSON.parse(body) : null;
 }
 const task = env.WATCHTOWER_TASK.trim().slice(0, 12000);
-const memory = await db("rpc/search_agent_memory", {
+const memory = memoryEnabled ? await db("rpc/search_agent_memory", {
   method: "POST",
   body: JSON.stringify({ query_text: task, result_limit: 18 })
-});
+}) : [];
 const contextFiles = [
   "agents/backup-supervisor/README.md",
   "command_center/latest_report.json"
@@ -102,7 +108,7 @@ const report = [
   ...uniqueCitations.map(x => `- [${x.title}](${x.url})`)
 ].join("\n");
 await writeFile("watchtower-x-report.md", report);
-const memoryRow = await db("agent_memory", {
+const memoryRow = memoryEnabled ? await db("agent_memory", {
   method: "POST",
   headers: { Prefer: "return=representation" },
   body: JSON.stringify([{
@@ -117,8 +123,8 @@ const memoryRow = await db("agent_memory", {
     importance: 3,
     metadata: { task, citations: uniqueCitations, model: env.WATCHTOWER_MODEL || "gpt-6-astra" }
   }])
-});
-const run = await db("command_center_execution_runs", {
+}) : null;
+const run = memoryEnabled ? await db("command_center_execution_runs", {
   method: "POST",
   headers: { Prefer: "return=representation" },
   body: JSON.stringify([{
@@ -139,11 +145,12 @@ const run = await db("command_center_execution_runs", {
       ? `${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}`
       : null
   }])
-});
+}) : null;
 console.log(JSON.stringify({
   status: "completed",
   task,
   citations: uniqueCitations,
+  supabase_memory_enabled: memoryEnabled,
   memory_record_id: memoryRow?.[0]?.id || null,
   execution_id: run?.[0]?.id || null,
   report_file: "watchtower-x-report.md"
