@@ -70,6 +70,19 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     <h1>Interactive Fare Estimator</h1>
     <p>Select your fleet tier and set pickup and drop. Your driving-road distance and On-Demand / 30-Day Subscription fares update automatically.</p>
   </header>
+        <div class="control-group-block">
+        <label class="input-panel-label">1. WHO IS THIS BOOKING FOR?</label>
+        <div class="booking-purpose" role="radiogroup" aria-label="Booking passenger">
+          <label><input type="radio" name="booking-purpose" value="self" checked> Booking for myself</label>
+          <label><input type="radio" name="booking-purpose" value="someone-else"> Booking for someone else</label>
+        </div>
+        <div id="other-rider-fields" class="other-rider-fields" hidden>
+          <label>Passenger name<input id="other-rider-name" type="text" autocomplete="name" placeholder="Name of passenger"></label>
+          <label>Passenger mobile<input id="other-rider-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Mobile number" required></label>
+        </div>
+        <p class="booking-hint">Passenger details are added to the WhatsApp booking request when booking for someone else.</p>
+      </div>
+  </section>
   <section class="estimator-controls-card" style="margin:0 0 24px;gap:16px" aria-label="Pickup and drop route">
     <div class="control-group-block">
       <label class="input-panel-label">LIVE ROUTE · PICKUP & DROP</label>
@@ -86,18 +99,6 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   </section>
   <div class="estimator-interface-grid">
     <section class="estimator-controls-card" aria-label="Fare estimator controls">
-      <div class="control-group-block">
-        <label class="input-panel-label">1. WHO IS THIS BOOKING FOR?</label>
-        <div class="booking-purpose" role="radiogroup" aria-label="Booking passenger">
-          <label><input type="radio" name="booking-purpose" value="self" checked> Booking for myself</label>
-          <label><input type="radio" name="booking-purpose" value="someone-else"> Booking for someone else</label>
-        </div>
-        <div id="other-rider-fields" class="other-rider-fields" hidden>
-          <label>Passenger name<input id="other-rider-name" type="text" autocomplete="name" placeholder="Name of passenger"></label>
-          <label>Passenger mobile<input id="other-rider-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Mobile number"></label>
-        </div>
-        <p class="booking-hint">Passenger details are added to the WhatsApp booking request when booking for someone else.</p>
-      </div>
       <div class="control-group-block">
         <label class="input-panel-label">2. SELECT VEHICLE CATEGORY</label>
         <div class="vehicle-select-grid">
@@ -196,6 +197,20 @@ var a=pickupInput.value.trim(),b=dropInput.value.trim();if(!a||!b){say('Enter bo
 addressButton.disabled=true;say('Finding pickup address…');
 geocode(a).then(function(p){setPin('pickup',p,false);map.setView(p,14);say('Pickup found. Finding drop address…');return new Promise(function(ok){setTimeout(ok,1100)}).then(function(){return geocode(b)})}).then(function(d){setPin('drop',d,false);map.fitBounds(L.latLngBounds([pickupPoint.lat,pickupPoint.lng],[d.lat,d.lng]).pad(.18));calculateRoute()}).catch(function(e){say(e.message||'Could not find one of the addresses.')}).finally(function(){addressButton.disabled=false})
 });
+function resolveAddressInput(input,which){
+var q=input.value.trim();if(!q)return;
+say('Finding '+which+' address…');
+geocode(q).then(function(ll){
+setPin(which,ll,false);
+if(map){map.setView(ll,15)}
+if(pickupPoint&&dropPoint)calculateRoute();
+else say(which+' found. Set the '+(which==='pickup'?'drop':'pickup')+' location to calculate road distance.');
+}).catch(function(e){say(e.message||('Could not find '+which+' address.'))});
+}
+pickupInput.addEventListener('change',function(){resolveAddressInput(pickupInput,'pickup')});
+pickupInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();resolveAddressInput(pickupInput,'pickup')}});
+dropInput.addEventListener('change',function(){resolveAddressInput(dropInput,'drop')});
+dropInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();resolveAddressInput(dropInput,'drop')}});
 routeButton.addEventListener('click',calculateRoute);initMap();
 })();
 </script>
@@ -273,6 +288,17 @@ routeButton.addEventListener('click',calculateRoute);initMap();
   vehicleSelects.forEach(function(select){select.addEventListener('change',function(){applyVehicleSelection(select);});});
   purposeRadios.forEach(function(radio){radio.addEventListener('change',function(){bookingPurpose=radio.value;otherRiderFields.hidden=bookingPurpose!=='someone-else';updateEstimate();});});
   [otherRiderName,otherRiderPhone].forEach(function(input){input.addEventListener('input',updateEstimate);});
+  bookingLink.addEventListener('click',function(event){
+    if(bookingPurpose==='someone-else'){
+      var phone=otherRiderPhone.value.replace(/[\s()-]/g,'');
+      if(!/^\+?[0-9]{10,15}$/.test(phone)){
+        event.preventDefault();
+        otherRiderPhone.setCustomValidity('Enter the passenger mobile number (10–15 digits).');
+        otherRiderPhone.reportValidity();
+        otherRiderPhone.focus();
+      }else{otherRiderPhone.setCustomValidity('');}
+    }
+  });
   slider.addEventListener('input',updateEstimate);
   updateEstimate();
 })();
