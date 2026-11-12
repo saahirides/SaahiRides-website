@@ -149,7 +149,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       <div class="readout-tier-box">
         <div class="readout-tier-header"><h2>On-Demand Fare</h2><span class="readout-tag-pill cyan-pill">Per Trip Cost</span></div>
         <div class="readout-price-row"><span class="readout-currency">₹</span><output id="output-ondemand-price" class="readout-sum-bold" aria-live="polite">191</output></div>
-        <p class="readout-calculation-note">Calculated using the progressive distance slabs and selected vehicle base rate.</p>
+        <p id="ondemand-calculation-note" class="readout-calculation-note">Calculated using the progressive distance slabs and selected vehicle base rate.</p>
       </div>
       <div class="readout-tier-box gold-tint-box">
         <div class="readout-tier-header"><h2>30-Day Subscription</h2><span class="readout-tag-pill gold-pill">Route Locked</span></div>
@@ -385,6 +385,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
     var distance = parseFloat(slider.value);
     var onDemand = calculateFare(distance,baseRatePerKm);
+    var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=isNightTime()?'Daytime fare subtotal only. Night charge applies from 10 PM to 6 AM; approved amount is not configured, so this is not a final night quote.':'Calculated using the progressive distance slabs and selected vehicle base rate.';
     distanceOutput.textContent = distance + ' km';
     onDemandOutput.textContent = String(onDemand);
     var oneWay = Math.round(onDemand * 30 + 199);
