@@ -62,6 +62,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 .route-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}.route-fields label{font-size:13px;font-weight:800;color:#fff}.route-fields input{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid #42618c;border-radius:9px;background:#030817;color:#fff;font:inherit}.route-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}.route-actions button{border:0;border-radius:9px;padding:12px 16px;background:linear-gradient(100deg,#d4af37,#ffe27a);color:#07152f;font-weight:900;cursor:pointer}.route-actions span{font-size:13px;color:#a0aec0}.route-distance-line{margin:8px 0;color:#dbeafe}.route-distance-line strong{color:#ffe27a}@media(max-width:560px){.route-fields{grid-template-columns:1fr}#saahi-route-map{height:260px!important}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
 <body>
 <main id="saahi-fare-estimator" class="estimator-dashboard-panel">
@@ -75,15 +76,15 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   <section class="estimator-controls-card" style="margin:0 0 24px;gap:16px" aria-label="Pickup and drop route">
     <div class="control-group-block">
       <label class="input-panel-label">LIVE ROUTE · PICKUP & DROP</label>
-      <p class="readout-calculation-note">Enter both addresses or select points on the map. SaahiRides will use the driving-road distance for the fare estimate.</p>
+      <p class="readout-calculation-note">Set pickup and drop pins on the map. Your driver will call to confirm the practical meeting point.</p>
       <div class="route-fields">
-        <label for="saahi-pickup">Pickup location<input id="saahi-pickup" type="text" placeholder="Enter pickup address" autocomplete="off"></label>
-        <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Enter destination" autocomplete="off"></label>
+        <label for="saahi-pickup">Pickup location<input id="saahi-pickup" type="text" placeholder="Pickup landmark / address note" autocomplete="off"></label>
+        <label for="saahi-drop">Drop location<input id="saahi-drop" type="text" placeholder="Drop landmark / address note" autocomplete="off"></label>
       </div>
       <div id="saahi-route-map" role="application" aria-label="Map for selecting pickup and drop" style="height:300px;border-radius:12px;overflow:hidden;background:#0b1c3d;border:1px solid #42618c"></div>
-      <div class="route-actions"><button type="button" id="saahi-calculate-route">Calculate road distance</button><span id="saahi-route-status" role="status" aria-live="polite">Add pickup and drop to calculate your route.</span></div>
+      <div class="route-actions"><button type="button" id="saahi-use-location">Use my current location</button><button type="button" id="saahi-calculate-route">Confirm pickup &amp; drop</button><span id="saahi-route-status" role="status" aria-live="polite">Use GPS or tap once for pickup and again for drop. Drag pins to adjust.</span></div>
       <p class="route-distance-line">Calculated road distance: <strong id="saahi-route-distance">Not calculated</strong></p>
-      <p class="readout-calculation-note">Map routing requires the SaahiRides Google Maps key to be configured. Until then, the manual distance control remains available.</p>
+      <p class="readout-calculation-note">Pickup/drop pins can be placed and adjusted on the map. The driver can call you to confirm the exact meeting point. Road distance is not guessed: until a routing-provider key is configured, use the distance control below or confirm the road distance with the customer.</p>
     </div>
   </section>
   <div class="estimator-interface-grid">
@@ -139,68 +140,62 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
 </main>
 <footer>© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved.</footer>
 <script src="maps-config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 (function(){
   'use strict';
   var pickupInput=document.getElementById('saahi-pickup');
   var dropInput=document.getElementById('saahi-drop');
   var routeButton=document.getElementById('saahi-calculate-route');
+  var locateButton=document.getElementById('saahi-use-location');
   var routeStatus=document.getElementById('saahi-route-status');
   var routeDistance=document.getElementById('saahi-route-distance');
-  var routeMap=null, RouteLibrary=null, routePolylines=[];
-  var pickupPlace=null, dropPlace=null, pickupMarker=null, dropMarker=null;
-  function routeMessage(message){routeStatus.textContent=message}
-  async function initSaahiRouteMap(){
-    var mapEl=document.getElementById('saahi-route-map');
-    if(!mapEl || !window.google || !google.maps) return;
-    routeMap=new google.maps.Map(mapEl,{center:{lat:17.385,lng:78.4867},zoom:11,mapTypeControl:false,streetViewControl:false,fullscreenControl:true});
-    var routeLibrary=await google.maps.importLibrary('routes');
-    RouteLibrary=routeLibrary.Route;
-    var bounds={componentRestrictions:{country:'in'}};
-    var pickupAuto=new google.maps.places.Autocomplete(pickupInput,Object.assign({fields:['formatted_address','geometry','name']},bounds));
-    var dropAuto=new google.maps.places.Autocomplete(dropInput,Object.assign({fields:['formatted_address','geometry','name']},bounds));
-    pickupAuto.addListener('place_changed',function(){pickupPlace=pickupAuto.getPlace();if(pickupPlace.geometry) routeMessage('Pickup selected. Now select your drop.')});
-    dropAuto.addListener('place_changed',function(){dropPlace=dropAuto.getPlace();if(dropPlace.geometry) routeMessage('Drop selected. Calculate the road distance.')});
-    routeMap.addListener('click',function(event){
-      var point={geometry:{location:event.latLng},formatted_address:event.latLng.lat().toFixed(6)+', '+event.latLng.lng().toFixed(6)};
-      if(!pickupPlace || (pickupPlace && dropPlace)){pickupPlace=point;dropPlace=null;pickupInput.value=point.formatted_address;dropInput.value='';if(pickupMarker)pickupMarker.setMap(null);pickupMarker=new google.maps.Marker({map:routeMap,position:event.latLng,label:'P'});if(dropMarker)dropMarker.setMap(null);routeMessage('Pickup pin set. Tap the map again to set drop.')}
-      else{dropPlace=point;dropInput.value=point.formatted_address;if(dropMarker)dropMarker.setMap(null);dropMarker=new google.maps.Marker({map:routeMap,position:event.latLng,label:'D'});routeMessage('Drop pin set. Calculate the road distance.')}
+  var map=null, pickupMarker=null, dropMarker=null, nextPin='pickup';
+  var pickupPoint=null, dropPoint=null;
+  function say(message){routeStatus.textContent=message}
+  function coords(point){return point.lat.toFixed(6)+', '+point.lng.toFixed(6)}
+  function setPin(which,latlng){
+    var point={lat:latlng.lat,lng:latlng.lng};
+    var marker=which==='pickup'?pickupMarker:dropMarker;
+    if(!marker){
+      marker=L.marker(latlng,{draggable:true}).addTo(map);
+      marker.on('dragend',function(event){setPin(which,event.target.getLatLng())});
+      if(which==='pickup') pickupMarker=marker; else dropMarker=marker;
+    }else marker.setLatLng(latlng);
+    if(which==='pickup'){pickupPoint=point;marker.bindTooltip('Pickup',{permanent:true}).openTooltip();pickupInput.value=coords(point)}
+    else{dropPoint=point;marker.bindTooltip('Drop',{permanent:true}).openTooltip();dropInput.value=coords(point)}
+    say((which==='pickup'?'Pickup':'Drop')+' pin set: '+coords(point)+'. '+(which==='pickup'?'Tap to set drop.':'Drag either pin to adjust, then confirm.'));
+  }
+  function initMap(){
+    if(!window.L){say('Map library could not load. Address fields and manual distance remain available.');return}
+    map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    map.on('click',function(event){
+      var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';
+      setPin(which,event.latlng);nextPin=which==='pickup'?'drop':'pickup';
     });
-    routeButton.addEventListener('click',calculateSaahiRoute);
-    routeMessage('Map ready. Search addresses or tap the map to set pickup and drop.');
+    say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust. Address lookup and road routing require a configured provider.');
   }
-  async function calculateSaahiRoute(){
-    if(!pickupPlace || !dropPlace || !pickupPlace.geometry || !dropPlace.geometry){routeMessage('Please choose both pickup and drop from suggestions or map pins.');return}
-    routeButton.disabled=true;routeMessage('Calculating driving route…');
-    try{
-      var result=await RouteLibrary.computeRoutes({origin:pickupPlace.geometry.location,destination:dropPlace.geometry.location,travelMode:'DRIVING',fields:['path','legs.distanceMeters']});
-      var route=result.routes&&result.routes[0];
-      if(!route || !route.legs || !route.legs.length){routeMessage('Could not calculate this road route. Please adjust the locations and try again.');return}
-      routePolylines.forEach(function(line){line.setMap(null)});
-      routePolylines=route.createPolylines();
-      routePolylines.forEach(function(line){line.setMap(routeMap)});
-      var metres=route.legs.reduce(function(sum,leg){return sum+(leg.distanceMeters||0)},0);
-      var km=Math.round((metres/1000)*10)/10;
-      routeDistance.textContent=km.toFixed(1)+' km';
-      if(route.path&&route.path.length){var bounds=new google.maps.LatLngBounds();route.path.forEach(function(point){bounds.extend(point)});routeMap.fitBounds(bounds)}
-      if(km>30){routeMessage('Route distance captured. This is above the standard city estimator limit; request a long-distance quote before booking.');return}
-      var slider=document.getElementById('estimator-distance-slider');
-      slider.value=Math.max(0.1,Math.min(30,km)).toFixed(1);
-      slider.dispatchEvent(new Event('input',{bubbles:true}));
-      routeMessage('Road distance applied to the fare calculator. Review the updated estimate below.');
-      document.querySelector('.estimator-interface-grid').scrollIntoView({behavior:'smooth',block:'start'});
-    }catch(error){routeMessage('Route calculation failed. Check that Routes API is enabled and the key is authorised.')}
-    finally{routeButton.disabled=false}
-  }
-  window.initSaahiRouteMap=initSaahiRouteMap;
-  var mapsKey=window.SAAHI_GOOGLE_MAPS_API_KEY;
-  if(mapsKey && mapsKey!=='PASTE_RESTRICTED_BROWSER_KEY_HERE'){
-    var mapsScript=document.createElement('script');
-    mapsScript.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(mapsKey)+'&libraries=places&callback=initSaahiRouteMap&v=weekly';
-    mapsScript.async=true;mapsScript.defer=true;
-    mapsScript.onerror=function(){routeMessage('Google Maps could not load. Check the API key and enabled APIs.')};
-    document.head.appendChild(mapsScript);
-  }else{routeMessage('Google Maps key is not configured yet. The manual distance control is still available.')}
+  locateButton.addEventListener('click',function(){
+    if(!navigator.geolocation){say('This browser does not provide location access. Enter an address note or tap the map.');return}
+    say('Getting your current location…');
+    navigator.geolocation.getCurrentPosition(function(position){
+      var point=L.latLng(position.coords.latitude,position.coords.longitude);
+      setPin('pickup',point);map.setView(point,18);nextPin='drop';
+    },function(error){say(error.code===1?'Location permission was denied. Enter an address note or tap the map.':'Could not get your location. Enter an address note or tap the map.')},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
+  });
+  routeButton.addEventListener('click',function(){
+    if(!pickupPoint||!dropPoint){say('Set both pickup and drop pins before confirming.');return}
+    routeDistance.textContent='Not calculated — routing provider not configured';
+    say('Pickup and drop coordinates confirmed. Driver should call to confirm the exact meeting point. No straight-line fare distance has been substituted.');
+    var pickupNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(pickupPoint))+'&travelmode=driving';
+    var dropNav='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(coords(dropPoint))+'&travelmode=driving';
+    var message='SaahiRides pickup: '+coords(pickupPoint)+'\nPickup navigation: '+pickupNav+'\nPickup note: '+pickupInput.value+'\nDrop: '+coords(dropPoint)+'\nDrop navigation: '+dropNav+'\nDrop note: '+dropInput.value+'\nPlease call customer near the pickup point to confirm exact meeting position.';
+    document.getElementById('estimator-booking-link').href='https://wa.me/919347946026?text='+encodeURIComponent('BOOK\n'+message);
+  });
+  initMap();
 })();
 </script>
 <script>
