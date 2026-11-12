@@ -2,6 +2,12 @@ name: SaahiRides Backup Supervisor
 
 on:
   workflow_dispatch:
+    inputs:
+      enable_supabase_write:
+        description: "Explicitly authorize this run to read QA data and write its execution record to production Supabase"
+        required: true
+        default: false
+        type: boolean
   schedule:
     - cron: '0 2 * * *'
   workflow_run:
@@ -18,7 +24,9 @@ concurrency:
 
 jobs:
   independent-supervision:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion != ''
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.enable_supabase_write == true) ||
+      (github.event_name != 'workflow_dispatch' && vars.WATCHTOWER_PRODUCTION_SUPERVISION_ENABLED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
