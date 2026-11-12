@@ -174,8 +174,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
     }).addTo(map);
     map.on('click',function(event){
       var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';
-      setPin(which,event.latlng);
-      nextPin=which==='pickup'?'drop':'pickup';
+      setPin(which,event.latlng);nextPin=which==='pickup'?'drop':'pickup';
     });
     say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust. Address lookup and road routing require a configured provider.');
   }
@@ -196,98 +195,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
   });
   initMap();
 })();
-</script>
-<script>
-(function(){
-  'use strict';
-  var pickupInput=document.getElementById('saahi-pickup');
-  var dropInput=document.getElementById('saahi-drop');
-  var routeButton=document.getElementById('saahi-calculate-route');
-  var locateButton=document.getElementById('saahi-use-location');
-  var searchButton=document.getElementById('saahi-find-addresses');
-  var routeStatus=document.getElementById('saahi-route-status');
-  var routeDistance=document.getElementById('saahi-route-distance');
-  var map=null, pickupMarker=null, dropMarker=null, nextPin='pickup', lastGeocodeAt=0;
-  var pickupPoint=null, dropPoint=null;
-  function say(message){routeStatus.textContent=message}
-  function coords(point){return point.lat.toFixed(6)+', '+point.lng.toFixed(6)}
-  function waitForGeocoder(){var delay=Math.max(0,1100-(Date.now()-lastGeocodeAt));return new Promise(function(resolve){setTimeout(resolve,delay)})}
-  async function geocode(url){
-    await waitForGeocoder(); lastGeocodeAt=Date.now();
-    var response=await fetch(url,{headers:{'Accept':'application/json'}});
-    if(!response.ok) throw new Error('Address service returned '+response.status);
-    return response.json();
-  }
-  async function reverse(point){
-    try{
-      var rows=await geocode('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(point.lat)+'&lon='+encodeURIComponent(point.lng)+'&zoom=18&addressdetails=1');
-      return rows.display_name || coords(point);
-    }catch(error){return coords(point)}
-  }
-  async function setPin(which,latlng,doReverse){
-    var point={lat:latlng.lat,lng:latlng.lng};
-    var marker=which==='pickup'?pickupMarker:dropMarker;
-    if(!marker){
-      marker=L.marker(latlng,{draggable:true}).addTo(map);
-      marker.on('dragend',function(event){setPin(which,event.target.getLatLng(),true)});
-      if(which==='pickup') pickupMarker=marker; else dropMarker=marker;
-    }else marker.setLatLng(latlng);
-    if(which==='pickup'){pickupPoint=point;marker.bindTooltip('Pickup',{permanent:true}).openTooltip()}
-    else{dropPoint=point;marker.bindTooltip('Drop',{permanent:true}).openTooltip()}
-    var field=which==='pickup'?pickupInput:dropInput;
-    field.value=doReverse?await reverse(point):coords(point);
-    say((which==='pickup'?'Pickup':'Drop')+' pin set. '+(which==='pickup'?'Set the drop pin or search its address.':'Confirm both points. You can drag either pin.'));
-  }
-  async function findAddress(which,field){
-    var query=field.value.trim(); if(!query) throw new Error('Enter the '+which+' address first.');
-    var rows=await geocode('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(query));
-    if(!rows.length) throw new Error('No match found for '+which+'. Try a nearby landmark or tap the map.');
-    var point=L.latLng(Number(rows[0].lat),Number(rows[0].lon));
-    await setPin(which,point,false); map.setView(point,17);
-    field.value=rows[0].display_name||query;
-  }
-  function initMap(){
-    if(!window.L){say('Map library could not load. Address fields and manual distance remain available.');return}
-    map=L.map('saahi-route-map',{scrollWheelZoom:false}).setView([17.385,78.4867],12);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-    map.on('click',function(event){
-      var which=(!pickupPoint||nextPin==='pickup')?'pickup':'drop';
-      setPin(which,event.latlng,true);
-      nextPin=which==='pickup'?'drop':'pickup';
-    });
-    say('Map ready. Tap once for pickup, again for drop. Drag pins to adjust.');
-  }
-  locateButton.addEventListener('click',function(){
-    if(!navigator.geolocation){say('This browser does not provide location access. Search or tap the map instead.');return}
-    say('Getting your current location…');
-    navigator.geolocation.getCurrentPosition(function(position){
-      var point=L.latLng(position.coords.latitude,position.coords.longitude);
-      setPin('pickup',point,true);map.setView(point,18);nextPin='drop';
-    },function(error){say(error.code===1?'Location permission was denied. Enter the address or tap the map.':'Could not get your location. Enter the address or tap the map.')},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
-  });
-  searchButton.addEventListener('click',async function(){
-    searchButton.disabled=true;
-    try{if(pickupInput.value.trim()) await findAddress('pickup',pickupInput);if(dropInput.value.trim()) await findAddress('drop',dropInput);say('Address pins placed. Drag either pin if needed, then confirm.')}
-    catch(error){say(error.message||'Address search failed. Try a landmark or place pins manually.')}
-    finally{searchButton.disabled=false}
-  });
-  routeButton.addEventListener('click',function(){
-    if(!pickupPoint||!dropPoint){say('Set both pickup and drop pins before confirming.');return}
-    routeDistance.textContent='Not calculated — road routing provider not configured';
-    say('Pickup and drop coordinates confirmed. Driver should call for the exact meeting point. Road distance is deliberately not estimated without a routing service.');
-    var message='SaahiRides pickup: '+coords(pickupPoint)+'\nPickup address: '+pickupInput.value+'\nDrop: '+coords(dropPoint)+'\nDrop address: '+dropInput.value+'\nPlease call customer to confirm exact meeting point.';
-    var bookingLink=document.getElementById('estimator-booking-link');
-    bookingLink.href='https://wa.me/919347946026?text='+encodeURIComponent('BOOK\n'+message);
-  });
-  initMap();
-})();
-</script>
-<script>
-(function(){
-  'use strict';
-  var baseRatePerKm = 10;
+var baseRatePerKm = 10;
   var slider = document.getElementById('estimator-distance-slider');
   var distanceOutput = document.getElementById('display-distance-val');
   var onDemandOutput = document.getElementById('output-ondemand-price');
