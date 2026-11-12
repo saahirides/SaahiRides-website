@@ -137,7 +137,15 @@ footer {
   padding:15px}
 }
 </style>
-</head>
+<style id="saahi-talkback-persistent-alert">
+#ccTalkbackAlert[hidden]{display:none!important}
+#ccTalkbackAlert{position:fixed;inset:0;z-index:10090;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,8,22,.84);backdrop-filter:blur(7px)}
+#ccTalkbackAlert .talkback-alert-panel{width:min(100%,620px);max-height:88vh;overflow:auto;background:linear-gradient(145deg,#fff8df,#ffe8aa);color:#132b4d;border:3px solid #d99a13;border-radius:18px;padding:22px;box-shadow:0 22px 70px rgba(0,0,0,.48)}
+#ccTalkbackAlert h2{margin:0 0 8px;color:#173b7a;font-size:clamp(22px,4vw,28px)}
+#ccTalkbackAlert .talkback-alert-meta{font-size:12px;color:#52647e;margin:0 0 14px}
+#ccTalkbackAlert .talkback-alert-body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55;background:#fff;border:1px solid #e2c57d;border-radius:10px;padding:14px;max-height:42vh;overflow:auto}
+#ccTalkbackAcknowledge{width:100%;margin-top:16px;background:linear-gradient(100deg,#d4af37,#ffe27a);color:#10264b;border:1px solid #b77b00;font-weight:900}
+</style></head>
 <body>
 <main>
 <header class="top">
@@ -612,12 +620,34 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(!admin||!session)return;
   const data=await callCommandCentre('notifications_list');
   const items=data.notifications||[];
+  renderTalkbackAlert(items);
   $('ccUnreadCount').textContent=(data.unread||0)+' unread';
   const host=$('ccNotificationList');
   host.innerHTML=items.length?items.map(n=>'<div class="tile" style="margin-top:8px"><strong>'+esc(n.title)+'</strong><p>'+esc(n.body)+'</p><div class="small">'+esc(n.severity).toUpperCase()+' · '+esc(n.status)+' · '+new Date(n.created_at).toLocaleString()+'</div>'+(n.status!=='acknowledged'?'<button type="button" class="secondary" data-notification-ack="'+esc(n.id)+'">Acknowledge</button>':'<span class="small">Acknowledged</span>')+'</div>').join(''):'No notifications yet.';
   host.querySelectorAll('[data-notification-ack]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await callCommandCentre('notification_mark',{id:btn.dataset.notificationAck,status:'acknowledged'});await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);btn.disabled=false;}}));
   ccStatus('ccNotificationStatus','Secure notification inbox connected. '+items.length+' recent alert(s) loaded.');
  }
+ function renderTalkbackAlert(items){
+  const root=$('ccTalkbackAlert');
+  if(!root)return;
+  const pending=(items||[]).find(n=>n.category==='talkback'&&n.status!=='acknowledged');
+  if(!pending){root.hidden=true;root.dataset.notificationId='';return;}
+  const isNew=root.hidden||root.dataset.notificationId!==pending.id;
+  root.dataset.notificationId=pending.id;
+  $('ccTalkbackAlertTitle').textContent=pending.title||'New TalkBack feedback';
+  $('ccTalkbackAlertBody').textContent=pending.body||'A new TalkBack submission needs review.';
+  $('ccTalkbackAlertTime').textContent='Received '+new Date(pending.created_at).toLocaleString();
+  root.hidden=false;
+  if(isNew){const ack=$('ccTalkbackAcknowledge');if(ack)ack.focus();}
+ }
+ $('ccTalkbackAcknowledge').onclick=async()=>{
+  const root=$('ccTalkbackAlert'),btn=$('ccTalkbackAcknowledge'),id=root?.dataset.notificationId;
+  if(!id)return;
+  btn.disabled=true;
+  try{await callCommandCentre('notification_mark',{id,status:'acknowledged'});await loadNotifications();}
+  catch(e){ccStatus('ccNotificationStatus','TalkBack acknowledgement failed: '+e.message,true);}
+  finally{btn.disabled=false;}
+ };
  function showPhoneNotification(n){
   if(!('Notification' in window)||Notification.permission!=='granted'||document.visibilityState==='visible')return;
   try{new Notification(String(n.title||'SaahiRides alert'),{body:String(n.body||'A new Command Centre alert needs attention.'),tag:'saahirides-'+String(n.id||Date.now())});}catch(e){console.warn('Browser notification could not be shown',e);}
@@ -651,7 +681,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   const modules=data.modules||[],activity=data.activity||[],approvals=data.approvals||[];
   $('ccModules').innerHTML=modules.map(m=>'<div class="tile"><h3>'+esc(m.title)+'</h3><p>'+esc(m.description)+'</p><div class="small"><strong>'+esc(m.status)+'</strong> · '+esc(m.cadence||'Schedule not set')+'</div><div class="small">'+(m.approval_required?'Owner approval required':'Approval not required')+'</div></div>').join('');
   $('ccApprovals').innerHTML=approvals.length?approvals.map(a=>'<div class="tile"><strong>'+esc(a.change_type)+'</strong> · '+esc(a.target_system)+'<p>'+esc(a.summary)+'</p><div class="small">Risk: '+esc(a.risk_level)+' · '+esc(a.status)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No pending approval requests.';
-  $('ccActivity').innerHTML=activity.length?activity.map(a=>'<div class="tile"><strong>'+esc(a.payload?.agent_name||a.title)+'</strong><p>'+esc(a.summary)+'</p><div class="small">'+esc(a.module_key||'General')+' · '+esc(a.activity_type||'activity')+' · '+esc(a.status)+' · '+esc(a.risk_level)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No activity has been recorded yet.';
+  $('ccActivity').innerHTML=activity.length?activity.map(a=>'<div class="tile"><strong>'+esc(a.payload?.agent_name||a.title)+'</strong><p>'+esc(a.summary)+'</p>'+(a.activity_type==='talkback_feedback'?'<div class="tile" style="background:#fff8df;color:#132b4d"><strong>Customer feedback · '+esc(a.payload?.rating||'—')+'/5</strong><p style="white-space:pre-wrap">'+esc(a.payload?.feedback_text||'Feedback text unavailable')+'</p><div class="small">Type: '+esc(a.payload?.feedback_type||'')+' · Booking reference: '+esc(a.payload?.booking_reference||'Not supplied')+'</div></div>':'')+'<div class="small">'+esc(a.module_key||'General')+' · '+esc(a.activity_type||'activity')+' · '+esc(a.status)+' · '+esc(a.risk_level)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No activity has been recorded yet.';
   ccStatus('ccModuleStatus','Loaded '+modules.length+' workstreams, '+activity.length+' activity records and '+approvals.length+' pending approvals. Signed in as '+esc(data.role||'Admin')+'.');
   ccStatus('ccApprovalStatus',approvals.length+' pending approval request(s). No request has been approved or executed.');
  }
@@ -1132,4 +1162,13 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
 })();
 </script>
 <script src="saahi-promotions.js?v=20261031" defer></script>
+<div id="ccTalkbackAlert" hidden role="alertdialog" aria-modal="true" aria-labelledby="ccTalkbackAlertTitle" aria-describedby="ccTalkbackAlertBody">
+ <section class="talkback-alert-panel">
+  <h2 id="ccTalkbackAlertTitle">New TalkBack feedback</h2>
+  <p class="talkback-alert-meta" id="ccTalkbackAlertTime"></p>
+  <div class="talkback-alert-body" id="ccTalkbackAlertBody"></div>
+  <p class="small" style="color:#52647e;margin:12px 0 0">This alert remains pending until you explicitly acknowledge that you have reviewed it. Leaving or refreshing this page does not clear it.</p>
+  <button type="button" id="ccTalkbackAcknowledge">I have reviewed this feedback · Acknowledge</button>
+ </section>
+</div>
 </body></html>
