@@ -152,10 +152,10 @@
                 <div style="font-size: 13px; color: #555;" id="displayTerms">Plan valid for 90 Days cycle window.</div>
             </div>
 
-            <button type="submit" class="btn-submit">Secure Payment Checkout (Mock)</button>
+            <button type="submit" class="btn-submit">Contact Support to Activate</button>
         </form>
 
-        <!-- SECURE ONE-TIME VALID 90-DAY KEY GENERATOR BOX -->
+        <!-- Activation confirmation is withheld until server-side payment and driver verification exist. -->
         <div id="successBox" class="success-box">
             <h3>🎉 Activation Successful!</h3>
             <p>Your subscription is verified and active for the next 90 days.</p>
@@ -200,31 +200,19 @@
             summaryCard.style.display = "block";
         }
 
-        // Mock Payment Processing & Secure Lifecycle Key Creation Logic
-        document.getElementById('paymentActivationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const phone = document.getElementById('driverPhone').value;
+        // Do not simulate payment, issue client-side access tokens, or activate an unverified driver.
+        document.getElementById('paymentActivationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const phone = document.getElementById('driverPhone').value.trim();
             const category = document.getElementById('vehicleCategory').value;
-            const targetPlan = pricingMatrix[category];
+            if (!event.currentTarget.reportValidity() || !pricingMatrix[category]) return;
 
-            // Trigger Mock Checkout window
-            alert(Connecting Secure Gateway...\nProcessing transaction total of ₹${targetPlan.total} for your ${targetPlan.title}.\nAccount: +91 ${phone});
-
-            // Hide Form Inputs cleanly
-            document.getElementById('paymentActivationForm').style.display = "none";
-            document.getElementById('deadlineAlert').style.display = "none";
-
-            // Generate a secure crypto-random one-time valid token key string
-            const randomString = Math.random().toString(36).substring(2, 6).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-            const secureKey = SR-${category.toUpperCase()}-${randomString};
-            
-            // Set browser tracking local states variables to simulate 90-day execution limits
-            localStorage.setItem('driver_access_token', secureKey);
-            localStorage.setItem('subscription_cycle_start', new Date().getTime());
-            localStorage.setItem('subscription_days_limit', 90);
-
-            // Display Success Elements container panel
-            document.getElementById('generatedKey').innerText = secureKey;
-            document.getElementById('successBox').style.display = "block";
+            const message = encodeURIComponent(
+                'Hello SaahiRides, I need assistance with driver account activation. ' +
+                'My registered mobile number is ' + phone +
+                '. My vehicle category is ' + category +
+                '. Please confirm the applicable plan, verification status and official payment process.'
+            );
+            window.open('https://wa.me/919347946026?text=' + message, '_blank', 'noopener,noreferrer');
+            alert('No payment has been taken and your account has not been activated. Please contact SaahiRides support to complete verification and confirm the official payment process.');
         });
