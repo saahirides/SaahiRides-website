@@ -657,7 +657,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(!admin||!client||!session)return;
   try{await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
   if(notificationChannel)await client.removeChannel(notificationChannel).catch(()=>{});
-  notificationChannel=client.channel('saahirides:admin-notifications',{config:{private:true}})
+  notificationChannel=client.channel('saahirides:admin-notifications:'+session.user.id,{config:{private:true}})
    .on('broadcast',{event:'notification'},message=>{const n=message.payload||message;showPhoneNotification(n);loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));})
    .subscribe((status,error)=>{if(status==='SUBSCRIBED')ccStatus('ccNotificationStatus','Private live alerts connected. Dashboard updates are active.');else if(error)ccStatus('ccNotificationStatus','Live alert connection: '+(error.message||status),true);});
  }
