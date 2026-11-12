@@ -405,7 +405,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var option=select.options[select.selectedIndex];if(!option)return;
     baseRatePerKm=Number(option.getAttribute('data-rate'));
     selectedVehicle=option.getAttribute('data-label')||option.textContent.trim();
-    vehicleSelects.forEach(function(other){if(other!==select)other.selectedIndex=0;});
+    vehicleSelects.forEach(function(other){if(other!==select){other.selectedIndex=0;if(other._saahiTrigger){var resetOption=other.options[other.selectedIndex];other._saahiTrigger.textContent=resetOption?resetOption.textContent.trim():'Choose vehicle';}}});
     updateEstimate();
   }
   vehicleSelects.forEach(function(select){select.addEventListener('change',function(){applyVehicleSelection(select);});});
@@ -450,7 +450,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
  document.body.appendChild(backdrop);
  var box=backdrop.querySelector('#saahi-vehicle-picker-options'),title=backdrop.querySelector('#saahi-vehicle-picker-title'),close=backdrop.querySelector('#saahi-vehicle-picker-close'),activeTrigger=null;
  function shut(){backdrop.hidden=true;if(activeTrigger)activeTrigger.focus();activeTrigger=null}
- selects.forEach(function(select){var trigger=document.createElement('button');trigger.type='button';trigger.className='vehicle-picker-trigger';var current=select.options[select.selectedIndex];trigger.textContent=current&&!current.disabled?current.textContent.trim():'Choose '+select.getAttribute('aria-label');select.parentNode.insertBefore(trigger,select.nextSibling);
+ selects.forEach(function(select){var trigger=document.createElement('button');trigger.type='button';trigger.className='vehicle-picker-trigger';var current=select.options[select.selectedIndex];trigger.textContent=current&&!current.disabled?current.textContent.trim():'Choose '+select.getAttribute('aria-label');select._saahiTrigger=trigger;select.parentNode.insertBefore(trigger,select.nextSibling);
  trigger.addEventListener('click',function(){activeTrigger=trigger;title.textContent='Choose '+select.getAttribute('aria-label');box.innerHTML='';Array.prototype.forEach.call(select.options,function(option){if(option.disabled||!option.value)return;var b=document.createElement('button');b.type='button';b.textContent=option.textContent.trim();b.addEventListener('click',function(){select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));trigger.textContent=option.textContent.trim();shut()});box.appendChild(b)});backdrop.hidden=false;var first=box.querySelector('button');if(first)first.focus()});
  select.addEventListener('change',function(){var o=select.options[select.selectedIndex];trigger.textContent=o?o.textContent.trim():'Choose vehicle'});
  });
