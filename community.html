@@ -36,6 +36,7 @@ footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}
 <form id="communityForm">
 <label for="category">What would you like to share?</label>
 <select id="category" required><option value="">Choose a category</option><option>Driver appreciation / story</option><option>Driver service issue</option><option>Safety concern (private review)</option><option>Customer testimonial</option><option>Feedback / suggestion</option><option>Photo / video contribution</option></select>
+<label for="rating">Your rating *</label><select id="rating" required><option value="">Choose a rating</option><option value="5">5 · Excellent</option><option value="4">4 · Good</option><option value="3">3 · Average</option><option value="2">2 · Needs improvement</option><option value="1">1 · Poor</option></select>
 <label for="name">Your name (optional)</label><input id="name" maxlength="80" autocomplete="name" placeholder="Name">
 <label for="contact">Contact number or email (optional)</label><input id="contact" maxlength="100" placeholder="How we can reach you">
 <label for="message">Your message</label><textarea id="message" maxlength="2500" required placeholder="Tell us what happened, what you appreciated, or what you would like us to improve..."></textarea>
@@ -51,11 +52,12 @@ footer{text-align:center;color:var(--muted);padding:18px;font-size:13px}
 document.getElementById('communityForm').addEventListener('submit',function(event){
  event.preventDefault();
  const category=document.getElementById('category').value;
+ const rating=document.getElementById('rating').value;
  const name=document.getElementById('name').value.trim()||'Not provided';
  const contact=document.getElementById('contact').value.trim()||'Not provided';
  const message=document.getElementById('message').value.trim();
- if(!category||!message||!document.getElementById('consent').checked)return;
- const text='SAAHIRIDES COMMUNITY SUBMISSION\nCategory: '+category+'\nName: '+name+'\nContact: '+contact+'\n\nMessage:\n'+message+'\n\nI confirm I have permission to share this content. Please review before any public use.';
+ if(!category||!rating||!message||!document.getElementById('consent').checked)return;
+ const text='SAAHIRIDES COMMUNITY SUBMISSION\nCategory: '+category+'\nRating: '+rating+'\nName: '+name+'\nContact: '+contact+'\n\nMessage:\n'+message+'\n\nI confirm I have permission to share this content. Please review before any public use.';
  window.open('https://wa.me/919347946026?text='+encodeURIComponent(text),'_blank','noopener');
 });
 </script></body></html>
