@@ -10,7 +10,7 @@
 <label for="poster">Poster image</label><input id="poster" type="file" accept="image/*">
 <label for="ratio">Video format</label><select id="ratio"><option value="portrait">Vertical 9:16 · Reels/Shorts</option><option value="landscape">Landscape 16:9</option><option value="square">Square 1:1</option></select>
 <label for="duration">Ticker speed</label><select id="duration"><option value="slow">Slow</option><option value="normal" selected>Normal</option><option value="fast">Fast</option></select>
-<label for="music">Background music (optional)</label><input id="music" type="file" accept="audio/*">
+<label for="masterVoice">Saved master voice from Social Music</label><select id="masterVoice"><option value="">Use device speech voice (fallback)</option></select><audio id="masterVoicePreview" controls class="hidden" style="width:100%;margin-top:8px"></audio><div class="hint" id="voiceStatus">Sign in to Admin Portal in this browser to load saved master audio.</div>
 </div><div>
 <label for="en">English script (spoken + ticker)</label><textarea id="en" placeholder="Enter English script…"></textarea>
 <label for="hi">Hindi script (spoken + ticker)</label><textarea id="hi" placeholder="हिंदी स्क्रिप्ट लिखें…"></textarea>
@@ -19,8 +19,9 @@
 <div class="preview"><label>Live preview</label><canvas id="preview" width="720" height="1280"></canvas></div>
 <button id="previewSpeak">▶ Preview narration (EN → HI → TE)</button><button id="render">● Record & Export video</button><button id="stop" class="secondary" disabled>Stop & save</button><div class="status" id="status" role="status">Ready. Add a poster and scripts to begin.</div>
 </section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const $=id=>document.getElementById(id), canvas=$('preview'),ctx=canvas.getContext('2d');let posterImg=null,raf=0,rec=null,chunks=[],stream=null,mic=null,musicAudio=null,musicStream=null,scroll=0,activeText='',tag='';let speaking=false;
+const $=id=>document.getElementById(id), canvas=$('preview'),ctx=canvas.getContext('2d');let posterImg=null,raf=0,rec=null,chunks=[],stream=null,mic=null,musicAudio=null,musicStream=null,scroll=0,activeText='',tag='';let speaking=false,sb=null,voiceFiles=[];
 const langs=[{id:'en',lang:'en-IN',label:'ENGLISH'},{id:'hi',lang:'hi-IN',label:'हिन्दी'},{id:'te',lang:'te-IN',label:'తెలుగు'}];
 function resize(){const r=$('ratio').value;canvas.width=r==='portrait'?720:r==='landscape'?1280:900;canvas.height=r==='portrait'?1280:r==='landscape'?720:900;draw();} 
 function draw(){ctx.fillStyle='#06122e';ctx.fillRect(0,0,canvas.width,canvas.height);if(posterImg){let scale=Math.max(canvas.width/posterImg.width,canvas.height/posterImg.height),w=posterImg.width*scale,h=posterImg.height*scale;ctx.drawImage(posterImg,(canvas.width-w)/2,(canvas.height-h)/2,w,h)}else{ctx.fillStyle='#f5b82e';ctx.font='bold 34px system-ui';ctx.textAlign='center';ctx.fillText('UPLOAD YOUR POSTER',canvas.width/2,canvas.height/2)}
@@ -28,12 +29,36 @@ const tickerH=Math.max(112,canvas.height*.12),tickerY=(canvas.height-tickerH)/2;
 function loop(){draw();raf=requestAnimationFrame(loop)}
 $('poster').onchange=e=>{let f=e.target.files[0];if(!f)return;let u=URL.createObjectURL(f);posterImg=new Image();posterImg.onload=()=>{resize();URL.revokeObjectURL(u)};posterImg.src=u};
 $('ratio').onchange=resize;['en','hi','te'].forEach(id=>$(id).oninput=draw);resize();
+
+const voiceSelect=$('masterVoice'),voiceAudio=$('masterVoicePreview'),voiceStatus=$('voiceStatus');
+async function loadMasterVoices(){
+ try{
+  if(!window.supabase?.createClient)throw new Error('Supabase client library unavailable.');
+  sb=window.supabase.createClient('https://uzwubbzlytqqewqibobr.supabase.co','sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq',{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const {data:{session},error:authError}=await sb.auth.getSession();if(authError)throw authError;
+  if(!session){voiceStatus.textContent='Open Admin Portal and sign in, then return here to load your saved master voice.';return;}
+  const {data,error}=await sb.storage.from('social-audio').list('master',{limit:100,sortBy:{column:'created_at',order:'desc'}});
+  if(error)throw error;
+  voiceFiles=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+  voiceSelect.innerHTML='<option value="">Use device speech voice (fallback)</option>';
+  voiceFiles.forEach((file,i)=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;voiceSelect.appendChild(o)});
+  voiceStatus.textContent=voiceFiles.length?voiceFiles.length+' saved audio file(s) found. Select your master recording.':'No saved master audio found in Social Music yet.';
+ }catch(e){voiceStatus.textContent='Could not load saved master audio: '+(e.message||String(e));}
+}
+voiceSelect.onchange=async()=>{
+ const name=voiceSelect.value;if(!name){voiceAudio.pause();voiceAudio.removeAttribute('src');voiceAudio.classList.add('hidden');return;}
+ const {data,error}=await sb.storage.from('social-audio').createSignedUrl('master/'+name,3600);
+ if(error){voiceStatus.textContent='Could not open selected audio: '+error.message;return;}
+ voiceAudio.src=data.signedUrl;voiceAudio.classList.remove('hidden');voiceStatus.textContent='Master voice selected: '+name+'. The original audio remains unchanged.';
+};
+loadMasterVoices();
+
 function scriptFor(l){return $(l.id).value.trim()}
 function speakSegment(l){return new Promise((resolve,reject)=>{let text=scriptFor(l);if(!text){resolve();return}let u=new SpeechSynthesisUtterance(text);u.lang=l.lang;let v=speechSynthesis.getVoices().find(x=>x.lang.toLowerCase()===l.lang.toLowerCase()||x.lang.toLowerCase().startsWith(l.lang.slice(0,2)));if(v)u.voice=v;u.onend=resolve;u.onerror=e=>{if(e.error==='canceled'||e.error==='interrupted')resolve();else reject(new Error('Speech failed for '+l.label))};speechSynthesis.speak(u)})}
-async function sequence(){speaking=true;for(const l of langs){if(!speaking)break;activeText=scriptFor(l);tag=l.label;scroll=canvas.width;draw();$('status').textContent='Speaking and scrolling: '+l.label;await speakSegment(l);await new Promise(r=>setTimeout(r,500))}speaking=false;activeText='';draw()}
+async function sequence(){speaking=true;if(voiceSelect.value&&voiceAudio.src){const usable=langs.filter(l=>scriptFor(l));if(!usable.length)throw new Error('Enter ticker text in at least one language.');voiceAudio.currentTime=0;const play=voiceAudio.play();await play;const segment=Math.max(1000,(voiceAudio.duration*1000)/usable.length||5000);for(const l of usable){if(!speaking)break;activeText=scriptFor(l);tag=l.label;scroll=canvas.width;draw();$('status').textContent='Master voice playing · ticker: '+l.label;await new Promise(r=>setTimeout(r,segment))}if(speaking&&voiceAudio.ended===false)voiceAudio.pause();}else{for(const l of langs){if(!speaking)break;activeText=scriptFor(l);tag=l.label;scroll=canvas.width;draw();$('status').textContent='Speaking and scrolling: '+l.label;await speakSegment(l);await new Promise(r=>setTimeout(r,500))}}speaking=false;activeText='';draw()}
 $('previewSpeak').onclick=()=>{speechSynthesis.cancel();speaking=true;sequence().catch(e=>$('status').textContent=e.message)};
 async function startRecording(){if(!posterImg){$('status').textContent='Please upload a poster first.';return}if(!langs.some(scriptFor)){ $('status').textContent='Please enter at least one script.';return}if(!('MediaRecorder'in window)||!canvas.captureStream){$('status').textContent='Video recording is not supported in this browser. Use an updated Chrome or Edge.';return}
-try{mic=await navigator.mediaDevices.getUserMedia({audio:true});stream=canvas.captureStream(30);mic.getAudioTracks().forEach(t=>stream.addTrack(t));let mime=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=avc1.42E01E','video/mp4'].find(t=>MediaRecorder.isTypeSupported(t));if(!mime){stream.getTracks().forEach(t=>t.stop());if(mic)mic.getTracks().forEach(t=>t.stop());$('status').textContent='MP4 recording is not supported by this browser. No WebM file was created. Please use a browser/device with native MP4 MediaRecorder support.';$('render').disabled=false;$('stop').disabled=true;return}rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};rec.onstop=save;rec.start(1000);$('render').disabled=true;$('stop').disabled=false;$('status').textContent='Recording running. Keep this tab active; narration is captured through your microphone. Please avoid other sounds.';scroll=canvas.width;raf=requestAnimationFrame(loop);speaking=true;sequence().then(()=>{if(rec&&rec.state!=='inactive')rec.stop()}).catch(e=>{$('status').textContent=e.message;if(rec&&rec.state!=='inactive')rec.stop()})}catch(e){$('status').textContent='Recording could not start: '+e.message+' (microphone permission is needed for voice capture).'}}
+try{stream=canvas.captureStream(30);if(voiceSelect.value&&voiceAudio.src){if(!voiceAudio.captureStream)throw new Error('This browser cannot capture the selected master audio track. Use updated Chrome.');const voiceStream=voiceAudio.captureStream();voiceStream.getAudioTracks().forEach(t=>stream.addTrack(t));}else{mic=await navigator.mediaDevices.getUserMedia({audio:true});mic.getAudioTracks().forEach(t=>stream.addTrack(t));}let mime=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=avc1.42E01E','video/mp4'].find(t=>MediaRecorder.isTypeSupported(t));if(!mime){stream.getTracks().forEach(t=>t.stop());if(mic)mic.getTracks().forEach(t=>t.stop());$('status').textContent='MP4 recording is not supported by this browser. No WebM file was created. Please use a browser/device with native MP4 MediaRecorder support.';$('render').disabled=false;$('stop').disabled=true;return}rec=new MediaRecorder(stream,{mimeType:mime});chunks=[];rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};rec.onstop=save;rec.start(1000);$('render').disabled=true;$('stop').disabled=false;$('status').textContent='Recording running. Keep this tab active; the selected master audio or device speech voice is being captured.';scroll=canvas.width;raf=requestAnimationFrame(loop);speaking=true;sequence().then(()=>{if(rec&&rec.state!=='inactive')rec.stop()}).catch(e=>{$('status').textContent=e.message;if(rec&&rec.state!=='inactive')rec.stop()})}catch(e){$('status').textContent='Recording could not start: '+e.message+' (check master audio selection or microphone permission).'}}
 $('render').onclick=startRecording;
 $('stop').onclick=()=>{speaking=false;speechSynthesis.cancel();cancelAnimationFrame(raf);if(rec&&rec.state!=='inactive')rec.stop()};
 function save(){cancelAnimationFrame(raf);speechSynthesis.cancel();if(stream)stream.getTracks().forEach(t=>t.stop());if(mic)mic.getTracks().forEach(t=>t.stop());let blob=new Blob(chunks,{type:rec.mimeType||'video/mp4'});if(!blob.type.includes('mp4')){$('render').disabled=false;$('stop').disabled=true;$('status').textContent='Export stopped: the browser did not produce MP4. No incorrectly labelled file was downloaded.';return}let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='SaahiRides_TalkBack_'+Date.now()+'.mp4';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);$('render').disabled=false;$('stop').disabled=true;$('status').textContent='MP4 video export downloaded successfully.'}
