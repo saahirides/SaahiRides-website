@@ -5,7 +5,7 @@ const exec = promisify(execFile);
 const patch = await readFile("watchtower.patch", "utf8");
 if (!patch.startsWith("diff --git ")) throw new Error("Patch must start with a git diff header.");
 if (Buffer.byteLength(patch) > 180000) throw new Error("Patch exceeds 180 KB.");
-if (/GIT binary patch|^new file mode 120000|^deleted file mode|^old mode |^new mode |^rename from |^rename to /m.test(patch)) throw new Error("Binary, symlink, deletion, rename or file-mode changes are prohibited.");
+if (/GIT binary patch|^new file mode (?:120000|100755)|^deleted file mode|^old mode |^new mode |^rename from |^rename to /m.test(patch)) throw new Error("Binary, symlink, deletion, rename or file-mode changes are prohibited.");
 const headers = [...patch.matchAll(/^diff --git a\/(.+?) b\/(.+)$/gm)];
 if (!headers.length) throw new Error("No valid diff headers found.");
 const deny = /^(?:\.github\/|\.devcontainer\/|supabase\/|command_center\/|node_modules\/|vendor\/|dist\/|build\/|scripts\/backup-agent\/|agents\/backup-supervisor\/)|(?:^|\/)(?:\.env(?:\..*)?|CNAME|maps-config\.js|package(?:-lock)?\.json|yarn\.lock|pnpm-lock\.yaml|bun\.lockb?)$/i;
