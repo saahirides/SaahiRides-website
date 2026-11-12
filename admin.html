@@ -640,14 +640,15 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   root.hidden=false;
   if(isNew){const ack=$('ccTalkbackAcknowledge');if(ack)ack.focus();}
  }
- $('ccTalkbackAcknowledge').onclick=async()=>{
-  const root=$('ccTalkbackAlert'),btn=$('ccTalkbackAcknowledge'),id=root?.dataset.notificationId;
+ document.addEventListener('click',async event=>{
+  if(!event.target||event.target.id!=='ccTalkbackAcknowledge')return;
+  const root=$('ccTalkbackAlert'),btn=event.target,id=root?.dataset.notificationId;
   if(!id)return;
   btn.disabled=true;
   try{await callCommandCentre('notification_mark',{id,status:'acknowledged'});await loadNotifications();}
   catch(e){ccStatus('ccNotificationStatus','TalkBack acknowledgement failed: '+e.message,true);}
   finally{btn.disabled=false;}
- };
+ });
  function showPhoneNotification(n){
   if(!('Notification' in window)||Notification.permission!=='granted'||document.visibilityState==='visible')return;
   try{new Notification(String(n.title||'SaahiRides alert'),{body:String(n.body||'A new Command Centre alert needs attention.'),tag:'saahirides-'+String(n.id||Date.now())});}catch(e){console.warn('Browser notification could not be shown',e);}
