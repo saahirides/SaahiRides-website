@@ -429,7 +429,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     }
   });
   slider.addEventListener('input',updateEstimate);
-  [billNameInput,billPhoneInput,billAlternateInput].forEach(function(input){input.addEventListener('input',updateBill)});
+  [billNameInput,billPhoneInput].forEach(function(input){input.addEventListener('input',updateEstimate)});billAlternateInput.addEventListener('input',updateBill);
   document.querySelectorAll('input[name="saahi-bill-recipient"]').forEach(function(radio){radio.addEventListener('change',function(){billAlternateWrap.hidden=radio.value!=='alternate';updateBill()})});
   billSend.addEventListener('click',function(){
     var route=window.saahiRouteContext,customer=billCustomer(),choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
