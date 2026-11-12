@@ -1615,5 +1615,44 @@ body.sos-dialog-open{overflow:hidden}
 </script>
 
 
+
+<style id="saahi-compact-portal-dock">
+/* Persistent, compact portal shortcuts: four controls, one edge, no large overlay. */
+.hero-button-row .portal-btn{
+  position:fixed!important;z-index:10020!important;left:auto!important;
+  right:8px!important;width:min(94px,25vw)!important;max-width:94px!important;
+  min-width:0!important;min-height:30px!important;height:auto!important;
+  padding:5px 6px!important;border-radius:8px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
+  text-align:center!important;font-size:10px!important;line-height:1.12!important;
+  font-weight:750!important;letter-spacing:0!important;
+  background:rgba(20,43,76,.78)!important;color:#eef5ff!important;
+  border:1px solid rgba(194,211,235,.42)!important;
+  box-shadow:0 2px 8px rgba(3,12,28,.16)!important;
+  opacity:.88;backdrop-filter:blur(7px);
+}
+.hero-button-row .portal-btn:hover,.hero-button-row .portal-btn:focus-visible{opacity:1;background:#244b7c!important;transform:translateY(-1px)}
+.hero-button-row .portal-btn.customer-portal{bottom:132px!important}
+.hero-button-row .portal-btn.driver-portal{bottom:96px!important}
+.hero-button-row .portal-btn.hr-portal{bottom:60px!important}
+.hero-button-row .portal-btn.admin-portal{bottom:24px!important}
+@media(min-width:651px){
+  .hero-button-row .portal-btn{right:10px!important;width:106px!important;max-width:106px!important;font-size:11px!important}
+  .hero-button-row .portal-btn.customer-portal{bottom:150px!important}
+  .hero-button-row .portal-btn.driver-portal{bottom:108px!important}
+  .hero-button-row .portal-btn.hr-portal{bottom:66px!important}
+  .hero-button-row .portal-btn.admin-portal{bottom:24px!important}
+}
+@media(max-width:650px){
+  body{padding-bottom:calc(174px + env(safe-area-inset-bottom,0px))!important}
+  .hero-button-row .portal-btn{right:6px!important;width:78px!important;max-width:78px!important;min-height:28px!important;padding:4px 5px!important;font-size:9px!important}
+  .hero-button-row .portal-btn.customer-portal{bottom:130px!important}
+  .hero-button-row .portal-btn.driver-portal{bottom:96px!important}
+  .hero-button-row .portal-btn.hr-portal{bottom:62px!important}
+  .hero-button-row .portal-btn.admin-portal{bottom:28px!important}
+}
+@media(prefers-reduced-motion:reduce){.hero-button-row .portal-btn{transition:none!important}}
+</style>
 </body>
 </html>
