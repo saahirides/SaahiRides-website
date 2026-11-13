@@ -42,13 +42,19 @@ async function loadMasterVoices(){
   sb=window.supabase.createClient('https://uzwubbzlytqqewqibobr.supabase.co','sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq',{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   const {data:{session},error:authError}=await sb.auth.getSession();if(authError)throw authError;
   if(!session){voiceStatus.textContent='Open Admin Portal and sign in, then return here to load your saved master voice.';return;}
-  const {data,error}=await sb.storage.from('social-audio').list('master',{limit:100,sortBy:{column:'created_at',order:'desc'}});
-  if(error)throw error;
-  voiceFiles=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+  const [voiceResult,musicResult]=await Promise.all([
+   sb.storage.from('social-audio').list('master',{limit:100,sortBy:{column:'created_at',order:'desc'}}),
+   sb.storage.from('social-audio').list('music',{limit:100,sortBy:{column:'created_at',order:'desc'}})
+  ]);
+  if(voiceResult.error)throw voiceResult.error;
+  if(musicResult.error)throw musicResult.error;
+  voiceFiles=(voiceResult.data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+  const musicFiles=(musicResult.data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
   voiceSelect.innerHTML='<option value="">Use device speech voice (fallback)</option>';
   musicSelect.innerHTML='<option value="">No background music</option>';
-  voiceFiles.forEach((file,i)=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;voiceSelect.appendChild(o);const m=document.createElement('option');m.value=file.name;m.textContent=file.name;musicSelect.appendChild(m)});
-  voiceStatus.textContent=voiceFiles.length?voiceFiles.length+' saved audio file(s) found. Select your master recording.':'No saved master audio found in Social Music yet.';
+  voiceFiles.forEach(file=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;voiceSelect.appendChild(o);});
+  musicFiles.forEach(file=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;musicSelect.appendChild(o);});
+  voiceStatus.textContent=voiceFiles.length+' master narration file(s) and '+musicFiles.length+' background music file(s) available.';
  }catch(e){voiceStatus.textContent='Could not load saved master audio: '+(e.message||String(e));}
 }
 voiceSelect.onchange=async()=>{
@@ -57,7 +63,7 @@ voiceSelect.onchange=async()=>{
  if(error){voiceStatus.textContent='Could not open selected audio: '+error.message;return;}
  voiceAudio.crossOrigin='anonymous';voiceAudio.src=data.signedUrl;voiceAudio.classList.remove('hidden');voiceStatus.textContent='Master voice selected: '+name+'. The original audio remains unchanged.';
 };
-musicSelect.onchange=async()=>{const name=musicSelect.value;if(!name){musicAudio.pause();musicAudio.removeAttribute('src');musicPreview.classList.add('hidden');return;}const {data,error}=await sb.storage.from('social-audio').createSignedUrl('master/'+name,3600);if(error){voiceStatus.textContent='Could not load background music: '+error.message;return;}musicAudio.crossOrigin='anonymous';musicAudio.src=data.signedUrl;musicAudio.loop=true;musicAudio.volume=1;musicPreview.src=data.signedUrl;musicPreview.volume=Number(musicVolume.value);musicPreview.classList.remove('hidden');voiceStatus.textContent='Background music ready: '+name+'. It will be mixed separately under the narration.';};
+musicSelect.onchange=async()=>{const name=musicSelect.value;if(!name){musicAudio.pause();musicAudio.removeAttribute('src');musicPreview.classList.add('hidden');return;}const {data,error}=await sb.storage.from('social-audio').createSignedUrl('music/'+name,3600);if(error){voiceStatus.textContent='Could not load background music: '+error.message;return;}musicAudio.crossOrigin='anonymous';musicAudio.src=data.signedUrl;musicAudio.loop=true;musicAudio.volume=1;musicPreview.src=data.signedUrl;musicPreview.volume=Number(musicVolume.value);musicPreview.classList.remove('hidden');voiceStatus.textContent='Background music ready: '+name+'. It will be mixed separately under the narration.';};
 musicVolume.oninput=()=>{musicAudio.volume=1;musicPreview.volume=Number(musicVolume.value);if(musicGain)musicGain.gain.value=Number(musicVolume.value);};
 loadMasterVoices();$('refreshAudio').onclick=loadMasterVoices;window.addEventListener('focus',loadMasterVoices);document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadMasterVoices()});
 
