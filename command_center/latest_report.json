@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-12T08:37:42.110Z",
+  "runAt": "2026-11-13T08:25:08.826Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 18,
   "pagesInspected": 18,
@@ -19,27 +19,15 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 67
+        "latencyMs": 56
       },
       {
         "status": 200,
-        "latencyMs": 71
+        "latencyMs": 56
       },
       {
         "status": 200,
-        "latencyMs": 8
-      },
-      {
-        "status": 200,
-        "latencyMs": 8
-      },
-      {
-        "status": 200,
-        "latencyMs": 92
-      },
-      {
-        "status": 200,
-        "latencyMs": 94
+        "latencyMs": 68
       },
       {
         "status": 200,
@@ -48,6 +36,18 @@
       {
         "status": 200,
         "latencyMs": 9
+      },
+      {
+        "status": 200,
+        "latencyMs": 73
+      },
+      {
+        "status": 200,
+        "latencyMs": 9
+      },
+      {
+        "status": 200,
+        "latencyMs": 8
       }
     ]
   },
@@ -88,18 +88,18 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/offers.html",
-      "status": 200,
-      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
       "url": "https://saahirides.co.in/travel-tours.html",
       "status": 200,
       "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
       "forms": 1,
       "buttons": 30
+    },
+    {
+      "url": "https://saahirides.co.in/offers.html",
+      "status": 200,
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/fare-estimator.html",
@@ -123,16 +123,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
       "status": 200,
-      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
       "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
       "forms": 0,
       "buttons": 2
     },
@@ -151,18 +151,18 @@
       "buttons": 1
     },
     {
-      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
-      "status": 200,
-      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
-      "forms": 0,
-      "buttons": 0
-    },
-    {
       "url": "https://saahirides.co.in/driver.html",
       "status": 200,
       "title": "Driver Network - SaahiRides",
       "forms": 1,
       "buttons": 4
+    },
+    {
+      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
+      "status": 200,
+      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
+      "forms": 0,
+      "buttons": 0
     },
     {
       "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
