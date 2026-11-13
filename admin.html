@@ -449,7 +449,12 @@ footer {
    <button type="button" data-library-filter="rejected">REJECTED / Archive</button>
    <button type="button" data-library-filter="all">All images</button>
   </div>
-  <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
+   <button type="button" class="secondary" id="ssSelectAllVisible">Select all visible</button>
+   <button type="button" class="secondary" id="ssClearImageSelection">Clear selection</button>
+   <button type="button" id="ssDeleteSelectedImages" style="background:#991b1b;color:#fff" disabled>Delete selected permanently (0)</button>
+   <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
+  </div>
   <div id="ssLibraryGrid" class="grid" style="margin-top:12px"><p class="small">Sign in as an active Admin to load the library.</p></div>
  </div>
 </div>
@@ -928,6 +933,8 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
 
  const libraryFiles=$('ssLibraryFiles'), libraryGrid=$('ssLibraryGrid'), libraryStatus=$('ssLibraryStatus');
  let libraryFilter='raw';
+ const selectedSocialImagePaths=new Set();
+ function updateSocialImageSelection(){const count=selectedSocialImagePaths.size;const btn=$('ssDeleteSelectedImages');if(btn){btn.disabled=!count;btn.textContent='Delete selected permanently ('+count+')';}}
  async function callLibraryManager(action, extra={}){
   const {data,error}=await client.functions.invoke('manage-social-image-library',{body:{action,...extra}});
   if(error)throw new Error(data?.error||error.message);
@@ -992,6 +999,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  }
  async function loadSocialImageLibrary(filter=libraryFilter){
   libraryFilter=filter;
+  selectedSocialImagePaths.clear();updateSocialImageSelection();
   if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
   libraryGrid.innerHTML='<p class="small">Preparing the central image library…</p>';
   try{
@@ -1006,6 +1014,9 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    images.forEach(file=>{
     const path=file.storage_path, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
     const card=document.createElement('div');card.className='tile';
+    const pickLabel=document.createElement('label');pickLabel.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:8px;font-weight:700';
+    const pick=document.createElement('input');pick.type='checkbox';pick.checked=selectedSocialImagePaths.has(path);pick.addEventListener('change',()=>{if(pick.checked)selectedSocialImagePaths.add(path);else selectedSocialImagePaths.delete(path);updateSocialImageSelection();});
+    pickLabel.append(pick,document.createTextNode('Select for permanent deletion'));card.appendChild(pickLabel);
     const img=document.createElement('img');img.src=url;img.alt=file.original_filename||path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
     const name=document.createElement('p');name.className='small';name.textContent=(file.display_filename||path.split('/').pop()||file.original_filename||path)+' · '+file.source;
     const status=document.createElement('p');status.className='small';status.textContent=file.status.toUpperCase()+' · '+path;
@@ -1037,9 +1048,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
      card.appendChild(actions); 
      const crop=document.createElement('button');crop.type='button';crop.className='secondary';crop.textContent='Edit / Crop';
      crop.onclick=async()=>{crop.disabled=true;try{await openSocialImageCrop(file,path,url);}catch(e){libraryStatus.textContent='Could not open crop editor: '+(e?.message||String(e));}finally{crop.disabled=false;}};
-     const reject=document.createElement('button');reject.type='button';reject.style.cssText='background:#7f1d1d;color:#fff';reject.textContent='Reject / Archive';
-     reject.onclick=async()=>{if(!window.confirm('Reject this image? It will be archived and excluded from approval and publishing. The original file will not be deleted.'))return;const note=window.prompt('Optional rejection reason:','');reject.disabled=true;try{await callLibraryManager('reject',{storage_path:path,rejection_note:note||''});libraryStatus.textContent='Image rejected and archived. Original file retained.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Reject failed: '+(e?.message||String(e));reject.disabled=false;}};
-     card.append(crop,reject);
+     card.appendChild(crop);
      const approve=document.createElement('button');approve.type='button';approve.textContent='Approve → APPROVED';
      approve.onclick=async()=>{approve.disabled=true;try{await callLibraryManager('approve',{storage_path:path});libraryStatus.textContent='Approved and moved into the APPROVED folder.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Approval failed: '+(e?.message||String(e));approve.disabled=false;}};
      card.appendChild(approve);
@@ -1055,6 +1064,23 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    });
   }catch(e){libraryGrid.textContent='Could not load image library: '+(e?.message||String(e));}
  }
+ if($('ssSelectAllVisible'))$('ssSelectAllVisible').onclick=()=>{libraryGrid.querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=true;const card=input.closest('.tile');const status=card?.querySelector('p.small:nth-of-type(2)')?.textContent||'';const path=status.split(' · ').slice(1).join(' · ');if(path)selectedSocialImagePaths.add(path);});updateSocialImageSelection();};
+ if($('ssClearImageSelection'))$('ssClearImageSelection').onclick=()=>{selectedSocialImagePaths.clear();libraryGrid.querySelectorAll('input[type="checkbox"]').forEach(input=>input.checked=false);updateSocialImageSelection();};
+ if($('ssDeleteSelectedImages'))$('ssDeleteSelectedImages').onclick=async()=>{
+  const paths=Array.from(selectedSocialImagePaths);
+  if(!paths.length)return;
+  if(!window.confirm('Permanently delete '+paths.length+' selected image(s) from Supabase Storage and the image library? This cannot be undone. GitHub source files are not touched.'))return;
+  const btn=$('ssDeleteSelectedImages');btn.disabled=true;btn.textContent='Deleting…';
+  try{
+   const {error:storageError}=await client.storage.from('social-images').remove(paths);
+   if(storageError)throw new Error('Storage deletion failed: '+storageError.message);
+   const {error:rowError}=await client.from('social_image_library').delete().in('storage_path',paths);
+   if(rowError)throw new Error('Image files were deleted, but database cleanup needs retry: '+rowError.message);
+   selectedSocialImagePaths.clear();libraryStatus.textContent=paths.length+' image(s) permanently deleted from Supabase Storage and the library. No archive was created; GitHub originals remain untouched.';
+   await loadSocialImageLibrary(libraryFilter);
+  }catch(e){libraryStatus.textContent='Bulk deletion incomplete: '+(e?.message||String(e));updateSocialImageSelection();}
+  finally{updateSocialImageSelection();}
+ };
  if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=()=>loadSocialImageLibrary(libraryFilter);
  document.querySelectorAll('[data-library-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x===b));loadSocialImageLibrary(b.dataset.libraryFilter);});
  if($('ssImportGithub'))$('ssImportGithub').onclick=async()=>{
