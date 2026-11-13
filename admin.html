@@ -678,7 +678,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
-  show('pitchDeckLibrary',admin);show('superAdminPanel',admin);$('superAdminSummary').textContent=owner?'Super Admin · Company Control Panel':'Admin Office · Workspace';if(admin){$('pitchDeckCategory').querySelector('option[value="Investor"]').disabled=!owner;await loadPitchDecks();}
+  show('pitchDeckLibrary',admin);show('superAdminPanel',admin||hr||governanceRoles.length>0);$('superAdminSummary').textContent=owner?'Super Admin · Company Control Panel':admin?'Admin Office · Workspace':hr?'HR Office · Workspace':'Governance Office';$('superAdminPanel').querySelectorAll('.role-dropdown').forEach(group=>{const label=group.querySelector('summary')?.textContent?.trim();group.classList.toggle('hidden',!admin&&label!=='HR'&&!(governanceRoles.length&&label==='Admin Office'));});if(admin){$('pitchDeckCategory').querySelector('option[value="Investor"]').disabled=!owner;await loadPitchDecks();}
   show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('socialCampaign',false);show('talkBack',false);show('commandCenter',false);
   $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
   $('welcome').textContent='Welcome';
