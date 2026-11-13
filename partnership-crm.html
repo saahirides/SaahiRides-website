@@ -104,7 +104,7 @@ async function loadActivities(){
 }
 $("saveActivity").onclick=async()=>{
  if(!selected)return;const kind=$("activityType").value,dir=$("direction").value;
- if(dir==="outbound"&&["call","email","whatsapp","message"].includes(kind)&&selected.contact_permission!=="permitted"){msg("activityStatus","Outbound contact is blocked until contact permission / official channel is confirmed.",true);return;}
+ if(dir==="outbound"&&["call","email","meeting","whatsapp","message"].includes(kind)&&selected.contact_permission!=="permitted"){msg("activityStatus","Outbound contact is blocked until contact permission / official channel is confirmed.",true);return;}
  const summary=$("activitySummary").value.trim();if(summary.length<2){msg("activityStatus","Add a short factual activity summary.",true);return;}
  const next=iso("activityFollowup");
  const payload={prospect_id:selected.id,activity_type:kind,direction:dir,occurred_at:new Date().toISOString(),outcome:$("outcome").value.trim()||null,summary,next_action:$("nextAction").value.trim()||null,next_follow_up_at:next,created_by:user.id};
