@@ -529,7 +529,7 @@ footer {
 <div id="ssMediaPreview" class="grid" style="margin-top:14px"></div>
 </div>
 <div id="ssMusicArea" class="hidden">
- <div class="tile"><h3>Music & audio library</h3><p class="small">Upload an audio file to private Supabase storage. Original files are retained; nothing is overwritten. The saved master track can be selected in Talk Back Studio.</p><label for="ssMusic">Choose music / master voice audio</label><input id="ssMusic" type="file" accept="audio/*"><button type="button" id="ssMusicUpload" style="margin-top:10px">Upload and save audio</button><div id="ssMusicStatus" class="status" role="status" aria-live="polite">No new audio selected.</div><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio><h4 style="margin-top:18px">Saved audio</h4><button type="button" class="secondary" id="ssMusicRefresh">Refresh saved audio</button><div id="ssMusicLibrary" class="grid" style="margin-top:10px"><p class="small">Sign in as an active Admin to load saved audio.</p></div></div>
+ <div class="tile"><h3>Music & audio library</h3><p class="small">Upload an audio file to private Supabase storage. Original files are retained; nothing is overwritten. The saved master track can be selected in Talk Back Studio.</p><label for="ssMusicCategory">Audio purpose</label><select id="ssMusicCategory"><option value="master">Master voice narration</option><option value="music">Background music</option></select><label for="ssMusic">Choose audio file</label><input id="ssMusic" type="file" accept="audio/*"><button type="button" id="ssMusicUpload" style="margin-top:10px">Upload and save audio</button><div id="ssMusicStatus" class="status" role="status" aria-live="polite">No new audio selected.</div><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio><h4 style="margin-top:18px">Saved audio</h4><button type="button" class="secondary" id="ssMusicRefresh">Refresh saved audio</button><div id="ssMusicLibrary" class="grid" style="margin-top:10px"><p class="small">Sign in as an active Admin to load saved audio.</p></div></div>
 </div>
 <div id="ssPublishingArea" class="hidden">
 <div class="tile" id="ssCampaignKit" style="margin-top:14px">
@@ -1384,18 +1384,24 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
  async function loadSocialAudio(){
   if(!client||!session?.user||!admin){musicLibrary.innerHTML='<p class="small">Sign in with an active Admin account to view saved audio.</p>';return;}
   musicLibrary.innerHTML='<p class="small">Loading saved audio…</p>';
-  const {data,error}=await client.storage.from('social-audio').list('master',{limit:100,sortBy:{column:'created_at',order:'desc'}});
-  if(error){musicLibrary.textContent='Could not load saved audio: '+error.message;return;}
   musicLibrary.innerHTML='';
-  const files=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
-  if(!files.length){musicLibrary.innerHTML='<p class="small">No audio files saved yet.</p>';return;}
-  for(const file of files){
-   const path='master/'+file.name,card=document.createElement('div');card.className='tile';
-   const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+Math.round((file.metadata?.size||0)/1024)+' KB';
-   const play=document.createElement('button');play.type='button';play.className='secondary';play.textContent='Preview / select for Talk Back';
-   play.addEventListener('click',async()=>{const {data,error}=await client.storage.from('social-audio').createSignedUrl(path,3600);if(error){musicStatus.textContent='Could not open audio: '+error.message;return;}audioPreview.src=data.signedUrl;audioPreview.classList.remove('hidden');musicStatus.textContent='Saved audio selected: '+file.name+'. Private signed preview link is valid for one hour.';});
-   card.append(label,play);musicLibrary.appendChild(card);
+  let total=0;
+  for(const folder of ['master','music']){
+   const {data,error}=await client.storage.from('social-audio').list(folder,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+   if(error){musicLibrary.textContent='Could not load '+folder+' audio: '+error.message;return;}
+   const files=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+   const heading=document.createElement('h4');heading.textContent=folder==='master'?'Master voice narration':'Background music';musicLibrary.appendChild(heading);
+   if(!files.length){const empty=document.createElement('p');empty.className='small';empty.textContent='No files saved in this category.';musicLibrary.appendChild(empty);continue;}
+   total+=files.length;
+   for(const file of files){
+    const path=folder+'/'+file.name,card=document.createElement('div');card.className='tile';
+    const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+Math.round((file.metadata?.size||0)/1024)+' KB';
+    const play=document.createElement('button');play.type='button';play.className='secondary';play.textContent='Preview audio';
+    play.addEventListener('click',async()=>{const {data,error}=await client.storage.from('social-audio').createSignedUrl(path,3600);if(error){musicStatus.textContent='Could not open audio: '+error.message;return;}audioPreview.src=data.signedUrl;audioPreview.classList.remove('hidden');musicStatus.textContent='Previewing '+folder+': '+file.name+'. Original preserved.';});
+    card.append(label,play);musicLibrary.appendChild(card);
+   }
   }
+  if(!total)musicLibrary.innerHTML='<p class="small">No audio files saved yet.</p>';
  }
  if(musicInput)musicInput.addEventListener('change',()=>{
   if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
@@ -1412,10 +1418,11 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   musicUpload.disabled=true;musicUpload.textContent='Uploading…';
   try{
    const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
-   const path='master/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+   const folder=$('ssMusicCategory')?.value==='music'?'music':'master';
+   const path=folder+'/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
    const {error}=await client.storage.from('social-audio').upload(path,file,{contentType:file.type,upsert:false});
    if(error)throw error;
-   musicStatus.textContent='Saved securely in Supabase: '+file.name+'. Original preserved. Refreshing audio library…';
+   musicStatus.textContent='Saved securely as '+(folder==='music'?'background music':'master narration')+': '+file.name+'. Original preserved. Refreshing audio library…';
    musicInput.value='';await loadSocialAudio();
   }catch(error){musicStatus.textContent='Audio upload failed: '+(error?.message||String(error));}
   finally{musicUpload.disabled=false;musicUpload.textContent='Upload and save audio';}
