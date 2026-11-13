@@ -454,16 +454,40 @@ footer {
 </div>
 <div id="ssVideoUploadArea" class="hidden">
  <div class="tile">
-  <h3>Tirupati & project video uploads</h3>
-  <p class="small">A dedicated video-only staging area for finished project videos. Select multiple videos, preview them, then send one video at a time to the existing publishing composer. Files stay on this device until you publish; nothing is uploaded or published by selecting them here.</p>
-  <label for="ssVideoFiles">Choose project videos (MP4, MOV or WebM · up to 100 MB each)</label>
-  <input id="ssVideoFiles" type="file" accept="video/mp4,video/quicktime,video/webm,video/*" multiple>
-  <div id="ssVideoUploadStatus" class="status" role="status" aria-live="polite">No project videos selected yet.</div>
+  <h3>SaahiRides Video Library · Supabase Storage</h3>
+  <p class="small">Upload finished videos directly into your private Supabase library. Uploads are resumable for unstable mobile connections. Only active SaahiRides Owner/Admin accounts can upload or view saved videos. Uploading does not publish anything.</p>
+  <div class="grid">
+   <div>
+    <label for="ssVideoCategory">Save video in</label>
+    <select id="ssVideoCategory">
+     <option value="reels">Social Reels</option><option value="youtube-shorts">YouTube Shorts</option><option value="youtube-long">YouTube long videos</option><option value="tours">Tour & destination videos</option><option value="advertisements">Advertisements</option><option value="raw-footage">Raw footage</option>
+    </select>
+   </div>
+   <div>
+    <label for="ssVideoFiles">Choose videos (MP4, MOV, WebM, AVI, MKV · up to 100 MB each)</label>
+    <input id="ssVideoFiles" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-matroska,video/*" multiple>
+   </div>
+  </div>
+  <div id="ssVideoUploadStatus" class="status" role="status" aria-live="polite">Choose one or more videos to begin.</div>
+  <progress id="ssVideoProgress" value="0" max="100" style="width:100%;height:14px;display:none"></progress>
   <div id="ssVideoPreviewGrid" class="grid" style="margin-top:12px"></div>
-  <label for="ssVideoChoose">Choose one video to prepare for publishing</label>
-  <select id="ssVideoChoose" disabled><option value="">Select a video after choosing files</option></select>
-  <button type="button" id="ssVideoUseBtn" disabled>Use selected video in publishing composer</button>
-  <p class="small">The publishing composer accepts one video per post. Repeat for each of your four videos, review the caption and platforms, then publish. Facebook and Instagram results are checked independently.</p>
+  <button type="button" id="ssVideoUploadBtn" disabled>Upload selected videos to Supabase</button>
+  <p class="small">Files are stored privately in the <code>social-videos</code> bucket. Original files are never overwritten. Large uploads can resume after a network interruption from the same browser.</p>
+ </div>
+ <div class="tile" style="margin-top:14px">
+  <h3>Saved video library</h3>
+  <div class="grid">
+   <div><label for="ssVideoLibraryCategory">Browse folder</label><select id="ssVideoLibraryCategory"><option value="reels">Social Reels</option><option value="youtube-shorts">YouTube Shorts</option><option value="youtube-long">YouTube long videos</option><option value="tours">Tour & destination videos</option><option value="advertisements">Advertisements</option><option value="raw-footage">Raw footage</option></select></div>
+   <div style="align-self:end"><button type="button" class="secondary" id="ssVideoLibraryRefresh">Refresh saved videos</button></div>
+  </div>
+  <div id="ssVideoLibraryStatus" class="status" role="status" aria-live="polite">Sign in as an active Admin to load saved videos.</div>
+  <div id="ssVideoLibraryGrid" class="grid" style="margin-top:12px"></div>
+ </div>
+ <div class="tile" style="margin-top:14px">
+  <h3>Send a saved video to publishing</h3>
+  <p class="small">Choose a saved video to create a temporary private preview and attach it to the existing Social Studio publishing composer. Review the post and platform settings before publishing.</p>
+  <label for="ssVideoSavedChoose">Saved video</label><select id="ssVideoSavedChoose" disabled><option value="">Load a folder first</option></select>
+  <button type="button" id="ssVideoSavedUseBtn" disabled>Use saved video in publishing composer</button>
  </div>
 </div>
 <div id="ssContentArea">
@@ -555,6 +579,7 @@ footer {
 </section>
 <footer>SaahiRides · SafeRide @ SaahiPrice · Staged admin workspace; production access and approval controls are not yet enabled.</footer>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
@@ -1106,6 +1131,96 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   renderSocialMedia();
   videoStatus.textContent=file.name+' is ready in the publishing composer. Open Captions & publishing to review and publish it.';
   document.querySelector('[data-social-target="ssPublishingArea"]')?.click();
+ });
+
+ // Persistent private Supabase video library (TUS resumable uploads).
+ const videoBucket='social-videos',videoProjectRef='uzwubbzlytqqewqibobr';
+ const videoFolders=['reels','youtube-shorts','youtube-long','tours','advertisements','raw-footage'];
+ const videoUploadBtn=$('ssVideoUploadBtn'),videoProgress=$('ssVideoProgress');
+ const videoLibraryStatus=$('ssVideoLibraryStatus'),videoLibraryGrid=$('ssVideoLibraryGrid');
+ const videoSavedChoose=$('ssVideoSavedChoose'),videoSavedUseBtn=$('ssVideoSavedUseBtn');
+ let savedVideoPaths=[];
+ function videoSafeName(name){return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(-110)||'video';}
+ function videoSetStatus(message){if(videoStatus)videoStatus.textContent=message;}
+ function videoTUSUpload(file,path,onProgress){
+  return new Promise((resolve,reject)=>{
+   if(!window.tus?.Upload){reject(new Error('Resumable upload library did not load. Reload the page and try again.'));return;}
+   const upload=new window.tus.Upload(file,{
+    endpoint:'https://'+videoProjectRef+'.storage.supabase.co/storage/v1/upload/resumable',
+    retryDelays:[0,3000,5000,10000,20000],
+    headers:{authorization:'Bearer '+session.access_token,apikey:client.supabaseKey},
+    uploadDataDuringCreation:true,removeFingerprintOnSuccess:true,chunkSize:6*1024*1024,
+    metadata:{bucketName:videoBucket,objectName:path,contentType:file.type||'video/mp4',cacheControl:'3600'},
+    onError:error=>reject(error),
+    onProgress:(uploaded,total)=>onProgress(total?uploaded/total*100:0),
+    onSuccess:()=>resolve()
+   });
+   upload.findPreviousUploads().then(previous=>{if(previous.length)upload.resumeFromPreviousUpload(previous[0]);upload.start();}).catch(reject);
+  });
+ }
+ async function loadSavedVideos(){
+  if(!client||!session?.user||!admin){videoLibraryStatus.textContent='Sign in with an active Admin account to view saved videos.';return;}
+  const folder=$('ssVideoLibraryCategory').value;
+  videoLibraryStatus.textContent='Loading '+folder+'…';videoLibraryGrid.innerHTML='';savedVideoPaths=[];
+  videoSavedChoose.innerHTML='<option value="">Choose a saved video…</option>';videoSavedChoose.disabled=true;videoSavedUseBtn.disabled=true;
+  const {data,error}=await client.storage.from(videoBucket).list(folder,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+  if(error){videoLibraryStatus.textContent='Could not load videos: '+error.message;return;}
+  const files=(data||[]).filter(item=>item.name&&!item.name.startsWith('.'));
+  if(!files.length){videoLibraryStatus.textContent='No videos saved in '+folder+' yet.';return;}
+  for(const item of files){
+   const path=folder+'/'+item.name; savedVideoPaths.push(path);
+   videoSavedChoose.add(new Option(item.name,path));
+   const card=document.createElement('div');card.className='tile';
+   const name=document.createElement('p');name.className='small';name.textContent=item.name+' · '+((item.metadata?.size||0)/1024/1024).toFixed(1)+' MB';
+   const preview=document.createElement('button');preview.type='button';preview.className='secondary';preview.textContent='Preview video';
+   const player=document.createElement('video');player.controls=true;player.playsInline=true;player.preload='none';player.style.cssText='width:100%;max-height:260px;margin-top:8px;border-radius:8px;background:#06122e';player.classList.add('hidden');
+   preview.addEventListener('click',async()=>{const {data:signed,error:e}=await client.storage.from(videoBucket).createSignedUrl(path,3600);if(e){videoLibraryStatus.textContent='Preview failed: '+e.message;return;}player.src=signed.signedUrl;player.classList.remove('hidden');player.load();});
+   card.append(name,preview,player);videoLibraryGrid.appendChild(card);
+  }
+  videoSavedChoose.disabled=false;videoLibraryStatus.textContent=files.length+' saved video(s) in '+folder+'. Files remain private; previews use temporary signed links.';
+ }
+ if($('ssVideoFiles'))$('ssVideoFiles').addEventListener('change',()=>{
+  const files=Array.from($('ssVideoFiles').files||[]);videoPreviewGrid.innerHTML='';
+  const invalid=files.find(file=>!file.type.startsWith('video/')||file.size>100*1024*1024);
+  if(invalid){videoSetStatus(invalid.size>100*1024*1024?invalid.name+' exceeds the 100 MB per-file limit.':'Choose video files only.');videoUploadBtn.disabled=true;return;}
+  files.forEach(file=>{const card=document.createElement('div');card.className='tile';const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+(file.size/1024/1024).toFixed(1)+' MB';const player=document.createElement('video');player.src=URL.createObjectURL(file);player.controls=true;player.playsInline=true;player.preload='metadata';player.style.cssText='width:100%;max-height:220px;border-radius:8px';card.append(label,player);videoPreviewGrid.appendChild(card);});
+  videoUploadBtn.disabled=!files.length;videoSetStatus(files.length+' video(s) ready. Upload will save them privately to Supabase.');
+ });
+ if(videoUploadBtn)videoUploadBtn.addEventListener('click',async()=>{
+  const files=Array.from($('ssVideoFiles').files||[]);
+  if(!client||!session?.user||!admin){videoSetStatus('Sign in with an active Admin account before uploading.');return;}
+  if(!files.length)return videoSetStatus('Choose at least one video.');
+  videoUploadBtn.disabled=true;videoProgress.style.display='block';videoProgress.value=0;
+  let completed=0;
+  try{
+   for(const file of files){
+    const folder=$('ssVideoCategory').value;
+    if(!videoFolders.includes(folder))throw new Error('Invalid video folder.');
+    const path=folder+'/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+videoSafeName(file.name);
+    videoSetStatus('Uploading '+(completed+1)+'/'+files.length+': '+file.name);
+    await videoTUSUpload(file,path,pct=>{videoProgress.value=((completed+pct/100)/files.length)*100;});
+    completed++;videoProgress.value=completed/files.length*100;
+   }
+   videoSetStatus(completed+' video(s) uploaded successfully to private Supabase Storage.');
+   $('ssVideoFiles').value='';videoPreviewGrid.innerHTML='';await loadSavedVideos();
+  }catch(error){videoSetStatus(completed+' of '+files.length+' uploaded. Upload stopped: '+(error?.message||String(error))+'. Retry the remaining file(s); completed files are preserved.');}
+  finally{videoUploadBtn.disabled=false;}
+ });
+ if($('ssVideoLibraryRefresh'))$('ssVideoLibraryRefresh').addEventListener('click',loadSavedVideos);
+ if($('ssVideoLibraryCategory'))$('ssVideoLibraryCategory').addEventListener('change',loadSavedVideos);
+ if(videoSavedChoose)videoSavedChoose.addEventListener('change',()=>{videoSavedUseBtn.disabled=!videoSavedChoose.value;});
+ if(videoSavedUseBtn)videoSavedUseBtn.addEventListener('click',async()=>{
+  const path=videoSavedChoose.value;if(!path||!mediaInput)return;
+  const {data,error}=await client.storage.from(videoBucket).createSignedUrl(path,3600);
+  if(error){videoLibraryStatus.textContent='Could not prepare saved video: '+error.message;return;}
+  try{
+   const response=await fetch(data.signedUrl);if(!response.ok)throw new Error('Could not retrieve the saved video for the composer.');
+   const blob=await response.blob(),name=path.split('/').pop()||'saahirides-video.mp4';
+   const file=new File([blob],name,{type:blob.type||'video/mp4'});
+   const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;renderSocialMedia();
+   document.querySelector('[data-social-target="ssPublishingArea"]')?.click();
+   videoLibraryStatus.textContent=name+' is attached to the publishing composer. Review before publishing.';
+  }catch(error){videoLibraryStatus.textContent='Could not attach video: '+(error?.message||String(error));}
  });
  
  let ssObjectUrls=[];
