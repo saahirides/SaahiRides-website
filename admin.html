@@ -130,6 +130,33 @@ footer {
   text-align:center;
   color:var(--muted);
   padding:20px}
+
+/* Super Admin accordion workspace */
+.superadmin-shell{background:rgba(8,24,53,.98);border:1px solid #49648d;border-radius:14px;padding:14px;margin:14px 0}
+.superadmin-shell>summary,.role-dropdown>summary,.pitch-category>summary{cursor:pointer;list-style:none;font-weight:900;color:var(--gold);padding:10px 12px;border-radius:9px;background:#10264a}
+.superadmin-shell>summary::-webkit-details-marker,.role-dropdown>summary::-webkit-details-marker,.pitch-category>summary::-webkit-details-marker{display:none}
+.superadmin-shell>summary:after,.role-dropdown>summary:after,.pitch-category>summary:after{content:'＋';float:right;color:var(--gold)}
+.superadmin-shell[open]>summary:after,.role-dropdown[open]>summary:after,.pitch-category[open]>summary:after{content:'−'}
+.superadmin-submenus{display:grid;gap:9px;margin-top:12px}
+.role-dropdown{border:1px solid var(--line);border-radius:10px;padding:8px;background:#091a36}
+.role-dropdown .admin-nav{display:flex;flex-direction:column;gap:7px;margin:10px 0 2px}
+.role-dropdown .admin-nav button,.role-dropdown .admin-nav .btn{width:100%;min-height:42px;text-align:left;display:block;margin:0}
+.role-links{display:grid;gap:7px;padding:10px 4px 2px}
+.role-links a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:8px;color:#f8fafc;text-decoration:none;background:#0a1934}
+.role-links a:hover{border-color:var(--gold)}
+.pitch-deck-panel{border:1px solid #8c7130;background:linear-gradient(145deg,#11284c,#091a36)}
+.pitch-deck-panel>summary{font-weight:900;color:#ffe27a;cursor:pointer;list-style:none;padding:12px}
+.pitch-deck-panel>summary::-webkit-details-marker{display:none}
+.pitch-deck-panel .pitch-inner{padding:0 14px 14px}
+.pitch-deck-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.pitch-category{border:1px solid var(--line);border-radius:9px;padding:7px;background:#071630}
+.pitch-category>summary{font-size:.95rem}
+.pitch-file{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 4px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.pitch-file button{flex-shrink:0}
+.pitch-upload-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end;margin-top:12px}
+.pitch-upload-row button{width:100%;margin:0}
+#pitchDeckStatus{min-height:42px}
+
 @media(max-width:500px) {
   main {
   padding:14px}
@@ -173,6 +200,20 @@ footer {
 </section>
 <section id="forcePassword" class="card hidden"><h2>Mandatory first-login password change</h2><p class="hint">Set a new password before entering the SaahiRides workspace. Use at least 12 characters.</p><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="12"><label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="12"><button id="changePassword">Change password and continue</button></section>
 <section id="workspace" class="hidden">
+<details class="card pitch-deck-panel hidden" id="pitchDeckLibrary" open>
+<summary>▣ Pitch Deck Library · controlled company documents</summary>
+<div class="pitch-inner">
+<p class="hint">Six audience folders are separated below. Investor material is stored in a private Supabase bucket and is restricted to the Owner account. Files are not made public by the website.</p>
+<div class="pitch-upload-row">
+<div><label for="pitchDeckCategory">Deck category</label><select id="pitchDeckCategory"><option value="Investor">Investor · Owner only</option><option value="Corporate">Corporate / B2B</option><option value="Government">Government</option><option value="Institutional">Institutional</option><option value="Partner">Partner</option><option value="General">General</option></select></div>
+<div><label for="pitchDeckFiles">Select PPTX or PDF</label><input id="pitchDeckFiles" type="file" accept=".pptx,.ppt,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint" /></div>
+<div><button type="button" id="pitchDeckUpload">Upload to private library</button></div>
+</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div id="pitchDeckStatus" class="status" role="status" aria-live="polite" style="flex:1">Secure library ready. Upload approved deck files to their audience folder.</div><button type="button" id="pitchDeckRefresh" class="secondary">Refresh deck list</button></div>
+<div id="pitchDeckLists" class="pitch-deck-grid"><p class="small">Sign in with an active Admin account to load the private deck library.</p></div>
+<p class="small">The original investor master is read-only in this portal: replace it only with an explicitly approved new version. The archival master itself is never overwritten by this upload flow.</p>
+</div>
+</details>
 <div class="card">
 <div class="top">
 <div>
@@ -182,43 +223,29 @@ footer {
 </div>
 <button id="logout">Sign out</button>
 </div>
-<div class="grid">
-<div class="tile">
-<h3>Admin</h3>
-<p>Owner-controlled access, governance and sensitive actions.</p>
-<span class="small">Only active database-authorized admins see admin controls.</span>
+<details class="superadmin-shell" id="superAdminPanel" open>
+<summary id="superAdminSummary">Super Admin · Company Control Panel</summary>
+<div class="superadmin-submenus">
+ <details class="role-dropdown" open>
+  <summary>Admin Office</summary>
+  <div class="admin-nav" id="adminNav" aria-label="Admin workspace sections">
+   <button type="button" class="active" data-panel="overview">⌂ Overview</button>
+   <button type="button" data-panel="pricingHistory">₹ Pricing & history</button>
+   <button type="button" data-panel="policyCentre">▤ Policy Centre</button>
+   <button type="button" data-panel="approvalNote">✓ Governance</button>
+   <button type="button" data-panel="socialStudio">◉ Social Studio</button>
+   <button type="button" data-panel="talkBack">🎙 Talk Back · Video Studio</button>
+   <button type="button" data-panel="socialCampaign">✦ Social Campaign</button>
+   <button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
+   <a class="btn secondary" href="./lead-engine.html">▣ Lead & Growth Engine</a>
+   <a class="btn secondary" href="./partnership-crm.html">🤝 Partnership CRM</a>
+  </div>
+ </details>
+ <details class="role-dropdown"><summary>Driver</summary><div class="role-links"><a href="./driver.html">Open Driver Office →</a></div></details>
+ <details class="role-dropdown"><summary>Customer</summary><div class="role-links"><a href="./customer.html">Open Customer Portal →</a></div></details>
+ <details class="role-dropdown"><summary>HR</summary><div class="role-links"><a href="./hr.html">Open HR Office →</a></div></details>
 </div>
-<div class="tile">
-<h3>HR</h3>
-<p>Separate HR publishing workspace for content the owner has supplied or authorized.</p>
-<span class="small">HR publishers can manage HR-category policies only.</span>
-</div>
-<div class="tile">
-<h3>Customer</h3>
-<p>Customer terms, fares, booking, cancellations, privacy and safety.</p>
-</div>
-<div class="tile">
-<h3>Driver</h3>
-<p>Driver KYC, vehicle, safety, trip conduct and grievance policies.</p>
-</div>
-<div class="tile">
-<h3>Admin Governance</h3>
-<p>Approval records, access controls, audits and operating rules.</p>
-</div>
-</div>
-<div class="admin-nav" id="adminNav" aria-label="Admin workspace sections">
-<button type="button" class="active" data-panel="overview">⌂ Overview</button>
-<button type="button" data-panel="pricingHistory">₹ Pricing & history</button>
-<button type="button" data-panel="policyCentre">▤ Policy Centre</button>
-<button type="button" data-panel="approvalNote">✓ Governance</button>
-<button type="button" data-panel="socialStudio">◉ Social Studio</button>
-<button type="button" data-panel="talkBack">🎙 Talk Back · Video Studio</button>
-<button type="button" data-panel="socialCampaign">✦ Social Campaign</button>
-<button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
-<span class="small" style="align-self:center">Talk Back is now inside this Admin workspace.</span>
-<a class="btn secondary" href="./lead-engine.html" style="margin:0;min-height:54px;display:flex;align-items:center">▣ Lead & Growth Engine</a>
-<a class="btn secondary" href="./partnership-crm.html" style="margin:0;min-height:54px;display:flex;align-items:center">🤝 Partnership CRM</a>
-</div>
+</details>
 </div>
 <section class="card hidden" id="talkBack">
 <h2>Talk Back · Multilingual Video Studio</h2>
@@ -591,6 +618,45 @@ footer {
  const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR', notificationChannel=null;
  const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
+ const pitchCategories=['Investor','Corporate','Government','Institutional','Partner','General'];
+ const pitchBucket='pitch-decks';
+ const pitchSafeName=name=>String(name||'deck').normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-120);
+ async function loadPitchDecks(){
+  const host=$('pitchDeckLists');if(!host||!client||!admin)return;
+  host.textContent='Loading private pitch decks…';
+  const visible=owner?pitchCategories:pitchCategories.filter(x=>x!=='Investor');host.innerHTML='';
+  for(const categoryName of visible){
+   const details=document.createElement('details');details.className='pitch-category';if(categoryName==='Investor')details.open=true;
+   const summary=document.createElement('summary');summary.textContent=categoryName==='Investor'?'Investor · Owner locked':categoryName+' Decks';details.appendChild(summary);
+   const list=document.createElement('div');list.className='small';list.textContent='Loading…';details.appendChild(list);host.appendChild(details);
+   const {data,error}=await client.storage.from(pitchBucket).list(categoryName,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+   list.innerHTML='';
+   if(error){list.textContent='Could not load: '+error.message;continue;}
+   const files=(data||[]).filter(file=>file.name&&!file.name.startsWith('.'));
+   if(!files.length){list.textContent='No file stored yet.';continue;}
+   files.forEach(file=>{
+    const path=categoryName+'/'+file.name,row=document.createElement('div');row.className='pitch-file';
+    const name=document.createElement('span');name.textContent=file.name;row.appendChild(name);
+    const open=document.createElement('button');open.type='button';open.className='secondary';open.textContent='Open securely';
+    open.addEventListener('click',async()=>{open.disabled=true;try{const {data:signed,error:signError}=await client.storage.from(pitchBucket).createSignedUrl(path,300);if(signError)throw signError;window.open(signed.signedUrl,'_blank','noopener');}catch(err){$('pitchDeckStatus').textContent='Secure download failed: '+(err?.message||String(err));}finally{open.disabled=false;}});
+    row.appendChild(open);list.appendChild(row);
+   });
+  }
+ }
+ $('pitchDeckUpload').addEventListener('click',async()=>{
+  const file=$('pitchDeckFiles').files?.[0],categoryName=$('pitchDeckCategory').value;
+  if(!client||!admin||!session?.user){$('pitchDeckStatus').textContent='Sign in with an active Admin account first.';return;}
+  if(categoryName==='Investor'&&!owner){$('pitchDeckStatus').textContent='Investor deck access is restricted to the Owner account.';return;}
+  if(!file){$('pitchDeckStatus').textContent='Choose a PPTX or PDF file first.';return;}
+  const ext=file.name.toLowerCase().split('.').pop();if(!['pptx','ppt','pdf'].includes(ext)){$('pitchDeckStatus').textContent='Only PPTX, PPT and PDF files are accepted.';return;}
+  if(file.size>100*1024*1024){$('pitchDeckStatus').textContent='File exceeds the 100 MB limit.';return;}
+  const path=categoryName+'/'+Date.now()+'-'+crypto.randomUUID()+'-'+pitchSafeName(file.name),btn=$('pitchDeckUpload');btn.disabled=true;btn.textContent='Uploading…';
+  try{const {error}=await client.storage.from(pitchBucket).upload(path,file,{contentType:file.type|| (ext==='pdf'?'application/pdf':ext==='ppt'?'application/vnd.ms-powerpoint':'application/vnd.openxmlformats-officedocument.presentationml.presentation'),upsert:false});if(error)throw error;$('pitchDeckStatus').textContent='Uploaded to the private '+categoryName+' folder. Existing files were preserved.';$('pitchDeckFiles').value='';await loadPitchDecks();}
+  catch(err){$('pitchDeckStatus').textContent='Upload failed: '+(err?.message||String(err));}
+  finally{btn.disabled=false;btn.textContent='Upload to private library';}
+ });
+ $('pitchDeckRefresh').addEventListener('click',loadPitchDecks);
+
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const config=(url,key)=>{if(!window.supabase?.createClient)throw Error('Supabase client library did not load. Check internet access and reload.');if(!url.startsWith('https://')||!key.trim())throw Error('Admin connection configuration is invalid.');client=window.supabase.createClient(url.trim(),key.trim(),{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});show('auth');say('Checking your existing browser session…');return client.auth.getSession().then(async({data,error})=>{if(error)throw error;if(data.session){session=data.session;if(data.session.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('Please complete the required password change.');return;}show('forcePassword',false);await checkAccess();}else{show('workspace',false);show('forcePassword',false);show('auth',true);say('No active browser session. Please sign in.');}});};
 
@@ -598,7 +664,7 @@ footer {
  $('signIn').onclick=async()=>{if(!client)return say('Connect the project first.');const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;if(data.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('For security, change your initial password before continuing.');return}show('forcePassword',false);await checkAccess();};
  $('changePassword').onclick=async()=>{const btn=$('changePassword');const p=$('newPassword').value,c=$('confirmPassword').value;if(!client||!session)return say('Your sign-in session has expired. Please sign in again.');if(p.length<12)return say('Choose a password of at least 12 characters.');if(p!==c)return say('The passwords do not match.');btn.disabled=true;btn.textContent='Updating password…';say('Updating your password securely with Supabase…');try{const {data,error}=await client.auth.updateUser({password:p,data:{...(session?.user?.user_metadata||{}),must_change_password:false}});if(error)throw error;if(!data?.user)throw Error('Supabase did not confirm the password update.');session={...session,user:data.user};$('newPassword').value='';$('confirmPassword').value='';say('Password updated. Checking your Admin permissions…');await checkAccess();if(!$('workspace').classList.contains('hidden')){show('forcePassword',false);show('auth',false);say('Password updated. Admin access verified.');}else{say('Password updated, but Admin access could not be verified. Check the message above and confirm the account is active in Supabase.');}}catch(e){say('Password change did not complete: '+(e?.message||'Unexpected error')+'. Your password may be unchanged; try again or use Send password reset.');}finally{btn.disabled=false;btn.textContent='Change password and continue';}};
  $('reset').onclick=async()=>{if(!client)return say('Connect the project first.');const email=$('email').value.trim();if(!email)return say('Enter your account email first.');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});say(error?'Reset request failed: '+error.message:'If the account exists and email delivery is configured, a password-reset email will be sent.');};
- $('logout').onclick=async()=>{if(notificationChannel&&client){await client.removeChannel(notificationChannel).catch(()=>{});notificationChannel=null;}if(client)await client.auth.signOut();session=null;admin=false;owner=false;hr=false;governanceRoles=[];show('workspace',false);show('forcePassword',false);show('auth',true);say('Signed out.');};
+ $('logout').onclick=async()=>{if(notificationChannel&&client){await client.removeChannel(notificationChannel).catch(()=>{});notificationChannel=null;}if(client)await client.auth.signOut();session=null;admin=false;owner=false;hr=false;governanceRoles=[];show('pitchDeckLibrary',false);show('superAdminPanel',false);show('workspace',false);show('forcePassword',false);show('auth',true);say('Signed out.');};
  async function checkAccess(){const {data:{user}}=await client.auth.getUser();
   if(!user){say('No authenticated user returned.');
   return}session={user};
@@ -612,6 +678,7 @@ footer {
   if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
   return}show('auth',false);
   show('workspace',true);
+  show('pitchDeckLibrary',admin);show('superAdminPanel',admin);$('superAdminSummary').textContent=owner?'Super Admin · Company Control Panel':'Admin Office · Workspace';if(admin){$('pitchDeckCategory').querySelector('option[value="Investor"]').disabled=!owner;await loadPitchDecks();}
   show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('socialCampaign',false);show('talkBack',false);show('commandCenter',false);
   $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
   $('welcome').textContent='Welcome';
