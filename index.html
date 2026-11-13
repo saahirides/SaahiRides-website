@@ -50,6 +50,15 @@ img{width:100%;display:block}
 .nav-links{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:15px}
 .nav-links a{color:#fff;text-decoration:none;font-weight:700;font-size:13px}
 .nav-links a:hover{color:#FFD700}
+.superadmin-menu{position:relative;flex:0 0 auto;z-index:10030}
+.superadmin-menu>summary{list-style:none;cursor:pointer;color:#06122E;background:linear-gradient(100deg,#D4AF37,#FFE66D);border:1px solid #FFE27A;border-radius:9px;padding:8px 12px;font-size:12px;font-weight:950;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.superadmin-menu>summary::-webkit-details-marker{display:none}
+.superadmin-menu>summary:after{content:" ▾";font-size:11px}
+.superadmin-menu[open]>summary:after{content:" ▴"}
+.superadmin-dropdown{position:absolute;right:0;top:calc(100% + 8px);min-width:170px;padding:7px;background:#071931;border:1px solid rgba(255,215,0,.55);border-radius:11px;box-shadow:0 12px 28px rgba(0,0,0,.38);display:grid;gap:3px}
+.superadmin-dropdown a{display:block;padding:10px 12px;border-radius:7px;color:#fff!important;text-decoration:none;font-size:13px;font-weight:800}
+.superadmin-dropdown a:hover,.superadmin-dropdown a:focus-visible{background:#17365f;color:#FFE27A!important}
+@media(max-width:650px){.superadmin-menu>summary{padding:7px 10px;font-size:12px}.superadmin-dropdown{right:auto;left:0}}
 .landing-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:center;text-align:left;padding:36px 28px;background:radial-gradient(ellipse at 75% 40%,#163c70 0%,#06122e 58%,#030817 100%)}
 .hero-copy{min-width:0}
 .landing-hero .hero-mark{margin-bottom:12px}
@@ -709,7 +718,15 @@ img{height:auto}
   <nav class="top-nav" aria-label="Main navigation">
     <a class="brand-mini" href="#home" aria-label="SaahiRides Transit Pvt. Ltd. home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span class="brand-full-name">SaahiRides Transit Pvt. Ltd.</span></a>
     <div class="nav-links">
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#pricing-model">Pricing</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a><a href="./community.html">Community</a><a href="./admin.html" aria-label="Admin and governance portal">Admin</a>
+      <a href="#home">Home</a><a href="#services">Services</a><a href="#pricing-model">Pricing</a><a href="#vehicles">Vehicles</a><a href="#tours">Tours &amp; Travel</a><a href="#offers">Offers</a><a href="#contact">Contact</a><a href="./community.html">Community</a><details class="superadmin-menu">
+        <summary aria-label="Open Super Admin menu">Super Admin</summary>
+        <div class="superadmin-dropdown" role="menu" aria-label="Super Admin portals">
+          <a role="menuitem" href="./admin.html">Admin</a>
+          <a role="menuitem" href="./hr.html">HR</a>
+          <a role="menuitem" href="./app/customer.html">Customer</a>
+          <a role="menuitem" href="./app/driver.html">Driver</a>
+        </div>
+      </details>
     </div>
   </nav>
 
@@ -739,10 +756,6 @@ img{height:auto}
       <img src="saahirides%20main%20page.png" alt="SaahiRides co-founder and HR leadership" fetchpriority="high">
     </div>
     <div class="hero-button-row" aria-label="SaahiRides portals and booking links">
-      <a class="portal-btn customer-portal" href="./app/customer.html">Customer Portal</a>
-      <a class="portal-btn driver-portal" href="./app/driver.html">Driver Portal</a>
-      <a class="portal-btn hr-portal" href="./hr.html">HR Portal</a>
-      <a class="portal-btn admin-portal" href="./admin.html">Admin Portal</a>
       <a class="hero-primary" href="fare-estimator.html">🚕 Book My Ride · Calculate Fare</a>
       <a class="hero-secondary" href="travel-tours.html">🧭 Plan My Trip</a>
       <a class="hero-secondary" href="#services">Explore Services ↓</a>
@@ -1338,39 +1351,7 @@ document.addEventListener('DOMContentLoaded',function(){
  document.querySelectorAll('[data-saahi-tab]').forEach(function(link){link.addEventListener('click',function(){var tab=document.getElementById(link.getAttribute('data-saahi-tab'));if(tab){setTimeout(function(){tab.click();var panel=document.getElementById('panel-sawari');if(panel){panel.scrollIntoView({behavior:'smooth',block:'start'});}},80);}});});
 });
 </script>
-  <div class="saahi-flash-news" role="region" aria-label="SaahiRides Flash News">
-    <span class="saahi-flash-news-label">Flash News</span>
-    <div class="saahi-flash-news-track"><span>SaahiRides News Desk is open · Diwali offer rates effective 2 November 2026 · No surge pricing · Read CEO travel blogs and destination guides · <a href="news-desk.html">Open News Desk →</a></span></div>
-  </div>
 
-<footer id="saahi-footer-anchor" class="saahirides-footer-panel">
-  <div class="footer-container">
-    <div class="footer-brand-side">
-      <h2 class="footer-brand-title">SaahiRides Transit Pvt. Ltd.</h2>
-      <p class="footer-tagline-slogan">SafeRide @ SaahiPrice — Your Journey, Our Responsibility.</p>
-      <div class="footer-services-pillbox" aria-label="SaahiRides services">
-        <span class="mini-pill">Bikes</span><span class="mini-pill">Scooty</span><span class="mini-pill">Auto</span>
-        <span class="mini-pill">AC Cabs</span><span class="mini-pill">Non-AC Cabs</span><span class="mini-pill">Rental</span><span class="mini-pill">Outstation</span>
-      </div>
-    </div>
-    <div class="footer-logistics-side">
-      <div class="logistics-data-card">
-        <span class="data-label">HEADQUARTERS LOCATION</span>
-        <p class="data-value-txt">📍 Nagaram, Hyderabad, Telangana, India</p>
-      </div>
-      <div class="digital-channels-grid">
-        <span class="data-label channels-span">VERIFIED DIGITAL CHANNELS</span>
-        <a href="https://saahirides.co.in/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>🌐 Website</span><span class="channel-arrow" aria-hidden="true">→</span></a>
-        <a href="https://wa.me/919347946026" class="channel-link-row whatsapp-highlight-edge" target="_blank" rel="noopener noreferrer"><span>💬 WhatsApp Support</span><span class="channel-arrow" aria-hidden="true">→</span></a>
-        <a href="https://www.facebook.com/saahiridestransitpvt.ltd" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📘 Facebook Page</span><span class="channel-arrow" aria-hidden="true">→</span></a>
-        <a href="https://www.instagram.com/saahirides/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📸 @saahirides</span><span class="channel-arrow" aria-hidden="true">→</span></a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copyright-bar"><div class="copyright-content">
-    <p>© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved. Registered in Telangana, India.</p>
-  </div></div>
-</footer>
 
   
 
@@ -1633,43 +1614,63 @@ body.sos-dialog-open{overflow:hidden}
 
 
 
-<style id="saahi-compact-portal-dock">
-/* Persistent, compact portal shortcuts: four controls, one edge, no large overlay. */
-.hero-button-row .portal-btn{
-  position:fixed!important;z-index:10020!important;left:auto!important;
-  right:8px!important;width:min(94px,25vw)!important;max-width:94px!important;
-  min-width:0!important;min-height:30px!important;height:auto!important;
-  padding:5px 6px!important;border-radius:8px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
-  text-align:center!important;font-size:10px!important;line-height:1.12!important;
-  font-weight:750!important;letter-spacing:0!important;
-  background:rgba(20,43,76,.78)!important;color:#eef5ff!important;
-  border:1px solid rgba(194,211,235,.42)!important;
-  box-shadow:0 2px 8px rgba(3,12,28,.16)!important;
-  opacity:.88;backdrop-filter:blur(7px);
-}
-.hero-button-row .portal-btn:hover,.hero-button-row .portal-btn:focus-visible{opacity:1;background:#244b7c!important;transform:translateY(-1px)}
-.hero-button-row .portal-btn.customer-portal{bottom:132px!important}
-.hero-button-row .portal-btn.driver-portal{bottom:174px!important}
-.hero-button-row .portal-btn.hr-portal{bottom:60px!important}
-.hero-button-row .portal-btn.admin-portal{bottom:24px!important}
-@media(min-width:651px){
-  .hero-button-row .portal-btn{right:10px!important;width:106px!important;max-width:106px!important;font-size:11px!important}
-  .hero-button-row .portal-btn.customer-portal{bottom:150px!important}
-  .hero-button-row .portal-btn.driver-portal{bottom:108px!important}
-  .hero-button-row .portal-btn.hr-portal{bottom:66px!important}
-  .hero-button-row .portal-btn.admin-portal{bottom:24px!important}
-}
-@media(max-width:650px){
-  body{padding-bottom:calc(230px + env(safe-area-inset-bottom,0px))!important}
-  .hero-button-row .portal-btn{right:6px!important;width:78px!important;max-width:78px!important;min-height:28px!important;padding:4px 5px!important;font-size:9px!important}
-  .hero-button-row .portal-btn.customer-portal{bottom:214px!important}
-  .hero-button-row .portal-btn.driver-portal{bottom:96px!important}
-  .hero-button-row .portal-btn.hr-portal{bottom:134px!important}
-  .hero-button-row .portal-btn.admin-portal{bottom:94px!important}
-}
-@media(prefers-reduced-motion:reduce){.hero-button-row .portal-btn{transition:none!important}}
-</style>
+
+
+<script id="saahi-daily-news-feed">
+(function(){
+  var target=document.getElementById('saahi-live-flash-text');
+  if(!target)return;
+  var today=new Date().toLocaleDateString('en-CA');
+  var feed='https://news.google.com/rss/search?q=Hyderabad+OR+Telangana+OR+India+mobility+OR+transport&hl=en-IN&gl=IN&ceid=IN:en';
+  var cacheKey='saahi_daily_news_v1';
+  function show(items){
+    var labels=items.slice(0,7).map(function(item){return item.title;}).filter(Boolean);
+    target.textContent=labels.length?labels.join('  ·  ')+'  ·  ':'Today’s headlines are temporarily unavailable  ·  ';
+    var link=document.createElement('a');link.href='news-desk.html';link.textContent='Open News Desk →';target.appendChild(link);
+  }
+  try{var cached=JSON.parse(localStorage.getItem(cacheKey)||'null');if(cached&&cached.date===today&&Array.isArray(cached.items)&&cached.items.length)show(cached.items);}catch(e){}
+  var api='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(feed);
+  fetch(api,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('News feed request failed');return r.json();}).then(function(data){
+    if(!data||data.status!=='ok'||!Array.isArray(data.items)||!data.items.length)throw new Error('No current headlines');
+    var items=data.items.slice(0,10).map(function(item){return {title:String(item.title||'').replace(/\s+/g,' ').trim()};}).filter(function(item){return item.title;});
+    if(!items.length)throw new Error('No usable headlines');
+    try{localStorage.setItem(cacheKey,JSON.stringify({date:today,items:items}));}catch(e){}
+    show(items);
+  }).catch(function(){try{var f=JSON.parse(localStorage.getItem(cacheKey)||'null');if(!(f&&f.date===today&&f.items&&f.items.length))show([]);}catch(e){show([]);}});
+})();
+</script>
+
+<footer id="saahi-footer-anchor" class="saahirides-footer-panel">
+  <div class="footer-container">
+    <div class="footer-brand-side">
+      <h2 class="footer-brand-title">SaahiRides Transit Pvt. Ltd.</h2>
+      <p class="footer-tagline-slogan">SafeRide @ SaahiPrice — Your Journey, Our Responsibility.</p>
+      <div class="footer-services-pillbox" aria-label="SaahiRides services">
+        <span class="mini-pill">Bikes</span><span class="mini-pill">Scooty</span><span class="mini-pill">Auto</span>
+        <span class="mini-pill">AC Cabs</span><span class="mini-pill">Non-AC Cabs</span><span class="mini-pill">Rental</span><span class="mini-pill">Outstation</span>
+      </div>
+    </div>
+    <div class="footer-logistics-side">
+      <div class="logistics-data-card">
+        <span class="data-label">HEADQUARTERS LOCATION</span>
+        <p class="data-value-txt">📍 Nagaram, Hyderabad, Telangana, India</p>
+      </div>
+      <div class="digital-channels-grid">
+        <span class="data-label channels-span">VERIFIED DIGITAL CHANNELS</span>
+        <a href="https://saahirides.co.in/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>🌐 Website</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://wa.me/919347946026" class="channel-link-row whatsapp-highlight-edge" target="_blank" rel="noopener noreferrer"><span>💬 WhatsApp Support</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://www.facebook.com/saahiridestransitpvt.ltd" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📘 Facebook Page</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+        <a href="https://www.instagram.com/saahirides/" class="channel-link-row" target="_blank" rel="noopener noreferrer"><span>📸 @saahirides</span><span class="channel-arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright-bar"><div class="copyright-content">
+    <p>© 2026 SaahiRides Transit Pvt. Ltd. All rights reserved. Registered in Telangana, India.</p>
+  </div></div>
+</footer>
+  <div class="saahi-flash-news" role="region" aria-label="SaahiRides Flash News">
+    <span class="saahi-flash-news-label">Flash News</span>
+    <div class="saahi-flash-news-track"><span id="saahi-live-flash-text">Loading today’s headlines… · <a href="news-desk.html">Open News Desk →</a></span></div>
+  </div>
 </body>
 </html>
