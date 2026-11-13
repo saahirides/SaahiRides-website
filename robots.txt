@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /activation.html
+Disallow: /upload-images.html
+Disallow: /talkback.html
 
 Sitemap: https://saahirides.co.in/sitemap.xml
