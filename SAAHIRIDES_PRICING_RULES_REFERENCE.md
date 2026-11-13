@@ -58,8 +58,11 @@ Previously shared outstation rates and terms remain unchanged:
 - Normal one-way outstation bookings: 350 km minimum.
 - Normal round-trip outstation bookings: 300 km/day minimum.
 - Hyderabad garage-to-garage distance calculation.
-- 5% GST extra; toll, parking and driver bata included.
-- Payment, waiting and cancellation terms remain as separately approved.
+- 50% advance to confirm; balance as stated in the confirmed quote.
+- 5% GST extra.
+- Fuel, toll, parking, driver food and driver bata are included; do not add them again as separate customer charges.
+- Insurance through Akiko General; state applicable coverage and policy details in the booking confirmation.
+- Do not add unapproved surcharges or undisclosed exclusions.
 
 **Important:** The 50 km / 100 km threshold is only for a city traveller crossing the 30 km city limit. It is not a replacement for the normal 350 km one-way or 300 km/day round-trip minimums for regular outstation bookings.
 
