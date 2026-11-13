@@ -1183,6 +1183,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   finally{btn.disabled=false;btn.textContent='Upload to RAW';}
  };
  const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
+ window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='SAAHIRIDES_TALKBACK_EXPORT')return;const frame=document.querySelector('#talkBack iframe');if(!frame||event.source!==frame.contentWindow)return;const blob=event.data.blob,name=String(event.data.name||'SaahiRides_TalkBack.mp4');if(!(blob instanceof Blob)||!blob.type.startsWith('video/'))return;if(blob.size>100*1024*1024){say('Talk Back export exceeds the 100 MB Social Studio upload limit. Use a smaller export.');return;}const file=new File([blob],name,{type:blob.type});const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;renderSocialMedia();$('adminNav').querySelector('[data-panel="socialStudio"]')?.click();$('socialNav').querySelector('[data-social-target="ssPublishingArea"]')?.click();$('ssStatus').textContent='Talk Back export attached. Review caption, platforms and preview before publishing.';});
  const videoStatus=$('ssVideoUploadStatus'),videoPreviewGrid=$('ssVideoPreviewGrid');
 
  // Persistent private Supabase video library (TUS resumable uploads).
