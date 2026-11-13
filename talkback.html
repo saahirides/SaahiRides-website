@@ -25,7 +25,7 @@
 </section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const $=id=>document.getElementById(id), canvas=$('preview'),ctx=canvas.getContext('2d');let posterImg=null,raf=0,rec=null,chunks=[],stream=null,mic=null,musicAudio=null,musicStream=null,scroll=0,activeText='',tag='';let speaking=false,sb=null,voiceFiles=[],audioContext=null,voiceSource=null,musicSource=null,musicGain=null,recordingDestination=null,micSource=null,lastExportBlob=null,lastExportName='',originalMusicNodes=[],originalMusicGain=null;
+const $=id=>document.getElementById(id), canvas=$('preview'),ctx=canvas.getContext('2d');let posterImg=null,raf=0,rec=null,chunks=[],stream=null,mic=null,musicAudio=null,musicStream=null,scroll=0,activeText='',tag='';let speaking=false,sb=null,voiceFiles=[],audioContext=null,voiceSource=null,musicSource=null,musicGain=null,recordingDestination=null,micSource=null,lastExportBlob=null,lastExportName='',originalMusicNodes=[],originalMusicGain=null,originalMusicStopTimer=null;
 const langs=[{id:'en',lang:'en-IN',label:'ENGLISH'},{id:'hi',lang:'hi-IN',label:'हिन्दी'},{id:'te',lang:'te-IN',label:'తెలుగు'}];
 function resize(){const r=$('ratio').value;canvas.width=r==='portrait'?720:r==='landscape'?1280:900;canvas.height=r==='portrait'?1280:r==='landscape'?720:900;draw();} 
 function draw(){ctx.fillStyle='#06122e';ctx.fillRect(0,0,canvas.width,canvas.height);if(posterImg){let scale=Math.max(canvas.width/posterImg.width,canvas.height/posterImg.height),w=posterImg.width*scale,h=posterImg.height*scale;ctx.drawImage(posterImg,(canvas.width-w)/2,(canvas.height-h)/2,w,h)}else{ctx.fillStyle='#f5b82e';ctx.font='bold 34px system-ui';ctx.textAlign='center';ctx.fillText('UPLOAD YOUR POSTER',canvas.width/2,canvas.height/2)}
@@ -39,7 +39,8 @@ musicAudio=new Audio();musicAudio.preload='auto';musicAudio.crossOrigin='anonymo
 function startOriginalMusic(){
  if(!audioContext)audioContext=new (window.AudioContext||window.webkitAudioContext)();
  if(audioContext.state==='suspended')audioContext.resume();
- if(originalMusicNodes.length)return;
+ if(originalMusicStopTimer){clearTimeout(originalMusicStopTimer);originalMusicStopTimer=null;}
+ if(originalMusicNodes.length){if(recordingDestination&&originalMusicGain)originalMusicGain.connect(recordingDestination);if(originalMusicGain){originalMusicGain.gain.cancelScheduledValues(audioContext.currentTime);originalMusicGain.gain.setTargetAtTime(Number(musicVolume.value),audioContext.currentTime,0.08);}return;}
  originalMusicGain=audioContext.createGain();originalMusicGain.gain.value=Number(musicVolume.value);
  originalMusicGain.connect(audioContext.destination);
  if(recordingDestination)originalMusicGain.connect(recordingDestination);
@@ -61,7 +62,8 @@ function stopOriginalMusic(){
  if(!originalMusicGain){originalMusicNodes=[];return;}
  const gain=originalMusicGain,now=audioContext?.currentTime||0;
  try{gain.gain.cancelScheduledValues(now);gain.gain.setTargetAtTime(0,now,0.25);}catch(_){}
- setTimeout(()=>{originalMusicNodes.forEach(n=>{try{n.stop()}catch(_){}});originalMusicNodes=[];try{gain.disconnect()}catch(_){}if(originalMusicGain===gain)originalMusicGain=null;},1200);
+ if(originalMusicStopTimer)clearTimeout(originalMusicStopTimer);
+ originalMusicStopTimer=setTimeout(()=>{originalMusicNodes.forEach(n=>{try{n.stop()}catch(_){}});originalMusicNodes=[];try{gain.disconnect()}catch(_){}if(originalMusicGain===gain)originalMusicGain=null;originalMusicStopTimer=null;},1200);
 }
 async function loadMasterVoices(){
  try{
