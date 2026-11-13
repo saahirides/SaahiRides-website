@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides Partnership CRM</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--navy:#06122e;--blue:#1e3a8a;--gold:#f5b82e;--text:#f8fafc;--muted:#bac7dc;--line:#28436d;--panel:#0b1c3d;--green:#39b980;--red:#f08b8b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17365f,var(--navy) 60%);font:15px/1.5 system-ui,Arial,sans-serif;color:var(--text)}
+main{max-width:1200px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:10px 0 18px}.brand{color:var(--gold);font-weight:900;letter-spacing:.04em}
+.card{background:rgba(11,28,61,.96);border:1px solid var(--line);border-radius:15px;padding:18px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+h1,h2,h3{margin:4px 0 10px}h2{color:var(--gold)}.muted,.small{color:var(--muted)}.small{font-size:.86rem}
+label{display:block;color:var(--muted);margin:10px 0 5px}input,select,textarea{width:100%;padding:10px;border:1px solid #46618b;border-radius:8px;background:#06122e;color:#fff;font:inherit}textarea{min-height:76px;resize:vertical}
+button,.btn{border:0;border-radius:8px;background:linear-gradient(100deg,#d4af37,#ffe27a);color:#06122e;font-weight:800;padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px 5px 4px 0}button.secondary,.btn.secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}button:disabled{opacity:.5;cursor:wait}
+.status{padding:10px 12px;background:#11294b;border-radius:8px;margin:10px 0;white-space:pre-wrap}.ok{color:#9ce7bd}.err{color:#ffb5b5}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.metric{padding:12px;border:1px solid var(--line);border-radius:10px;background:#0a1934}.metric strong{display:block;color:var(--gold);font-size:25px}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:850px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--gold);background:#10264b}td button{margin:0;padding:7px 10px}
+.hidden{display:none!important}.pill{display:inline-block;border:1px solid #607da9;border-radius:99px;padding:2px 8px;font-size:12px}.toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.toolbar>div{flex:1;min-width:180px}
+@media(max-width:700px){main{padding:12px}.card{padding:14px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<header class="top"><div><div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div><h1>Partnership & Business Development CRM</h1><div class="muted">Created 13 November 2026 · Internal owner/admin workspace</div></div><div><a class="btn secondary" href="./admin.html">← Admin Centre</a><button class="secondary" id="signOut">Sign out</button></div></header>
+<section id="login" class="card"><h2>Secure admin sign-in</h2><p class="muted">Only active SaahiRides Owner/Admin accounts can access partnership records.</p><div class="two"><div><label>Email</label><input id="email" type="email" autocomplete="username"></div><div><label>Password</label><input id="password" type="password" autocomplete="current-password"></div></div><button id="signIn">Sign in</button><div id="loginStatus" class="status">Sign in to open the private CRM.</div></section>
+<div id="app" class="hidden">
+<section class="card"><div class="toolbar"><div><h2>Partnership pipeline</h2><div class="muted">One agent workflow · manual contact and follow-up logging · no automatic emails or calls</div></div><button class="secondary" id="refresh">Refresh</button></div><div class="metrics" id="metrics"></div></section>
+<section class="card"><h2>Add a partner prospect</h2><p class="small">Add only organisation and professional contact details relevant to a potential partnership. Verify source and contact permission before outreach.</p>
+<form id="prospectForm">
+<div class="grid">
+<div><label>Organisation *</label><input id="org" required maxlength="200"></div>
+<div><label>Partner category *</label><select id="type"><option value="government_authority">Government authority</option><option value="corporate">Corporate</option><option value="institutional">Institutional</option><option value="fleet">Fleet / vehicle partner</option><option value="technology">Technology / service partner</option><option value="other">Other</option></select></div>
+<div><label>State</label><input id="state" maxlength="100"></div><div><label>City</label><input id="city" maxlength="100"></div>
+<div><label>Contact person</label><input id="contact" maxlength="160"></div><div><label>Designation</label><input id="designation" maxlength="160"></div>
+<div><label>Official email</label><input id="officialEmail" type="email" maxlength="180"></div><div><label>Professional phone</label><input id="phone" maxlength="30"></div>
+<div><label>Website</label><input id="website" type="url" maxlength="300" placeholder="https://"></div><div><label>Source / directory</label><input id="source" maxlength="200"></div>
+<div><label>Source URL</label><input id="sourceUrl" type="url" maxlength="500" placeholder="https://"></div><div><label>Verification</label><select id="verification"><option value="unverified">Unverified</option><option value="pending">Pending verification</option><option value="verified">Verified</option><option value="rejected">Rejected</option></select></div>
+<div><label>Contact permission</label><select id="permission"><option value="not_checked">Not checked</option><option value="permitted">Permitted / official channel confirmed</option><option value="do_not_contact">Do not contact</option></select></div>
+<div><label>Pipeline stage</label><select id="stage"><option value="identified">Identified</option><option value="researching">Researching</option><option value="verified">Verified</option><option value="contacted">Contacted</option><option value="meeting_scheduled">Meeting scheduled</option><option value="proposal_sent">Proposal sent</option><option value="negotiation">Negotiation</option><option value="on_hold">On hold</option><option value="won">Won</option><option value="lost">Lost</option></select></div>
+<div><label>Next follow-up (local time)</label><input id="followup" type="datetime-local"></div>
+</div><label>Internal notes</label><textarea id="notes" maxlength="3000" placeholder="Verified facts, partnership fit, decision path, and next step"></textarea>
+<button id="saveProspect" type="submit">Save prospect</button><span id="formStatus" class="small" role="status"></span></form></section>
+<section class="card"><h2>Prospect register</h2><div class="toolbar"><div><label>Search</label><input id="search" placeholder="Organisation, contact, city or state"></div><div><label>Stage</label><select id="stageFilter"><option value="">All stages</option><option value="identified">Identified</option><option value="researching">Researching</option><option value="verified">Verified</option><option value="contacted">Contacted</option><option value="meeting_scheduled">Meeting scheduled</option><option value="proposal_sent">Proposal sent</option><option value="negotiation">Negotiation</option><option value="on_hold">On hold</option><option value="won">Won</option><option value="lost">Lost</option></select></div><div><label>Partner category</label><select id="typeFilter"><option value="">All categories</option><option value="government_authority">Government</option><option value="corporate">Corporate</option><option value="institutional">Institutional</option><option value="fleet">Fleet</option><option value="technology">Technology</option><option value="other">Other</option></select></div></div>
+<div class="tablewrap"><table><thead><tr><th>Created</th><th>Organisation / contact</th><th>Category / location</th><th>Verification</th><th>Stage</th><th>Next follow-up</th><th>Details</th></tr></thead><tbody id="rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div></section>
+<section class="card hidden" id="detail"><div class="toolbar"><div><h2 id="detailTitle">Prospect details</h2><div class="small" id="detailMeta"></div></div><button class="secondary" id="closeDetail">Close</button></div><div class="grid" id="detailFields"></div><label>Update stage</label><div class="toolbar"><div><select id="editStage"><option value="identified">Identified</option><option value="researching">Researching</option><option value="verified">Verified</option><option value="contacted">Contacted</option><option value="meeting_scheduled">Meeting scheduled</option><option value="proposal_sent">Proposal sent</option><option value="negotiation">Negotiation</option><option value="on_hold">On hold</option><option value="won">Won</option><option value="lost">Lost</option></select></div><div><select id="editPermission"><option value="not_checked">Permission not checked</option><option value="permitted">Permitted / official channel confirmed</option><option value="do_not_contact">Do not contact</option></select></div><button id="saveStage">Save changes</button></div><h3>Log a call, email, meeting or note</h3><div class="grid"><div><label>Activity type</label><select id="activityType"><option value="call">Call</option><option value="email">Email</option><option value="meeting">Meeting</option><option value="whatsapp">WhatsApp</option><option value="message">Other message</option><option value="note">Internal note</option><option value="other">Other</option></select></div><div><label>Direction</label><select id="direction"><option value="outbound">Outbound</option><option value="inbound">Inbound</option><option value="internal">Internal</option></select></div><div><label>Outcome</label><input id="outcome" maxlength="180" placeholder="No answer / referred to office / meeting agreed"></div><div><label>Next follow-up</label><input id="activityFollowup" type="datetime-local"></div></div><label>Activity summary *</label><textarea id="activitySummary" maxlength="3000" placeholder="Record only what happened; do not mark an email or call as completed unless it was actually sent or made."></textarea><label>Next action</label><input id="nextAction" maxlength="500"><button id="saveActivity">Save activity</button><div id="activityStatus" class="small"></div><h3>Activity history</h3><div id="activityList" class="small">No activity loaded.</div></section>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=> {
+const URL="https://uzwubbzlytqqewqibobr.supabase.co",KEY="sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq";
+const db=window.supabase.createClient(URL,KEY,{auth:{storage:sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let user=null,items=[],selected=null;
+const labels={identified:"Identified",researching:"Researching",verified:"Verified",contacted:"Contacted",meeting_scheduled:"Meeting scheduled",proposal_sent:"Proposal sent",negotiation:"Negotiation",on_hold:"On hold",won:"Won",lost:"Lost"};
+const typeLabels={government_authority:"Government",corporate:"Corporate",institutional:"Institutional",fleet:"Fleet",technology:"Technology",other:"Other"};
+const date=v=>v?new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):"—";
+const iso=id=>$(id).value?new Date($(id).value).toISOString():null;
+function msg(id,t,err=false){$(id).textContent=t;$(id).className=err?"err":"ok";}
+async function check(){
+ const {data:{user:u}}=await db.auth.getUser();if(!u)return false;
+ const {data:admin,error}=await db.from("admin_users").select("active,role").eq("user_id",u.id).maybeSingle();
+ if(error||!admin?.active||!["owner","admin"].includes(admin.role))return false;
+ user=u;$("login").classList.add("hidden");$("app").classList.remove("hidden");await load();return true;
+}
+$("signIn").onclick=async()=>{const {error}=await db.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error){msg("loginStatus",error.message,true);return;}if(!await check()){msg("loginStatus","This account does not have active Owner/Admin access.",true);await db.auth.signOut();}};
+$("signOut").onclick=async()=>{await db.auth.signOut();location.reload();};
+async function load(){
+ const {data,error}=await db.from("partnership_prospects").select("*").is("archived_at",null).order("created_at",{ascending:false}).limit(500);
+ if(error){$("rows").innerHTML='<tr><td colspan="7">'+esc(error.message)+'</td></tr>';return;}
+ items=data||[];render();
+ const count=s=>items.filter(x=>x.stage===s).length;
+ $("metrics").innerHTML=[["Total prospects",items.length],["Verified",count("verified")],["Contacted",count("contacted")],["Meetings",count("meeting_scheduled")],["Proposals",count("proposal_sent")],["Won",count("won")],["Follow-ups due",items.filter(x=>x.next_follow_up_at&&new Date(x.next_follow_up_at)<=new Date()).length]].map(([k,v])=>'<div class="metric"><strong>'+v+'</strong><span>'+k+'</span></div>').join("");
+}
+function render(){
+ const q=$("search").value.toLowerCase(),st=$("stageFilter").value,ty=$("typeFilter").value;
+ const filtered=items.filter(x=>(!st||x.stage===st)&&(!ty||x.partner_type===ty)&&(!q||[x.organization_name,x.contact_name,x.city,x.state,x.official_email].some(v=>String(v||"").toLowerCase().includes(q))));
+ $("rows").innerHTML=filtered.length?filtered.map(x=>'<tr><td>'+date(x.created_at)+'</td><td><strong>'+esc(x.organization_name)+'</strong><br><span class="small">'+esc(x.contact_name||"Contact not added")+' · '+esc(x.designation||"")+'</span></td><td>'+esc(typeLabels[x.partner_type]||x.partner_type)+'<br>'+esc([x.city,x.state].filter(Boolean).join(", ")||"Location not set")+'</td><td><span class="pill">'+esc(x.verification_status)+'</span></td><td><span class="pill">'+esc(labels[x.stage]||x.stage)+'</span></td><td>'+date(x.next_follow_up_at)+'</td><td><button class="secondary" data-id="'+x.id+'">Open</button></td></tr>').join(""):'<tr><td colspan="7">No matching prospects.</td></tr>';
+ $("rows").querySelectorAll("button[data-id]").forEach(b=>b.onclick=()=>openDetail(b.dataset.id));
+}
+["search","stageFilter","typeFilter"].forEach(id=>$(id).addEventListener("input",render));
+$("refresh").onclick=load;
+$("prospectForm").onsubmit=async e=>{
+ e.preventDefault();const b=$("saveProspect");b.disabled=true;
+ const payload={organization_name:$("org").value.trim(),partner_type:$("type").value,state:$("state").value.trim()||null,city:$("city").value.trim()||null,contact_name:$("contact").value.trim()||null,designation:$("designation").value.trim()||null,official_email:$("officialEmail").value.trim()||null,phone:$("phone").value.trim()||null,website:$("website").value.trim()||null,source_name:$("source").value.trim()||null,source_url:$("sourceUrl").value.trim()||null,verification_status:$("verification").value,contact_permission:$("permission").value,stage:$("stage").value,next_follow_up_at:iso("followup"),notes:$("notes").value.trim()||null,created_by:user.id,assigned_to:user.id};
+ const {error}=await db.from("partnership_prospects").insert(payload);b.disabled=false;
+ if(error){msg("formStatus",error.message,true);return;}msg("formStatus","Prospect saved. Creation date and owner recorded.");$("prospectForm").reset();await load();
+};
+async function openDetail(id){
+ selected=items.find(x=>x.id===id);if(!selected)return;
+ $("detail").classList.remove("hidden");$("detailTitle").textContent=selected.organization_name;$("detailMeta").textContent="Created "+date(selected.created_at)+" · Updated "+date(selected.updated_at);
+ const pairs=[["Contact",selected.contact_name],["Designation",selected.designation],["Email",selected.official_email],["Phone",selected.phone],["Website",selected.website],["Location",[selected.city,selected.state].filter(Boolean).join(", ")],["Source",selected.source_name],["Source URL",selected.source_url],["Verification",selected.verification_status],["Contact permission",selected.contact_permission],["Notes",selected.notes]];
+ $("detailFields").innerHTML=pairs.map(([k,v])=>'<div class="metric"><span>'+esc(k)+'</span><div>'+esc(v||"—")+'</div></div>').join("");
+ $("editStage").value=selected.stage;$("editPermission").value=selected.contact_permission;
+ await loadActivities();
+}
+$("closeDetail").onclick=()=>{$("detail").classList.add("hidden");selected=null;};
+$("saveStage").onclick=async()=>{
+ if(!selected)return;const {error}=await db.from("partnership_prospects").update({stage:$("editStage").value,contact_permission:$("editPermission").value}).eq("id",selected.id);
+ if(error){msg("activityStatus",error.message,true);return;}msg("activityStatus","Prospect updated.");await load();selected=items.find(x=>x.id===selected.id);await openDetail(selected.id);
+};
+async function loadActivities(){
+ const {data,error}=await db.from("partnership_activities").select("*").eq("prospect_id",selected.id).order("occurred_at",{ascending:false}).limit(100);
+ $("activityList").innerHTML=error?'<span class="err">'+esc(error.message)+'</span>':(data||[]).length?(data||[]).map(a=>'<div class="status"><strong>'+esc(a.activity_type)+' · '+esc(a.direction)+'</strong> <span class="small">'+date(a.occurred_at)+'</span><br>'+esc(a.summary)+'<br><span class="small">Outcome: '+esc(a.outcome||"—")+' · Next: '+esc(a.next_action||"—")+' · Follow-up: '+date(a.next_follow_up_at)+'</span></div>').join(""):"No activity recorded yet.";
+}
+$("saveActivity").onclick=async()=>{
+ if(!selected)return;const kind=$("activityType").value,dir=$("direction").value;
+ if(dir==="outbound"&&["call","email","whatsapp","message"].includes(kind)&&selected.contact_permission!=="permitted"){msg("activityStatus","Outbound contact is blocked until contact permission / official channel is confirmed.",true);return;}
+ const summary=$("activitySummary").value.trim();if(summary.length<2){msg("activityStatus","Add a short factual activity summary.",true);return;}
+ const next=iso("activityFollowup");
+ const payload={prospect_id:selected.id,activity_type:kind,direction:dir,occurred_at:new Date().toISOString(),outcome:$("outcome").value.trim()||null,summary,next_action:$("nextAction").value.trim()||null,next_follow_up_at:next,created_by:user.id};
+ const {error}=await db.from("partnership_activities").insert(payload);if(error){msg("activityStatus",error.message,true);return;}
+ const update={};if(dir!=="internal"&&["call","email","meeting","whatsapp","message"].includes(kind))update.last_contacted_at=new Date().toISOString();if(next)update.next_follow_up_at=next;
+ if(Object.keys(update).length)await db.from("partnership_prospects").update(update).eq("id",selected.id);
+ $("activitySummary").value="";$("outcome").value="";$("nextAction").value="";$("activityFollowup").value="";msg("activityStatus","Activity recorded.");await load();selected=items.find(x=>x.id===selected.id);await loadActivities();
+};
+(async()=>{const {data:{user:u}}=await db.auth.getUser();if(u&&!await check()){await db.auth.signOut();}})();
+})();
+</script>
+</body></html>
