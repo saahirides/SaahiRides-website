@@ -70,10 +70,11 @@ Previously shared outstation rates and terms remain unchanged:
 ## 5. Subscription model — approved pricing
 - Subscription period: 30 days.
 - Eligible subscription distances: 3 km, 5 km, 10 km and 15 km.
-- Subscription calculation: matching On-Demand fare × 30 one-way trips or × 60 trip legs for both-way service, then apply a straight 15% discount (multiply by 0.85).
+- Subscription calculation: matching On-Demand fare × 30 one-way trips or × 60 trip legs for both-way service; apply a 10% discount to trip fares (multiply by 0.90), then add the fixed Route-Lock fee: ₹199 one-way or ₹299 both-way.
 - Round the final 30-day subscription total to the nearest rupee.
-- No separate joining fee and no separate route-lock add-on. The 15% discount replaces the previous ₹199/₹299 route-lock add-on calculation.
-- Subscription savings are 15% against the comparable On-Demand total for every vehicle and service tier, including Bike and Scooty EV.
+- No separate joining fee. The Route-Lock fee is added in full after the trip-fare discount and is not discounted.
+- Published subscription pricing reflects the 10% trip-fare discount plus the applicable fixed Route-Lock fee for every vehicle and service tier, including Bike and Scooty EV.
+- Optional 5% goodwill discount: owner discretion only; it is additional to the published formula and must not appear in website pricing, public tables, or estimator outputs.
 - Planned benefits (route lock, dedicated driver, SOS and ride insurance subject to applicable coverage terms, eligible unused-balance carry-forward with a 5-day use window, and expiry reminder 5 days before expiry) remain subject to their separate operating and coverage rules.
 - Automated bot handling for eligibility, balance deductions, carry-forward and reminders is planned.
 - The 15-day free trial offer ran 1–15 October 2026 and is no longer a current offer.
