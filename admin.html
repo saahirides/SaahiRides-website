@@ -615,7 +615,7 @@ footer {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (() => {
- const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR', notificationChannel=null;
+ const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR', notificationChannel=null, notificationPollTimer=null;
  const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
  const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
  const pitchCategories=['Investor','Corporate','Government','Institutional','Partner','General'];
@@ -771,7 +771,11 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(notificationChannel)await client.removeChannel(notificationChannel).catch(()=>{});
   notificationChannel=client.channel('saahirides:admin-notifications:'+session.user.id,{config:{private:true}})
    .on('broadcast',{event:'notification'},message=>{const n=message.payload||message;showPhoneNotification(n);loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));})
-   .subscribe((status,error)=>{if(status==='SUBSCRIBED')ccStatus('ccNotificationStatus','Private live alerts connected. Dashboard updates are active.');else if(error)ccStatus('ccNotificationStatus','Live alert connection: '+(error.message||status),true);});
+   .subscribe((status,error)=>{if(status==='SUBSCRIBED')ccStatus('ccNotificationStatus','Private live alerts connected. Backup inbox refresh is active.');else if(error)ccStatus('ccNotificationStatus','Live alert connection: '+(error.message||status)+' · Backup inbox refresh is active.',true);});
+  // Realtime broadcasts are immediate, but a lightweight inbox poll recovers alerts
+  // after mobile sleep, dropped WebSocket connections, or missed broadcasts.
+  if(notificationPollTimer)clearInterval(notificationPollTimer);
+  notificationPollTimer=setInterval(()=>{if(admin&&session&&document.visibilityState!=='hidden')loadNotifications().catch(e=>ccStatus('ccNotificationStatus','Alert inbox refresh failed: '+e.message,true));},15000);
  }
  $('ccEnablePhoneAlerts').onclick=async()=>{
   if(!('Notification' in window)){ccStatus('ccNotificationStatus','This browser does not support desktop notifications. Use the admin dashboard inbox.',true);return;}
