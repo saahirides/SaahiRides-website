@@ -1092,46 +1092,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   finally{btn.disabled=false;btn.textContent='Upload to RAW';}
  };
  const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
- const videoFilesInput=$('ssVideoFiles'), videoChoose=$('ssVideoChoose'), videoUseBtn=$('ssVideoUseBtn'), videoStatus=$('ssVideoUploadStatus'), videoPreviewGrid=$('ssVideoPreviewGrid');
- let stagedVideoFiles=[], stagedVideoUrls=[];
- function renderStagedVideos(){
-  stagedVideoUrls.forEach(url=>URL.revokeObjectURL(url));stagedVideoUrls=[];
-  stagedVideoFiles=Array.from(videoFilesInput?.files||[]);
-  videoChoose.innerHTML='';
-  videoPreviewGrid.innerHTML='';
-  if(!stagedVideoFiles.length){
-   videoChoose.add(new Option('Select a video after choosing files',''));
-   videoChoose.disabled=true;videoUseBtn.disabled=true;
-   videoStatus.textContent='No project videos selected yet.';return;
-  }
-  if(stagedVideoFiles.some(file=>!file.type.startsWith('video/'))){
-   videoStatus.textContent='One or more selected files are not recognized as video. Choose video files only.';return;
-  }
-  if(stagedVideoFiles.some(file=>file.size>100*1024*1024)){
-   videoStatus.textContent='Each video must be 100 MB or smaller. Remove oversized files and choose again.';return;
-  }
-  videoChoose.add(new Option('Choose a video…',''));
-  stagedVideoFiles.forEach((file,index)=>{
-   const url=URL.createObjectURL(file);stagedVideoUrls.push(url);
-   videoChoose.add(new Option((index+1)+'. '+file.name,index));
-   const card=document.createElement('div');card.className='tile';
-   const title=document.createElement('p');title.className='small';title.textContent=(index+1)+'. '+file.name+' · '+(file.size/1024/1024).toFixed(1)+' MB';
-   const preview=document.createElement('video');preview.src=url;preview.controls=true;preview.playsInline=true;preview.preload='metadata';preview.style.cssText='width:100%;max-height:260px;margin-top:8px;border-radius:8px;background:#06122e';
-   card.append(title,preview);videoPreviewGrid.appendChild(card);
-  });
-  videoChoose.disabled=false;videoUseBtn.disabled=true;
-  videoStatus.textContent=stagedVideoFiles.length+' video(s) staged for review. Select one below to send it to the publishing composer.';
- }
- if(videoFilesInput)videoFilesInput.addEventListener('change',renderStagedVideos);
- if(videoChoose)videoChoose.addEventListener('change',()=>{videoUseBtn.disabled=videoChoose.value==='';});
- if(videoUseBtn)videoUseBtn.addEventListener('click',()=>{
-  const index=Number(videoChoose.value),file=stagedVideoFiles[index];
-  if(!file||!mediaInput)return;
-  const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;
-  renderSocialMedia();
-  videoStatus.textContent=file.name+' is ready in the publishing composer. Open Captions & publishing to review and publish it.';
-  document.querySelector('[data-social-target="ssPublishingArea"]')?.click();
- });
+ const videoStatus=$('ssVideoUploadStatus'),videoPreviewGrid=$('ssVideoPreviewGrid');
 
  // Persistent private Supabase video library (TUS resumable uploads).
  const videoBucket='social-videos',videoProjectRef='uzwubbzlytqqewqibobr';
