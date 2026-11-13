@@ -77,14 +77,14 @@ a{color:var(--cyan);font-weight:bold}
 <p><strong>Progressive cumulative fare rules:</strong> The base fare covers the first 3 km, calculated as 3 × the selected vehicle and service tier's per-kilometre rate. Each multiplier applies only to kilometres within its own slab, and the slab fares are added cumulatively: 3–5 km at 1.15×; 5–10 km at 1.25×; 10–15 km at 1.50×; 15–20 km at 1.75×; 20–25 km at 2.00×; and 25–30 km at 2.25×.</p>
 <h2 style="margin:26px 0 8px;color:#06122e">City-Cab Extended Distance Billing</h2>
 <div class="table-wrap"><table><thead><tr><th>Trip distance</th><th>Billing basis</th><th>Multiplier</th></tr></thead><tbody>
-<tr><th>Up to 30 km</th><td>Progressive cumulative fare model</td><td>Distance slabs above</td></tr>
-<tr><th>30–50 km</th><td>50 km billing basis</td><td>1.25×</td></tr>
-<tr><th>51–100 km</th><td>100 km billing basis</td><td>1.50×</td></tr>
-<tr><th>Above 100 km</th><td>Use separately approved outstation rules; no further city-model billing band</td><td>As per outstation tariff</td></tr>
+<tr><th>Up to 30 km</th><td>Actual distance, progressive cumulative city fare</td><td>Existing city slabs</td></tr>
+<tr><th>30.01–50 km</th><td>50 km rate basis × 1.25</td><td>62.5 rate-equivalent km</td></tr>
+<tr><th>50.01–100 km</th><td>Increase linearly from 62.5 to 150 rate-equivalent km</td><td>62.5 + (actual km − 50) × 1.75</td></tr>
+<tr><th>Above 100 km</th><td>Move to separately approved outstation policy</td><td>Outstation tariff and minimums apply</td></tr>
 </tbody></table></div>
 <p><strong>Scope:</strong> Extended distance billing above 30 km is for Non-AC and AC city cabs only. It does not apply to bikes, scooties, Scooty EV, Auto Rickshaw or Electric Auto Rickshaw.</p>
 <p><strong>Night charges:</strong> Applicable from 10:00 pm to 6:00 am. The night-charge amount is not specified on this page and must follow the approved SaahiRides tariff.</p>
-<p><strong>Separate outstation tariff reference:</strong> Sedan ₹18/km one-way or ₹16/km round-trip; Ertiga ₹22/km one-way or ₹20/km round-trip; Innova/Crysta ₹25/km one-way or ₹24/km round-trip. These are separate outstation rates and should not be confused with the 50 km / 100 km city-cab billing bands.</p>
+<p><strong>Separate outstation tariff reference:</strong> Sedan ₹18/km one-way or ₹16/km round-trip; Ertiga ₹22/km one-way or ₹20/km round-trip; Innova/Crysta ₹25/km one-way or ₹24/km round-trip. These are separate outstation rates and should not be confused with the progressive city-cab distance bands.</p>
 <p><strong>Rate notes:</strong> *Scooty EV and Electric Auto Rickshaw are single-rate services; Express and Super Fast are not applicable.</p>
 <h2 style="margin:26px 0 8px;color:#06122e">Additional Vehicle Rates — Legacy Reference</h2>
 <p>The rates below are retained as historical reference figures only. The active fare model uses a 3 km base and progressive cumulative slabs, as described above. These legacy 5 km base fares do not override the active model.</p>
@@ -93,10 +93,10 @@ a{color:var(--cyan);font-weight:bold}
 <tr><th>Scooty</th><td>Express</td><td>₹15/km</td><td>₹75</td></tr>
 <tr><th>Scooty</th><td>Super Fast</td><td>₹17/km</td><td>₹85</td></tr>
 <tr><th>Scooty EV</th><td>Rate supplied</td><td>₹16/km</td><td>₹80</td></tr>
-<tr><th>Electric Auto</th><td>Rate supplied</td><td>₹25/km</td><td>₹125</td></tr>
+<tr><th>Electric Auto</th><td>Superseded historical rate</td><td>₹25/km (historical only)</td><td>Not active — current approved rate is ₹19/km</td></tr>
 </tbody></table></div>
-<p><strong>Note:</strong> Scooty EV and Electric Auto rates are shown as supplied; Express and Super Fast tiers have not been inferred for these categories.</p>
-<footer><strong>Pricing policy:</strong> The progressive cumulative model is the active On-Demand calculation through 30 km. City cabs use the 50 km billing basis with a 1.25× multiplier for 30–50 km, and the 100 km billing basis with a 1.5× multiplier for 51–100 km. Above 100 km, use the separately approved outstation rules. Night charges apply from 10:00 pm to 6:00 am. These extended city-cab rules do not apply to bikes, scooties, electric scooties, auto-rickshaws or electric auto-rickshaws. Subscription fares are separate.</footer>
+<p><strong>Note:</strong> Scooty EV and Electric Auto are single-rate services at their current approved rates: ₹16/km and ₹19/km respectively. Express and Super Fast tiers do not apply.</p>
+<footer><strong>Pricing policy:</strong> The progressive cumulative model is the active On-Demand calculation through 30 km. For Non-AC and AC city cabs beyond 30 km, 30.01–50 km uses a 50 km rate basis × 1.25; 50.01–100 km increases linearly from 62.5 to 150 rate-equivalent km using 62.5 + (actual km − 50) × 1.75. This keeps the fare continuous at 50 km and avoids a sudden 50-to-51 km jump. Above 100 km, use the separately approved outstation rules. Night charges apply from 10:00 pm to 6:00 am. These extended city-cab rules do not apply to bikes, scooties, electric scooties, auto-rickshaws or electric auto-rickshaws. Subscription fares are separate.</footer>
 <p><a href="https://saahirides.co.in/">Back to SaahiRides website</a></p></main>
 <script src="saahi-promotions.js?v=20261031" defer></script>
 </body></html>
