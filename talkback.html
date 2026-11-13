@@ -46,12 +46,12 @@ function startOriginalMusic(){
  // Original, locally synthesized cinematic pad: warm sustained chords, no third-party recording.
  const chords=[[146.83,174.61,220.00],[110.00,130.81,164.81],[130.81,155.56,196.00],[98.00,123.47,146.83]];
  const now=audioContext.currentTime;
- chords.forEach((chord,index)=>chord.forEach((hz,j)=>{
+ for(let cycle=0;cycle<10;cycle++)chords.forEach((chord,index)=>chord.forEach((hz,j)=>{
   const osc=audioContext.createOscillator(),voiceGain=audioContext.createGain();
   osc.type=j===0?'sine':'triangle';osc.frequency.value=hz;
   voiceGain.gain.value=j===0?0.20:0.075;
   osc.connect(voiceGain);voiceGain.connect(originalMusicGain);
-  const start=now+index*7.5;osc.start(start);osc.stop(start+8.2);
+  const start=now+(cycle*4+index)*7.5;osc.start(start);osc.stop(start+8.2);
   originalMusicNodes.push(osc);
  }));
  originalMusicGain.gain.setValueAtTime(0,audioContext.currentTime);
@@ -78,7 +78,7 @@ async function loadMasterVoices(){
   voiceFiles=(voiceResult.data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
   const musicFiles=(musicResult.data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
   voiceSelect.innerHTML='<option value="">Use device speech voice (fallback)</option>';
-  musicSelect.innerHTML='<option value="">No background music</option>';
+  musicSelect.innerHTML='<option value="">No background music</option><option value="__original__">SaahiRides Original Cinematic Bed · Built in</option>';
   voiceFiles.forEach(file=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;voiceSelect.appendChild(o);});
   musicFiles.forEach(file=>{const o=document.createElement('option');o.value=file.name;o.textContent=file.name;musicSelect.appendChild(o);});
   voiceStatus.textContent=voiceFiles.length+' master narration file(s) and '+musicFiles.length+' background music file(s) available.';
