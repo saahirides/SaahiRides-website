@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#071931">
 <title>Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.</title>
-<meta name="description" content="Estimate SaahiRides progressive on-demand and 30-day subscription fares with a 15% discount by vehicle tier and route distance.">
+<meta name="description" content="Estimate SaahiRides progressive on-demand and 30-day subscription fares with a 10% discount on trip fares plus the fixed Route-Lock fee.">
 <link rel="canonical" href="https://saahirides.co.in/fare-estimator.html">
 <style>
 :root{--bg:#071931;--card:#16223f;--cyan:#00f0ff;--gold:#ffc107;--white:#fff;--muted:#a0aec0;--green:#25d366}
@@ -152,13 +152,13 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
         <p id="ondemand-calculation-note" class="readout-calculation-note">Calculated using the progressive distance slabs and selected vehicle base rate.</p>
       </div>
       <div class="readout-tier-box gold-tint-box">
-        <div class="readout-tier-header"><h2>30-Day Subscription</h2><span class="readout-tag-pill gold-pill">15% Discount</span></div>
+        <div class="readout-tier-header"><h2>30-Day Subscription</h2><span class="readout-tag-pill gold-pill">10% Trip Discount</span></div>
         <div class="subscription-split-outputs">
           <div class="sub-price-subblock"><span class="sub-label-micro">ONE-WAY TOTAL</span><div class="readout-price-row size-medium"><span class="readout-currency">₹</span><output id="output-sub-oneway" class="readout-sum-bold" aria-live="polite">5929</output></div></div>
           <div class="vertical-divider-line" aria-hidden="true"></div>
           <div class="sub-price-subblock"><span class="sub-label-micro">BOTH-WAY TOTAL</span><div class="readout-price-row size-medium"><span class="readout-currency">₹</span><output id="output-sub-bothway" class="readout-sum-bold" aria-live="polite">11759</output></div></div>
         </div>
-        <p class="readout-calculation-note gold-note">30-day totals apply a straight 15% discount to 30 or 60 On-Demand trip legs. No joining fee or separate route-lock add-on.</p>
+        <p class="readout-calculation-note gold-note">A 10% discount applies to trip fares only. Add the fixed Route-Lock fee in full: ₹199 one-way or ₹299 both-way. No separate joining fee.</p>
       </div>
       
       <div class="readout-tier-box" id="saahi-bill-card">
@@ -401,15 +401,15 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=isNightTime()===true?'Daytime fare subtotal only. Night charge applies from 10 PM to 6 AM; approved amount is not configured, so this is not a final night quote.':isNightTime()===null?'Select expected pickup time to determine night-charge applicability.':'Calculated using the progressive distance slabs and selected vehicle base rate.';
     distanceOutput.textContent = distance + ' km';
     onDemandOutput.textContent = String(onDemand);
-    var oneWay = Math.round(onDemand * 30 * 0.85);
-    var bothWay = Math.round(onDemand * 60 * 0.85);
+    var oneWay = Math.round(onDemand * 30 * 0.90 + 199);
+    var bothWay = Math.round(onDemand * 60 * 0.90 + 299);
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
     var passengerDetails = bookingPurpose === 'someone-else' ? '\nBooking for: Someone else\nPassenger name: ' + (otherRiderName.value.trim() || 'To be provided') + '\nPassenger mobile: ' + (otherRiderPhone.value.trim() || 'To be provided') + '\nRide OTP recipient (passenger): ' + otherRiderPhone.value.trim() : '\nBooking for: Myself\nCustomer name: ' + billNameInput.value.trim() + '\nCustomer mobile: ' + billPhoneInput.value.trim() + '\nRide OTP recipient (passenger): ' + billPhoneInput.value.trim();
     var message = 'BOOK\nSaahiRides fare estimate' + passengerDetails + '\nExpected pickup: ' + (billPickupTime.value||'Not supplied') + ' IST\nVehicle: ' + selectedVehicle +
       '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
-      '\n30-day subscription one-way: ₹' + oneWay +
-      '\n30-day subscription both-way: ₹' + bothWay +
+      '\n30-day subscription one-way: ₹' + oneWay + '\nRoute-Lock fee included: ₹199' +
+      '\n30-day subscription both-way: ₹' + bothWay + '\nRoute-Lock fee included: ₹299' +
       (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + (window.saahiRouteContext.pickupAddress||window.saahiRouteContext.pickup) + '\nDrop: ' + (window.saahiRouteContext.dropAddress||window.saahiRouteContext.drop) + '\nPickup coordinates: ' + window.saahiRouteContext.pickup + '\nDrop coordinates: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
       '\nPlease verify pickup, drop, availability and final itemised fare before confirming my booking.';
     bookingLink.href = 'https://wa.me/919347946026?text=' + encodeURIComponent(message);
