@@ -36,18 +36,19 @@ This threshold rule applies only to a city traveller whose trip exceeds the 30 k
 | Actual city-cab distance | Billing basis |
 |---|---|
 | Up to 30 km | Actual distance, progressive cumulative city pricing |
-| 30.01–50 km | 50 km billing basis × 1.25 |
-| 50.01–100 km | 100 km billing basis × 1.50 |
+| 30.01–50 km | 50 km rate basis × 1.25 = 62.5 rate-equivalent km |
+| 50.01–100 km | Linear increase from 62.5 to 150 rate-equivalent km: 62.5 + (actual km − 50) × 1.75 |
 | Above 100 km | Separately approved normal outstation rules; no further city-model band |
 
 Confirmed examples:
-- 35 km → bill 50 km
-- 50 km → bill 50 km
-- 51 km → bill 100 km
-- 80 km → bill 100 km
-- 100 km → bill 100 km
+- 35 km → 50 km rate basis × 1.25 = 62.5 rate-equivalent km
+- 50 km → 62.5 rate-equivalent km
+- 51 km → 64.25 rate-equivalent km
+- 75 km → 106.25 rate-equivalent km
+- 80 km → 115 rate-equivalent km
+- 100 km → 150 rate-equivalent km
 
-The 1.25× and 1.50× multipliers apply to the stated city-cab billing bands. This extended city-cab rule does not apply to bikes, scooties, Scooty EV, Auto Rickshaw or Electric Auto Rickshaw. Do not replace or rewrite normal outstation booking rules with this city-traveller threshold.
+Multiply the rate-equivalent kilometres by the applicable Non-AC or AC city-cab approved per-kilometre rate. This extended city-cab rule does not apply to bikes, scooties, Scooty EV, Auto Rickshaw or Electric Auto Rickshaw. Do not replace or rewrite normal outstation booking rules with this city-traveller threshold. The formula is continuous at 50 km and avoids a sudden 50-to-51 km fare jump.
 
 ## 4. Existing outstation booking policy — keep separate
 Previously shared outstation rates and terms remain unchanged:
