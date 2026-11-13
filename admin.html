@@ -1081,7 +1081,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
     const path=file.storage_path, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
     const card=document.createElement('div');card.className='tile';
     const pickLabel=document.createElement('label');pickLabel.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:8px;font-weight:700';
-    const pick=document.createElement('input');pick.type='checkbox';pick.checked=selectedSocialImagePaths.has(path);pick.addEventListener('change',()=>{if(pick.checked)selectedSocialImagePaths.add(path);else selectedSocialImagePaths.delete(path);updateSocialImageSelection();});
+    const pick=document.createElement('input');pick.type='checkbox';pick.dataset.storagePath=path;pick.checked=selectedSocialImagePaths.has(path);pick.addEventListener('change',()=>{if(pick.checked)selectedSocialImagePaths.add(path);else selectedSocialImagePaths.delete(path);updateSocialImageSelection();});
     pickLabel.append(pick,document.createTextNode('Select for permanent deletion'));card.appendChild(pickLabel);
     const img=document.createElement('img');img.src=url;img.alt=file.original_filename||path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
     const name=document.createElement('p');name.className='small';name.textContent=(file.display_filename||path.split('/').pop()||file.original_filename||path)+' · '+file.source;
@@ -1130,7 +1130,7 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
    });
   }catch(e){libraryGrid.textContent='Could not load image library: '+(e?.message||String(e));}
  }
- if($('ssSelectAllVisible'))$('ssSelectAllVisible').onclick=()=>{libraryGrid.querySelectorAll('input[type="checkbox"]').forEach(input=>{input.checked=true;const card=input.closest('.tile');const status=card?.querySelector('p.small:nth-of-type(2)')?.textContent||'';const path=status.split(' · ').slice(1).join(' · ');if(path)selectedSocialImagePaths.add(path);});updateSocialImageSelection();};
+ if($('ssSelectAllVisible'))$('ssSelectAllVisible').onclick=()=>{libraryGrid.querySelectorAll('input[type="checkbox"][data-storage-path]').forEach(input=>{input.checked=true;selectedSocialImagePaths.add(input.dataset.storagePath);});updateSocialImageSelection();};
  if($('ssClearImageSelection'))$('ssClearImageSelection').onclick=()=>{selectedSocialImagePaths.clear();libraryGrid.querySelectorAll('input[type="checkbox"]').forEach(input=>input.checked=false);updateSocialImageSelection();};
  if($('ssDeleteSelectedImages'))$('ssDeleteSelectedImages').onclick=async()=>{
   const paths=Array.from(selectedSocialImagePaths);
@@ -1138,11 +1138,9 @@ $('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-
   if(!window.confirm('Permanently delete '+paths.length+' selected image(s) from Supabase Storage and the image library? This cannot be undone. GitHub source files are not touched.'))return;
   const btn=$('ssDeleteSelectedImages');btn.disabled=true;btn.textContent='Deleting…';
   try{
-   const {error:storageError}=await client.storage.from('social-images').remove(paths);
-   if(storageError)throw new Error('Storage deletion failed: '+storageError.message);
-   const {error:rowError}=await client.from('social_image_library').delete().in('storage_path',paths);
-   if(rowError)throw new Error('Image files were deleted, but database cleanup needs retry: '+rowError.message);
-   selectedSocialImagePaths.clear();libraryStatus.textContent=paths.length+' image(s) permanently deleted from Supabase Storage and the library. No archive was created; GitHub originals remain untouched.';
+   const result=await callLibraryManager('delete_selected',{storage_paths:paths});
+   if(result.deleted_count!==paths.length)throw new Error('Deletion count did not match the selected count. Refresh the library and verify each image.');
+   selectedSocialImagePaths.clear();libraryStatus.textContent=result.deleted_count+' image(s) permanently deleted from Supabase Storage and the library. No archive was created; GitHub originals remain untouched.';
    await loadSocialImageLibrary(libraryFilter);
   }catch(e){libraryStatus.textContent='Bulk deletion incomplete: '+(e?.message||String(e));updateSocialImageSelection();}
   finally{updateSocialImageSelection();}
