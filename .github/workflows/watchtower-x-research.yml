@@ -1,0 +1,59 @@
+name: Watchtower X Research and Advisory
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Research, development, architecture, security, marketing or business task"
+        required: true
+        type: string
+      enable_supabase_memory:
+        description: "Enable only after approving production memory access and applying the reviewed migration"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: watchtower-x-research
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run Watchtower X
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SUPABASE_URL: ${{ inputs.enable_supabase_memory && secrets.SUPABASE_URL || '' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ inputs.enable_supabase_memory && secrets.SUPABASE_SERVICE_ROLE_KEY || '' }}
+          WATCHTOWER_ENABLE_SUPABASE_MEMORY: ${{ inputs.enable_supabase_memory }}
+          WATCHTOWER_TASK: ${{ inputs.task }}
+          WATCHTOWER_MODEL: gpt-6-astra
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: node scripts/backup-agent/research.mjs
+
+      - name: Upload research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: watchtower-x-research-report
+          path: watchtower-x-report.md
+          if-no-files-found: warn
+          retention-days: 30

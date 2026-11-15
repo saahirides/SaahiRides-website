@@ -1,0 +1,51 @@
+name: SaahiRides Backup Supervisor
+
+on:
+  workflow_dispatch:
+    inputs:
+      enable_supabase_write:
+        description: "Explicitly authorize this run to read QA data and write its execution record to production Supabase"
+        required: true
+        default: false
+        type: boolean
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_run:
+    workflows: ["SaahiRides Website QA"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: saahirides-backup-supervisor
+  cancel-in-progress: false
+
+jobs:
+  independent-supervision:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.enable_supabase_write == true) ||
+      (github.event_name != 'workflow_dispatch' && vars.WATCHTOWER_PRODUCTION_SUPERVISION_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run independent supervisor
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: node scripts/backup-agent/audit.mjs
