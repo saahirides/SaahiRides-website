@@ -152,7 +152,7 @@
     <script>
 document.getElementById('whatsappOnboardingForm')?.addEventListener('submit', function(e) {
   e.preventDefault();
-  let cleanPhone = (document.getElementById('driverWhatsApp')?.value || '').replace(/\\D/g, '');
+  let cleanPhone = (document.getElementById('driverWhatsApp')?.value || '').replace(/\D/g, '');
   if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
   if (!/^[0-9]{10,15}$/.test(cleanPhone)) {
     alert('Enter a valid driver WhatsApp number, including country code if outside India.');
