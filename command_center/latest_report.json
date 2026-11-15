@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-14T07:47:39.601Z",
+  "runAt": "2026-11-15T08:06:38.606Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,50 +19,50 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 49
+        "latencyMs": 29
       },
       {
         "status": 200,
-        "latencyMs": 55
+        "latencyMs": 4
       },
       {
         "status": 200,
-        "latencyMs": 7
+        "latencyMs": 46
       },
       {
         "status": 200,
-        "latencyMs": 7
+        "latencyMs": 4
       },
       {
         "status": 200,
-        "latencyMs": 10
+        "latencyMs": 3
       },
       {
         "status": 200,
-        "latencyMs": 75
+        "latencyMs": 4
       },
       {
         "status": 200,
-        "latencyMs": 9
+        "latencyMs": 107
       },
       {
         "status": 200,
-        "latencyMs": 78
+        "latencyMs": 112
       }
     ]
   },
   "pageResults": [
     {
-      "url": "https://saahirides.co.in/ceo-blog.html",
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
-      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "url": "https://saahirides.co.in/ceo-blog.html",
       "status": 200,
-      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
@@ -88,13 +88,6 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/fare-estimator.html",
-      "status": 200,
-      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 11
-    },
-    {
       "url": "https://saahirides.co.in/offers.html",
       "status": 200,
       "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
@@ -109,9 +102,23 @@
       "buttons": 30
     },
     {
+      "url": "https://saahirides.co.in/fare-estimator.html",
+      "status": 200,
+      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 11
+    },
+    {
       "url": "https://saahirides.co.in/company-inception.html",
       "status": 200,
       "title": "Company Inception Details | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "status": 200,
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
@@ -126,13 +133,6 @@
       "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
       "status": 200,
       "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
-      "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
