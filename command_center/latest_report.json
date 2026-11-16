@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-15T08:06:38.606Z",
+  "runAt": "2026-11-16T08:14:44.060Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,50 +19,50 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 29
+        "latencyMs": 61
       },
       {
         "status": 200,
-        "latencyMs": 4
+        "latencyMs": 67
       },
       {
         "status": 200,
-        "latencyMs": 46
+        "latencyMs": 74
       },
       {
         "status": 200,
-        "latencyMs": 4
+        "latencyMs": 40
       },
       {
         "status": 200,
-        "latencyMs": 3
+        "latencyMs": 39
       },
       {
         "status": 200,
-        "latencyMs": 4
+        "latencyMs": 38
       },
       {
         "status": 200,
-        "latencyMs": 107
+        "latencyMs": 39
       },
       {
         "status": 200,
-        "latencyMs": 112
+        "latencyMs": 156
       }
     ]
   },
   "pageResults": [
     {
-      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "url": "https://saahirides.co.in/ceo-blog.html",
       "status": 200,
-      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog.html",
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
-      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
     },
@@ -76,7 +76,7 @@
     {
       "url": "https://saahirides.co.in/",
       "status": 200,
-      "title": "SaahiRides Transit Pvt. Ltd. | Safe & Affordable Rides in Hyderabad - Bikes, Auto, Cabs",
+      "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
       "forms": 0,
       "buttons": 9
     },
@@ -116,16 +116,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
       "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
       "status": 200,
-      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
@@ -144,13 +144,6 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/community.html",
-      "status": 200,
-      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
-      "forms": 1,
-      "buttons": 1
-    },
-    {
       "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
       "status": 200,
       "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
@@ -165,16 +158,16 @@
       "buttons": 4
     },
     {
+      "url": "https://saahirides.co.in/community.html",
+      "status": 200,
+      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
+      "forms": 1,
+      "buttons": 1
+    },
+    {
       "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
       "status": 200,
       "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
-      "forms": 0,
-      "buttons": 0
-    },
-    {
-      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
-      "status": 200,
-      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
@@ -193,6 +186,13 @@
       "buttons": 0
     },
     {
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "status": 200,
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
       "url": "https://saahirides.co.in/rates.html",
       "status": 200,
       "title": "SaahiRides Rates | Affordable Bike, Auto & Cab Fares in Hyderabad",
@@ -207,16 +207,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/vision.html",
+      "url": "https://saahirides.co.in/founder.html",
       "status": 200,
-      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
+      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/founder.html",
+      "url": "https://saahirides.co.in/vision.html",
       "status": 200,
-      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
+      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     }
