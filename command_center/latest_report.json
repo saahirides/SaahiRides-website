@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-18T08:50:20.698Z",
+  "runAt": "2026-11-19T09:07:25.654Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,7 +19,11 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 40
+        "latencyMs": 43
+      },
+      {
+        "status": 200,
+        "latencyMs": 43
       },
       {
         "status": 200,
@@ -27,27 +31,23 @@
       },
       {
         "status": 200,
-        "latencyMs": 47
+        "latencyMs": 26
       },
       {
         "status": 200,
-        "latencyMs": 30
+        "latencyMs": 29
       },
       {
         "status": 200,
-        "latencyMs": 28
+        "latencyMs": 80
       },
       {
         "status": 200,
-        "latencyMs": 27
+        "latencyMs": 18
       },
       {
         "status": 200,
-        "latencyMs": 16
-      },
-      {
-        "status": 200,
-        "latencyMs": 119
+        "latencyMs": 52
       }
     ]
   },
@@ -58,13 +58,6 @@
       "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
-    },
-    {
-      "url": "https://saahirides.co.in/",
-      "status": 200,
-      "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
-      "forms": 0,
-      "buttons": 9
     },
     {
       "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
@@ -81,18 +74,18 @@
       "buttons": 0
     },
     {
+      "url": "https://saahirides.co.in/",
+      "status": 200,
+      "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
+      "forms": 0,
+      "buttons": 9
+    },
+    {
       "url": "https://saahirides.co.in/ceo-blog-ramoji-yadadri.html",
       "status": 200,
       "title": "Ramoji Film City & Yadadri: Two Very Different Telangana Experiences | CEO’s Blog",
       "forms": 0,
       "buttons": 0
-    },
-    {
-      "url": "https://saahirides.co.in/offers.html",
-      "status": 200,
-      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/travel-tours.html",
@@ -109,9 +102,23 @@
       "buttons": 11
     },
     {
+      "url": "https://saahirides.co.in/offers.html",
+      "status": 200,
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
       "url": "https://saahirides.co.in/company-inception.html",
       "status": 200,
       "title": "Company Inception Details | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "status": 200,
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
@@ -130,25 +137,11 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
-      "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
       "url": "https://saahirides.co.in/on-demand-fare-chart.html",
       "status": 200,
       "title": "SaahiRides On-Demand Fare Chart",
       "forms": 0,
       "buttons": 2
-    },
-    {
-      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
-      "status": 200,
-      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
-      "forms": 0,
-      "buttons": 0
     },
     {
       "url": "https://saahirides.co.in/community.html",
@@ -165,16 +158,16 @@
       "buttons": 4
     },
     {
-      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
       "status": 200,
-      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
+      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
       "status": 200,
-      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
+      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
       "forms": 0,
       "buttons": 0
     },
@@ -193,6 +186,13 @@
       "buttons": 0
     },
     {
+      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
+      "status": 200,
+      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
       "url": "https://saahirides.co.in/rates.html",
       "status": 200,
       "title": "SaahiRides Rates | Affordable Bike, Auto & Cab Fares in Hyderabad",
@@ -200,9 +200,9 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/vision.html",
+      "url": "https://saahirides.co.in/offer.html",
       "status": 200,
-      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
+      "title": "SaahiRides Customer Offers | Ride & Travel Deals in Hyderabad",
       "forms": 0,
       "buttons": 2
     },
@@ -214,9 +214,9 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/offer.html",
+      "url": "https://saahirides.co.in/vision.html",
       "status": 200,
-      "title": "SaahiRides Customer Offers | Ride & Travel Deals in Hyderabad",
+      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     }
