@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-20T08:50:34.274Z",
+  "runAt": "2026-11-21T08:31:10.634Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,15 +19,11 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 38
+        "latencyMs": 43
       },
       {
         "status": 200,
-        "latencyMs": 42
-      },
-      {
-        "status": 200,
-        "latencyMs": 52
+        "latencyMs": 59
       },
       {
         "status": 200,
@@ -35,19 +31,23 @@
       },
       {
         "status": 200,
-        "latencyMs": 22
+        "latencyMs": 67
       },
       {
         "status": 200,
-        "latencyMs": 36
+        "latencyMs": 19
       },
       {
         "status": 200,
-        "latencyMs": 44
+        "latencyMs": 25
       },
       {
         "status": 200,
-        "latencyMs": 42
+        "latencyMs": 39
+      },
+      {
+        "status": 200,
+        "latencyMs": 58
       }
     ]
   },
@@ -60,16 +60,16 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog.html",
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
-      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "url": "https://saahirides.co.in/ceo-blog.html",
       "status": 200,
-      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
@@ -95,18 +95,18 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/fare-estimator.html",
-      "status": 200,
-      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 11
-    },
-    {
       "url": "https://saahirides.co.in/travel-tours.html",
       "status": 200,
       "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
       "forms": 1,
       "buttons": 30
+    },
+    {
+      "url": "https://saahirides.co.in/fare-estimator.html",
+      "status": 200,
+      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 11
     },
     {
       "url": "https://saahirides.co.in/company-inception.html",
@@ -123,16 +123,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
       "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
       "status": 200,
-      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
@@ -151,13 +151,6 @@
       "buttons": 1
     },
     {
-      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
-      "status": 200,
-      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
-      "forms": 0,
-      "buttons": 0
-    },
-    {
       "url": "https://saahirides.co.in/driver.html",
       "status": 200,
       "title": "Driver Network - SaahiRides",
@@ -165,9 +158,9 @@
       "buttons": 4
     },
     {
-      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
       "status": 200,
-      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
+      "title": "Vellore: Golden Temple, Local Markets & a Practical Visitor Guide | CEO’s Blog — SaahiRides",
       "forms": 0,
       "buttons": 0
     },
@@ -175,6 +168,13 @@
       "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
       "status": 200,
       "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "status": 200,
+      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
       "forms": 0,
       "buttons": 0
     },
