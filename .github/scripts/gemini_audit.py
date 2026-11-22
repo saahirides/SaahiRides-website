@@ -1,3 +1,5 @@
+python
+
 import os
 import json
 import glob
@@ -26,13 +28,13 @@ for path in target_files:
     )
 
     req = urllib.request.Request(
-        f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}",
+        f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={api_key}",
         data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode("utf-8"),
         headers={"Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req) as resp:
         out = json.loads(resp.read().decode("utf-8"))
-        fixed = out["candidates"]["content"]["parts"]["text"].strip()
+        fixed = out["candidates"][0]["content"]["parts"][0]["text"].strip()
 
     if fixed and fixed != "NO_CHANGES_NEEDED" and "<!DOCTYPE html>" in fixed:
         with open(path, "w", encoding="utf-8") as fh:
