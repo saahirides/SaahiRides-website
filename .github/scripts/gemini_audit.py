@@ -1,5 +1,3 @@
-python
-
 import os
 import json
 import glob
@@ -34,7 +32,7 @@ for path in target_files:
     )
     with urllib.request.urlopen(req) as resp:
         out = json.loads(resp.read().decode("utf-8"))
-        fixed = out["candidates"][0]["content"]["parts"][0]["text"].strip()
+        fixed = out["candidates"].pop(0)["content"]["parts"].pop(0)["text"].strip()
 
     if fixed and fixed != "NO_CHANGES_NEEDED" and "<!DOCTYPE html>" in fixed:
         with open(path, "w", encoding="utf-8") as fh:
