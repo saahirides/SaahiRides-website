@@ -47,7 +47,9 @@ jobs:
           git add command_center/open_anomalies.json command_center/closed_anomalies.json command_center/latest_report.json
           if ! git diff --cached --quiet; then
             git commit -m "chore(qa): update automated website test report"
-            git push
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
           else
             echo "No QA log changes to commit."
           fi
