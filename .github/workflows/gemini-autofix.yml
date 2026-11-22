@@ -1,10 +1,9 @@
-yaml
-
 name: Gemini Autonomous Bug-Fix Agent
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "index.html"
       - "app/*.html"
@@ -21,49 +20,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Gemini Code & Link Auditor
+      - name: Run Gemini Code Auditor
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python3 - << 'EOF'
-          import os, json, glob, urllib.request
+        run: python3 .github/scripts/gemini_audit.py
 
-          api_key = os.environ["GEMINI_API_KEY"]
-          target_files = [f for f in ["index.html"] + glob.glob("app/*.html") if f != "app/admin.html" and os.path.exists(f)]
-
-          for path in target_files:
-              with open(path, "r", encoding="utf-8") as fh:
-                  content = fh.read()
-
-              rules = (
-                  "Audit this HTML file (" + path + ") for SaahiRides (saahirides.co.in). "
-                  "Fix ONLY real bugs: 1) Stray text before <!DOCTYPE html>, broken/unclosed HTML tags, duplicate IDs, or broken relative links. "
-                  "2) Shortened forms.gle links inside <iframe> tags (remove broken iframes if present, keep <a> buttons). "
-                  "3) Low-contrast links on dark navy (#0B132B / #16223F) backgrounds. "
-                  "Preserve all existing copy, styles, and structure. "
-                  "If no bugs exist, return exact text: NO_CHANGES_NEEDED. "
-                  "Otherwise return ONLY the complete fixed HTML with no markdown fences.\n\nFILE CONTENT:\n" + content
-              )
-
-              req = urllib.request.Request(
-                  f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}",
-                  data=json.dumps({"contents": [{"parts": [{"text": rules}]}]}).encode(),
-                  headers={"Content-Type": "application/json"}
-              )
-              with urllib.request.urlopen(req) as resp:
-                  out = json.loads(resp.read().decode())
-                  fixed = out["candidates"]["content"]["parts"]["text"].strip()
-
-              if fixed and fixed != "NO_CHANGES_NEEDED" and "<!DOCTYPE html>" in fixed:
-                  with open(path, "w", encoding="utf-8") as fh:
-                      fh.write(fixed + "\n")
-          EOF
-
-      - name: Open Auto-Fix Pull Request if Faults Found
+      - name: Open Auto-Fix Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "fix: autonomous Gemini HTML & link repair"
           branch: gemini-autofix/repair
           title: "Gemini Auto-Fix: HTML & Link Fault Repairs"
-          body: "Automated audit detected and repaired HTML/link issues while keeping `app/admin.html` untouched."
-
+          body: "Automated audit repaired HTML/link issues while keeping app/admin.html untouched."
