@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-21T08:31:10.634Z",
+  "runAt": "2026-11-22T08:26:27.312Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,50 +19,50 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 43
+        "latencyMs": 70
       },
       {
         "status": 200,
-        "latencyMs": 59
+        "latencyMs": 52
       },
       {
         "status": 200,
-        "latencyMs": 61
+        "latencyMs": 136
       },
       {
         "status": 200,
-        "latencyMs": 67
+        "latencyMs": 143
       },
       {
         "status": 200,
-        "latencyMs": 19
+        "latencyMs": 34
       },
       {
         "status": 200,
-        "latencyMs": 25
+        "latencyMs": 26
       },
       {
         "status": 200,
-        "latencyMs": 39
+        "latencyMs": 38
       },
       {
         "status": 200,
-        "latencyMs": 58
+        "latencyMs": 454
       }
     ]
   },
   "pageResults": [
     {
-      "url": "https://saahirides.co.in/news-desk.html",
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
-      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "url": "https://saahirides.co.in/news-desk.html",
       "status": 200,
-      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
       "forms": 0,
       "buttons": 0
     },
@@ -123,16 +123,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
+      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
       "status": 200,
-      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
+      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog-panchavati.html",
+      "url": "https://saahirides.co.in/hyderabad-isha-vellore-spiritual-tour.html",
       "status": 200,
-      "title": "From the CEO's Desk | SaahiRides Travel Memories & Panchavati Guide",
+      "title": "Hyderabad to Isha Foundation & Vellore Golden Temple | SaahiRides Spiritual Journeys",
       "forms": 0,
       "buttons": 2
     },
@@ -165,16 +165,16 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
       "status": 200,
-      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
       "status": 200,
-      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
@@ -207,16 +207,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/vision.html",
+      "url": "https://saahirides.co.in/founder.html",
       "status": 200,
-      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
+      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/founder.html",
+      "url": "https://saahirides.co.in/vision.html",
       "status": 200,
-      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
+      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     }
