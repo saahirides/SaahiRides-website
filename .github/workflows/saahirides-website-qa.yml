@@ -2,6 +2,10 @@ name: SaahiRides Website QA
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'command_center/**'
   schedule:
     - cron: '30 1 * * *'
 
