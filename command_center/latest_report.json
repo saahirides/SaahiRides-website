@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-22T08:26:27.312Z",
+  "runAt": "2026-11-22T21:00:40.844Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,50 +19,50 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 70
+        "latencyMs": 40
       },
       {
         "status": 200,
-        "latencyMs": 52
+        "latencyMs": 59
       },
       {
         "status": 200,
-        "latencyMs": 136
+        "latencyMs": 31
       },
       {
         "status": 200,
-        "latencyMs": 143
+        "latencyMs": 53
       },
       {
         "status": 200,
-        "latencyMs": 34
+        "latencyMs": 30
       },
       {
         "status": 200,
-        "latencyMs": 26
+        "latencyMs": 37
       },
       {
         "status": 200,
-        "latencyMs": 38
+        "latencyMs": 170
       },
       {
         "status": 200,
-        "latencyMs": 454
+        "latencyMs": 169
       }
     ]
   },
   "pageResults": [
     {
-      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
+      "url": "https://saahirides.co.in/news-desk.html",
       "status": 200,
-      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/news-desk.html",
+      "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
-      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
     },
@@ -172,16 +172,16 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
       "status": 200,
-      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
       "status": 200,
-      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
