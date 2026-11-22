@@ -35,25 +35,24 @@ jobs:
               with open(path, "r", encoding="utf-8") as fh:
                   content = fh.read()
 
-              prompt = f"""Audit this HTML file ({path}) for SaahiRides (saahirides.co.in).
-          Fix ONLY real bugs:
-          1. Stray text before <!DOCTYPE html>, broken/unclosed HTML tags, duplicate IDs, or broken relative links.
-          2. Shortened forms.gle links inside <iframe> tags (remove broken iframes if present, keep <a> buttons).
-          3. Accessibility/contrast issues on dark navy (#0B132B / #16223F) backgrounds.
-          Preserve all existing copy, styles, and structure. If no bugs exist, return exact text: NO_CHANGES_NEEDED
-          Otherwise return ONLY the complete fixed HTML with no markdown fences.
-
-          FILE CONTENT:
-          {content}"""
+              rules = (
+                  "Audit this HTML file (" + path + ") for SaahiRides (saahirides.co.in). "
+                  "Fix ONLY real bugs: 1) Stray text before <!DOCTYPE html>, broken/unclosed HTML tags, duplicate IDs, or broken relative links. "
+                  "2) Shortened forms.gle links inside <iframe> tags (remove broken iframes if present, keep <a> buttons). "
+                  "3) Low-contrast links on dark navy (#0B132B / #16223F) backgrounds. "
+                  "Preserve all existing copy, styles, and structure. "
+                  "If no bugs exist, return exact text: NO_CHANGES_NEEDED. "
+                  "Otherwise return ONLY the complete fixed HTML with no markdown fences.\n\nFILE CONTENT:\n" + content
+              )
 
               req = urllib.request.Request(
                   f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}",
-                  data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}).encode(),
+                  data=json.dumps({"contents": [{"parts": [{"text": rules}]}]}).encode(),
                   headers={"Content-Type": "application/json"}
               )
               with urllib.request.urlopen(req) as resp:
                   out = json.loads(resp.read().decode())
-                  fixed = out["candidates"][0]["content"]["parts"][0]["text"].strip()
+                  fixed = out["candidates"]["content"]["parts"]["text"].strip()
 
               if fixed and fixed != "NO_CHANGES_NEEDED" and "<!DOCTYPE html>" in fixed:
                   with open(path, "w", encoding="utf-8") as fh:
@@ -68,6 +67,3 @@ jobs:
           title: "Gemini Auto-Fix: HTML & Link Fault Repairs"
           body: "Automated audit detected and repaired HTML/link issues while keeping `app/admin.html` untouched."
 
-Use code with caution.
-
-Copy code text to clipboard.
