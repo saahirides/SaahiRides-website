@@ -141,8 +141,8 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
       </div>
       <div class="control-group-block">
         <div class="slider-header-row"><label class="input-panel-label" for="estimator-distance-slider">3. ROUTE DISTANCE · AUTOMATIC</label><output id="display-distance-val" class="slider-counter-txt" for="estimator-distance-slider">15 km</output></div>
-        <input type="range" id="estimator-distance-slider" min="0.1" max="30" value="15" step="0.1" class="saahi-custom-range" aria-describedby="distance-bounds">
-        <div id="distance-bounds" class="slider-bounds-indicators"><span>1 km</span><span>City Limit Threshold (30 km)</span></div>
+        <input type="range" id="estimator-distance-slider" min="0.1" max="100" value="15" step="0.1" class="saahi-custom-range" aria-describedby="distance-bounds">
+        <div id="distance-bounds" class="slider-bounds-indicators"><span>0.1 km</span><span>Cab city threshold: 30 km · max 100 km</span></div>
       </div>
     </section>
     <section class="estimator-readout-card" aria-label="Estimated fares">
@@ -241,8 +241,8 @@ window.saahiRouteContext={pickup:coords(pickupPoint),drop:coords(dropPoint),pick
 if(routeLine&&map){map.removeLayer(routeLine);routeLine=null}
 map.fitBounds(L.latLngBounds([pickupPoint.lat,pickupPoint.lng],[dropPoint.lat,dropPoint.lng]).pad(.18));
 routeDistance.textContent=km.toFixed(2)+' km';
-if(km<=30){var bill=Math.ceil(km*10)/10,slider=document.getElementById('estimator-distance-slider');slider.disabled=false;slider.value=bill.toFixed(1);slider.dispatchEvent(new Event('input',{bubbles:true}));say('Ola Maps road distance: '+km.toFixed(2)+' km. Fare updated automatically.')}
-else say('Ola Maps road distance: '+km.toFixed(2)+' km. City fare limit is 30 km; request an outstation quote.')
+var slider=document.getElementById('estimator-distance-slider');var cab=window.saahiIsCityCab?window.saahiIsCityCab():false;if(km<=30||(cab&&km<=100)){var bill=Math.ceil(km*10)/10;slider.disabled=false;slider.value=bill.toFixed(1);slider.dispatchEvent(new Event('input',{bubbles:true}));say('Ola Maps road distance: '+km.toFixed(2)+' km. Fare updated using the applicable city billing band.')}
+else say(km>100?'Ola Maps road distance: '+km.toFixed(2)+' km. Above 100 km requires the normal outstation quote.':'Ola Maps road distance: '+km.toFixed(2)+' km. The 30 km city fare limit applies to this vehicle; request an outstation quote.')
 }).catch(function(e){if(id!==routeRequest)return;window.saahiRouteContext=null;routeDistance.textContent='Not available';say(e.message||'Could not calculate road distance. Retry.')}).finally(function(){if(id===routeRequest){routeButton.disabled=false;routeButton.textContent='Calculate distance & fare'}})
 }
 function geocode(q){return fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept':'application/json','Accept-Language':'en'}}).then(function(r){if(!r.ok)throw new Error('Address search is temporarily unavailable.');return r.json()}).then(function(a){if(!a||!a.length)throw new Error('Address not found: '+q);return L.latLng(Number(a[0].lat),Number(a[0].lon))})}
@@ -311,7 +311,10 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
     return Number(parts.find(function(p){return p.type==='hour'}).value);
   }
-  function isNightTime(){var value=billPickupTime.value;if(!value||value.length<13)return null;var h=Number(value.slice(11,13));return h>=22||h<6}
+  function isNightTime(){var value=billPickupTime.value;if(!value||value.length<13)return null;var h=Number(value.slice(11,13));return h>=21||h<6}
+  function isCityCab(){return /^(Non-AC Cab|AC Cab)/i.test(selectedVehicle)}
+  function nightCharge(){if(isNightTime()!==true)return 0;if(/^Bike/i.test(selectedVehicle))return 30;if(/^Scooty/i.test(selectedVehicle))return 45;if(/^Auto|^Electric Auto/i.test(selectedVehicle))return 60;if(/^Non-AC Cab/i.test(selectedVehicle))return 75;if(/^AC Cab/i.test(selectedVehicle))return 95;return 0}
+  function extendedRateEquivalent(distance){if(distance<=30)return null;if(distance<=50)return 62.5;return 62.5+(distance-50)*1.75}
   function istTimestamp(){return new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date())+' IST'}
   if(billPickupTime){if(!billPickupTime.value)billPickupTime.value=istLocalDateTime();billPickupTime.min=istLocalDateTime();}
   function billCustomer(){
@@ -325,6 +328,8 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
       var km=Math.max(0,Math.min(distance,x.to)-x.from);
       return {label:x.from+'–'+Math.min(distance,x.to)+' km × '+x.m.toFixed(2)+'×',amount:rate*km*x.m};
     }).filter(function(x){return x.amount>0});
+    if(distance>30&&isCityCab()){var equivalent=extendedRateEquivalent(distance);return [{label:'Extended city-cab billing · '+equivalent.toFixed(2)+' rate-equivalent km',amount:rate*equivalent}];}
+    return distance>30?[]:slabs.filter(function(x){return distance>x.from}).map(function(x){var km=Math.max(0,Math.min(distance,x.to)-x.from);return {label:x.from+'–'+Math.min(distance,x.to)+' km × '+x.m.toFixed(2)+'×',amount:rate*km*x.m};}).filter(function(x){return x.amount>0});
   }
   function normalizedPhone(value){
     var digits=String(value||'').replace(/\D/g,'');
@@ -335,17 +340,19 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var route=window.saahiRouteContext,customer=billCustomer(),night=isNightTime();
     billCustomerFields.hidden=bookingPurpose==='someone-else';
     billPassengerNote.hidden=bookingPurpose!=='someone-else';
-    if(!route||route.distanceKm>30){
-      billDetails.textContent='Resolve pickup and drop addresses and calculate a valid city route before preparing the bill.';
+    if(!route||route.distanceKm>100|| (route.distanceKm>30&&!isCityCab())){
+      billDetails.textContent='This vehicle/route is outside the supported city fare range. Cab city trips are supported through 100 km; above 100 km requires a separate outstation quote.';
       billStatus.textContent='Waiting for a verified route.';
       billSend.disabled=true;return;
     }
     if(!billPickupTime.value){billDetails.textContent='Enter the expected pickup date and time to determine whether night charges apply.';billStatus.textContent='Expected pickup date/time is required before sending a final bill.';billSend.disabled=true;return;}
     var distance=Math.ceil(route.distanceKm*10)/10;
-    var onDemand=calculateFare(distance,baseRatePerKm);
+    var extended=distance>30&&isCityCab();
+    var onDemand=extended?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
     var lines=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)});
-    var nightLine=night===true?'Night charge (10 PM–6 AM): NOT INCLUDED — approved amount is not configured.':'Night charge: ₹0 (pickup is outside 10 PM–6 AM)';
-    var totalLine=night===true?'Final amount: Pending approved night-charge tariff':'Final amount: ₹'+onDemand;
+    var charge=nightCharge();
+    var nightLine=charge?'Night charge (9 PM–6 AM): ₹'+charge:'Night charge: ₹0 (pickup outside 9 PM–6 AM)';
+    var totalLine='Final amount: ₹'+(onDemand+charge);
     var text='SaahiRides Bill\nCustomer: '+(customer.name||'Name required')+'\nCustomer mobile: '+(customer.phone||'Mobile required')+
       '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
       '\nVehicle: '+selectedVehicle+'\nExpected pickup: '+billPickupTime.value.replace('T',' ')+' IST\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
@@ -369,14 +376,15 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   }
   function buildBillMessage(){
     var route=window.saahiRouteContext,customer=billCustomer(),distance=Math.ceil(route.distanceKm*10)/10;
-    var onDemand=calculateFare(distance,baseRatePerKm);
+    var onDemand=distance>30&&isCityCab()?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
+    var charge=nightCharge();
     var slabs=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)}).join('\n');
     return 'SaahiRides Bill\nCustomer: '+customer.name+'\nCustomer mobile: '+customer.phone+
       '\nPickup: '+(route.pickupAddress||route.pickup)+'\nDrop: '+(route.dropAddress||route.drop)+
       '\nVehicle: '+selectedVehicle+'\nExpected pickup: '+billPickupTime.value.replace('T',' ')+' IST\nDriving-road distance: '+route.distanceKm.toFixed(2)+' km'+
       '\nQuote time: '+istTimestamp()+'\nApplicable fare slabs:\n'+slabs+
-      '\nOn-demand fare: ₹'+onDemand+'\nNight charge: ₹0 (outside 10 PM–6 AM)'+
-      '\nFinal amount: ₹'+onDemand+'\nNo surge pricing; no undisclosed extras.';
+      '\nOn-demand fare: ₹'+onDemand+'\nNight charge (9 PM–6 AM): ₹'+charge+
+      '\nFinal amount: ₹'+(onDemand+charge)+'\nNo surge pricing; no undisclosed extras.';
   }
   function calculateFare(distance, rate){
     var total = 0;
@@ -407,21 +415,25 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     }
     return Math.round(total);
   }
+  window.saahiIsCityCab=isCityCab;
   function updateEstimate(){
-    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';updateBill();return}
+    var route=window.saahiRouteContext;
+    if(!route||route.distanceKm>100||(route.distanceKm>30&&!isCityCab())){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';updateBill();return}
     bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
-    var distance = parseFloat(slider.value);
-    var onDemand = calculateFare(distance,baseRatePerKm);
-    var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=isNightTime()===true?'Daytime fare subtotal only. Night charge applies from 10 PM to 6 AM; approved amount is not configured, so this is not a final night quote.':isNightTime()===null?'Select expected pickup time to determine night-charge applicability.':'Calculated using the progressive distance slabs and selected vehicle base rate.';
+    var distance = Math.ceil(route.distanceKm*10)/10;
+    var extended=distance>30&&isCityCab();
+    var onDemand = extended?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
+    var charge=nightCharge();
+    var fareNote=document.getElementById('ondemand-calculation-note');if(fareNote)fareNote.textContent=(extended?'Extended city-cab rate-equivalent billing applies. ':'Progressive city fare applies. ')+(charge?'Night charge 9 PM–6 AM: ₹'+charge+' added.':'Night charge: ₹0.');
     distanceOutput.textContent = distance + ' km';
-    onDemandOutput.textContent = String(onDemand);
+    onDemandOutput.textContent = String(onDemand+charge);
     var oneWay = Math.round(onDemand * 30 * 0.90 + 199);
     var bothWay = Math.round(onDemand * 60 * 0.90 + 299);
     oneWayOutput.textContent = String(oneWay);
     bothWayOutput.textContent = String(bothWay);
     var passengerDetails = bookingPurpose === 'someone-else' ? '\nBooking for: Someone else\nPassenger name: ' + (otherRiderName.value.trim() || 'To be provided') + '\nPassenger mobile: ' + (otherRiderPhone.value.trim() || 'To be provided') + '\nRide OTP recipient (passenger): ' + otherRiderPhone.value.trim() : '\nBooking for: Myself\nCustomer name: ' + billNameInput.value.trim() + '\nCustomer mobile: ' + billPhoneInput.value.trim() + '\nRide OTP recipient (passenger): ' + billPhoneInput.value.trim();
     var message = 'BOOK\nSaahiRides fare estimate' + passengerDetails + '\nExpected pickup: ' + (billPickupTime.value||'Not supplied') + ' IST\nVehicle: ' + selectedVehicle +
-      '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + onDemand +
+      '\nDistance: ' + distance + ' km\nEstimated on-demand fare: ₹' + (onDemand+charge) + '\nNight charge (9 PM–6 AM): ₹' + charge +
       '\n30-day subscription one-way: ₹' + oneWay + '\nRoute-Lock fee included: ₹199' +
       '\n30-day subscription both-way: ₹' + bothWay + '\nRoute-Lock fee included: ₹299' +
       (window.saahiRouteContext ? '\nDriving-road distance: ' + window.saahiRouteContext.distanceKm.toFixed(2) + ' km\nPickup: ' + (window.saahiRouteContext.pickupAddress||window.saahiRouteContext.pickup) + '\nDrop: ' + (window.saahiRouteContext.dropAddress||window.saahiRouteContext.drop) + '\nPickup coordinates: ' + window.saahiRouteContext.pickup + '\nDrop coordinates: ' + window.saahiRouteContext.drop + '\nPickup navigation: ' + window.saahiRouteContext.pickupNav + '\nDrop navigation: ' + window.saahiRouteContext.dropNav : '') +
@@ -440,7 +452,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   purposeRadios.forEach(function(radio){radio.addEventListener('change',function(){bookingPurpose=radio.value;otherRiderFields.hidden=bookingPurpose!=='someone-else';updateEstimate();});});
   [otherRiderName,otherRiderPhone].forEach(function(input){input.addEventListener('input',updateEstimate);});
   bookingLink.addEventListener('click',function(event){
-    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>30){event.preventDefault();alert('Resolve both pickup and drop addresses and calculate a valid city route before booking.');return}
+    if(!window.saahiRouteContext || window.saahiRouteContext.distanceKm>100 || (window.saahiRouteContext.distanceKm>30&&!isCityCab())){event.preventDefault();alert('This vehicle/route requires a separate outstation quote. City-cab billing is supported through 100 km.');return}
     if(!billPickupTime.value){event.preventDefault();billPickupTime.focus();alert('Enter the expected pickup date and time so the correct fare rules can be applied.');return}
     if(bookingPurpose==='someone-else'){
       var phone=otherRiderPhone.value.replace(/[\s()-]/g,'');
@@ -462,7 +474,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
   billSend.addEventListener('click',function(){
     var route=window.saahiRouteContext,customer=billCustomer(),choice=document.querySelector('input[name="saahi-bill-recipient"]:checked');
     var recipient=choice&&choice.value==='alternate'?normalizedPhone(billAlternateInput.value):normalizedPhone(customer.phone);
-    if(!route||route.distanceKm>30||isNightTime()!==false||!customer.name||!normalizedPhone(customer.phone)||!recipient){updateBill();return}
+    if(!route||route.distanceKm>100||(route.distanceKm>30&&!isCityCab())||!customer.name||!normalizedPhone(customer.phone)||!recipient){updateBill();return}
     window.open('https://wa.me/'+recipient+'?text='+encodeURIComponent(buildBillMessage()),'_blank','noopener');
   });
   updateBill();
