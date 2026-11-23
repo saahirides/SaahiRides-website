@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaahiRides State Hub | SafeRide - SaafeRide @ SaahiPrice</title>
+<meta name="supabase-anon-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtztCncdpnbe9ZZiHVZVE">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:radial-gradient(ellipse at top,#132b53 0%,#06122E 52%,#030817 100%);font-family:'Segoe UI',Arial,sans-serif;color:#fff;line-height:1.6}
+  .container{max-width:1180px;margin:0 auto;background:#071931;box-shadow:0 12px 50px rgba(0,0,0,.35)}
+  .top-nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:14px 22px;background:#030817;border-bottom:2px solid #D4AF37}
+  .brand-mini{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;font-size:clamp(16px,2.2vw,23px);background:linear-gradient(100deg,#F97316 0%,#FFD400 50%,#D4AF37 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .brand-mini img{width:54px;height:54px;object-fit:contain}
+  .nav-links{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .nav-links a{color:#fff;text-decoration:none;font-size:13px;font-weight:700}
+  .nav-links a:hover{color:#FFD700}
+  .hub-bar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#0b1c3d;border-bottom:1px solid rgba(255,215,0,.35)}
+  .hub-pill{padding:8px 13px;border-radius:9px;border:1px solid #46618b;background:#06122E;color:#fff;text-decoration:none;font-size:12.5px;font-weight:800}
+  .hub-pill.active{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E;border-color:#FFE66D}
+  .role-bar{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;background:#06122E;border-bottom:1px solid rgba(255,255,255,.08)}
+  .role-btn{flex:1 1 140px;text-align:center;padding:9px 10px;border-radius:9px;border:1px solid rgba(255,215,0,.5);background:#10284d;color:#FFD700;text-decoration:none;font-size:12.5px;font-weight:800}
+  .role-btn.admin{background:linear-gradient(100deg,#D4AF37,#FFE66D);color:#06122E}
+  .state-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;padding:30px 24px;border-bottom:2px solid #D4AF37}
+  .badge{display:inline-block;padding:6px 12px;border-radius:999px;border:1px solid #00F0FF;color:#00F0FF;font-size:12px;font-weight:800;margin-bottom:10px}
+  .state-hero h1{font-size:clamp(28px,4.5vw,46px);color:#FFD700;line-height:1.12;margin-bottom:8px}
+  .lang-row{display:flex;gap:8px;margin:14px 0}
+  .lang-btn{padding:8px 14px;border-radius:8px;border:1px solid #D4AF37;background:#06122E;color:#FFD700;font-weight:800;cursor:pointer}
+  .lang-btn.active{background:#FFD700;color:#06122E}
+  .hero-img{border:2px solid #D4AF37;border-radius:16px;overflow:hidden;background:#0b1c3d}
+  .hero-img img{width:100%;max-height:320px;object-fit:cover;display:block}
+  .ceo-box{margin:20px 24px;padding:20px;border-radius:15px;background:linear-gradient(145deg,#10284d,#0b1c3d);border:1.5px solid #FFD700}
+  .ceo-box h2{color:#FFD700;font-size:19px;margin-bottom:6px}
+  .offer-box{margin:0 24px 20px;padding:18px 20px;border-radius:14px;background:rgba(37,211,102,.12);border:1.5px solid #25D366}
+  .offer-box strong{color:#6ee7b7;display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+  .partner-section{margin:0 24px 24px;padding:22px;border-radius:16px;background:#0b1c3d;border:1.5px solid #00F0FF}
+  .partner-section h2{color:#00F0FF;font-size:21px;margin-bottom:6px}
+  .partner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}
+  .partner-card{background:#16223F;border:1px solid rgba(255,215,0,.45);border-radius:13px;padding:16px}
+  .partner-card h3{color:#FFD700;font-size:16.5px;margin:4px 0 6px}
+  .partner-tag{display:inline-block;background:rgba(0,240,255,.15);color:#00F0FF;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px}
+  .common-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;padding:0 24px 26px}
+  .common-card{background:#16223F;border:1px solid rgba(255,215,0,.35);border-radius:14px;padding:18px;text-decoration:none;color:#fff;display:block;transition:transform .18s}
+  .common-card:hover{transform:translateY(-3px);border-color:#00F0FF}
+  .common-card h3{color:#FFD700;font-size:16.5px;margin-bottom:6px}
+  .common-card p{color:#cbd5e1;font-size:13px}
+  .flash-bar{display:flex;align-items:center;background:#10284d;border-top:2px solid #D4AF37;overflow:hidden}
+  .flash-tag{background:#D4AF37;color:#06122E;padding:10px 14px;font-size:11px;font-weight:950;white-space:nowrap}
+  .flash-text{padding:10px 14px;font-size:13px;font-weight:700;color:#ffe27a}
+  @media(max-width:760px){.state-hero{grid-template-columns:1fr}}
+</style>
+</head>
+<!-- CHANGE ONLY data-state="TS" (telangana.html), "AP" (andhra-pradesh.html), or "KA" (karnataka.html) -->
+<body data-state="TS">
+<div class="container">
+  <nav class="top-nav">
+    <a class="brand-mini" href="index.html"><img src="saahirides%20logo.jpg" alt="SaahiRides Logo"><span>SaahiRides Transit Pvt. Ltd.</span></a>
+    <div class="nav-links">
+      <a href="index.html">🏛️ Hyderabad Core HQ</a>
+      <a href="index.html#fare-chart">Price Pages</a>
+      <a href="index.html#vehicle-lists">Vehicle Categories</a>
+      <a href="travel-tours.html">Common Tours &amp; 20 Destinations</a>
+      <a href="ceo-blog.html">CEO's Blogs</a>
+      <a href="news-desk.html">News Desk</a>
+    </div>
+  </nav>
+
+  <div class="hub-bar">
+    <a href="index.html" class="hub-pill">1. Hyderabad Core HQ (Default)</a>
+    <a href="telangana.html" class="hub-pill" data-nav="TS">2. Telangana State (Hyderabad)</a>
+    <a href="andhra-pradesh.html" class="hub-pill" data-nav="AP">3. Andhra Pradesh (Amaravati)</a>
+    <a href="karnataka.html" class="hub-pill" data-nav="KA">4. Karnataka (Bengaluru)</a>
+  </div>
+
+  <div class="role-bar">
+    <a href="customer.html" class="role-btn">👤 Customers Login</a>
+    <a href="driver.html" class="role-btn">🚖 Drivers Login</a>
+    <a href="partnership-crm.html" class="role-btn">🤝 State Travel Partners Login</a>
+    <a href="hr.html" class="role-btn">🏢 HR Policies &amp; Portal</a>
+    <a href="admin.html" class="role-btn admin">🛡️ Founder Super Admin</a>
+  </div>
+
+  <section class="state-hero">
+    <div>
+      <span class="badge" id="stCapitalBadge">State Business Hub</span>
+      <h1 id="stTitle">SaahiRides State Operations</h1>
+      <p style="color:#00F0FF;font-weight:800;margin-bottom:8px">SafeRide - SaafeRide @ SaahiPrice • Monitored from Hyderabad Core HQ</p>
+      <div class="lang-row">
+        <button type="button" class="lang-btn active" id="stBtnEn">English</button>
+        <button type="button" class="lang-btn" id="stBtnReg">Regional Language</button>
+      </div>
+      <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px">
+        <a id="stWaBook" href="https://wa.me" target="_blank" rel="noopener" style="padding:12px 18px;border-radius:10px;background:#25D366;color:#fff;font-weight:800;text-decoration:none">💬 Book State Ride on WhatsApp</a>
+        <a href="fare-estimator.html" style="padding:12px 18px;border-radius:10px;border:1.5px solid #FFD700;color:#FFD700;font-weight:800;text-decoration:none">🧮 Calculate Fare</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img id="stHeroImg" src="logo.png" alt="State Hub Landmark">
+    </div>
+  </section>
+
+  <!-- Live CEO Message & Live State Offers (Centrally Controlled by You) -->
+  <section class="ceo-box">
+    <h2>🎙️ Live Message from the Founder &amp; CEO</h2>
+    <p id="stCeoMsg" style="color:#f8fafc;font-size:15px">Loading live CEO broadcast…</p>
+  </section>
+
+  <section class="offer-box">
+    <strong>⚡ Live State Offer &amp; Campaign</strong>
+    <p id="stOfferMsg" style="color:#fff;font-weight:700;font-size:15px">Loading state offers…</p>
+  </section>
+
+  <!-- State Travel Partner Managed Pilgrimage & State Tour Packages -->
+  <section class="partner-section">
+    <h2>🛕 State Travel Partner Pilgrimage &amp; State Tour Packages</h2>
+    <p style="color:#cbd5e1;font-size:13.5px">Curated and operated locally by verified State Travel Partners under SaahiRides Central Quality &amp; Safety Standards.</p>
+    <div class="partner-grid" id="stPartnerPackagesGrid">
+      <p style="color:#ffe27a;font-size:13px">Loading approved state partner packages…</p>
+    </div>
+  </section>
+
+  <!-- Common Pan-India Modules Present on Every State Page -->
+  <section class="common-grid" aria-label="Shared Pan-India SaahiRides Modules">
+    <a href="index.html#fare-chart" class="common-card"><h3>₹ Price Pages &amp; Subscriptions</h3><p>Central 30 km cumulative On-Demand slabs, Outstation tariffs &amp; 30-day Route-Lock plans.</p></a>
+    <a href="index.html#vehicle-lists" class="common-card"><h3>🚘 Vehicle Categories</h3><p>Sawari (Bike, Scooty, EV, Auto, Cab), Premium, Rental &amp; Outstation vehicle lists.</p></a>
+    <a href="index.html#saahi-table-of-contents" class="common-card"><h3>🔧 Central Garage Network</h3><p>Centralised vehicle inspection, safety standards &amp; upcoming SaahiRides Garage Services.</p></a>
+    <a href="hr.html" class="common-card"><h3>📋 HR Policies &amp; Charter</h3><p>Brand Ambassador dignity, Zero-Tipping, 24-hour KYC validation &amp; state HR governance.</p></a>
+    <a href="travel-tours.html" class="common-card"><h3>🗺️ Common Pilgrimage &amp; 20 Destinations</h3><p>Pan-India temple circuits, family combos &amp; 20 curated destinations across India.</p></a>
+    <a href="ceo-blog.html" class="common-card"><h3>✍️ CEO's Blogs &amp; State News</h3><p>Founder stories, smarter package planning tips &amp; live state announcements.</p></a>
+  </section>
+
