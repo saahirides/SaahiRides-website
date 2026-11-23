@@ -9,9 +9,9 @@
     "lastSeenAt": "2026-11-11T07:58:26.544Z",
     "occurrences": 2,
     "status": "OPEN_PENDING_VERIFICATION",
-    "lastCheckedAt": "2026-11-23T19:44:55.129Z",
-    "notReproducedInRunAt": "2026-11-23T19:44:55.129Z",
-    "cleanRunsWithoutReproduction": 17
+    "lastCheckedAt": "2026-11-23T19:58:31.362Z",
+    "notReproducedInRunAt": "2026-11-23T19:58:31.362Z",
+    "cleanRunsWithoutReproduction": 18
   },
   {
     "id": "browser-runtime-error|https---saahirides.co.in-driver.html|missing---after-argument-list",
@@ -23,9 +23,9 @@
     "lastSeenAt": "2026-11-11T07:58:26.544Z",
     "occurrences": 2,
     "status": "OPEN_PENDING_VERIFICATION",
-    "lastCheckedAt": "2026-11-23T19:44:55.129Z",
-    "notReproducedInRunAt": "2026-11-23T19:44:55.129Z",
-    "cleanRunsWithoutReproduction": 17
+    "lastCheckedAt": "2026-11-23T19:58:31.362Z",
+    "notReproducedInRunAt": "2026-11-23T19:58:31.362Z",
+    "cleanRunsWithoutReproduction": 18
   },
   {
     "id": "browser-runtime-error|https---saahirides.co.in-|unexpected-token----",
@@ -36,6 +36,9 @@
     "firstSeenAt": "2026-11-23T02:24:44.062Z",
     "lastSeenAt": "2026-11-23T19:44:55.129Z",
     "occurrences": 4,
-    "status": "OPEN"
+    "status": "OPEN_PENDING_VERIFICATION",
+    "lastCheckedAt": "2026-11-23T19:58:31.362Z",
+    "notReproducedInRunAt": "2026-11-23T19:58:31.362Z",
+    "cleanRunsWithoutReproduction": 1
   }
 ]
