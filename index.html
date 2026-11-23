@@ -728,9 +728,283 @@ img{height:auto}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"TaxiService","name":"SaahiRides Transit Pvt. Ltd.","alternateName":"SaahiRides","url":"https://saahirides.co.in/","logo":"https://saahirides.co.in/logo.png","image":"https://saahirides.co.in/saahirides%20logo.jpg","description":"Safe and affordable rides in Hyderabad: bikes, scooties, autos, AC and non-AC cabs, rentals and outstation travel with no surge pricing.","telephone":"+91-9347946026","areaServed":{"@type":"City","name":"Hyderabad"},"slogan":"SafeRide @ SaahiPrice"}
 </script>
+<meta name="supabase-anon-key" content="eyJhIjoiYzM3MTk2YzUwODEwNjIyNDRjMDIyY2IxYjE3YTRhYWUiLCJ0IjoiMzkwMjJmMTQtYmI1NS00YmFmLWI3NmUtYzQ5NWQyYTJiMmVkIiwicyI6Ik5HTXhZMlptWmprdE1ETTNPQzAwTmpjMExXSXdOemd0WWpZMk9EWTROMkl4WVdKaiJ9">
 </head>
 <body>
 <div class="container">
+
+<!-- === SAAHIRIDES HUB-AND-SPOKE TRI-STATE & ROLE ENTRY GATEWAY === -->
+<style>
+  .sr-gateway-wrap {
+    background: linear-gradient(155deg, #071329 0%, #0d2247 55%, #050d1f 100%);
+    border-bottom: 2px solid #D4AF37;
+    padding: 22px 18px 26px;
+    color: #fff;
+  }
+  .sr-hq-ribbon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+  }
+  .sr-hq-ribbon strong { color: #FFD700; }
+  .sr-role-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .sr-role-btn {
+    flex: 1 1 140px;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 800;
+    text-decoration: none;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    background: #0b1c3d;
+    color: #FFD700;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .sr-role-btn:hover { transform: translateY(-2px); background: #163669; color: #fff; }
+  .sr-role-btn.superadmin {
+    background: linear-gradient(100deg, #D4AF37, #FFE66D);
+    color: #06122E;
+    border-color: #FFE66D;
+  }
+  .sr-state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .sr-state-card {
+    background: #0b1c3d;
+    border: 2px solid #28436d;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s;
+  }
+  .sr-state-card:hover, .sr-state-card.active {
+    border-color: #FFD700;
+    transform: translateY(-2px);
+  }
+  .sr-state-img-box {
+    position: relative;
+    height: 135px;
+    background: #102b55;
+    overflow: hidden;
+  }
+  .sr-state-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sr-capital-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(6, 18, 46, 0.9);
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 4px 9px;
+    border-radius: 8px;
+  }
+  .sr-state-info { padding: 12px 14px; }
+  .sr-state-info h3 { font-size: 16px; color: #fff; margin-bottom: 4px; }
+  .sr-state-info p { font-size: 12.5px; color: #cbd5e1; margin: 0; }
+  .sr-verify-box {
+    background: rgba(6, 18, 46, 0.92);
+    border: 1.5px solid #D4AF37;
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .sr-verify-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .sr-verify-row input {
+    flex: 1 1 210px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #46618b;
+    background: #040d21;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .sr-verify-btn {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 0;
+    background: linear-gradient(100deg, #078b35, #16c65a);
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .sr-guest-btn {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #FFD700;
+    background: transparent;
+    color: #FFD700;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .sr-gate-msg {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffe27a;
+  }
+  #srGuestLockModal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(3, 8, 23, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+  }
+  #srGuestLockModal.open { display: flex; }
+  .sr-lock-card {
+    max-width: 480px;
+    width: 100%;
+    background: #0b1c3d;
+    border: 2px solid #FFD700;
+    border-radius: 16px;
+    padding: 22px;
+    text-align: center;
+  }
+</style>
+
+<section class="sr-gateway-wrap" id="saahirides-tristate-gateway">
+  <!-- Core HQ + Active State Office Ribbon -->
+  <div class="sr-hq-ribbon">
+    <div>🏛️ <strong>Core Corporate Office (HQ):</strong> Hyderabad, Telangana (Nagaram)</div>
+    <div id="srActiveStateBadge">📍 Active State Office: <strong>Telangana State (Capital: Hyderabad)</strong></div>
+  </div>
+
+  <!-- Universal Role Login Bar (Available on Every Page View) -->
+  <div class="sr-role-bar">
+    <a href="customer.html" class="sr-role-btn sr-protected-link">👤 Login as Customer</a>
+    <a href="driver.html" class="sr-role-btn sr-protected-link">🚖 Login as Driver</a>
+    <a href="partnership-crm.html" class="sr-role-btn sr-protected-link">🤝 Login as Partner</a>
+    <a href="hr.html" class="sr-role-btn sr-protected-link">🏢 HR &amp; Company Others</a>
+    <a href="admin.html" class="sr-role-btn superadmin">🛡️ Common Super Admin Login</a>
+  </div>
+
+  <!-- Three Independent State Business Hubs with Capitals & Landmark Photos -->
+  <div class="sr-state-grid">
+    <div class="sr-state-card active" data-state="TS" data-name="Telangana State" data-capital="Hyderabad" onclick="srSelectState(this)">
+      <div class="sr-state-img-box">
+        <img src="ramoji gate poster.jpg" alt="Telangana State - Capital Hyderabad" onerror="this.src='logo.png'">
+        <span class="sr-capital-badge">Capital: Hyderabad</span>
+      </div>
+      <div class="sr-state-info">
+        <h3>TELANGANA STATE</h3>
+        <p>Core HQ &amp; State Business Office • Hyderabad, Secunderabad, ECIL, HITEC City &amp; Warangal.</p>
+      </div>
+    </div>
+
+    <div class="sr-state-card" data-state="AP" data-name="Andhra Pradesh" data-capital="Amaravati" onclick="srSelectState(this)">
+      <div class="sr-state-img-box">
+        <img src="hyderabad to tirupati special darshan.jpg" alt="Andhra Pradesh - Capital Amaravati" onerror="this.src='logo.png'">
+        <span class="sr-capital-badge">Capital: Amaravati</span>
+      </div>
+      <div class="sr-state-info">
+        <h3>ANDHRA PRADESH</h3>
+        <p>Independent State Business Office • Amaravati, Vijayawada, Visakhapatnam &amp; Tirupati.</p>
+      </div>
+    </div>
+
+    <div class="sr-state-card" data-state="KA" data-name="Karnataka" data-capital="Bengaluru" onclick="srSelectState(this)">
+      <div class="sr-state-img-box">
+        <img src="bangalore palace.jpg" alt="Karnataka - Capital Bengaluru" onerror="this.src='logo.png'">
+        <span class="sr-capital-badge">Capital: Bengaluru</span>
+      </div>
+      <div class="sr-state-info">
+        <h3>KARNATAKA</h3>
+        <p>Independent State Business Office • Bengaluru, Kempegowda Airport, Mysuru &amp; Inter-State.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registered Mobile Number Gate (Supabase Verified) + 2-Page Guest Entry -->
+  <div class="sr-verify-box">
+    <div style="font-size:14px;font-weight:800;color:#FFD700">
+      🔐 Registered Member Access (Supabase Verified) • Unregistered Blocked Beyond 2 Guest Pages
+    </div>
+    <div class="sr-verify-row">
+      <input type="tel" id="srMobileInput" maxlength="10" placeholder="Enter 10-digit registered +91 mobile number">
+      <button type="button" class="sr-verify-btn" id="srVerifyMobileBtn">Verify &amp; Unlock Full Access</button>
+      <button type="button" class="sr-guest-btn" id="srGuestEntryBtn">Guest Entry (First 2 Pages Only)</button>
+    </div>
+    <div class="sr-gate-msg" id="srGateStatus">
+      Enter your registered mobile number to unlock all portals, or use Guest Entry (strictly limited to 2 pages).
+    </div>
+  </div>
+</section>
+
+<!-- Guest 2-Page Limit Blocking Modal -->
+<div id="srGuestLockModal">
+  <div class="sr-lock-card">
+    <h3 style="color:#FFD700;margin-bottom:10px">🔒 Guest 2-Page Preview Limit Reached</h3>
+    <p style="font-size:14px;color:#e2e8f0;margin-bottom:14px">
+      Guest entry is restricted to the first 2 pages only. Enter a Supabase-verified mobile number or register your profile (24-hour KYC validation window) to continue.
+    </p>
+    <input type="tel" id="srModalMobileInput" maxlength="10" placeholder="Enter 10-digit registered mobile" style="width:100%;padding:12px;border-radius:10px;border:1px solid #46618b;background:#040d21;color:#fff;margin-bottom:10px">
+    <div id="srModalStatus" style="font-size:13px;color:#fca5a5;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+      <button type="button" class="sr-verify-btn" id="srModalVerifyBtn">Verify Mobile</button>
+      <a href="https://wa.me." target="_blank" rel="noopener" class="sr-role-btn">Register on WhatsApp</a>
+      <button type="button" class="sr-guest-btn" onclick="document.getElementById('srGuestLockModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function initSaahiRidesTriStateGate() {
+  const SUPABASE_URL = 'https://supabase.co';
+  const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.content || '';
+
+  const gateStatus = document.getElementById('srGateStatus');
+  const activeStateBadge = document.getElementById('srActiveStateBadge');
+  const lockModal = document.getElementById('srGuestLockModal');
+
+  // Track Guest Page Count (Max 2 Pages Allowed)
+  let isVerified = sessionStorage.getItem('sr_verified_mobile') || '';
+  let guestPages = Number(sessionStorage.getItem('sr_guest_pages') || '1');
+  if (!isVerified) {
+    sessionStorage.setItem('sr_guest_pages', String(guestPages));
+  } else {
+    gateStatus.style.color = '#6ee7b7';
+    gateStatus.textContent = '✓ Verified Member (+91 ' + isVerified + ') — Full Tri-State & Portal Access Unlocked.';
+  }
+
+  window.srSelectState = function(card) {
+    document.querySelectorAll('.sr-state-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    const code = card.dataset.state;
+    const name = card.dataset.name;
+    const capital = card.dataset.capital;
+    sessionStorage.setItem('sr_active_state', code);
+
+  
   <nav class="top-nav" aria-label="Main navigation">
     <a class="brand-mini" href="#home" aria-label="SaahiRides Transit Pvt. Ltd. home"><img class="brand-logo" src="saahirides%20logo.jpg" alt="SaahiRides logo"><span class="brand-full-name">SaahiRides Transit Pvt. Ltd.</span></a>
     <div class="nav-links">
