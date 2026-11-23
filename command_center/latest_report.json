@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-11-23T09:25:12.903Z",
+  "runAt": "2026-11-23T19:44:55.129Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
@@ -19,35 +19,35 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 43
+        "latencyMs": 45
       },
       {
         "status": 200,
-        "latencyMs": 49
+        "latencyMs": 76
       },
       {
         "status": 200,
-        "latencyMs": 51
+        "latencyMs": 33
       },
       {
         "status": 200,
-        "latencyMs": 54
+        "latencyMs": 23
       },
       {
         "status": 200,
-        "latencyMs": 17
+        "latencyMs": 18
       },
       {
         "status": 200,
-        "latencyMs": 34
+        "latencyMs": 66
       },
       {
         "status": 200,
-        "latencyMs": 29
+        "latencyMs": 326
       },
       {
         "status": 200,
-        "latencyMs": 41
+        "latencyMs": 334
       }
     ]
   },
@@ -58,6 +58,13 @@
       "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
       "forms": 0,
       "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/",
+      "status": 200,
+      "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
+      "forms": 0,
+      "buttons": 7
     },
     {
       "url": "https://saahirides.co.in/ceo-blog.html",
@@ -74,18 +81,18 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/",
-      "status": 200,
-      "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
-      "forms": 0,
-      "buttons": 7
-    },
-    {
       "url": "https://saahirides.co.in/ceo-blog-ramoji-yadadri.html",
       "status": 200,
       "title": "Ramoji Film City & Yadadri: Two Very Different Telangana Experiences | CEO’s Blog",
       "forms": 0,
       "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/fare-estimator.html",
+      "status": 200,
+      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 11
     },
     {
       "url": "https://saahirides.co.in/offers.html",
@@ -102,23 +109,16 @@
       "buttons": 30
     },
     {
-      "url": "https://saahirides.co.in/fare-estimator.html",
+      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
       "status": 200,
-      "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
+      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
       "forms": 0,
-      "buttons": 11
+      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/company-inception.html",
       "status": 200,
       "title": "Company Inception Details | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
-      "url": "https://saahirides.co.in/bengaluru-mysuru-hyderabad-family-combo.html",
-      "status": 200,
-      "title": "Royal Multi-Destination Escape | Bengaluru, Mysuru & Hyderabad Family Combo | SaahiRides",
       "forms": 0,
       "buttons": 2
     },
@@ -137,18 +137,18 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/on-demand-fare-chart.html",
-      "status": 200,
-      "title": "SaahiRides On-Demand Fare Chart",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
       "url": "https://saahirides.co.in/community.html",
       "status": 200,
       "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
       "forms": 1,
       "buttons": 1
+    },
+    {
+      "url": "https://saahirides.co.in/on-demand-fare-chart.html",
+      "status": 200,
+      "title": "SaahiRides On-Demand Fare Chart",
+      "forms": 0,
+      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/driver.html",
@@ -165,13 +165,6 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
-      "status": 200,
-      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
-      "forms": 0,
-      "buttons": 0
-    },
-    {
       "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
       "status": 200,
       "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
@@ -182,6 +175,13 @@
       "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
       "status": 200,
       "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
+      "forms": 0,
+      "buttons": 0
+    },
+    {
+      "url": "https://saahirides.co.in/tirupati-complete-pilgrimage-guide.html",
+      "status": 200,
+      "title": "Tirumala–Tirupati Pilgrimage: 2 Sightseeing Days, 3 Nights | SaahiRides CEO Blog",
       "forms": 0,
       "buttons": 0
     },
@@ -207,16 +207,16 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/vision.html",
+      "url": "https://saahirides.co.in/founder.html",
       "status": 200,
-      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
+      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/founder.html",
+      "url": "https://saahirides.co.in/vision.html",
       "status": 200,
-      "title": "Message from the Founder | SaahiRides Transit Pvt. Ltd.",
+      "title": "Our Vision & Mission | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 2
     }
