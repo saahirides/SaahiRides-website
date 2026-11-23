@@ -158,7 +158,7 @@ footer{border-top:1px solid #ffffff12;padding:22px 4%;text-align:center;color:#8
           <div class="vertical-divider-line" aria-hidden="true"></div>
           <div class="sub-price-subblock"><span class="sub-label-micro">BOTH-WAY TOTAL</span><div class="readout-price-row size-medium"><span class="readout-currency">₹</span><output id="output-sub-bothway" class="readout-sum-bold" aria-live="polite">11759</output></div></div>
         </div>
-        <p class="readout-calculation-note gold-note">A 10% discount applies to trip fares only. Add the fixed Route-Lock fee in full: ₹199 one-way or ₹299 both-way. No separate joining fee.</p>
+        <p class="readout-calculation-note gold-note">A 10% discount applies to trip fares only. Add the fixed Route-Lock fee in full: ₹199 one-way or ₹299 both-way. Applicable night charges are billed per trip separately and are not included in the subscription estimate. No separate joining fee.</p>
       </div>
       
       <div class="readout-tier-box" id="saahi-bill-card">
@@ -345,7 +345,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
       billSend.disabled=true;return;
     }
     if(!billPickupTime.value){billDetails.textContent='Enter the expected pickup date and time to determine whether night charges apply.';billStatus.textContent='Expected pickup date/time is required before sending a final bill.';billSend.disabled=true;return;}
-    var distance=Math.ceil(route.distanceKm*10)/10;
+    var distance=route.distanceKm;
     var extended=distance>30&&isCityCab();
     var onDemand=extended?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
     var lines=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)});
@@ -372,7 +372,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
           : 'Bill total matches the on-demand calculator. Review the details, then send.';
   }
   function buildBillMessage(){
-    var route=window.saahiRouteContext,customer=billCustomer(),distance=Math.ceil(route.distanceKm*10)/10;
+    var route=window.saahiRouteContext,customer=billCustomer(),distance=route.distanceKm;
     var onDemand=distance>30&&isCityCab()?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
     var charge=nightCharge();
     var slabs=applicableSlabs(distance,baseRatePerKm).map(function(x){return '• '+x.label+' = ₹'+x.amount.toFixed(2)}).join('\n');
@@ -417,7 +417,7 @@ routeButton.addEventListener('click',calculateRoute);document.querySelectorAll('
     var route=window.saahiRouteContext;
     if(!route||route.distanceKm>100||(route.distanceKm>30&&!isCityCab())){distanceOutput.textContent='—';onDemandOutput.textContent='—';oneWayOutput.textContent='—';bothWayOutput.textContent='—';bookingLink.setAttribute('aria-disabled','true');bookingLink.style.opacity='.55';bookingLink.style.pointerEvents='none';updateBill();return}
     bookingLink.removeAttribute('aria-disabled');bookingLink.style.opacity='1';bookingLink.style.pointerEvents='auto';
-    var distance = Math.ceil(route.distanceKm*10)/10;
+    var distance = route.distanceKm;
     var extended=distance>30&&isCityCab();
     var onDemand = extended?Math.round(baseRatePerKm*extendedRateEquivalent(distance)):calculateFare(distance,baseRatePerKm);
     var charge=nightCharge();
