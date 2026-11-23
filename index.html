@@ -1853,8 +1853,149 @@ body.sos-dialog-open{overflow:hidden}
   </section>`;
   tocSection.insertAdjacentHTML('afterend', wallHTML);
 
-  const lockedNodes=[];
+    const lockedNodes=[];
+  let cursor=document.getElementById('srGuestWallBanner').nextElementSibling;
+  while(cursor){
+    lockedNodes.push(cursor);
+    cursor=cursor.nextElementSibling;
+  }
 
+  function applyLockState(){
+    const verified=!!sessionStorage.getItem('sr_verified_mobile');
+    const wall=document.getElementById('srGuestWallBanner');
+    if(wall)wall.classList.toggle('hidden',verified);
+    lockedNodes.forEach(el=>el.classList.toggle('sr-guest-hidden',!verified));
+  }
+  applyLockState();
+
+  // 3. Bilingual Dictionary (English + Regional Language per Chosen Hub)
+  const HUB_DICT={
+    HYD:{
+      regBtn:'తెలుగు (Telugu)',
+      en:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • Core HQ: Hyderabad (Nagaram)',
+        wallTitle:'🔒 Guest Preview Limit Reached (First 2 Sections Shown)',
+        wallDesc:'Verify your registered +91 mobile number or register for Hyderabad Core HQ to view complete fare charts, subscriptions & booking portals.'
+      },
+      reg:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • ప్రధాన కార్యాలయం: హైదరాబాద్ (నాగారం)',
+        wallTitle:'🔒 అతిథి ప్రివ్యూ పరిమితి పూర్తయింది (మొదటి 2 విభాగాలు మాత్రమే)',
+        wallDesc:'పూర్తి ఛార్జీల పట్టికలు, సబ్‌స్క్రిప్షన్‌లు మరియు బుకింగ్ పోర్టల్‌లను చూడటానికి మీ రిజిస్టర్డ్ +91 మొబైల్ నంబర్‌ను ధృవీకరించండి.'
+      }
+    },
+    TS:{
+      regBtn:'తెలుగు (Telugu)',
+      en:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • Telangana State Office (Capital: Hyderabad)',
+        wallTitle:'🔒 Telangana State Hub — Login or Register to View Full Operations',
+        wallDesc:'Verify your registered +91 mobile number or register for Telangana State (Warangal, Karimnagar, Nizamabad & Intercity).'
+      },
+      reg:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • తెలంగాణ రాష్ట్ర కార్యాలయం (రాజధాని: హైదరాబాద్)',
+        wallTitle:'🔒 తెలంగాణ రాష్ట్ర హబ్ — పూర్తి సేవల కోసం లాగిన్ లేదా రిజిస్టర్ చేయండి',
+        wallDesc:'వరంగల్, కరీంనగర్, నిజామాబాద్ మరియు అంతర్-నగర సేవల కోసం మీ రిజిస్టర్డ్ +91 మొబైల్ నంబర్‌ను నమోదు చేయండి.'
+      }
+    },
+    AP:{
+      regBtn:'తెలుగు (Telugu)',
+      en:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • Andhra Pradesh Office (Capital: Amaravati)',
+        wallTitle:'🔒 Andhra Pradesh Hub — Login or Register to View Full Operations',
+        wallDesc:'Verify your registered +91 mobile number or register for Andhra Pradesh (Amaravati, Vijayawada, Visakhapatnam & Tirupati).'
+      },
+      reg:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • ఆంధ్రప్రదేశ్ రాష్ట్ర కార్యాలయం (రాజధాని: అమరావతి)',
+        wallTitle:'🔒 ఆంధ్రప్రదేశ్ హబ్ — పూర్తి సేవల కోసం లాగిన్ లేదా రిజిస్టర్ చేయండి',
+        wallDesc:'అమరావతి, విజయవాడ, విశాఖపట్నం మరియు తిరుపతి సేవల కోసం మీ రిజిస్టర్డ్ +91 మొబైల్ నంబర్‌ను ధృవీకరించండి.'
+      }
+    },
+    KA:{
+      regBtn:'ಕನ್ನಡ (Kannada)',
+      en:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • Karnataka State Office (Capital: Bengaluru)',
+        wallTitle:'🔒 Karnataka State Hub — Login or Register to View Full Operations',
+        wallDesc:'Verify your registered +91 mobile number or register for Karnataka (Bengaluru, Kempegowda Airport & Mysuru).'
+      },
+      reg:{
+        tagline:'SafeRide - SaafeRide @ SaahiPrice • ಕರ್ನಾಟಕ ರಾಜ್ಯ ಕಚೇರಿ (ರಾಜಧಾನಿ: ಬೆಂಗಳೂರು)',
+        wallTitle:'🔒 ಕರ್ನಾಟಕ ರಾಜ್ಯ ಹಬ್ — ಸಂಪೂರ್ಣ ಸೇವೆಗಳಿಗಾಗಿ ಲಾಗಿನ್ ಅಥವಾ ನೋಂದಾಯಿಸಿ',
+        wallDesc:'ಬೆಂಗಳೂರು, ಕೆಂಪೇಗೌಡ ವಿಮಾನ ನಿಲ್ದಾಣ ಮತ್ತು ಮೈಸೂರು ಸೇವೆಗಳಿಗಾಗಿ ನಿಮ್ಮ ನೋಂದಾಯಿತ +91 ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.'
+      }
+    }
+  };
+
+  let currentHub=sessionStorage.getItem('sr_hub')||'HYD';
+  let currentLang=sessionStorage.getItem('sr_lang')||'en';
+
+  function applyLocalization(){
+    const cfg=HUB_DICT[currentHub]||HUB_DICT.HYD;
+    const copy=cfg[currentLang]||cfg.en;
+    document.getElementById('srLangRegBtn').textContent=cfg.regBtn;
+    document.getElementById('srTaglineText').textContent=copy.tagline;
+    document.getElementById('srWallTitle').textContent=copy.wallTitle;
+    document.getElementById('srWallDesc').textContent=copy.wallDesc;
+    document.getElementById('srLangEnBtn').classList.toggle('active',currentLang==='en');
+    document.getElementById('srLangRegBtn').classList.toggle('active',currentLang==='reg');
+  }
+
+  document.querySelectorAll('.sr-hub-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      currentHub=card.dataset.hub||'HYD';
+      sessionStorage.setItem('sr_hub',currentHub);
+      document.querySelectorAll('.sr-hub-card').forEach(c=>c.classList.remove('active'));
+      card.classList.add('active');
+      applyLocalization();
+    });
+  });
+
+  document.getElementById('srLangEnBtn').onclick=()=>{currentLang='en';sessionStorage.setItem('sr_lang','en');applyLocalization();};
+  document.getElementById('srLangRegBtn').onclick=()=>{currentLang='reg';sessionStorage.setItem('sr_lang','reg');applyLocalization();};
+  document.getElementById('srGuestScrollBtn').onclick=()=>{
+    const h=document.getElementById('home');
+    if(h)h.scrollIntoView({behavior:'smooth'});
+  };
+
+  async function verifyMobile(inputId,statusId){
+    const raw=document.getElementById(inputId)?.value||'';
+    const statusEl=document.getElementById(statusId);
+    const clean=raw.replace(/\D/g,'');
+    if(clean.length!==10){
+      statusEl.style.color='#fca5a5';
+      statusEl.textContent='Please enter a valid 10-digit registered mobile number.';
+      return;
+    }
+    statusEl.style.color='#ffe27a';
+    statusEl.textContent='Verifying against SaahiRides Supabase records…';
+    try{
+      const res=await fetch('https://supabase.co',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'apikey':SUPABASE_ANON_KEY,
+          'Authorization':'Bearer '+SUPABASE_ANON_KEY
+        },
+        body:JSON.stringify({p_phone:clean})
+      });
+      const data=await res.json();
+      if(data&&data.is_registered===true){
+        sessionStorage.setItem('sr_verified_mobile',clean);
+        applyLockState();
+        document.getElementById('srTopGateStatus').style.color='#6ee7b7';
+        document.getElementById('srTopGateStatus').textContent='✓ Verified (+91 '+clean+') — Complete page & portals unlocked!';
+      }else{
+        statusEl.style.color='#fca5a5';
+        statusEl.textContent='⛔ Number +91 '+clean+' is not verified in Supabase. Register for your state below (24-hr KYC window).';
+      }
+    }catch{
+      statusEl.style.color='#fca5a5';
+      statusEl.textContent='⛔ Verification failed. Complete page remains locked beyond the first 2 guest sections.';
+    }
+  }
+
+  document.getElementById('srTopVerifyBtn').onclick=()=>verifyMobile('srTopMobileInput','srTopGateStatus');
+  document.getElementById('srWallVerifyBtn').onclick=()=>verifyMobile('srWallMobileInput','srWallStatus');
+  applyLocalization();
+})();
+</script>
 </body>
-
 </html>
