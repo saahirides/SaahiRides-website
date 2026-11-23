@@ -1,10 +1,10 @@
 {
-  "runAt": "2026-11-23T02:24:49.887Z",
+  "runAt": "2026-11-23T04:33:47.843Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
   "openAnomalies": 3,
-  "newlyDetected": 1,
+  "newlyDetected": 0,
   "reopenedDefectCount": 0,
   "notReproducedPendingVerification": 2,
   "movedToClosedAfterCleanRun": 0,
@@ -19,39 +19,46 @@
     "results": [
       {
         "status": 200,
-        "latencyMs": 97
+        "latencyMs": 48
       },
       {
         "status": 200,
-        "latencyMs": 99
+        "latencyMs": 54
       },
       {
         "status": 200,
-        "latencyMs": 112
+        "latencyMs": 61
       },
       {
         "status": 200,
-        "latencyMs": 120
+        "latencyMs": 60
       },
       {
         "status": 200,
-        "latencyMs": 37
+        "latencyMs": 18
       },
       {
         "status": 200,
-        "latencyMs": 47
+        "latencyMs": 34
       },
       {
         "status": 200,
-        "latencyMs": 59
+        "latencyMs": 46
       },
       {
         "status": 200,
-        "latencyMs": 71
+        "latencyMs": 42
       }
     ]
   },
   "pageResults": [
+    {
+      "url": "https://saahirides.co.in/news-desk.html",
+      "status": 200,
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "forms": 0,
+      "buttons": 0
+    },
     {
       "url": "https://saahirides.co.in/ceo-blog.html",
       "status": 200,
@@ -63,13 +70,6 @@
       "url": "https://saahirides.co.in/ceo-blog-hyderabad-telangana.html",
       "status": 200,
       "title": "Hyderabad & Telangana: A Journey Through Heritage, Food and Living Culture | CEO’s Blog",
-      "forms": 0,
-      "buttons": 0
-    },
-    {
-      "url": "https://saahirides.co.in/news-desk.html",
-      "status": 200,
-      "title": "SaahiRides News Channel | Company Announcements & Updates",
       "forms": 0,
       "buttons": 0
     },
@@ -88,11 +88,11 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/travel-tours.html",
+      "url": "https://saahirides.co.in/offers.html",
       "status": 200,
-      "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
-      "forms": 1,
-      "buttons": 30
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/fare-estimator.html",
@@ -102,11 +102,11 @@
       "buttons": 11
     },
     {
-      "url": "https://saahirides.co.in/offers.html",
+      "url": "https://saahirides.co.in/travel-tours.html",
       "status": 200,
-      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 2
+      "title": "SaahiRides Tours & Travel | India Trips, Pilgrimage & Outstation",
+      "forms": 1,
+      "buttons": 30
     },
     {
       "url": "https://saahirides.co.in/company-inception.html",
@@ -137,18 +137,18 @@
       "buttons": 2
     },
     {
-      "url": "https://saahirides.co.in/community.html",
-      "status": 200,
-      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
-      "forms": 1,
-      "buttons": 1
-    },
-    {
       "url": "https://saahirides.co.in/on-demand-fare-chart.html",
       "status": 200,
       "title": "SaahiRides On-Demand Fare Chart",
       "forms": 0,
       "buttons": 2
+    },
+    {
+      "url": "https://saahirides.co.in/community.html",
+      "status": 200,
+      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
+      "forms": 1,
+      "buttons": 1
     },
     {
       "url": "https://saahirides.co.in/driver.html",
