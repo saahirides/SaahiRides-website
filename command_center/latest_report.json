@@ -1,10 +1,10 @@
 {
-  "runAt": "2026-11-23T02:10:53.786Z",
+  "runAt": "2026-11-23T02:24:49.887Z",
   "target": "https://saahirides.co.in",
   "pagesDiscovered": 24,
   "pagesInspected": 24,
-  "openAnomalies": 2,
-  "newlyDetected": 0,
+  "openAnomalies": 3,
+  "newlyDetected": 1,
   "reopenedDefectCount": 0,
   "notReproducedPendingVerification": 2,
   "movedToClosedAfterCleanRun": 0,
@@ -19,43 +19,43 @@
     "results": [
       {
         "status": 200,
+        "latencyMs": 97
+      },
+      {
+        "status": 200,
+        "latencyMs": 99
+      },
+      {
+        "status": 200,
         "latencyMs": 112
       },
       {
         "status": 200,
-        "latencyMs": 119
+        "latencyMs": 120
       },
       {
         "status": 200,
-        "latencyMs": 133
+        "latencyMs": 37
       },
       {
         "status": 200,
-        "latencyMs": 141
+        "latencyMs": 47
       },
       {
         "status": 200,
-        "latencyMs": 49
+        "latencyMs": 59
       },
       {
         "status": 200,
-        "latencyMs": 50
-      },
-      {
-        "status": 200,
-        "latencyMs": 55
-      },
-      {
-        "status": 200,
-        "latencyMs": 58
+        "latencyMs": 71
       }
     ]
   },
   "pageResults": [
     {
-      "url": "https://saahirides.co.in/news-desk.html",
+      "url": "https://saahirides.co.in/ceo-blog.html",
       "status": 200,
-      "title": "SaahiRides News Channel | Company Announcements & Updates",
+      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
@@ -67,9 +67,9 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/ceo-blog.html",
+      "url": "https://saahirides.co.in/news-desk.html",
       "status": 200,
-      "title": "CEO’s Blog | SaahiRides Transit Pvt. Ltd.",
+      "title": "SaahiRides News Channel | Company Announcements & Updates",
       "forms": 0,
       "buttons": 0
     },
@@ -78,7 +78,7 @@
       "status": 200,
       "title": "SaahiRides Hyderabad | Daily Sawari, Luxury Premium, Rentals & Tours",
       "forms": 0,
-      "buttons": 9
+      "buttons": 7
     },
     {
       "url": "https://saahirides.co.in/ceo-blog-ramoji-yadadri.html",
@@ -95,18 +95,18 @@
       "buttons": 30
     },
     {
-      "url": "https://saahirides.co.in/offers.html",
-      "status": 200,
-      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
-      "forms": 0,
-      "buttons": 2
-    },
-    {
       "url": "https://saahirides.co.in/fare-estimator.html",
       "status": 200,
       "title": "Interactive Fare Estimator | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 11
+    },
+    {
+      "url": "https://saahirides.co.in/offers.html",
+      "status": 200,
+      "title": "November Offers | SaahiRides Transit Pvt. Ltd.",
+      "forms": 0,
+      "buttons": 2
     },
     {
       "url": "https://saahirides.co.in/company-inception.html",
@@ -137,6 +137,13 @@
       "buttons": 2
     },
     {
+      "url": "https://saahirides.co.in/community.html",
+      "status": 200,
+      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
+      "forms": 1,
+      "buttons": 1
+    },
+    {
       "url": "https://saahirides.co.in/on-demand-fare-chart.html",
       "status": 200,
       "title": "SaahiRides On-Demand Fare Chart",
@@ -149,13 +156,6 @@
       "title": "Driver Network - SaahiRides",
       "forms": 1,
       "buttons": 4
-    },
-    {
-      "url": "https://saahirides.co.in/community.html",
-      "status": 200,
-      "title": "SaahiRides Community | Stories, Driver Issues & Feedback",
-      "forms": 1,
-      "buttons": 1
     },
     {
       "url": "https://saahirides.co.in/vellore-golden-temple-travel-guide.html",
@@ -172,16 +172,16 @@
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
+      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
       "status": 200,
-      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
+      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
       "forms": 0,
       "buttons": 0
     },
     {
-      "url": "https://saahirides.co.in/divine-pilgrimage-pass.html",
+      "url": "https://saahirides.co.in/bhubaneswar-itinerary-special.html",
       "status": 200,
-      "title": "Divine Pilgrimage Pass | SaahiRides Transit Pvt. Ltd.",
+      "title": "Bhubaneswar Itinerary Special | Heritage, Wildlife & Odia Food | SaahiRides",
       "forms": 0,
       "buttons": 0
     },
