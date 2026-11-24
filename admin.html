@@ -681,8 +681,6 @@ footer {
     <div class="small" style="color:#f5b82e;font-weight:800;margin-bottom:8px">LIVE 9:16 REEL &amp; WHATSAPP STATUS PREVIEW CANVAS</div>
     <canvas id="tbVideoCanvas" width="720" height="1280" style="width:min(100%,320px);height:auto;border-radius:14px;border:2px solid #f5b82e;background:#071329"></canvas>
   </div>
-</section>
-
 <script>
 (function initSaahiTalkBackVideoStudio() {
   const scriptInput = document.getElementById('tbScriptInput');
@@ -701,10 +699,37 @@ footer {
   let isSpeaking = false;
   let marqueeX = canvas.width;
   let marqueeText = '★ SaahiRides — SafeRide @ SaahiPrice   ✦   साहीराइड्स — ज़ीरो सर्ज प्राइसिंग, ज़ीरो कैंसलेशन   ✦   సాహిరైడ్స్ — మీ ప్రయాణం, మా బాధ్యత';
-  let hindiSubtitle = 'SaahiRides — SafeRide @ SaahiPrice';
+  let middleScript = 'SaahiRides — SafeRide @ SaahiPrice';
   let posterImg = new Image();
   posterImg.crossOrigin = 'anonymous';
   posterImg.src = 'logo.png';
+
+  // Web Audio API Voice Analyzer (Makes the man in the poster react to your uploaded voice sample!)
+  let audioCtx = null, analyser = null, freqData = null, voiceDest = null;
+  function ensureAudioAnalyzer() {
+    if (audioCtx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = new AC();
+    const src = audioCtx.createMediaElementSource(bgAudio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 64;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    voiceDest = audioCtx.createMediaStreamDestination();
+    src.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.connect(voiceDest);
+  }
+
+  function getVoiceEnergy() {
+    if (analyser && !bgAudio.paused) {
+      analyser.getByteFrequencyData(freqData);
+      let sum = 0;
+      for (let i = 0; i < 12; i++) sum += freqData[i];
+      return Math.min(1, sum / (12 * 140));
+    }
+    return isSpeaking ? (0.45 + 0.45 * Math.abs(Math.sin(Date.now() / 75))) : 0;
+  }
 
   posterInput.addEventListener('change', (e) => {
     const file = e.target.files?.[0];
@@ -718,15 +743,23 @@ footer {
     const file = e.target.files?.[0];
     if (!file) return;
     bgAudio.src = URL.createObjectURL(file);
-    bgAudio.volume = 0.4;
+    bgAudio.loop = false;
+    bgAudio.volume = 1.0;
+    exportStatus.textContent = '✓ Sample voice loaded! Click Poster Speak or Record & Download MP4.';
   });
 
   document.getElementById('tbPlayMusicBtn').onclick = () => {
-    if (bgAudio.src) { bgAudio.volume = 0.4; bgAudio.play(); }
+    if (bgAudio.src) {
+      ensureAudioAnalyzer();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      bgAudio.currentTime = 0;
+      bgAudio.play();
+    }
   };
   document.getElementById('tbStopMusicBtn').onclick = () => {
     bgAudio.pause();
     bgAudio.currentTime = 0;
+    isSpeaking = false;
   };
 
   async function translateText(text, targetLang) {
@@ -742,106 +775,147 @@ footer {
   document.getElementById('tbBuildBtn').onclick = async () => {
     const raw = scriptInput.value.trim();
     if (!raw) return;
-    exportStatus.textContent = 'Translating into 3 languages…';
+    middleScript = raw;
+    exportStatus.textContent = 'Building 3-language marquee & middle poster script…';
     const [enText, hiText, regText] = await Promise.all([
       translateText(raw, 'en'),
       translateText(raw, 'hi'),
       translateText(raw, thirdLang.value)
     ]);
     marqueeText = `[EN] ${enText}   ✦   [हिन्दी / Hinglish] ${hiText}   ✦   [${thirdLang.value.toUpperCase()}] ${regText}   ✦`;
-    hindiSubtitle = hiText;
     marqueeX = canvas.width;
-    exportStatus.textContent = '3-language marquee ready! Click Poster Speak or Record & Download MP4.';
+    exportStatus.textContent = '✓ Ready! Text placed in open middle space of poster.';
   };
 
   document.getElementById('tbToggleScrollBtn').onclick = () => {
     isScrolling = !isScrolling;
   };
 
-  function speakHindiScript(onDone) {
+  function playNarration(onDone) {
     const raw = scriptInput.value.trim();
+    if (raw) middleScript = raw;
+
+    // Priority 1: Use uploaded sample voice audio file if provided
+    if (bgAudio.src) {
+      ensureAudioAnalyzer();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      window.speechSynthesis?.cancel();
+      bgAudio.currentTime = 0;
+      isSpeaking = true;
+      bgAudio.onended = () => {
+        isSpeaking = false;
+        if (onDone) onDone();
+      };
+      bgAudio.play();
+      return;
+    }
+
+    // Priority 2: Built-in speech synthesis fallback if no voice sample file was uploaded
     if (!raw || !('speechSynthesis' in window)) {
       if (onDone) onDone();
       return;
     }
     window.speechSynthesis.cancel();
-    if (!bgAudio.paused) bgAudio.pause();
-
-    const speakText = hindiSubtitle && hindiSubtitle !== 'SaahiRides — SafeRide @ SaahiPrice' ? hindiSubtitle : raw;
-    const utter = new SpeechSynthesisUtterance(speakText);
+    const utter = new SpeechSynthesisUtterance(raw);
     const voices = window.speechSynthesis.getVoices();
     const hindiVoice = voices.find(v => v.lang.toLowerCase().includes('hi-in')) || voices.find(v => v.lang.toLowerCase().includes('en-in'));
     if (hindiVoice) utter.voice = hindiVoice;
     utter.lang = 'hi-IN';
-    utter.rate = 0.95;
-
+    utter.rate = 0.96;
     utter.onstart = () => { isSpeaking = true; };
     utter.onend = () => { isSpeaking = false; if (onDone) onDone(); };
     utter.onerror = () => { isSpeaking = false; if (onDone) onDone(); };
     window.speechSynthesis.speak(utter);
   }
 
-  document.getElementById('tbSpeakPosterBtn').onclick = () => speakHindiScript();
+  document.getElementById('tbSpeakPosterBtn').onclick = () => playNarration();
   document.getElementById('tbStopSpeakBtn').onclick = () => {
-    window.speechSynthesis.cancel();
+    window.speechSynthesis?.cancel();
+    bgAudio.pause();
+    bgAudio.currentTime = 0;
     isSpeaking = false;
   };
 
-  // Continuous 30fps Canvas Renderer (Draws Poster + Speaking Glow + Hindi Subtitle + 3-Lang Marquee)
+  // Continuous 30fps Canvas Renderer: Full Poster + Text in Open Middle Space + Speaking Portrait Glow (NO bottom box)
   function renderLoop() {
     ctx.fillStyle = '#071329';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Header Brand Strip
+    // Top Brand Strip
     ctx.fillStyle = '#0b1c3d';
-    ctx.fillRect(0, 0, canvas.width, 96);
+    ctx.fillRect(0, 0, canvas.width, 84);
     ctx.fillStyle = '#f5b82e';
-    ctx.font = '800 30px system-ui, Arial, sans-serif';
+    ctx.font = '800 28px system-ui, Arial, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('SAAHIRIDES • SAFERIDE @ SAAHIPRICE', canvas.width / 2, 60);
+    ctx.fillText('SAAHIRIDES • SAFERIDE @ SAAHIPRICE', canvas.width / 2, 52);
 
-    // Poster Card with Speaking Pulse
-    const pulse = isSpeaking ? (1 + 0.018 * Math.sin(Date.now() / 80)) : 1;
-    const boxW = 620 * pulse;
-    const boxH = 760 * pulse;
-    const boxX = (canvas.width - boxW) / 2;
-    const boxY = 130 - (boxH - 760) / 2;
+    const energy = getVoiceEnergy();
+    const activeVoice = energy > 0.04;
 
+    // Full Poster Frame (y = 100 to 1110 — zero bottom caption obstruction!)
+    const boxX = 36, boxY = 100, boxW = canvas.width - 72, boxH = 1010;
     ctx.save();
-    ctx.strokeStyle = isSpeaking ? '#38bdf8' : '#f5b82e';
-    ctx.lineWidth = isSpeaking ? 8 : 4;
-    ctx.strokeRect(boxX - 4, boxY - 4, boxW + 8, boxH + 8);
+    ctx.strokeStyle = activeVoice ? '#38bdf8' : '#f5b82e';
+    ctx.lineWidth = activeVoice ? (4 + energy * 6) : 3;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
     if (posterImg && posterImg.complete && posterImg.naturalWidth > 0) {
       const ratio = Math.min(boxW / posterImg.naturalWidth, boxH / posterImg.naturalHeight);
       const drawW = posterImg.naturalWidth * ratio;
       const drawH = posterImg.naturalHeight * ratio;
-      ctx.drawImage(posterImg, boxX + (boxW - drawW) / 2, boxY + (boxH - drawH) / 2, drawW, drawH);
+      const imgX = boxX + (boxW - drawW) / 2;
+      const imgY = boxY + (boxH - drawH) / 2;
+      ctx.drawImage(posterImg, imgX, imgY, drawW, drawH);
+
+      // Animated Speaking Voice Aura & Soundwave Indicator around the Speaker in the Poster
+      if (activeVoice) {
+        const speakerX = canvas.width / 2;
+        const speakerY = imgY + drawH * 0.66;
+        ctx.beginPath();
+        ctx.arc(speakerX, speakerY, 88 + energy * 26, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(56, 189, 248, ${0.35 + energy * 0.55})`;
+        ctx.lineWidth = 3 + energy * 4;
+        ctx.stroke();
+
+        // Live Voice Waveform Bars beside Speaker
+        for (let b = -4; b <= 4; b++) {
+          const barH = 10 + energy * (36 - Math.abs(b) * 5) * Math.abs(Math.cos(Date.now() / 65 + b));
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(speakerX + b * 11 - 3, speakerY + 95 - barH / 2, 6, barH);
+        }
+      }
     }
     ctx.restore();
 
-    // Hindi / Hinglish Subtitle Caption Box
-    ctx.fillStyle = 'rgba(6, 18, 46, 0.92)';
-    ctx.fillRect(40, 920, canvas.width - 80, 175);
-    ctx.strokeStyle = '#f5b82e';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(40, 920, canvas.width - 80, 175);
+    // Render Narration Text Cleanly Inside the Open Black Space in the Middle (y = 325 to 520)
+    const displayMsg = (scriptInput.value.trim() || middleScript || '').trim();
+    if (displayMsg) {
+      ctx.save();
+      ctx.fillStyle = '#ffe27a';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 8;
+      ctx.font = '700 25px system-ui, Arial, sans-serif';
+      ctx.textAlign = 'center';
 
-    ctx.fillStyle = '#ffe27a';
-    ctx.font = '700 28px system-ui, Arial, sans-serif';
-    ctx.textAlign = 'center';
-    const words = hindiSubtitle.split(' ');
-    let line = '', y = 968;
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      if (ctx.measureText(testLine).width > canvas.width - 120 && n > 0) {
-                ctx.fillText(line.trim(), canvas.width / 2, y);
-        line = words[n] + ' ';
-        y += 38;
-      } else {
-        line = testLine;
+      const words = displayMsg.split(/\s+/);
+      let line = '', y = 335, lineCount = 0;
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        if (ctx.measureText(testLine).width > canvas.width - 175 && n > 0) {
+          ctx.fillText(line.trim(), canvas.width / 2, y);
+          line = words[n] + ' ';
+          y += 33;
+          lineCount++;
+          if (lineCount >= 6) break;
+        } else {
+          line = testLine;
+        }
       }
+      if (lineCount < 6 && line.trim()) {
+        ctx.fillText(line.trim(), canvas.width / 2, y);
+      }
+      ctx.restore();
     }
-    ctx.fillText(line.trim(), canvas.width / 2, y);
 
     // Bottom 3-Language Scrolling Marquee Strip
     ctx.fillStyle = '#d4af37';
@@ -861,58 +935,17 @@ footer {
   }
   requestAnimationFrame(renderLoop);
 
-  // Direct MP4 / WebM Reel Recorder & Download
+  // Direct MP4 / WebM Reel Recorder (Captures Both Canvas Video + Your Uploaded Sample Voice Audio!)
   let mediaRecorder = null;
   let recordedChunks = [];
 
   recordBtn.onclick = () => {
     try {
-      const stream = canvas.captureStream(30);
-      const mimeType = MediaRecorder.isTypeSupported('video/mp4')
-        ? 'video/mp4'
-        : (MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm');
-      recordedChunks = [];
-      mediaRecorder = new MediaRecorder(stream, { mimeType });
+      const canvasStream = canvas.captureStream(30);
+      const tracks = [...canvasStream.getVideoTracks()];
+      if (bgAudio.src) {
+        ensureAudioAnalyzer();
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) recordedChunks.push(e.data);
-      };
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: mimeType });
-        const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `SaahiRides_TalkBack_${Date.now()}.${ext}`;
-        a.click();
-        exportStatus.textContent = `✓ Video exported (${ext.toUpperCase()})! Check your Downloads folder.`;
-        recordBtn.disabled = false;
-        stopExportBtn.disabled = true;
-      };
-
-      mediaRecorder.start();
-      recordBtn.disabled = true;
-      stopExportBtn.disabled = false;
-      exportStatus.textContent = '🔴 Recording 9:16 Reel… Speaking script & scrolling 3-language marquee…';
-      if (bgAudio.src) { bgAudio.currentTime = 0; bgAudio.play(); }
-      speakHindiScript(() => {
-        setTimeout(() => {
-          if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
-        }, 1800);
-      });
-    } catch (err) {
-      exportStatus.textContent = 'Recording failed: ' + (err?.message || String(err));
-    }
-  };
-
-  stopExportBtn.onclick = () => {
-    if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
-    window.speechSynthesis.cancel();
-    isSpeaking = false;
-  };
-})();
-</script>
 </main>
 
 </main>
