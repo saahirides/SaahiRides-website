@@ -1972,7 +1972,7 @@ body.sos-dialog-open{overflow:hidden}
     document.getElementById('srLangRegBtn').classList.toggle('active',currentLang==='reg');
   }
 
-   const HUB_ROUTES = {
+     const HUB_ROUTES = {
     HYD: '#home',
     TS: 'telangana.html',
     AP: 'andhra-pradesh.html',
@@ -1996,7 +1996,6 @@ body.sos-dialog-open{overflow:hidden}
       }
     });
   });
-);
 
   document.getElementById('srLangEnBtn').onclick=()=>{currentLang='en';sessionStorage.setItem('sr_lang','en');applyLocalization();};
   document.getElementById('srLangRegBtn').onclick=()=>{currentLang='reg';sessionStorage.setItem('sr_lang','reg');applyLocalization();};
@@ -2049,3 +2048,4 @@ body.sos-dialog-open{overflow:hidden}
 </script>
 </body>
 </html>
+
