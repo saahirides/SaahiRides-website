@@ -148,3 +148,60 @@
         <summary class="dest-summary">
           <img class="dest-thumb" src="logo.png" alt="Panchavati Nashik">
           <div class="dest-meta">
+    </div>
+  </section>
+
+  <footer>
+    © 2026 SaahiRides Transit Pvt. Ltd. • SafeRide - SaafeRide @ SaahiPrice • Hyderabad Core HQ &amp; Pan-India State Hubs
+  </footer>
+</main>
+
+<script>
+(async function initCeoBlogMasterHub() {
+  const SUPABASE_URL = 'https://supabase.co';
+  const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.content || '';
+
+  const cards = Array.from(document.querySelectorAll('#masterDestinationsGrid details.dest-card'));
+
+  // 1. Expand All / Collapse All Controls
+  document.getElementById('expandAllBtn').onclick = () => cards.forEach(c => { c.open = true; });
+  document.getElementById('collapseAllBtn').onclick = () => cards.forEach(c => { c.open = false; });
+
+  // 2. Region & Status Filter Buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        const match =
+          filter === 'all' ||
+          (filter === 'published' && card.dataset.status === 'published') ||
+          card.dataset.region === filter;
+        card.classList.toggle('hidden', !match);
+      });
+    });
+  });
+
+  // 3. Load Live CEO Messages Across All 4 Hub Cards from Supabase
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/state_live_broadcasts?select=state_code,ceo_message_en`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+      }
+    });
+    const rows = await res.json();
+    if (Array.isArray(rows)) {
+      rows.forEach(row => {
+        const el = document.getElementById('ceoCard' + row.state_code);
+        if (el && row.ceo_message_en) el.textContent = row.ceo_message_en;
+      });
+    }
+  } catch (e) {
+    // Fallback default text remains visible if offline
+  }
+})();
+</script>
+</body>
+</html>
