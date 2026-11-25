@@ -134,8 +134,31 @@
   const grid = document.getElementById('masterDestinationsGrid');
   const list = Array.isArray(window.SAAHI_DESTINATIONS) ? window.SAAHI_DESTINATIONS : [];
 
+    const KEYWORDS = {
+    '01': ['nashik', 'panchavati', 'trimbakeshwar'],
+    '02': ['puri', 'odisha', 'konark', 'chilika'],
+    '03': ['vellore', 'sripuram', 'golden-temple'],
+    '04': ['tirupati', 'tirumala', 'balaji'],
+    '05': ['hyderabad', 'charminar', 'golconda', 'main page'],
+    '06': ['ramoji', 'yadadri', 'yadagirigutta'],
+    '07': ['pilgrimage', 'pass', 'divine'],
+    '08': ['jaisalmer', 'sonar', 'thar', 'desert'],
+    '09': ['mysuru', 'mysore', 'bangalore', 'bengaluru'],
+    '10': ['ooty', 'coonoor', 'nilgiri'],
+    '11': ['madurai', 'rameswaram', 'kodaikanal'],
+    '12': ['vijayawada', 'amaravati', 'kanaka'],
+    '13': ['srisailam', 'ahobilam'],
+    '14': ['araku', 'vizag', 'visakhapatnam'],
+    '15': ['bhadrachalam', 'papi'],
+    '16': ['warangal', 'ramappa', 'laknavaram'],
+    '17': ['hampi', 'badami', 'pattadakal'],
+    '18': ['dharmasthala', 'coorg', 'subramanya'],
+    '19': ['shirdi', 'ellora', 'shingnapur'],
+    '20': ['kerala', 'munnar', 'alleppey', 'trivandrum']
+  };
+
   grid.innerHTML = list.map(item => `
-    <details class="dest-card" data-region="${item.region}" data-status="${item.status}" ${item.open ? 'open' : ''}>
+    <details class="dest-card" data-id="${item.id}" data-region="${item.region}" data-status="${item.status}" ${item.open ? 'open' : ''}>
       <summary class="dest-summary">
         <img class="dest-thumb" src="${item.img}" alt="${item.title}">
         <div class="dest-meta">
@@ -146,46 +169,66 @@
         <span class="toggle-pill">Expand ▾</span>
       </summary>
       <div class="dest-body">
+        <div class="dest-gallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:14px"></div>
         <div class="itinerary-grid">
           ${item.days.map(day => `<div class="day-box"><strong>${day.d}</strong><p>${day.t}</p></div>`).join('')}
         </div>
         <div class="guide-footer">
-          ${item.link ? `<a href="${item.link}">Full Article ↗</a>` : `<span style="color:#00F0FF;font-size:13px">📸 Future Expansion &amp; Gallery Slot</span>`}
-          <a class="wa" href="https://wa.me/919347946026?text=${encodeURIComponent('TOUR ENQUIRY - ' + item.wa)}" target="_blank" rel="noopener">💬 Plan on WhatsApp</a>
+          ${item.link ? `<a href="${item.link}">Full Article ↗</a>` : `<span style="color:#00F0FF;font-size:13px">📸 Auto-synced with GitHub &amp; Mobile Supabase Library</span>`}
+          <a class="wa" href="https://wa.me{encodeURIComponent('TOUR ENQUIRY - ' + item.wa)}" target="_blank" rel="noopener">💬 Plan on WhatsApp</a>
         </div>
       </div>
     </details>
   `).join('');
 
-  const cards = Array.from(grid.querySelectorAll('details.dest-card'));
-  document.getElementById('expandAllBtn').onclick = () => cards.forEach(c => { c.open = true; });
-  document.getElementById('collapseAllBtn').onclick = () => cards.forEach(c => { c.open = false; });
-
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      cards.forEach(card => {
-        const match = filter === 'all' || (filter === 'published' && card.dataset.status === 'published') || card.dataset.region === filter;
-        card.classList.toggle('hidden', !match);
-      });
-    });
-  });
-
+  // 1. Auto-discover & align existing GitHub photos by destination keyword
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/state_live_broadcasts?select=state_code,ceo_message_en`, {
+    const ghRes = await fetch('https://github.com');
+    const ghData = await ghRes.json();
+    const imgFiles = (ghData.tree || [])
+      .filter(f => f.type === 'blob' && /\.(jpg|jpeg|png|webp)$/i.test(f.path))
+      .map(f => f.path);
+
+    Object.entries(KEYWORDS).forEach(([destId, words]) => {
+      const matched = imgFiles.filter(p => words.some(w => p.toLowerCase().includes(w)));
+      if (!matched.length) return;
+      const card = grid.querySelector(`details.dest-card[data-id="${destId}"]`);
+      if (!card) return;
+      const thumb = card.querySelector('img.dest-thumb');
+      if (thumb && thumb.getAttribute('src') === 'logo.png') {
+        thumb.src = encodeURI(matched.at(0));
+      }
+      const gallery = card.querySelector('.dest-gallery');
+      if (gallery) {
+        gallery.innerHTML = matched.slice(0, 6).map(p =>
+          `<img src="${encodeURI(p)}" alt="Destination ${destId}" loading="lazy" style="width:100%;height:130px;object-fit:cover;border-radius:9px;border:1px solid rgba(255,215,0,.35)">`
+        ).join('');
+      }
+    });
+  } catch (e) {}
+
+  // 2. Overlay latest mobile-uploaded Supabase photos (highest priority)
+  try {
+    const pRes = await fetch(`${SUPABASE_URL}/rest/v1/ceo_destination_photos?select=dest_id,image_url,caption`, {
       headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
     });
-    const rows = await res.json();
-    if (Array.isArray(rows)) {
-      rows.forEach(row => {
-        const el = document.getElementById('ceoCard' + row.state_code);
-        if (el && row.ceo_message_en) el.textContent = row.ceo_message_en;
+    const photos = await pRes.json();
+    if (Array.isArray(photos)) {
+      photos.forEach(p => {
+        const card = grid.querySelector(`details.dest-card[data-id="${p.dest_id}"]`);
+        if (!card || !p.image_url) return;
+        const thumb = card.querySelector('img.dest-thumb');
+        if (thumb) thumb.src = p.image_url;
+        const gallery = card.querySelector('.dest-gallery');
+        if (gallery) {
+          gallery.insertAdjacentHTML('afterbegin',
+            `<img src="${p.image_url}" alt="${p.caption || 'Mobile Upload'}" loading="lazy" style="width:100%;height:130px;object-fit:cover;border-radius:9px;border:2px solid #00F0FF">`
+          );
+        }
       });
     }
   } catch (e) {}
-})();
+
 </script>
 </body>
 </html>
