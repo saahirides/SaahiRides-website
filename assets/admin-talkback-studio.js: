@@ -1,0 +1,221 @@
+(function initSaahiTalkBackVideoStudio() {
+  const mainEl = document.querySelector('main');
+  if (!mainEl) return;
+
+  const oldCard = document.getElementById('tbStudioCard');
+  if (oldCard) oldCard.remove();
+
+  const card = document.createElement('section');
+  card.className = 'card';
+  card.id = 'tbStudioCard';
+  card.style.cssText = 'border:1.5px solid #f5b82e;background:linear-gradient(145deg,#0b1c3d,#06122e)';
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <div class="brand" style="font-size:.82rem">SAAHIRIDES TALK BACK STUDIO</div>
+        <h2 style="margin:2px 0;color:#ffe27a">Talking Poster (Middle Open-Space Text), Sample Voice &amp; MP4 Export</h2>
+      </div>
+      <span class="small">9:16 Reel / Status Canvas Recorder</span>
+    </div>
+
+    <div class="grid" style="margin-top:14px">
+      <div>
+        <label for="tbScriptInput">1. Paste Narration Script (Displayed in Open Middle Space of Poster)</label>
+        <textarea id="tbScriptInput" style="min-height:105px" placeholder="Paste script here... e.g., Namaste Hyderabad! SaahiRides par ab zero surge pricing aur zero cancellation ke saath apni sawari book karein."></textarea>
+
+        <div class="grid" style="margin-top:8px">
+          <div>
+            <label for="tbThirdLang">3rd Marquee Language</label>
+            <select id="tbThirdLang">
+              <option value="te" selected>Telugu (తెలుగు — TS &amp; AP)</option>
+              <option value="kn">Kannada (ಕನ್ನಡ — Karnataka)</option>
+            </select>
+          </div>
+          <div>
+            <label for="tbScrollSpeed">Marquee Speed</label>
+            <select id="tbScrollSpeed">
+              <option value="2.2">Slow &amp; Clear</option>
+              <option value="3.8" selected>Medium Reel Pace</option>
+              <option value="5.5">Fast Ticker</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button type="button" id="tbBuildBtn">✨ 1. Build 3-Language Marquee</button>
+          <button type="button" class="secondary" id="tbToggleScrollBtn">⏸ Pause / Resume</button>
+        </div>
+      </div>
+
+      <div>
+        <label for="tbPosterUpload">2. Upload Poster Image</label>
+        <input id="tbPosterUpload" type="file" accept="image/*">
+
+        <label for="tbBgMusicUpload">3. Upload Sample Voice / Narration Audio</label>
+        <input id="tbBgMusicUpload" type="file" accept="audio/*">
+
+        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+          <button type="button" id="tbSpeakPosterBtn">🗣️ Poster Speak (Sample Voice / AI)</button>
+          <button type="button" id="tbStopSpeakBtn" style="background:#991b1b;color:#fff">⏹ Stop Voice</button>
+        </div>
+
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid #28436d">
+          <button type="button" id="tbRecordExportBtn" style="background:linear-gradient(100deg,#10b981,#34d399);color:#04130d">🎬 Record &amp; Download Video (MP4)</button>
+          <button type="button" id="tbStopExportBtn" class="secondary" disabled>⏹ Finish &amp; Save File</button>
+          <div id="tbExportStatus" class="small" style="margin-top:6px;color:#ffe27a">Ready to preview or export 9:16 video.</div>
+        </div>
+        <audio id="tbBgAudio" crossorigin="anonymous" style="width:100%;margin-top:8px" controls></audio>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;text-align:center;background:#040d21;border:1px solid #28436d;border-radius:14px;padding:16px">
+      <div class="small" style="color:#f5b82e;font-weight:800;margin-bottom:8px">LIVE 9:16 REEL &amp; WHATSAPP STATUS PREVIEW CANVAS</div>
+      <canvas id="tbVideoCanvas" width="720" height="1280" style="width:min(100%,320px);height:auto;border-radius:14px;border:2px solid #f5b82e;background:#071329"></canvas>
+    </div>
+  `;
+  mainEl.appendChild(card);
+
+  const scriptInput = document.getElementById('tbScriptInput');
+  const thirdLang = document.getElementById('tbThirdLang');
+  const speedSelect = document.getElementById('tbScrollSpeed');
+  const posterInput = document.getElementById('tbPosterUpload');
+  const musicInput = document.getElementById('tbBgMusicUpload');
+  const bgAudio = document.getElementById('tbBgAudio');
+  const canvas = document.getElementById('tbVideoCanvas');
+  const ctx = canvas.getContext('2d');
+  const exportStatus = document.getElementById('tbExportStatus');
+  const recordBtn = document.getElementById('tbRecordExportBtn');
+  const stopExportBtn = document.getElementById('tbStopExportBtn');
+
+  let isScrolling = true, isSpeaking = false, marqueeX = canvas.width;
+  let marqueeText = '★ SaahiRides — SafeRide @ SaahiPrice   ✦   साहीराइड्स — ज़ीरो सर्ज प्राइसिंग, ज़ीरो कैंसलेशन   ✦   సాహిరైడ్స్ — మీ ప్రయాణం, మా బాధ్యత';
+  let posterImg = new Image();
+  posterImg.crossOrigin = 'anonymous';
+  posterImg.src = 'logo.png';
+
+  let audioCtx = null, analyser = null, freqData = null, voiceDest = null;
+  function ensureAudioAnalyzer() {
+    if (audioCtx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = new AC();
+    const src = audioCtx.createMediaElementSource(bgAudio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 64;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    voiceDest = audioCtx.createMediaStreamDestination();
+    src.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.connect(voiceDest);
+  }
+
+  function getVoiceEnergy() {
+    if (analyser && !bgAudio.paused) {
+      analyser.getByteFrequencyData(freqData);
+      let sum = 0;
+      for (let i = 0; i < 12; i++) sum += freqData.at(i);
+      return Math.min(1, sum / (12 * 140));
+    }
+    return isSpeaking ? (0.45 + 0.45 * Math.abs(Math.sin(Date.now() / 75))) : 0;
+  }
+
+  posterInput.addEventListener('change', (e) => {
+    const file = e.target.files ? e.target.files.item(0) : null;
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => { posterImg = img; exportStatus.textContent = '✓ Poster loaded onto 9:16 canvas!'; };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  musicInput.addEventListener('change', (e) => {
+    const file = e.target.files ? e.target.files.item(0) : null;
+    if (!file) return;
+    bgAudio.src = URL.createObjectURL(file);
+    bgAudio.loop = false;
+    bgAudio.volume = 1.0;
+    exportStatus.textContent = '✓ Sample voice loaded! Click Poster Speak or Record & Download MP4.';
+  });
+
+  async function translateText(text, targetLang) {
+    try {
+      const res = await fetch('https://googleapis.com' + targetLang + '&dt=t&q=' + encodeURIComponent(text));
+      const data = await res.json();
+      const rows = Array.isArray(data) ? data.at(0) : null;
+      return Array.isArray(rows) ? rows.map(r => (Array.isArray(r) ? r.at(0) : '')).join('') || text : text;
+    } catch { return text; }
+  }
+
+  document.getElementById('tbBuildBtn').onclick = async () => {
+    const raw = scriptInput.value.trim();
+    if (!raw) return;
+    exportStatus.textContent = 'Building 3-language marquee…';
+    const [enText, hiText, regText] = await Promise.all([
+      translateText(raw, 'en'),
+      translateText(raw, 'hi'),
+      translateText(raw, thirdLang.value)
+    ]);
+    marqueeText = '[EN] ' + enText + '   ✦   [हिन्दी / Hinglish] ' + hiText + '   ✦   [' + thirdLang.value.toUpperCase() + '] ' + regText + '   ✦';
+    marqueeX = canvas.width;
+    exportStatus.textContent = '✓ 3-language marquee ready!';
+  };
+
+  document.getElementById('tbToggleScrollBtn').onclick = () => { isScrolling = !isScrolling; };
+
+  function playNarration(onDone) {
+    const raw = scriptInput.value.trim();
+    if (bgAudio.src) {
+      ensureAudioAnalyzer();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      bgAudio.currentTime = 0;
+      isSpeaking = true;
+      bgAudio.onended = () => { isSpeaking = false; if (onDone) onDone(); };
+      bgAudio.play();
+      return;
+    }
+    if (!raw || !('speechSynthesis' in window)) { if (onDone) onDone(); return; }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(raw);
+    const voices = window.speechSynthesis.getVoices();
+    const hindiVoice = voices.find(v => v.lang.toLowerCase().includes('hi-in')) || voices.find(v => v.lang.toLowerCase().includes('en-in'));
+    if (hindiVoice) utter.voice = hindiVoice;
+    utter.lang = 'hi-IN';
+    utter.rate = 0.96;
+    utter.onstart = () => { isSpeaking = true; };
+    utter.onend = () => { isSpeaking = false; if (onDone) onDone(); };
+    utter.onerror = () => { isSpeaking = false; if (onDone) onDone(); };
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById('tbSpeakPosterBtn').onclick = () => playNarration();
+  document.getElementById('tbStopSpeakBtn').onclick = () => {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    bgAudio.pause();
+    bgAudio.currentTime = 0;
+    isSpeaking = false;
+  };
+
+  function renderLoop() {
+    ctx.fillStyle = '#071329';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#0b1c3d';
+    ctx.fillRect(0, 0, canvas.width, 84);
+    ctx.fillStyle = '#f5b82e';
+    ctx.font = '800 28px system-ui, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SAAHIRIDES • SAFERIDE @ SAAHIPRICE', canvas.width / 2, 52);
+
+    const energy = getVoiceEnergy();
+    const activeVoice = energy > 0.04;
+
+    const boxX = 36, boxY = 100, boxW = canvas.width - 72, boxH = 1010;
+    ctx.save();
+    ctx.strokeStyle = activeVoice ? '#38bdf8' : '#f5b82e';
+    ctx.lineWidth = activeVoice ? (4 + energy * 6) : 3;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
