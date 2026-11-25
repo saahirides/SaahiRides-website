@@ -122,3 +122,74 @@
       <!-- 01 -->
       <details class="dest-card" data-region="INDIA" data-status="published">
         <summary class="dest-summary"><img class="dest-thumb" src="logo.png" alt="Panchavati Nashik"><div class="dest-meta"><span class="tag">01 · Maharashtra · Published Guide</span><h3>Panchavati, Nashik: Sacred Ramayana Journey</h3><p>Sita Gufa, Kalaram Temple, Ramkund, Godavari riverfront &amp; Trimbakeshwar circuit.</p></div><span class="toggle-pill">Expand ▾</span></summary>
+<div class="dest-grid" id="masterDestinationsGrid"></div>
+  </section>
+
+  <footer>
+    © 2026 SaahiRides Transit Pvt. Ltd. • SafeRide - SaafeRide @ SaahiPrice • Hyderabad Core HQ &amp; Pan-India State Hubs
+  </footer>
+</main>
+
+<script src="assets/ceo-destinations.js?v=1"></script>
+<script>
+(async function initCeoBlogMasterHub() {
+  const SUPABASE_URL = 'https://uzwubbzlytqqewqibobr.supabase.co';
+  const SUPABASE_ANON_KEY = document.querySelector('meta[name="supabase-anon-key"]')?.content || '';
+  const grid = document.getElementById('masterDestinationsGrid');
+  const list = Array.isArray(window.SAAHI_DESTINATIONS) ? window.SAAHI_DESTINATIONS : [];
+
+  grid.innerHTML = list.map(item => `
+    <details class="dest-card" data-region="${item.region}" data-status="${item.status}" ${item.open ? 'open' : ''}>
+      <summary class="dest-summary">
+        <img class="dest-thumb" src="${item.img}" alt="${item.title}">
+        <div class="dest-meta">
+          <span class="tag ${item.status === 'planned' ? 'planned' : ''}">${item.id} · ${item.state} · ${item.tag}</span>
+          <h3>${item.title}</h3>
+          <p>${item.summary}</p>
+        </div>
+        <span class="toggle-pill">Expand ▾</span>
+      </summary>
+      <div class="dest-body">
+        <div class="itinerary-grid">
+          ${item.days.map(day => `<div class="day-box"><strong>${day.d}</strong><p>${day.t}</p></div>`).join('')}
+        </div>
+        <div class="guide-footer">
+          ${item.link ? `<a href="${item.link}">Full Article ↗</a>` : `<span style="color:#00F0FF;font-size:13px">📸 Future Expansion &amp; Gallery Slot</span>`}
+          <a class="wa" href="https://wa.me/919347946026?text=${encodeURIComponent('TOUR ENQUIRY - ' + item.wa)}" target="_blank" rel="noopener">💬 Plan on WhatsApp</a>
+        </div>
+      </div>
+    </details>
+  `).join('');
+
+  const cards = Array.from(grid.querySelectorAll('details.dest-card'));
+  document.getElementById('expandAllBtn').onclick = () => cards.forEach(c => { c.open = true; });
+  document.getElementById('collapseAllBtn').onclick = () => cards.forEach(c => { c.open = false; });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        const match = filter === 'all' || (filter === 'published' && card.dataset.status === 'published') || card.dataset.region === filter;
+        card.classList.toggle('hidden', !match);
+      });
+    });
+  });
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/state_live_broadcasts?select=state_code,ceo_message_en`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
+    });
+    const rows = await res.json();
+    if (Array.isArray(rows)) {
+      rows.forEach(row => {
+        const el = document.getElementById('ceoCard' + row.state_code);
+        if (el && row.ceo_message_en) el.textContent = row.ceo_message_en;
+      });
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>
