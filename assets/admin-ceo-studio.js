@@ -2,11 +2,8 @@
   const SUPABASE_URL = 'https://supabase.co';
   const SUPABASE_KEY = 'sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq';
 
-  // Remove any legacy inline studio cards if present so there are zero duplicates
-  ['ceoPanIndiaCard', 'tbStudioCard'].forEach(id => {
-    const oldEl = document.getElementById(id);
-    if (oldEl) oldEl.remove();
-  });
+  const oldEl = document.getElementById('saahiExternalCeoStudio');
+  if (oldEl) oldEl.remove();
 
   const mainEl = document.querySelector('main');
   if (!mainEl) return;
@@ -14,7 +11,7 @@
   const wrapper = document.createElement('div');
   wrapper.id = 'saahiExternalCeoStudio';
   wrapper.innerHTML = `
-  <!-- 1. FOUNDER & CEO PAN-INDIA LIVE BROADCAST & STATE COMMAND PANEL -->
+  <!-- PART A: FOUNDER & CEO PAN-INDIA LIVE BROADCAST & STATE COMMAND PANEL -->
   <section class="card" id="ceoPanIndiaCard" style="border:1.5px solid #00f0ff;background:linear-gradient(145deg,#091d3e,#06122e)">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
       <div>
@@ -122,76 +119,224 @@
     </div>
   </section>
 
-  <!-- 2. REFINED TALK BACK STUDIO (MIDDLE POSTER TEXT + SAMPLE VOICE + MP4 EXPORT) -->
-  <section class="card" id="tbStudioCard" style="border:1.5px solid #f5b82e;background:linear-gradient(145deg,#0b1c3d,#06122e)">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+  <!-- PART C: SMART MOBILE PHOTO UPLOADER (OCR LABEL CHECK + VISUAL SEARCH + AUTO-RENAME) -->
+  <section class="card" style="border:1.5px solid #25D366;background:linear-gradient(145deg,#091d3e,#06122e)">
+    <div class="brand" style="font-size:.82rem;color:#6ee7b7">SMART MOBILE PHOTO UPLOADER &amp; AUTO-NAMER</div>
+    <h2 style="margin:2px 0;color:#ffe27a">Upload from Mobile → Auto-Detect Label / Visual Search → Save Named to Supabase</h2>
+    <p class="small">Reads any signboard/label in your mobile photo (OCR), suggests a clean landmark filename, or lets you verify via Google Visual Search before publishing to ceo-blog.html.</p>
+    <div class="grid" style="margin-top:10px">
       <div>
-        <div class="brand" style="font-size:.82rem">SAAHIRIDES TALK BACK STUDIO</div>
-        <h2 style="margin:2px 0;color:#ffe27a">Talking Poster (Middle Open-Space Text), Sample Voice &amp; MP4 Export</h2>
+        <label for="mobDestSelect">1. Choose Destination (01–20)</label>
+        <select id="mobDestSelect">
+          <option value="08" selected>08 · Jaisalmer (Golden Fort &amp; Thar Desert)</option>
+          <option value="01">01 · Panchavati, Nashik</option>
+          <option value="02">02 · Puri &amp; Coastal Odisha</option>
+          <option value="03">03 · Vellore Golden Temple</option>
+          <option value="04">04 · Tirupati Balaji</option>
+          <option value="05">05 · Hyderabad &amp; Telangana</option>
+          <option value="06">06 · Ramoji &amp; Yadadri</option>
+          <option value="07">07 · Divine Pilgrimage Pass</option>
+          <option value="09">09 · Mysuru &amp; Bengaluru</option>
+          <option value="10">10 · Ooty &amp; Coonoor</option>
+          <option value="11">11 · Madurai &amp; Rameswaram</option>
+          <option value="12">12 · Vijayawada &amp; Amaravati</option>
+          <option value="13">13 · Srisailam &amp; Ahobilam</option>
+          <option value="14">14 · Araku Valley &amp; Vizag</option>
+          <option value="15">15 · Bhadrachalam &amp; Papi Hills</option>
+          <option value="16">16 · Warangal &amp; Ramappa</option>
+          <option value="17">17 · Hampi &amp; Badami</option>
+          <option value="18">18 · Dharmasthala &amp; Coorg</option>
+          <option value="19">19 · Shirdi &amp; Ellora</option>
+          <option value="20">20 · Kerala (Munnar &amp; Alleppey)</option>
+        </select>
       </div>
-      <span class="small">9:16 Reel / Status Canvas Recorder</span>
-    </div>
-
-    <div class="grid" style="margin-top:14px">
       <div>
-        <label for="tbScriptInput">1. Paste Narration Script (Displayed in Open Middle Space of Poster)</label>
-        <textarea id="tbScriptInput" style="min-height:105px" placeholder="Paste script here... e.g., Namaste Hyderabad! SaahiRides par ab zero surge pricing aur zero cancellation ke saath apni sawari book karein."></textarea>
-
-        <div class="grid" style="margin-top:8px">
-          <div>
-            <label for="tbThirdLang">3rd Marquee Language</label>
-            <select id="tbThirdLang">
-              <option value="te" selected>Telugu (తెలుగు — TS &amp; AP)</option>
-              <option value="kn">Kannada (ಕನ್ನಡ — Karnataka)</option>
-            </select>
-          </div>
-          <div>
-            <label for="tbScrollSpeed">Marquee Speed</label>
-            <select id="tbScrollSpeed">
-              <option value="2.2">Slow &amp; Clear</option>
-              <option value="3.8" selected>Medium Reel Pace</option>
-              <option value="5.5">Fast Ticker</option>
-            </select>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <button type="button" id="tbBuildBtn">✨ 1. Build 3-Language Marquee</button>
-          <button type="button" class="secondary" id="tbToggleScrollBtn">⏸ Pause / Resume</button>
-        </div>
-      </div>
-
-      <div>
-        <label for="tbPosterUpload">2. Upload Poster Image</label>
-        <input id="tbPosterUpload" type="file" accept="image/*">
-
-        <label for="tbBgMusicUpload">3. Upload Sample Voice / Narration Audio</label>
-        <input id="tbBgMusicUpload" type="file" accept="audio/*">
-
-        <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
-          <button type="button" id="tbSpeakPosterBtn">🗣️ Poster Speak (Sample Voice / AI)</button>
-          <button type="button" id="tbStopSpeakBtn" style="background:#991b1b;color:#fff">⏹ Stop Voice</button>
-        </div>
-
-        <div style="margin-top:12px;padding-top:10px;border-top:1px solid #28436d">
-          <button type="button" id="tbRecordExportBtn" style="background:linear-gradient(100deg,#10b981,#34d399);color:#04130d">🎬 Record &amp; Download Video (MP4)</button>
-          <button type="button" id="tbStopExportBtn" class="secondary" disabled>⏹ Finish &amp; Save File</button>
-          <div id="tbExportStatus" class="small" style="margin-top:6px;color:#ffe27a">Ready to preview or export 9:16 video.</div>
-        </div>
-        <audio id="tbBgAudio" crossorigin="anonymous" style="width:100%;margin-top:8px" controls></audio>
+        <label for="mobDestFile">2. Pick Photo from Mobile Gallery / Camera</label>
+        <input id="mobDestFile" type="file" accept="image/*">
       </div>
     </div>
-
-    <div style="margin-top:18px;text-align:center;background:#040d21;border:1px solid #28436d;border-radius:14px;padding:16px">
-      <div class="small" style="color:#f5b82e;font-weight:800;margin-bottom:8px">LIVE 9:16 REEL &amp; WHATSAPP STATUS PREVIEW CANVAS</div>
-      <canvas id="tbVideoCanvas" width="720" height="1280" style="width:min(100%,320px);height:auto;border-radius:14px;border:2px solid #f5b82e;background:#071329"></canvas>
+    <div style="margin-top:10px">
+      <label for="mobDetectedName">3. Detected / Verified Landmark Name</label>
+      <input id="mobDetectedName" placeholder="Will auto-detect label from image or use destination name…">
+    </div>
+    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <button type="button" id="mobUploadDestBtn" style="background:linear-gradient(100deg,#10b981,#34d399);color:#04130d">📲 Rename, Upload &amp; Publish Live</button>
+      <button type="button" id="mobVisualSearchBtn" class="secondary" disabled>🔍 Search Landmark on Google</button>
+      <span id="mobDestStatus" class="small" style="color:#ffe27a">Pick a mobile photo to auto-check its label.</span>
     </div>
   </section>`;
 
   mainEl.appendChild(wrapper);
 
-  // --- PART A: CEO PAN-INDIA LIVE BROADCAST LOGIC ---
-  if (window.supabase && window.supabase.createClient) {
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-      auth: { storage: window.sessionStorage, persistSession: true }
+  if (!window.supabase || !window.supabase.createClient) return;
+  const sb = window.supabase.createClient('https://uzwubbzlytqqewqibobr.supabase.co', SUPABASE_KEY, {
+    auth: { storage: window.sessionStorage, persistSession: true }
+  });
+
+  // Part A Handlers
+  const stateSelect = document.getElementById('ceoTargetState');
+  const statusEl = document.getElementById('ceoBroadcastStatus');
+  let broadcastCache = {};
+
+  function populateForm(code) {
+    const row = broadcastCache[code];
+    if (!row) return;
+    document.getElementById('ceoTickerInput').value = row.state_news_ticker || '';
+    document.getElementById('ceoMsgEn').value = row.ceo_message_en || '';
+    document.getElementById('ceoMsgReg').value = row.ceo_message_reg || '';
+    document.getElementById('ceoOfferEn').value = row.active_offer_en || '';
+    document.getElementById('ceoOfferReg').value = row.active_offer_reg || '';
+  }
+
+  async function loadPanIndiaData() {
+    statusEl.textContent = 'Loading live Pan-India broadcasts & private metrics…';
+    const [bRes, mRes] = await Promise.all([
+      sb.from('state_live_broadcasts').select('*'),
+      sb.from('state_command_metrics').select('*')
+    ]);
+    if (bRes.data) {
+      broadcastCache = {};
+      bRes.data.forEach(r => { broadcastCache[r.state_code] = r; });
+      populateForm(stateSelect.value);
+    }
+    if (mRes.data && mRes.data.length) {
+      let totalStaff = 0, totalRev = 0, totalPartners = 0;
+      const splitLines = [];
+      mRes.data.forEach(m => {
+        totalStaff += Number(m.staff_count || 0);
+        totalRev += Number(m.monthly_revenue_inr || 0);
+        totalPartners += Number(m.active_travel_partners || 0);
+        splitLines.push(m.state_code + ': ' + m.staff_count + ' staff');
+      });
+      document.getElementById('ceoTotalStaff').textContent = totalStaff + ' Total';
+      document.getElementById('ceoStaffSplit').textContent = splitLines.join(' • ');
+      document.getElementById('ceoTotalRev').textContent = '₹' + totalRev.toLocaleString('en-IN');
+      document.getElementById('ceoTotalPartners').textContent = totalPartners + ' Verified';
+      statusEl.textContent = '✓ Live Pan-India state data & private metrics loaded.';
+    } else {
+      statusEl.textContent = 'Sign in to Admin above first so your authenticated session unlocks private metrics.';
+    }
+  }
+
+  stateSelect.addEventListener('change', () => populateForm(stateSelect.value));
+  document.getElementById('ceoLoadAllBtn').onclick = loadPanIndiaData;
+
+  document.getElementById('ceoPublishBroadcastBtn').onclick = async () => {
+    const code = stateSelect.value;
+    statusEl.textContent = 'Pushing live update to ' + code + '…';
+    const { error } = await sb.from('state_live_broadcasts').update({
+      state_news_ticker: document.getElementById('ceoTickerInput').value.trim(),
+      ceo_message_en: document.getElementById('ceoMsgEn').value.trim(),
+      ceo_message_reg: document.getElementById('ceoMsgReg').value.trim(),
+      active_offer_en: document.getElementById('ceoOfferEn').value.trim(),
+      active_offer_reg: document.getElementById('ceoOfferReg').value.trim(),
+      updated_at: new Date().toISOString()
+    }).eq('state_code', code);
+
+    statusEl.textContent = error
+      ? '⛔ Push failed (confirm Admin sign-in & RLS SQL): ' + error.message
+      : '✅ Live on ' + code + ' hub immediately!';
+    if (!error) await loadPanIndiaData();
+  };
+
+  document.getElementById('ceoAddPkgBtn').onclick = async () => {
+    const payload = {
+      state_code: document.getElementById('pkgState').value,
+      partner_agency_name: document.getElementById('pkgAgency').value.trim(),
+      package_title: document.getElementById('pkgTitle').value.trim(),
+      package_category: document.getElementById('pkgCat').value,
+      duration_label: document.getElementById('pkgDuration').value.trim() || '1 Day',
+      starting_price_inr: Number(document.getElementById('pkgPrice').value || 0),
+      highlights: document.getElementById('pkgHighlights').value.trim(),
+      is_approved: true
+    };
+    if (!payload.partner_agency_name || !payload.package_title) {
+      statusEl.textContent = 'Enter Partner Agency Name and Package Title first.';
+      return;
+    }
+    const { error } = await sb.from('state_partner_packages').insert(payload);
+    statusEl.textContent = error
+      ? '⛔ Could not publish package: ' + error.message
+      : '✅ Partner package published live to ' + payload.state_code + ' hub!';
+    if (!error) ['pkgAgency', 'pkgTitle', 'pkgDuration', 'pkgPrice', 'pkgHighlights'].forEach(id => { document.getElementById(id).value = ''; });
+  };
+
+  // Part C Handlers (Smart Mobile Photo Auto-Namer)
+  let lastUploadedPublicUrl = '';
+  const mobFileEl = document.getElementById('mobDestFile');
+  const mobNameEl = document.getElementById('mobDetectedName');
+  const mobDestEl = document.getElementById('mobDestSelect');
+  const mobStatusEl = document.getElementById('mobDestStatus');
+  const mobSearchBtn = document.getElementById('mobVisualSearchBtn');
+
+  function getDefaultDestSlug() {
+    const label = mobDestEl.options.item(mobDestEl.selectedIndex)?.text || 'destination';
+    return label.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase();
+  }
+
+  mobFileEl.addEventListener('change', async () => {
+    const file = mobFileEl.files ? mobFileEl.files.item(0) : null;
+    if (!file) return;
+    mobStatusEl.textContent = 'Checking photo for visible signboard / text label (OCR)…';
+    mobNameEl.value = getDefaultDestSlug();
+
+    try {
+      if (!window.Tesseract) {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://jsdelivr.net';
+          s.onload = resolve;
+          s.onerror = () => reject(new Error('OCR unavailable'));
+          document.head.appendChild(s);
+        });
+      }
+      const res = await window.Tesseract.recognize(file, 'eng');
+      const rawText = (res && res.data && res.data.text ? res.data.text : '').replace(/\s+/g, ' ').trim();
+      const cleanLabel = rawText.replace(/[^a-zA-Z0-9\s-]/g, '').trim();
+      if (cleanLabel.length >= 4) {
+        mobNameEl.value = cleanLabel.slice(0, 65).toLowerCase().replace(/\s+/g, '-');
+        mobStatusEl.textContent = '✓ Label detected in photo: "' + cleanLabel.slice(0, 50) + '". Ready to save!';
+      } else {
+        mobStatusEl.textContent = 'No text label inside photo — named from destination (' + mobNameEl.value + ').';
+      }
+    } catch {
+      mobStatusEl.textContent = 'Named from destination (' + mobNameEl.value + '). Ready to upload!';
+    }
+  });
+
+  mobSearchBtn.onclick = () => {
+    if (lastUploadedPublicUrl) window.open('https://google.com' + encodeURIComponent(lastUploadedPublicUrl), '_blank', 'noopener');
+  };
+
+  document.getElementById('mobUploadDestBtn').onclick = async () => {
+    const destId = mobDestEl.value;
+    const file = mobFileEl.files ? mobFileEl.files.item(0) : null;
+    if (!file) { mobStatusEl.textContent = 'Select a photo from your mobile first.'; return; }
+
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+    const baseSlug = (mobNameEl.value.trim() || getDefaultDestSlug()).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 70);
+    const finalFileName = destId + '-' + baseSlug + '-' + new Date().toISOString().slice(0, 10) + '.' + ext;
+    const storagePath = 'approved/destinations/' + finalFileName;
+
+    mobStatusEl.textContent = 'Saving renamed file "' + finalFileName + '" to Supabase…';
+    const { error: upErr } = await sb.storage.from('social-images').upload(storagePath, file, {
+      contentType: file.type || 'image/jpeg',
+      upsert: true
     });
+    if (upErr) { mobStatusEl.textContent = '⛔ Upload failed (sign in to Admin above first): ' + upErr.message; return; }
+
+    lastUploadedPublicUrl = sb.storage.from('social-images').getPublicUrl(storagePath).data.publicUrl;
+    mobSearchBtn.disabled = false;
+
+    const { error: dbErr } = await sb.from('ceo_destination_photos').upsert({
+      dest_id: destId,
+      image_url: lastUploadedPublicUrl,
+      caption: baseSlug.replace(/-/g, ' '),
+      updated_at: new Date().toISOString()
+    });
+    mobStatusEl.textContent = dbErr
+      ? '⛔ File saved as ' + finalFileName + ', but DB link failed: ' + dbErr.message
+      : '✅ Saved as "' + finalFileName + '" & live on ceo-blog.html!';
+    if (!dbErr) mobFileEl.value = '';
+  };
+})();
