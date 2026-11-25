@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CEO’s Blog &amp; 20 Destinations Master Hub | SaahiRides Transit Pvt. Ltd.</title>
-<meta name="description" content="Complete 20-destination travel & pilgrimage master hub by Subodh Kumar Dandapat, CEO — SaahiRides Transit Pvt. Ltd. Includes Jaisalmer, Tirupati, Puri, Nashik, Vellore, Hyderabad, Ramoji & Yadadri.">
+<meta name="description" content="Complete 20-destination travel & pilgrimage master hub by Subodh Kumar Dandapat, CEO — SaahiRides Transit Pvt. Ltd. Includes Jaisalmer, Tirupati, Puri, Nashik, Vellore, Hyderabad, Ramoji, Yadadri & 12 regional circuits.">
 <meta name="supabase-anon-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtztCncdpnbe9ZZiHVZVE">
 <link rel="canonical" href="https://saahirides.co.in">
 <style>
@@ -21,9 +21,7 @@
   .brand-row img{width:46px;height:46px;object-fit:contain}
   .kicker{display:block;margin-top:12px;color:#00F0FF;font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
   h1{font-size:clamp(30px,5.5vw,48px);line-height:1.15;margin:8px 0;color:#fff}
-  h2{color:#FFE27A;margin:0 0 10px}
 
-  /* 4-Card CEO Live Message Grid Across All 4 Hubs */
   .ceo-four-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px;text-align:left}
   .ceo-hub-card{background:rgba(6,18,46,.9);border:1px solid rgba(0,240,255,.45);border-radius:12px;padding:14px}
   .ceo-hub-card .hub-badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:1px;color:#00F0FF;text-transform:uppercase;margin-bottom:4px}
@@ -39,23 +37,21 @@
   .filter-btn{padding:7px 13px;border-radius:999px;border:1px solid rgba(255,226,122,.45);background:#0b1c3d;color:#FFE27A;font-size:12.5px;font-weight:800;cursor:pointer}
   .filter-btn.active{background:#D4AF37;color:#06122E}
 
-  /* Unified 20-Destination Expand/Collapse Grid */
   .dest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
   details.dest-card{background:linear-gradient(145deg,#10284d,#0b1c3d);border:1px solid rgba(212,175,55,.4);border-radius:14px;overflow:hidden;transition:border-color .2s}
   details.dest-card[open]{border-color:#00F0FF;grid-column:1 / -1}
   details.dest-card.hidden{display:none}
-  summary.dest-summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;padding:14px}
+  summary.dest-summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:120px 1fr auto;gap:14px;align-items:center;padding:14px}
   summary.dest-summary::-webkit-details-marker{display:none}
-  .dest-thumb{width:130px;height:96px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,215,0,.35);background:#06122E}
+  .dest-thumb{width:120px;height:90px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,215,0,.35);background:#06122E}
   .dest-meta .tag{font-size:11px;color:#00F0FF;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;display:block}
   .dest-meta .tag.planned{color:#FFE27A}
-  .dest-meta h3{margin:3px 0 4px;color:#fff;font-size:18px;line-height:1.3}
+  .dest-meta h3{margin:3px 0 4px;color:#fff;font-size:17.5px;line-height:1.3}
   .dest-meta p{margin:0;color:#cbd5e1;font-size:13px;line-height:1.45}
   .toggle-pill{padding:7px 12px;border-radius:8px;border:1px solid #D4AF37;color:#FFE27A;font-size:12px;font-weight:800;white-space:nowrap}
   details[open] .toggle-pill{background:#00F0FF;color:#06122E;border-color:#00F0FF}
 
   .dest-body{padding:0 20px 20px;border-top:1px solid rgba(255,255,255,.1);background:#081630}
-  .dest-hero-banner{width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin:16px 0;border:1px solid rgba(212,175,55,.45)}
   .itinerary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
   .day-box{background:#10284d;border:1px solid rgba(0,240,255,.28);border-radius:11px;padding:14px}
   .day-box strong{color:#FFE27A;display:block;font-size:14px;margin-bottom:5px}
@@ -68,15 +64,14 @@
   @media(max-width:960px){.ceo-four-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:680px){
     .ceo-four-grid,.dest-grid{grid-template-columns:1fr}
-    summary.dest-summary{grid-template-columns:96px 1fr;gap:10px}
-    .dest-thumb{width:96px;height:76px}
+    summary.dest-summary{grid-template-columns:92px 1fr;gap:10px}
+    .dest-thumb{width:92px;height:74px}
     .toggle-pill{grid-column:1 / -1;text-align:center}
   }
 </style>
 </head>
 <body>
 <main>
-  <!-- Pan-India 4-Hub Navigation Bar -->
   <nav class="hub-bar" aria-label="SaahiRides State Hubs">
     <a href="index.html" class="hub-pill">1. Hyderabad Core HQ (Default)</a>
     <a href="telangana.html" class="hub-pill">2. Telangana State (Hyderabad)</a>
@@ -93,28 +88,11 @@
     <h1>From the <span style="color:#FFE27A">CEO’s Desk</span></h1>
     <p style="max-width:820px;margin:0 auto">Complete itineraries, destination photography, and practical family pilgrimage planning by <strong>Subodh Kumar Dandapat, CEO — SaahiRides Transit Pvt. Ltd.</strong> Expand any destination below or view all 20 circuits under one roof.</p>
 
-    <!-- Live CEO Message Over All 4 Cards (Synced with Supabase state_live_broadcasts) -->
     <div class="ceo-four-grid" aria-label="Live CEO Broadcasts Across All 4 Hubs">
-      <article class="ceo-hub-card">
-        <span class="hub-badge">01 · Core HQ</span>
-        <h3>Hyderabad Core Hub</h3>
-        <p id="ceoCardHYD">Zero surge pricing, dignified driver-partners, and transparent fares across every mile.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">02 · State Hub</span>
-        <h3>Telangana State</h3>
-        <p id="ceoCardTS">Expanding SafeRide - SaafeRide @ SaahiPrice across all 33 districts of Telangana.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">03 · State Hub</span>
-        <h3>Andhra Pradesh</h3>
-        <p id="ceoCardAP">Serving Amaravati, Vijayawada, Visakhapatnam &amp; Tirupati with transparent pilgrimage &amp; city mobility.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">04 · State Hub</span>
-        <h3>Karnataka</h3>
-        <p id="ceoCardKA">Zero-surge Bengaluru Airport transfers, Mysuru family combos &amp; Karnataka temple circuits.</p>
-      </article>
+      <article class="ceo-hub-card"><span class="hub-badge">01 · Core HQ</span><h3>Hyderabad Core Hub</h3><p id="ceoCardHYD">Zero surge pricing, dignified driver-partners, and transparent fares across every mile.</p></article>
+      <article class="ceo-hub-card"><span class="hub-badge">02 · State Hub</span><h3>Telangana State</h3><p id="ceoCardTS">Expanding SafeRide - SaafeRide @ SaahiPrice across all 33 districts of Telangana.</p></article>
+      <article class="ceo-hub-card"><span class="hub-badge">03 · State Hub</span><h3>Andhra Pradesh</h3><p id="ceoCardAP">Serving Amaravati, Vijayawada, Visakhapatnam &amp; Tirupati with transparent pilgrimage &amp; city mobility.</p></article>
+      <article class="ceo-hub-card"><span class="hub-badge">04 · State Hub</span><h3>Karnataka</h3><p id="ceoCardKA">Zero-surge Bengaluru Airport transfers, Mysuru family combos &amp; Karnataka temple circuits.</p></article>
     </div>
 
     <div class="actions">
@@ -140,155 +118,7 @@
       </div>
     </div>
 
-    <!-- ALL 20 DESTINATIONS UNDER ONE ROOF (EXPAND & COLLAPSE IN ONE PLACE) -->
-        <!-- ALL 20 DESTINATIONS UNDER ONE ROOF (EXPAND & COLLAPSE IN ONE PLACE) -->
     <div class="dest-grid" id="masterDestinationsGrid">
-
-      <!-- 01. PANCHAVATI, NASHIK -->
+      <!-- 01 -->
       <details class="dest-card" data-region="INDIA" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="logo.png" alt="Panchavati Nashik">
-          <div class="dest-meta">
-            <span class="tag">01 · Maharashtra · Published Guide</span>
-            <h3>Panchavati, Nashik: Sacred Ramayana Journey</h3>
-            <p>Sita Gufa, Kalaram Temple, Ramkund, Godavari riverfront &amp; Trimbakeshwar circuit.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Panchavati Sacred Circuit</strong><p>Morning darshan at Kalaram Temple, Sita Gufa, Kapaleshwar Mahadev, and evening Godavari Maha Aarti at Ramkund Ghat.</p></div>
-            <div class="day-box"><strong>Day 2 · Trimbakeshwar &amp; Tapovan</strong><p>Early drive to Trimbakeshwar Jyotirlinga (28 km), Anjaneri Hanuman birthplace viewpoint, and Tapovan riverside walk.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="ceo-blog-panchavati.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Plan Nashik Trip on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 02. PURI & COASTAL ODISHA -->
-      <details class="dest-card" data-region="INDIA" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="logo.png" alt="Puri & Coastal Odisha">
-          <div class="dest-meta">
-            <span class="tag">02 · Odisha · Published Guide</span>
-            <h3>Puri &amp; Coastal Odisha: Beyond the Temple Town</h3>
-            <p>Shree Jagannath Temple, Konark Sun Temple, Chilika Lake &amp; Bhubaneswar heritage.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Shree Jagannath Darshan &amp; Mahaprasad</strong><p>Early Mangala Alati darshan at Shree Jagannath Puri, Anand Bazar Mahaprasad, and Golden Beach evening walk.</p></div>
-            <div class="day-box"><strong>Day 2 · Konark Marine Drive &amp; Raghurajpur</strong><p>Sunrise at Konark Sun Temple, Chandrabhaga beach, and Raghurajpur Pattachitra heritage artisan village.</p></div>
-            <div class="day-box"><strong>Day 3 · Chilika Satapada &amp; Bhubaneswar</strong><p>Dolphin spotting boat cruise at Chilika Lake (Satapada) followed by Lingaraj Temple &amp; Khandagiri caves.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="puri-coastal-odisha-travel-guide.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Plan Odisha Trip on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 03. VELLORE GOLDEN TEMPLE -->
-      <details class="dest-card" data-region="INDIA" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="logo.png" alt="Vellore Golden Temple">
-          <div class="dest-meta">
-            <span class="tag">03 · Tamil Nadu · Published Guide</span>
-            <h3>Vellore: Sripuram Golden Temple &amp; Fort</h3>
-            <p>Sripuram Mahalakshmi Golden Temple, Jalakandeswarar Temple &amp; Vellore Fort.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Sripuram Star-Path &amp; Golden Temple</strong><p>Walk the serene 1.8 km Sri Chakra star path to Sripuram Golden Temple, followed by annadanam dining &amp; evening lighting.</p></div>
-            <div class="day-box"><strong>Day 2 · Vellore Fort &amp; Local Markets</strong><p>Morning visit to 16th-century Vellore Fort, Jalakandeswarar Temple, and relaxed shopping for silk &amp; local delicacies.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="vellore-golden-temple-travel-guide.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Plan Vellore Trip on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 04. TIRUPATI BALAJI DARSHAN -->
-      <details class="dest-card" data-region="AP" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="hyderabad%20to%20tirupati%20special%20darshan.jpg" alt="Tirupati Balaji Darshan">
-          <div class="dest-meta">
-            <span class="tag">04 · Andhra Pradesh · Published Guide</span>
-            <h3>Tirupati: A Complete Divine Journey</h3>
-            <p>Tirumala Balaji darshan, Padmavathi Ammavari Temple, Kapila Theertham &amp; Srivari Mettu.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Tirumala Hill &amp; Srivari Darshan</strong><p>Ghat road ascent, Sri Varahaswami darshan, Tirumala Venkateswara Swamy darshan, laddu prasadam, and Tarigonda Vengamamba Annaprasadam.</p></div>
-            <div class="day-box"><strong>Day 2 · Papavinasam, Akasa Ganga &amp; Tiruchanur</strong><p>Morning hill circuit followed by Sri Padmavathi Ammavari Temple at Tiruchanur &amp; Kapila Theertham.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="tirupati-complete-pilgrimage-guide.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Plan Tirupati Trip on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 05. HYDERABAD & TELANGANA HERITAGE -->
-      <details class="dest-card" data-region="TS" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="saahirides%20main%20page.png" alt="Hyderabad & Telangana Heritage">
-          <div class="dest-meta">
-            <span class="tag">05 · Telangana · Published Guide</span>
-            <h3>Hyderabad &amp; Telangana: Heritage, Food &amp; Culture</h3>
-            <p>Charminar, Golconda Fort, Chowmahalla Palace, Salar Jung Museum &amp; Hussain Sagar.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Old City Royal Walk &amp; Culinary Trail</strong><p>Charminar morning views, Mecca Masjid, Laad Bazaar pearls, Chowmahalla Palace, and authentic Hyderabadi biryani &amp; Irani chai.</p></div>
-            <div class="day-box"><strong>Day 2 · Golconda Fort &amp; Tank Bund</strong><p>Golconda acoustic tour, Birla Mandir sunset, and Hussain Sagar lakefront.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="ceo-blog-hyderabad-telangana.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Book Hyderabad Tour on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 06. RAMOJI FILM CITY & YADADRI -->
-      <details class="dest-card" data-region="TS" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="ramoji%20gate%20poster.jpg" alt="Ramoji Film City & Yadadri">
-          <div class="dest-meta">
-            <span class="tag">06 · Telangana · Published Guide</span>
-            <h3>Ramoji Film City &amp; Yadadri: Two Telangana Icons</h3>
-            <p>Full-day studio adventure at Ramoji paired with serene Sri Lakshmi Narasimha Swamy darshan.</p>
-          </div>
-          <span class="toggle-pill">Expand Itinerary ▾</span>
-        </summary>
-        <div class="dest-body">
-          <div class="itinerary-grid">
-            <div class="day-box"><strong>Day 1 · Ramoji Film City Full-Day Experience</strong><p>Studio tour, stunt shows, movie magic, and evening parade.</p></div>
-            <div class="day-box"><strong>Day 2 · Yadadri Temple &amp; Surendrapuri</strong><p>Morning drive to Yadagirigutta Sri Lakshmi Narasimha Swamy Temple and Surendrapuri mytho-theme park.</p></div>
-          </div>
-          <div class="guide-footer">
-            <a href="ceo-blog-ramoji-yadadri.html">Open Full Standalone Article ↗</a>
-            <a class="wa" href="https://wa.me" target="_blank" rel="noopener">💬 Book Ramoji &amp; Yadadri on WhatsApp</a>
-          </div>
-        </div>
-      </details>
-
-      <!-- 07. SAAHIRIDES DIVINE PILGRIMAGE PASS -->
-      <details class="dest-card" data-region="INDIA" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="saahirides%20logo.jpg" alt="SaahiRides Divine Pilgrimage Pass">
-          <div class="dest-meta">
-            <span class="tag">07 · India Pilgrimage · Published Guide</span>
-            <h3>SaahiRides Divine Pilgrimage Pass: 10 Destinations</h3>
-            <p>Twelve-month family pilgrimage pass with realistic 2-day travel legs &amp; dedicated drivers.</p>
-          </div>
+        <summary class="dest-summary"><img class="dest-thumb" src="logo.png" alt="Panchavati Nashik"><div class="dest-meta"><span class="tag">01 · Maharashtra · Published Guide</span><h3>Panchavati, Nashik: Sacred Ramayana Journey</h3><p>Sita Gufa, Kalaram Temple, Ramkund, Godavari riverfront &amp; Trimbakeshwar circuit.</p></div><span class="toggle-pill">Expand ▾</span></summary>
