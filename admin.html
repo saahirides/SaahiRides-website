@@ -1,150 +1,1795 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CEO’s Blog &amp; 20 Destinations Master Hub | SaahiRides Transit Pvt. Ltd.</title>
-<meta name="description" content="Complete 20-destination travel & pilgrimage master hub by Subodh Kumar Dandapat, CEO — SaahiRides Transit Pvt. Ltd. Includes Jaisalmer, Tirupati, Puri, Nashik, Vellore, Hyderabad, Ramoji & Yadadri.">
-<meta name="supabase-anon-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6d3ViYnpseXRxcWV3cWlib2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3NDYzNzcsImV4cCI6MjEwODMyMjM3N30.JwX1vOvoFhvao5FyYTUJYpgtztCncdpnbe9ZZiHVZVE">
-<link rel="canonical" href="https://saahirides.co.in">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SaahiRides Admin & Policy Centre</title>
+<meta name="robots" content="noindex,nofollow">
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(ellipse at top,#17365f,#06122E 65%,#030817);font:16px/1.65 'Segoe UI',Arial,sans-serif;color:#eaf1fb}
-  main{max-width:1180px;margin:20px auto;padding:0 14px 36px}
-  .hub-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:12px;background:#0b1c3d;border:1px solid rgba(212,175,55,.45);border-radius:14px;margin-bottom:14px}
-  .hub-pill{padding:8px 14px;border-radius:9px;border:1px solid #46618b;background:#06122E;color:#fff;text-decoration:none;font-size:12.5px;font-weight:800}
-  .hub-pill:hover{border-color:#FFE27A;color:#FFE27A}
+:root{color-scheme:dark;--navy:#06122e;--blue:#1e3a8a;--gold:#f5b82e;--text:#f8fafc;--muted:#bac7dc;--line:#28436d;--panel:#0b1c3d}
+* {
+  box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#17365f,var(--navy) 60%);
+  font:16px/1.5 system-ui,Arial,sans-serif;
+  color:var(--text)}
+main {
+  max-width:1100px;
+  margin:auto;
+  padding:22px}
+.brand {
+  color:var(--gold);
+  font-weight:900;
+  letter-spacing:.04em}
+.top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--line);
+  padding-bottom:18px}
+.card {
+  background:rgba(11,28,61,.96);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin:18px 0}
+.hint {
+  color:var(--muted);
+  font-size:.94rem}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px}
+.tile {
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px;
+  background:#0a1934}
+.tile h3 {
+  color:var(--gold);
+  margin:0 0 6px}
+label {
+  display:block;
+  margin:12px 0 5px;
+  color:var(--muted)}
+input,textarea,select {
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid #46618b;
+  background:#06122e;
+  color:#fff;
+  font:inherit}
+.password-field {
+  display:flex;
+  align-items:stretch;
+  gap:8px}
+.password-field input {
+  flex:1;
+  min-width:0}
+.password-field .password-toggle {
+  margin:0;
+  white-space:nowrap}
+textarea {
+  min-height:180px;
+  resize:vertical}
+button,.btn {
+  border:0;
+  border-radius:9px;
+  background:linear-gradient(100deg,#d4af37,#ffe27a);
+  color:#06122e;
+  font-weight:800;
+  padding:11px 15px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+  margin:4px 5px 4px 0}
+button.secondary,.btn.secondary {
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold)}
+button:disabled {
+  opacity:.5;
+  cursor:not-allowed}
+.tabs {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:16px 0}
+.tabs button.active {
+  outline:2px solid white}
+.admin-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:18px}
+.admin-nav button{margin:0;min-height:54px;text-align:left}
+.admin-nav button.active{outline:2px solid #fff}
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+.subnav button{margin:0}
+.subnav button.active{outline:2px solid #fff}
+.status {
+  padding:10px 12px;
+  border-radius:8px;
+  background:#11294b;
+  margin:12px 0;
+  white-space:pre-wrap}
+.hidden {
+  display:none!important}
+.policy {
+  padding:14px 0;
+  border-bottom:1px solid var(--line)}
+.policy h4 {
+  margin:0;
+  color:var(--gold)}
+.policy p {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere}
+.small {
+  font-size:.85rem;
+  color:var(--muted)}
+footer {
+  text-align:center;
+  color:var(--muted);
+  padding:20px}
 
-  header,.panel{background:#071931;border:1px solid rgba(212,175,55,.35);border-radius:16px;padding:24px;margin:16px 0}
-  header{text-align:center;background:linear-gradient(145deg,#10284d,#07152f)}
-  .brand-row{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-weight:950;font-size:21px}
-  .brand-row img{width:46px;height:46px;object-fit:contain}
-  .kicker{display:block;margin-top:12px;color:#00F0FF;font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
-  h1{font-size:clamp(30px,5.5vw,48px);line-height:1.15;margin:8px 0;color:#fff}
-  h2{color:#FFE27A;margin:0 0 10px}
+/* Super Admin accordion workspace */
+.superadmin-shell{background:rgba(8,24,53,.98);border:1px solid #49648d;border-radius:14px;padding:14px;margin:14px 0}
+.superadmin-shell>summary,.role-dropdown>summary,.pitch-category>summary{cursor:pointer;list-style:none;font-weight:900;color:var(--gold);padding:10px 12px;border-radius:9px;background:#10264a}
+.superadmin-shell>summary::-webkit-details-marker,.role-dropdown>summary::-webkit-details-marker,.pitch-category>summary::-webkit-details-marker{display:none}
+.superadmin-shell>summary:after,.role-dropdown>summary:after,.pitch-category>summary:after{content:'＋';float:right;color:var(--gold)}
+.superadmin-shell[open]>summary:after,.role-dropdown[open]>summary:after,.pitch-category[open]>summary:after{content:'−'}
+.superadmin-submenus{display:grid;gap:9px;margin-top:12px}
+.role-dropdown{border:1px solid var(--line);border-radius:10px;padding:8px;background:#091a36}
+.role-dropdown .admin-nav{display:flex;flex-direction:column;gap:7px;margin:10px 0 2px}
+.role-dropdown .admin-nav button,.role-dropdown .admin-nav .btn{width:100%;min-height:42px;text-align:left;display:block;margin:0}
+.role-links{display:grid;gap:7px;padding:10px 4px 2px}
+.role-links a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:8px;color:#f8fafc;text-decoration:none;background:#0a1934}
+.role-links a:hover{border-color:var(--gold)}
+.pitch-deck-panel{border:1px solid #8c7130;background:linear-gradient(145deg,#11284c,#091a36)}
+.pitch-deck-panel>summary{font-weight:900;color:#ffe27a;cursor:pointer;list-style:none;padding:12px}
+.pitch-deck-panel>summary::-webkit-details-marker{display:none}
+.pitch-deck-panel .pitch-inner{padding:0 14px 14px}
+.pitch-deck-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
+.pitch-category{border:1px solid var(--line);border-radius:9px;padding:7px;background:#071630}
+.pitch-category>summary{font-size:.95rem}
+.pitch-file{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 4px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.pitch-file button{flex-shrink:0}
+.pitch-upload-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end;margin-top:12px}
+.pitch-upload-row button{width:100%;margin:0}
+#pitchDeckStatus{min-height:42px}
 
-  /* 4-Card CEO Live Message Grid Across All 4 Hubs */
-  .ceo-four-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px;text-align:left}
-  .ceo-hub-card{background:rgba(6,18,46,.9);border:1px solid rgba(0,240,255,.45);border-radius:12px;padding:14px}
-  .ceo-hub-card .hub-badge{display:inline-block;font-size:11px;font-weight:900;letter-spacing:1px;color:#00F0FF;text-transform:uppercase;margin-bottom:4px}
-  .ceo-hub-card h3{margin:0 0 6px;font-size:15px;color:#FFE27A}
-  .ceo-hub-card p{margin:0;font-size:13px;color:#dbe4f4;line-height:1.5}
-
-  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;justify-content:center}
-  .actions a,.ctrl-btn{padding:10px 15px;border:1px solid #D4AF37;border-radius:9px;text-decoration:none;color:#FFE27A;background:#0b1c3d;font-weight:800;font-size:13px;cursor:pointer}
-  .actions .primary,.ctrl-btn.gold{background:#D4AF37;color:#06122E}
-
-  .toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
-  .filter-bar{display:flex;flex-wrap:wrap;gap:7px}
-  .filter-btn{padding:7px 13px;border-radius:999px;border:1px solid rgba(255,226,122,.45);background:#0b1c3d;color:#FFE27A;font-size:12.5px;font-weight:800;cursor:pointer}
-  .filter-btn.active{background:#D4AF37;color:#06122E}
-
-  /* Unified 20-Destination Expand/Collapse Grid */
-  .dest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-  details.dest-card{background:linear-gradient(145deg,#10284d,#0b1c3d);border:1px solid rgba(212,175,55,.4);border-radius:14px;overflow:hidden;transition:border-color .2s}
-  details.dest-card[open]{border-color:#00F0FF;grid-column:1 / -1}
-  details.dest-card.hidden{display:none}
-  summary.dest-summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center;padding:14px}
-  summary.dest-summary::-webkit-details-marker{display:none}
-  .dest-thumb{width:130px;height:96px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,215,0,.35);background:#06122E}
-  .dest-meta .tag{font-size:11px;color:#00F0FF;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;display:block}
-  .dest-meta .tag.planned{color:#FFE27A}
-  .dest-meta h3{margin:3px 0 4px;color:#fff;font-size:18px;line-height:1.3}
-  .dest-meta p{margin:0;color:#cbd5e1;font-size:13px;line-height:1.45}
-  .toggle-pill{padding:7px 12px;border-radius:8px;border:1px solid #D4AF37;color:#FFE27A;font-size:12px;font-weight:800;white-space:nowrap}
-  details[open] .toggle-pill{background:#00F0FF;color:#06122E;border-color:#00F0FF}
-
-  .dest-body{padding:0 20px 20px;border-top:1px solid rgba(255,255,255,.1);background:#081630}
-  .dest-hero-banner{width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin:16px 0;border:1px solid rgba(212,175,55,.45)}
-  .itinerary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
-  .day-box{background:#10284d;border:1px solid rgba(0,240,255,.28);border-radius:11px;padding:14px}
-  .day-box strong{color:#FFE27A;display:block;font-size:14px;margin-bottom:5px}
-  .day-box p{margin:0;font-size:13.5px;color:#e2e8f0}
-  .guide-footer{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
-  .guide-footer a{padding:9px 14px;border-radius:8px;background:#D4AF37;color:#06122E;text-decoration:none;font-weight:900;font-size:13px}
-  .guide-footer a.wa{background:#25D366;color:#fff}
-
-  footer{text-align:center;color:#b7c4d8;padding:22px;font-size:13px}
-  @media(max-width:960px){.ceo-four-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:680px){
-    .ceo-four-grid,.dest-grid{grid-template-columns:1fr}
-    summary.dest-summary{grid-template-columns:96px 1fr;gap:10px}
-    .dest-thumb{width:96px;height:76px}
-    .toggle-pill{grid-column:1 / -1;text-align:center}
-  }
+@media(max-width:500px) {
+  main {
+  padding:14px}
+.card {
+  padding:15px}
+}
 </style>
-</head>
+<style id="saahi-talkback-persistent-alert">
+#ccTalkbackAlert[hidden]{display:none!important}
+#ccTalkbackAlert{position:fixed;inset:0;z-index:10090;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,8,22,.84);backdrop-filter:blur(7px)}
+#ccTalkbackAlert .talkback-alert-panel{width:min(100%,620px);max-height:88vh;overflow:auto;background:linear-gradient(145deg,#fff8df,#ffe8aa);color:#132b4d;border:3px solid #d99a13;border-radius:18px;padding:22px;box-shadow:0 22px 70px rgba(0,0,0,.48)}
+#ccTalkbackAlert h2{margin:0 0 8px;color:#173b7a;font-size:clamp(22px,4vw,28px)}
+#ccTalkbackAlert .talkback-alert-meta{font-size:12px;color:#52647e;margin:0 0 14px}
+#ccTalkbackAlert .talkback-alert-body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.55;background:#fff;border:1px solid #e2c57d;border-radius:10px;padding:14px;max-height:42vh;overflow:auto}
+#ccTalkbackAcknowledge{width:100%;margin-top:16px;background:linear-gradient(100deg,#d4af37,#ffe27a);color:#10264b;border:1px solid #b77b00;font-weight:900}
+</style></head>
 <body>
 <main>
-  <!-- Pan-India 4-Hub Navigation Bar -->
-  <nav class="hub-bar" aria-label="SaahiRides State Hubs">
-    <a href="index.html" class="hub-pill">1. Hyderabad Core HQ (Default)</a>
-    <a href="telangana.html" class="hub-pill">2. Telangana State (Hyderabad)</a>
-    <a href="andhra-pradesh.html" class="hub-pill">3. Andhra Pradesh (Amaravati)</a>
-    <a href="karnataka.html" class="hub-pill">4. Karnataka (Bengaluru)</a>
-  </nav>
+<header class="top">
+<div>
+<div class="brand">SAAHIRIDES TRANSIT PVT. LTD.</div>
+<h1 style="margin:4px 0">Admin & Policy Centre</h1>
+<div class="hint">Restricted workspace · staged implementation</div>
+</div>
+<a class="btn secondary" href="./index.html">← Main website</a>
+</header>
+<div id="notice" class="status">SaahiRides Supabase connection is preconfigured with the public client key. Sign in with your authorized account.</div>
 
-  <header>
-    <a class="brand-row" href="index.html">
-      <img src="saahirides%20logo.jpg" alt="SaahiRides Eagle Logo">
-      <span>SaahiRides Transit Pvt. Ltd.</span>
-    </a>
-    <span class="kicker">SafeRide - SaafeRide @ SaahiPrice • 20 Destinations Master Hub</span>
-    <h1>From the <span style="color:#FFE27A">CEO’s Desk</span></h1>
-    <p style="max-width:820px;margin:0 auto">Complete itineraries, destination photography, and practical family pilgrimage planning by <strong>Subodh Kumar Dandapat, CEO — SaahiRides Transit Pvt. Ltd.</strong> Expand any destination below or view all 20 circuits under one roof.</p>
+<section id="auth" class="card hidden">
+<h2>Secure sign-in</h2>
+<p class="hint">Use an account already created in Supabase Auth. Access is granted only when the database recognizes an active Admin/Owner or authorized HR publisher.</p>
+<label for="email">Email</label>
+<input id="email" type="email" autocomplete="username">
+<label for="password">Password</label>
+<div class="password-field">
+  <input id="password" type="password" autocomplete="current-password">
+  <button type="button" class="secondary password-toggle" id="togglePassword" aria-controls="password" aria-pressed="false">Show</button>
+</div>
+<button id="signIn">Sign in</button>
+<button class="secondary" id="reset">Send password reset</button>
+</section>
+<section id="forcePassword" class="card hidden"><h2>Mandatory first-login password change</h2><p class="hint">Set a new password before entering the SaahiRides workspace. Use at least 12 characters.</p><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="12"><label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="12"><button id="changePassword">Change password and continue</button></section>
+<section id="workspace" class="hidden">
+<details class="card pitch-deck-panel hidden" id="pitchDeckLibrary" open>
+<summary>▣ Pitch Deck Library · controlled company documents</summary>
+<div class="pitch-inner">
+<p class="hint">Six audience folders are separated below. Investor material is stored in a private Supabase bucket and is restricted to the Owner account. Files are not made public by the website.</p>
+<div class="pitch-upload-row">
+<div><label for="pitchDeckCategory">Deck category</label><select id="pitchDeckCategory"><option value="Investor">Investor · Owner only</option><option value="Corporate">Corporate / B2B</option><option value="Government">Government</option><option value="Institutional">Institutional</option><option value="Partner">Partner</option><option value="General">General</option></select></div>
+<div><label for="pitchDeckFiles">Select PPTX or PDF</label><input id="pitchDeckFiles" type="file" accept=".pptx,.ppt,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint" /></div>
+<div><button type="button" id="pitchDeckUpload">Upload to private library</button></div>
+</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div id="pitchDeckStatus" class="status" role="status" aria-live="polite" style="flex:1">Secure library ready. Upload approved deck files to their audience folder.</div><button type="button" id="pitchDeckRefresh" class="secondary">Refresh deck list</button></div>
+<div id="pitchDeckLists" class="pitch-deck-grid"><p class="small">Sign in with an active Admin account to load the private deck library.</p></div>
+<p class="small">The original investor master is read-only in this portal: replace it only with an explicitly approved new version. The archival master itself is never overwritten by this upload flow.</p>
+</div>
+</details>
+<div class="card">
+<div class="top">
+<div>
+<h2 id="welcome">Signed in</h2>
+<div id="roleText" class="hint">
+</div>
+</div>
+<button id="logout">Sign out</button>
+</div>
+<details class="superadmin-shell" id="superAdminPanel" open>
+<summary id="superAdminSummary">Super Admin · Company Control Panel</summary>
+<div class="superadmin-submenus">
+ <details class="role-dropdown" open>
+  <summary>Admin Office</summary>
+  <div class="admin-nav" id="adminNav" aria-label="Admin workspace sections">
+   <button type="button" class="active" data-panel="overview">⌂ Overview</button>
+   <button type="button" data-panel="pricingHistory">₹ Pricing & history</button>
+   <button type="button" data-panel="policyCentre">▤ Policy Centre</button>
+   <button type="button" data-panel="approvalNote">✓ Governance</button>
+   <button type="button" data-panel="socialStudio">◉ Social Studio</button>
+   <button type="button" data-panel="talkBack">🎙 Talk Back · Video Studio</button>
+   <button type="button" data-panel="socialCampaign">✦ Social Campaign</button>
+   <button type="button" data-panel="commandCenter">✦ AI Command Centre</button>
+   <a class="btn secondary" href="./lead-engine.html">▣ Lead & Growth Engine</a>
+   <a class="btn secondary" href="./partnership-crm.html">🤝 Partnership CRM</a>
+  </div>
+ </details>
+ <details class="role-dropdown"><summary>Driver</summary><div class="role-links"><a href="./driver.html">Open Driver Office →</a></div></details>
+ <details class="role-dropdown"><summary>Customer</summary><div class="role-links"><a href="./customer.html">Open Customer Portal →</a></div></details>
+ <details class="role-dropdown"><summary>HR</summary><div class="role-links"><a href="./hr.html">Open HR Office →</a></div></details>
+</div>
+</details>
+</div>
+<section class="card hidden" id="talkBack">
+<h2>Talk Back · Multilingual Video Studio</h2>
+<p class="hint">Create campaign videos from one poster and language scripts. This embeds the existing Talk Back engine inside the authenticated Admin Portal; it does not replace or delete the standalone tool.</p>
+<div class="tile" style="padding:0;overflow:hidden">
+<iframe title="SaahiRides Talk Back multilingual video studio" src="./talkback.html?embedded=1" loading="lazy" style="display:block;width:100%;height:1100px;border:0;background:#06122e" allow="microphone; autoplay; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+</div>
+<p class="small">Talk Back supports a saved master narration track or device speech fallback, plus a separate background music track with adjustable mix level. Saved master narration is captured digitally; device speech fallback requires microphone permission. English, Hindi and Telugu scripts are entered separately—the ticker rotates supplied scripts but does not translate them automatically. After export, use “Attach exported video to Social Studio” to send the video into the authenticated publishing composer; review the caption, media and platform settings before publishing. MP4 is used when the browser supports it; otherwise the correctly labelled WebM format is exported.</p>
+</section>
+<section class="card hidden" id="socialCampaign">
+<h2>SaahiRides Social Campaign Desk</h2>
+<p class="hint">Dedicated campaign workspace · India travel promotion · Facebook + Instagram</p>
+<div class="tile">
+<h3>THE JOURNEY MATTERS. PLAN IT WITH CONFIDENCE. 🦅</h3>
+<p>SaahiRides — SafeRide @ SaahiPrice</p>
+<p>Your next memorable journey starts with a good plan. From family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.</p>
+<p>✨ Plan your journey with confidence<br>🚘 Comfortable travel options<br>👨‍👩‍👧‍👦 Family-friendly travel planning<br>📍 Destinations across India<br>💙 Travel with Team SaahiRides</p>
+<p>Tell us where you want to go. We'll help you plan the journey.</p>
+<p>📲 Enquire on WhatsApp: +91 93479 46026<br>🌐 https://saahirides.co.in</p>
+</div>
+<div class="tile">
+<h3>Hashtags</h3>
+<p>#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides</p>
+</div>
+<div class="tile">
+<h3>Publishing readiness</h3>
+<p>Caption and hashtags are prepared. The final photo or Reel/video asset must be attached before a social post can be submitted. Licensed Instagram music must be selected in Instagram or included in the finished video.</p>
+<p class="status" role="status">Draft only — no post has been published.</p>
+<button type="button" id="openSocialComposer">Open Facebook + Instagram publishing composer</button>
+</div>
+</section>
+<section class="card hidden" id="commandCenter">
+<h2>SaahiRides AI Command Centre</h2>
+<p class="hint">Central management desk · Owner / Admin only · Research and drafting may be assisted by AI; publishing, spending, legal commitments and company decisions remain subject to explicit approval.</p>
+<div class="grid">
+ <div class="tile"><h3>Business Intelligence</h3><p>Market, competitor, regulation, opportunity and threat monitoring.</p><span class="small">Configured · daily intelligence brief</span></div>
+ <div class="tile"><h3>Social & Brand Manager</h3><p>Facebook and Instagram posts, Reels, captions, hashtags, licensed audio, review and publishing workflow.</p><span class="small">Configured · direct publishing connection pending</span></div>
+ <div class="tile"><h3>Legal Watch</h3><p>Indian mobility, company, employment, tax, privacy and consumer-law monitoring.</p><span class="small">Configured · daily monitoring · lawyer review required</span></div>
+ <div class="tile"><h3>Tourism Image Scout</h3><p>Destination images with source, creator, commercial-use licence and attribution checks.</p><span class="small">Configured · daily scouting · owner approval before publication</span></div>
+ <div class="tile"><h3>Growth & Leads</h3><p>Customer, driver and fleet acquisition; consent-based lead pipeline.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Product & Operations</h3><p>Website, app, fares, service readiness and operational quality.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Finance & Revenue Analyst</h3><p>Costs, margins, cash flow, pricing and revenue forecasts.</p><span class="small">Planned · build next</span></div>
+ <div class="tile"><h3>Business Strategy</h3><p>Expansion, partnerships, commercial opportunities and decision support.</p><span class="small">Planned · build next</span></div>
+</div>
+<div class="policy">
+<h3>Owner decision & approval queue</h3>
+<p class="hint">Publishing, spending, account settings, legal commitments and company decisions require explicit approval. Joint Founder & at least one Director Approval — MANDATORY. Requests recorded here are not approvals and do not execute actions.</p>
+<div id="ccApprovalStatus" class="status" aria-live="polite">Loading approval queue…</div>
+<div id="ccApprovals" class="small">No approval requests loaded yet.</div>
+<h4>Submit a decision for approval</h4>
+<div class="form-grid">
+<label>Decision type<input id="ccChangeType" maxlength="80" placeholder="e.g. Social post publication"></label>
+<label>Target system<input id="ccTarget" maxlength="100" placeholder="e.g. Facebook and Instagram"></label>
+<label>Risk level<select id="ccRisk"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical</option></select></label>
+<label class="full">Decision details<textarea id="ccSummary" maxlength="1200" rows="3" placeholder="Describe the exact action requiring approval"></textarea></label>
+</div>
+<button type="button" id="ccRequestApproval">Submit approval request</button>
+</div>
+<div class="policy">
+<h3>Reports & command-centre activity</h3>
+<div class="tile" id="ccNotificationPanel">
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  <strong>Owner & operations notifications</strong>
+  <span class="small" id="ccUnreadCount">0 unread</span>
+ </div>
+ <p class="hint">Private live alerts from Supabase. Phone pop-ups require notification permission and this admin page to remain connected. Background push setup is a separate next step.</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+  <button type="button" class="secondary" id="ccEnablePhoneAlerts">Enable phone alerts</button>
+  <button type="button" class="secondary" id="ccNotificationRefresh">Refresh notifications</button>
+ </div>
+ <div id="ccNotificationStatus" class="status" aria-live="polite">Waiting for secure admin connection…</div>
+ <div id="ccNotificationList" class="small">No notifications loaded yet.</div>
+</div>
+<p class="hint">Live records are loaded through the authenticated SaahiRides Command Centre service.</p>
+<button type="button" class="secondary" id="ccRefresh">Refresh Command Centre</button>
+<div id="ccModuleStatus" class="status" aria-live="polite">Waiting for secure connection…</div>
+<div id="ccModules" class="grid"></div>
+<h4>Record an internal note</h4>
+<div class="form-grid">
+<label>Workstream<select id="ccModule"><option value="">General</option><option value="business_intelligence">Business Intelligence</option><option value="social_brand">Social & Brand</option><option value="legal_watch">Legal Watch</option><option value="tourism_image_scout">Tourism Image Scout</option><option value="growth_leads">Growth & Leads</option><option value="product_operations">Product & Operations</option><option value="finance_revenue">Finance & Revenue</option><option value="business_strategy">Business Strategy</option></select></label>
+<label>Risk<select id="ccNoteRisk"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select></label>
+<label class="full">Title<input id="ccNoteTitle" maxlength="160" placeholder="Short activity title"></label>
+<label class="full">Note<textarea id="ccNoteSummary" maxlength="1200" rows="3" placeholder="Internal report, finding or follow-up"></textarea></label>
+</div>
+<button type="button" id="ccSaveNote">Save internal note</button>
+<h4>Daily agent work log & reports</h4>
+<p class="hint">Choose a date to retrieve every recorded work-log entry and archive a daily report. Dates use India Standard Time for display; stored timestamps remain UTC.</p>
+<div class="form-grid">
+<label>Report date<input id="ccReportDate" type="date"></label>
+<div><button type="button" id="ccGenerateReport">Generate / retrieve daily report</button></div>
+</div>
+<div id="ccReportStatus" class="status" aria-live="polite">Select a date and generate its report.</div>
+<div id="ccDailyReport" class="small"></div>
+<h4>Recent activity</h4>
+<div id="ccActivity" class="small">No activity loaded yet.</div>
+<p class="hint">Current scheduled workstreams: Intelligence & Social Manager 08:00 IST; Legal Watch 15:00 IST; Tourism Image Scout 19:00 IST. Four-hour reporting is not active. Agent-to-database logging still needs to be connected for automated work logs to appear here.</p>
+</div>
+<div class="policy" id="qaCommandPanel">
+<h3>Website QA · Open & Closed Logs</h3>
+<p class="hint">All QA anomalies are stored in the central Command Centre database. Open items stay here until repaired and verified. Closing requires a passing retest.</p>
+<div class="grid"><div class="tile"><h3 id="qaOpenCount">—</h3><p>Open / active anomalies</p></div><div class="tile"><h3 id="qaClosedCount">—</h3><p>Closed · verified</p></div><div class="tile"><h3 id="qaTotalCount">—</h3><p>Total recorded</p></div></div>
+<button type="button" class="secondary" id="qaRefresh">Refresh QA logs</button><div id="qaStatus" class="status" aria-live="polite">Loading central QA logs…</div>
+<div class="subnav"><button type="button" class="active" data-qa-filter="open">OPEN LOGS</button><button type="button" data-qa-filter="closed">CLOSED LOGS</button></div><div id="qaLogList" class="grid"></div>
+</div>
+</section>
+<section class="card hidden" id="pricingHistory">
+<h2>Fare Rate History & Change Log</h2>
+<p class="hint">Admin-only reference. The previous schedule is retained for historical checks; the revised schedule is the active schedule from 2 November 2026.</p>
+<div class="policy">
+<h4>Previous on-demand rates · valid through 1 November 2026</h4>
+<p class="small">Archived schedule — do not use for new bookings dated on or after 2 November 2026.</p>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:540px"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Vehicle</th><th style="padding:8px;border-bottom:1px solid var(--line)">Standard</th><th style="padding:8px;border-bottom:1px solid var(--line)">Express</th><th style="padding:8px;border-bottom:1px solid var(--line)">Super Fast</th></tr></thead><tbody>
+<tr><td>Bike</td><td>₹10/km</td><td>₹12/km</td><td>₹13/km</td></tr>
+<tr><td>Scooty</td><td>₹14/km</td><td>₹15/km</td><td>₹17/km</td></tr>
+<tr><td>Scooty EV</td><td>₹16/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Auto Rickshaw</td><td>₹23/km</td><td>₹25/km</td><td>₹26/km</td></tr>
+<tr><td>Electric Auto</td><td>₹25/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Non-AC Cab</td><td>₹25/km</td><td>₹27/km</td><td>₹28/km</td></tr>
+<tr><td>AC Cab</td><td>₹30/km</td><td>₹32/km</td><td>₹33/km</td></tr>
+</tbody></table></div>
+</div>
+<div class="policy">
+<h4>Current on-demand rates · effective 2 November 2026</h4>
+<p class="small">Active schedule — use these rates for bookings dated 2 November 2026 onward.</p>
+<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:540px"><thead><tr><th style="text-align:left;padding:8px;border-bottom:1px solid var(--line)">Vehicle</th><th style="padding:8px;border-bottom:1px solid var(--line)">Standard</th><th style="padding:8px;border-bottom:1px solid var(--line)">Express</th><th style="padding:8px;border-bottom:1px solid var(--line)">Super Fast</th></tr></thead><tbody>
+<tr><td>Bike</td><td>₹10/km</td><td>₹12/km</td><td>₹13/km</td></tr>
+<tr><td>Scooty</td><td>₹12/km</td><td>₹13.50/km</td><td>₹15/km</td></tr>
+<tr><td>Scooty EV</td><td>₹16/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Auto Rickshaw</td><td>₹16.50/km</td><td>₹17.50/km</td><td>₹19/km</td></tr>
+<tr><td>Electric Auto</td><td>₹19/km</td><td>Not applicable</td><td>Not applicable</td></tr>
+<tr><td>Non-AC Cab</td><td>₹19.50/km</td><td>₹21/km</td><td>₹22/km</td></tr>
+<tr><td>AC Cab</td><td>₹22.50/km</td><td>₹24/km</td><td>₹25/km</td></tr>
+</tbody></table></div>
+</div>
+<p class="small">Rate history is recorded here for Admin reference. The fare calculator and customer-facing fare tables remain on the current schedule. Subscription pricing follows the approved 10% trip-fare discount plus the fixed ₹199 one-way / ₹299 both-way Route-Lock fee.</p>
+</section>
+<div class="card hidden" id="policyCentre">
+<h2>Policy Centre</h2>
+<p class="hint">Only authorized Admin/Owner or HR publishers can load records. This initial interface does not invent policy wording; paste only text approved by SaahiRides.</p>
+<div class="tabs" id="tabs">
+<button data-category="HR">HR</button>
+<button data-category="Customer">Customer</button>
+<button data-category="Driver">Driver</button>
+<button data-category="Admin Governance">Admin Governance</button>
+</div>
+<div id="editor" class="hidden">
+<h3 id="editorTitle">Create policy</h3>
+<input type="hidden" id="policyId">
+<label for="title">Policy title</label>
+<input id="title" maxlength="180">
+<label for="body">Approved policy text</label>
+<textarea id="body" placeholder="Paste approved text here. Do not add unapproved terms.">
+</textarea>
+<div class="grid">
+<div>
+<label for="version">Version</label>
+<input id="version" value="1.0">
+</div>
+<div>
+<label for="effective">Effective date</label>
+<input id="effective" type="date">
+</div>
+<div>
+<label for="review">Review date</label>
+<input id="review" type="date">
+</div>
+</div>
+<label for="status">Status</label>
+<select id="status">
+<option value="draft">Draft</option>
+<option value="pending approval">Pending approval</option>
+<option value="published">Published</option>
+<option value="superseded">Superseded</option>
+<option value="archived">Archived</option>
+</select>
+<label>
+<input id="ackRequired" type="checkbox" style="width:auto"> Require acknowledgement for this version</label>
+<button id="save">Save policy</button>
+<button id="clear" class="secondary">Clear form</button>
+<p class="small">Publishing is permission-controlled by the database. Confirm your organization's approval requirements before selecting Published.</p>
+</div>
+<div id="policyList">
+<p class="hint">Choose a category to load its policy records.</p>
+</div>
+</div>
+<div class="card" id="approvalNote">
+<strong>Mandatory governance rule</strong>
+<p>Joint Founder & at least one Director Approval — MANDATORY.</p>
+<p class="small">This page is an initial working interface, not a substitute for a complete dual-approval workflow. That workflow must be enforced server-side before sensitive approvals go live.</p>
+</div>
 
-    <!-- Live CEO Message Over All 4 Cards (Synced with Supabase state_live_broadcasts) -->
-    <div class="ceo-four-grid" aria-label="Live CEO Broadcasts Across All 4 Hubs">
-      <article class="ceo-hub-card">
-        <span class="hub-badge">01 · Core HQ</span>
-        <h3>Hyderabad Core Hub</h3>
-        <p id="ceoCardHYD">Zero surge pricing, dignified driver-partners, and transparent fares across every mile.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">02 · State Hub</span>
-        <h3>Telangana State</h3>
-        <p id="ceoCardTS">Expanding SafeRide - SaafeRide @ SaahiPrice across all 33 districts of Telangana.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">03 · State Hub</span>
-        <h3>Andhra Pradesh</h3>
-        <p id="ceoCardAP">Serving Amaravati, Vijayawada, Visakhapatnam &amp; Tirupati with transparent pilgrimage &amp; city mobility.</p>
-      </article>
-      <article class="ceo-hub-card">
-        <span class="hub-badge">04 · State Hub</span>
-        <h3>Karnataka</h3>
-        <p id="ceoCardKA">Zero-surge Bengaluru Airport transfers, Mysuru family combos &amp; Karnataka temple circuits.</p>
-      </article>
+<section class="card hidden" id="socialStudio">
+<h2>Social Studio</h2>
+<p class="hint">Admin-only publishing workspace · connected accounts · live publishing response</p>
+<div class="tile" id="ssReadyCampaign" style="margin:14px 0">
+<h3>READY CAMPAIGN · THE JOURNEY MATTERS 🦅</h3>
+<p><strong>SaahiRides — SafeRide @ SaahiPrice</strong></p>
+<p>Your next memorable journey starts with a good plan. From family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.</p>
+<p>✨ Plan your journey with confidence<br>🚘 Comfortable travel options<br>👨‍👩‍👧‍👦 Family-friendly travel planning<br>📍 Destinations across India<br>💙 Travel with Team SaahiRides</p>
+<p>Tell us where you want to go. We’ll help you plan the journey.</p>
+<p>📲 Enquire on WhatsApp: +91 93479 46026<br>🌐 https://saahirides.co.in</p>
+<p><strong>Hashtags</strong><br>#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides</p>
+<p><strong>Reel music brief</strong><br>20–25 second vertical Reel. Choose a business-account-licensed cinematic travel instrumental: gentle piano opening, uplifting orchestral build, confident finish. Search Meta/Instagram licensed audio for “cinematic travel instrumental” or “uplifting journey”. Add the selected track in Instagram’s Reel editor, or upload a video with audio licensed for both platforms. The connected publishing API does not attach Instagram’s licensed music selection.</p>
+<p class="small">Draft content is ready below in Captions & publishing. Add the final photo/video and licensed audio before publishing.</p>
+<button type="button" id="ssLoadCampaignTop">Load caption & hashtags into publishing composer</button>
+</div>
+<div class="subnav" id="socialNav" aria-label="Social Studio sections">
+<button type="button" class="active" data-social-target="ssContentArea">Content & media</button>
+<button type="button" data-social-target="ssVideoUploadArea">Video Upload</button>
+<button type="button" data-social-target="ssMusicArea">Music & audio</button>
+<button type="button" data-social-target="ssPublishingArea">Captions & publishing</button>
+<button type="button" data-social-target="ssImageLibraryArea">Social Images</button>
+</div>
+<div id="ssImageLibraryArea" class="hidden">
+ <div class="tile">
+  <h3>SaahiRides Social Images</h3>
+  <p class="small">Supabase is the central image library. New uploads enter RAW. Approve an image to move it into APPROVED. Existing GitHub images and the Puri review set can be copied into RAW. Nothing is approved automatically; GitHub originals remain untouched.</p>
+  <label for="ssLibraryFiles">Choose images (JPG, PNG, WEBP or GIF · up to 15 MB each)</label>
+  <input id="ssLibraryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+  <button type="button" id="ssLibraryUpload">Upload to RAW</button>
+  <button type="button" class="secondary" id="ssImportGithub">Import all GitHub images</button>
+  <button type="button" class="secondary" id="ssImportPuri">Import Puri review photos to RAW</button>
+  <div id="ssLibraryStatus" class="status" role="status" aria-live="polite">RAW and APPROVED folders will be initialized when the library is first loaded.</div>
+  <h3 style="margin-top:20px">Central image library</h3>
+  <div class="subnav" style="margin:8px 0">
+   <button type="button" data-library-filter="approved">APPROVED</button>
+   <button type="button" class="active" data-library-filter="raw">RAW · Review</button>
+   <button type="button" data-library-filter="all">All images</button>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
+   <button type="button" class="secondary" id="ssSelectAllVisible">Select all visible</button>
+   <button type="button" class="secondary" id="ssClearImageSelection">Clear selection</button>
+   <button type="button" id="ssDeleteSelectedImages" style="background:#991b1b;color:#fff" disabled>Delete selected permanently (0)</button>
+   <button type="button" class="secondary" id="ssLibraryRefresh">Refresh image list</button>
+  </div>
+  <div id="ssLibraryGrid" class="grid" style="margin-top:12px"><p class="small">Sign in as an active Admin to load the library.</p></div>
+ </div>
+</div>
+<div id="ssVideoUploadArea" class="hidden">
+ <div class="tile">
+  <h3>SaahiRides Video Library · Supabase Storage</h3>
+  <p class="small">Upload finished videos directly into your private Supabase library. Uploads are resumable for unstable mobile connections. Only active SaahiRides Owner/Admin accounts can upload or view saved videos. Uploading does not publish anything.</p>
+  <div class="grid">
+   <div>
+    <label for="ssVideoCategory">Save video in</label>
+    <select id="ssVideoCategory">
+     <option value="reels">Social Reels</option><option value="youtube-shorts">YouTube Shorts</option><option value="youtube-long">YouTube long videos</option><option value="tours">Tour & destination videos</option><option value="advertisements">Advertisements</option><option value="raw-footage">Raw footage</option>
+    </select>
+   </div>
+   <div>
+    <label for="ssVideoFiles">Choose videos (MP4, MOV, WebM, AVI, MKV · up to 100 MB each)</label>
+    <input id="ssVideoFiles" type="file" accept="video/mp4,video/quicktime,video/webm,video/x-msvideo,video/x-matroska,video/*" multiple>
+   </div>
+   
+   
+   </div>
+  <div id="ssVideoUploadStatus" class="status" role="status" aria-live="polite">Choose one or more videos to begin.</div>
+  <progress id="ssVideoProgress" value="0" max="100" style="width:100%;height:14px;display:none"></progress>
+  <div id="ssVideoPreviewGrid" class="grid" style="margin-top:12px"></div>
+  <button type="button" id="ssVideoUploadBtn" disabled>Upload selected videos to Supabase</button>
+  <p class="small">Files are stored privately in the <code>social-videos</code> bucket. Original files are never overwritten. Large uploads can resume after a network interruption from the same browser.</p>
+ </div>
+ <div class="tile" style="margin-top:14px">
+  <h3>Saved video library</h3>
+  <div class="grid">
+   <div><label for="ssVideoLibraryCategory">Browse folder</label><select id="ssVideoLibraryCategory"><option value="reels">Social Reels</option><option value="youtube-shorts">YouTube Shorts</option><option value="youtube-long">YouTube long videos</option><option value="tours">Tour & destination videos</option><option value="advertisements">Advertisements</option><option value="raw-footage">Raw footage</option></select></div>
+   <div style="align-self:end"><button type="button" class="secondary" id="ssVideoLibraryRefresh">Refresh saved videos</button></div>
+  </div>
+  <div id="ssVideoLibraryStatus" class="status" role="status" aria-live="polite">Sign in as an active Admin to load saved videos.</div>
+  <div id="ssVideoLibraryGrid" class="grid" style="margin-top:12px"></div>
+ </div>
+ <div class="tile" style="margin-top:14px">
+  <h3>Send a saved video to publishing</h3>
+  <p class="small">Choose a saved video to create a temporary private preview and attach it to the existing Social Studio publishing composer. Review the post and platform settings before publishing.</p>
+  <label for="ssVideoSavedChoose">Saved video</label><select id="ssVideoSavedChoose" disabled><option value="">Load a folder first</option></select>
+  <button type="button" id="ssVideoSavedUseBtn" disabled>Use saved video in publishing composer</button>
+ </div>
+</div>
+<div id="ssContentArea">
+<div class="grid">
+ <div class="tile"><h3>Select media</h3><p class="small">Choose multiple photos and video clips for a campaign.</p><label for="ssMedia">Photos / videos</label><input id="ssMedia" type="file" accept="image/*,video/*" multiple></div>
+</div>
+<div id="ssMediaPreview" class="grid" style="margin-top:14px"></div>
+</div>
+<div id="ssMusicArea" class="hidden">
+ <div class="tile"><h3>Music & audio library</h3><p class="small">Upload an audio file to private Supabase storage. Original files are retained; nothing is overwritten. The saved master track can be selected in Talk Back Studio.</p><label for="ssMusicCategory">Audio purpose</label><select id="ssMusicCategory"><option value="master">Master voice narration</option><option value="music">Background music</option></select><label for="ssMusic">Choose audio file</label><input id="ssMusic" type="file" accept="audio/*"><button type="button" id="ssMusicUpload" style="margin-top:10px">Upload and save audio</button><div id="ssMusicStatus" class="status" role="status" aria-live="polite">No new audio selected.</div><audio id="ssAudioPreview" controls class="hidden" style="width:100%;margin-top:10px"></audio><h4 style="margin-top:18px">Saved audio</h4><button type="button" class="secondary" id="ssMusicRefresh">Refresh saved audio</button><div id="ssMusicLibrary" class="grid" style="margin-top:10px"><p class="small">Sign in as an active Admin to load saved audio.</p></div></div>
+</div>
+<div id="ssPublishingArea" class="hidden">
+<div class="tile" id="ssCampaignKit" style="margin-top:14px">
+<h3>Ready campaign · India travel promotion</h3>
+<p class="small">Prepared inside Social Studio. Load the campaign to fill the caption and hashtags. Review and edit before publishing.</p>
+<div class="grid">
+ <div><strong>Campaign</strong><p class="small">The journey matters. Plan it with confidence.</p></div>
+ <div><strong>Reel format</strong><p class="small">Vertical 9:16 · 20–25 seconds · four scenes: scenic road, family travel, pilgrimage, SaahiRides brand end-card.</p></div>
+ <div><strong>Music direction</strong><p class="small">Use an uplifting cinematic instrumental: gentle piano opening, orchestral build, confident finish. Search Meta/Instagram's licensed music library for “cinematic travel instrumental” or “uplifting journey”. Choose a track available to your business account. This Upload-Post publishing endpoint does not embed licensed Instagram music; add it in Instagram's Reel editor or render licensed audio into the video before upload.</p></div>
+</div>
+<button type="button" id="ssLoadCampaign">Load prepared campaign into composer</button>
+<div id="ssCampaignStatus" class="status" role="status" aria-live="polite">Campaign kit is ready. Loading it will not publish anything.</div>
+</div>
+<div class="tile" id="ssDestinationCard" style="margin-bottom:16px">
+<h3>SaahiRides multi-account publishing</h3>
+<p class="small">Manage multiple Facebook Pages, Instagram Business identities and Google Business Profile locations from one workspace. Social passwords are entered only on the provider's secure authorization screen.</p>
+<div class="grid" style="margin-top:12px">
+ <div class="tile">
+  <h3>Facebook Pages</h3>
+  <p><strong>SaahiRides Transit Pvt. Ltd.</strong></p>
+  <p class="small">Official page: facebook.com/saahiridestransitpvt.ltd. A connected Facebook login can expose multiple Pages; choose the target Page when publishing.</p>
+  <a class="btn secondary" href="https://www.facebook.com/saahiridestransitpvt.ltd" target="_blank" rel="noopener">View SaahiRides Facebook Page</a>
+ </div>
+ <div class="tile">
+  <h3>Instagram Business</h3>
+  <p><strong>@saahirides</strong></p>
+  <p class="small">Additional Instagram identities can be connected through separate publishing profiles, subject to the Upload-Post plan limit.</p>
+  <a class="btn secondary" href="https://www.instagram.com/saahirides/" target="_blank" rel="noopener">View @saahirides</a>
+ </div>
+ <div class="tile">
+  <h3>Google Business Profile</h3>
+  <p><strong>SaahiRides Transit Pvt. Ltd.</strong></p>
+  <p class="small">Connect the Google account that manages the Business Profile. All authorized locations can then be listed and selected for updates.</p>
+  <a class="btn secondary" href="https://business.google.com/" target="_blank" rel="noopener">Open Google Business Profile</a>
+ </div>
+ <div class="tile">
+  <h3>WhatsApp Business</h3>
+  <p><strong>+91 93479 46026</strong></p>
+  <p class="small">Use this number for campaign enquiries and customer replies. WhatsApp Status posting remains a separate in-app action.</p>
+  <a class="btn secondary" href="https://wa.me/919347946026" target="_blank" rel="noopener">Open SaahiRides WhatsApp</a>
+ </div>
+</div>
+<div class="tile" style="margin-top:14px">
+<h3>Connected account manager</h3>
+<p class="small">First check the Upload-Post plan and existing profiles. A publishing profile can connect a Facebook login, an Instagram Business account and a Google Business account. Facebook can return multiple Pages and Google can return multiple locations. Use an additional profile for another separate login/account set; the plan's profile limit applies.</p>
+<div style="display:flex;flex-wrap:wrap;gap:9px;align-items:end">
+ <button type="button" id="ssRefreshAccounts">Check API key, plan & connected accounts</button>
+ <div style="flex:1;min-width:230px">
+  <label for="ssProfileLabel">New account group name</label>
+  <input id="ssProfileLabel" maxlength="45" placeholder="e.g. SaahiRides Instagram 2">
+ </div>
+ <button type="button" id="ssGenerateConnect">Generate secure connection link</button>
+</div>
+<div id="ssAccountStatus" class="status" role="status" aria-live="polite">Account status has not been checked yet.</div>
+<div id="ssConnectLink" style="margin:10px 0"></div>
+<div id="ssProfileList" class="grid" style="margin-top:12px"></div>
+<div id="ssDestinationDetails" class="status hidden" role="status" aria-live="polite"></div>
+</div>
+</div>
+<div class="tile" style="margin-top:14px">
+<h3>Publishing composer</h3><p class="small">Choose one connected Upload-Post profile and platforms. The same media and caption will be sent to each selected platform.</p>
+<label for="ssPublishProfile">Publishing profile</label><select id="ssPublishProfile" size="1" aria-describedby="ssProfileHelp"><option value="">Check connected accounts first</option></select><p id="ssProfileHelp" class="small">Choose the connected SaahiRides publishing profile. Facebook and Instagram can be selected together below.</p>
+<div class="grid"><label class="small"><input type="checkbox" name="ssPlatform" value="facebook" style="width:auto" checked> Facebook</label><label class="small"><input type="checkbox" name="ssPlatform" value="instagram" style="width:auto" checked> Instagram</label><label class="small"><input type="checkbox" name="ssPlatform" value="google_business" style="width:auto"> Google Business Profile</label></div>
+<label for="ssFacebookPage">SaahiRides Facebook Page ID (leave blank if only one Page is connected)</label><input id="ssFacebookPage" placeholder="Optional when one Facebook Page is connected">
+<label for="ssGoogleLocation">Google Business location name (optional for single location)</label><input id="ssGoogleLocation" placeholder="accounts/.../locations/...">
+<label for="ssCaption">Post caption</label><textarea id="ssCaption" placeholder="Write or paste the approved SaahiRides caption…"></textarea>
+<label for="ssHashtags">Hashtags</label><input id="ssHashtags" placeholder="#SaahiRides #SafeRideAtSaahiPrice">
+<p class="small">Attach either up to 10 photos or one video per post. Mixed photo/video batches are not accepted. Music selection is preview-only; custom audio embedding is not provided by this publishing endpoint.</p>
+<button type="button" id="ssPublishBtn">Publish now</button><div id="ssPublishResult" class="status" role="status" aria-live="polite">Choose a connected profile and destination. A live post link will appear when the platform confirms publication.</div>
+</div>
+<div class="grid">
+ <div class="tile"><h3>Publishing connection</h3><p class="small" id="ssConnection">Upload-Post API key has been placed in Supabase Edge Function Secrets. Click “Check API key, plan & connected accounts” above to verify the key and load all existing publishing profiles. No social account is treated as connected until Upload-Post confirms it.</p><a class="btn secondary" href="https://app.upload-post.com/manage-users" target="_blank" rel="noopener">Open Upload-Post account manager</a></div>
+ <div class="tile"><h3>AI caption & hashtag assistant</h3><p class="small">Generate a draft with the secured SaahiRides AI service. Review every claim, price, date and offer before publishing.</p><label for="ssAiBrief">Campaign brief</label><textarea id="ssAiBrief" rows="3" placeholder="Describe the approved announcement, destination, offer or campaign facts…"></textarea><label for="ssAiLanguage">Caption language</label><select id="ssAiLanguage"><option>English</option><option>Hindi</option><option>Telugu</option></select><button type="button" id="ssGenerateCaption">Generate caption & hashtags</button><div id="ssAiStatus" class="status" role="status" aria-live="polite">Ready for an approved campaign brief.</div></div>
+</div>
+<p class="small">Publication is confirmed only when the platform returns a successful per-platform result. Background jobs are identified as pending, not reported as live.</p>
+</div>
+<button type="button" id="ssPreviewBtn">Refresh media preview</button><div id="ssStatus" class="status" aria-live="polite">Private preview. Publishing is available after profile selection.</div>
+</section>
+</section>
+<footer>SaahiRides · SafeRide @ SaahiPrice · Staged admin workspace; production access and approval controls are not yet enabled.</footer>
+
+
+<!-- === SAAHIRIDES TALK BACK STUDIO (3-LANGUAGE MARQUEE + TALKING POSTER + MP4 EXPORT) === -->
+<section class="card" id="tbStudioCard" style="border:1.5px solid #f5b82e;background:linear-gradient(145deg,#0b1c3d,#06122e)">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+    <div>
+      <div class="brand" style="font-size:.82rem">SAAHIRIDES TALK BACK STUDIO</div>
+      <h2 style="margin:2px 0;color:#ffe27a">3-Language Marquee, Talking Poster (Hindi/Hinglish) &amp; MP4 Export</h2>
     </div>
+    <span class="small">9:16 Reel / Status Canvas Recorder</span>
+  </div>
 
-    <div class="actions">
-      <a class="primary" href="index.html">← Hyderabad Core HQ</a>
-      <a href="news-desk.html">Company News Channel →</a>
-      <a href="travel-tours.html">Custom Tour Planner →</a>
-    </div>
-  </header>
+  <div class="grid" style="margin-top:14px">
+    <div>
+      <label for="tbScriptInput">1. Paste Master Script (English / Hinglish / Hindi)</label>
+      <textarea id="tbScriptInput" style="min-height:105px" placeholder="Paste script here... e.g., Namaste Hyderabad! SaahiRides par ab zero surge pricing aur zero cancellation ke saath apni sawari book karein."></textarea>
 
-  <section class="panel">
-    <div class="toolbar">
-      <div class="filter-bar" role="group" aria-label="Filter 20 destinations">
-        <button type="button" class="filter-btn active" data-filter="all">All 20 Destinations</button>
-        <button type="button" class="filter-btn" data-filter="published">Published Guides (01–08)</button>
-        <button type="button" class="filter-btn" data-filter="TS">Telangana</button>
-        <button type="button" class="filter-btn" data-filter="AP">Andhra Pradesh</button>
-        <button type="button" class="filter-btn" data-filter="KA">Karnataka</button>
-        <button type="button" class="filter-btn" data-filter="INDIA">Pan-India &amp; Rajasthan</button>
+      <div class="grid" style="margin-top:8px">
+        <div>
+          <label for="tbThirdLang">3rd Marquee Language</label>
+          <select id="tbThirdLang">
+            <option value="te" selected>Telugu (తెలుగు — TS &amp; AP)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ — Karnataka)</option>
+          </select>
+        </div>
+        <div>
+          <label for="tbScrollSpeed">Marquee Speed</label>
+          <select id="tbScrollSpeed">
+            <option value="2.2">Slow &amp; Clear</option>
+            <option value="3.8" selected>Medium Reel Pace</option>
+            <option value="5.5">Fast Ticker</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <button type="button" class="ctrl-btn gold" id="expandAllBtn">+ Expand All 20</button>
-        <button type="button" class="ctrl-btn" id="collapseAllBtn">− Collapse All</button>
+
+      <div style="margin-top:12px">
+        <button type="button" id="tbBuildBtn">✨ 1. Generate 3-Language Marquee</button>
+        <button type="button" class="secondary" id="tbToggleScrollBtn">⏸ Pause / Resume</button>
       </div>
     </div>
 
-    <!-- ALL 20 DESTINATIONS UNDER ONE ROOF (EXPAND & COLLAPSE IN ONE PLACE) -->
-    <div class="dest-grid" id="masterDestinationsGrid">
+    <div>
+      <label for="tbPosterUpload">2. Upload Poster Image</label>
+      <input id="tbPosterUpload" type="file" accept="image/*">
 
-      <!-- 01. PANCHAVATI, NASHIK -->
-      <details class="dest-card" data-region="INDIA" data-status="published">
-        <summary class="dest-summary">
-          <img class="dest-thumb" src="logo.png" alt="Panchavati Nashik">
-          <div class="dest-meta">
+      <label for="tbBgMusicUpload">3. Upload Background Music / Voiceover (Optional)</label>
+      <input id="tbBgMusicUpload" type="file" accept="audio/*">
+
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+        <button type="button" id="tbPlayMusicBtn" class="secondary">🎵 Play Music</button>
+        <button type="button" id="tbStopMusicBtn" style="background:#991b1b;color:#fff">⏹ Stop Music</button>
+        <button type="button" id="tbSpeakPosterBtn">🗣️ Poster Speak (Hindi/Hinglish)</button>
+        <button type="button" id="tbStopSpeakBtn" class="secondary">🔇 Stop Voice</button>
+      </div>
+
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #28436d">
+        <button type="button" id="tbRecordExportBtn" style="background:linear-gradient(100deg,#10b981,#34d399);color:#04130d">🎬 Record &amp; Download Video (MP4)</button>
+        <button type="button" id="tbStopExportBtn" class="secondary" disabled>⏹ Finish &amp; Save File</button>
+        <div id="tbExportStatus" class="small" style="margin-top:6px;color:#ffe27a">Ready to preview or export 9:16 video.</div>
+      </div>
+      <audio id="tbBgAudio" loop crossorigin="anonymous" style="width:100%;margin-top:8px" controls></audio>
+    </div>
+  </div>
+
+  <!-- Live 9:16 Video Canvas Preview (Used for Direct MP4 Recording) -->
+  <div style="margin-top:18px;text-align:center;background:#040d21;border:1px solid #28436d;border-radius:14px;padding:16px">
+    <div class="small" style="color:#f5b82e;font-weight:800;margin-bottom:8px">LIVE 9:16 REEL &amp; WHATSAPP STATUS PREVIEW CANVAS</div>
+    <canvas id="tbVideoCanvas" width="720" height="1280" style="width:min(100%,320px);height:auto;border-radius:14px;border:2px solid #f5b82e;background:#071329"></canvas>
+  </div>
+<script>
+(function initSaahiTalkBackVideoStudio() {
+  const scriptInput = document.getElementById('tbScriptInput');
+  const thirdLang = document.getElementById('tbThirdLang');
+  const speedSelect = document.getElementById('tbScrollSpeed');
+  const posterInput = document.getElementById('tbPosterUpload');
+  const musicInput = document.getElementById('tbBgMusicUpload');
+  const bgAudio = document.getElementById('tbBgAudio');
+  const canvas = document.getElementById('tbVideoCanvas');
+  const ctx = canvas.getContext('2d');
+  const exportStatus = document.getElementById('tbExportStatus');
+  const recordBtn = document.getElementById('tbRecordExportBtn');
+  const stopExportBtn = document.getElementById('tbStopExportBtn');
+
+  let isScrolling = true;
+  let isSpeaking = false;
+  let marqueeX = canvas.width;
+  let marqueeText = '★ SaahiRides — SafeRide @ SaahiPrice   ✦   साहीराइड्स — ज़ीरो सर्ज प्राइसिंग, ज़ीरो कैंसलेशन   ✦   సాహిరైడ్స్ — మీ ప్రయాణం, మా బాధ్యత';
+  let middleScript = 'SaahiRides — SafeRide @ SaahiPrice';
+  let posterImg = new Image();
+  posterImg.crossOrigin = 'anonymous';
+  posterImg.src = 'logo.png';
+
+  // Web Audio API Voice Analyzer (Makes the man in the poster react to your uploaded voice sample!)
+  let audioCtx = null, analyser = null, freqData = null, voiceDest = null;
+  function ensureAudioAnalyzer() {
+    if (audioCtx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audioCtx = new AC();
+    const src = audioCtx.createMediaElementSource(bgAudio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 64;
+    freqData = new Uint8Array(analyser.frequencyBinCount);
+    voiceDest = audioCtx.createMediaStreamDestination();
+    src.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    analyser.connect(voiceDest);
+  }
+
+  function getVoiceEnergy() {
+    if (analyser && !bgAudio.paused) {
+      analyser.getByteFrequencyData(freqData);
+      let sum = 0;
+      for (let i = 0; i < 12; i++) sum += freqData[i];
+      return Math.min(1, sum / (12 * 140));
+    }
+    return isSpeaking ? (0.45 + 0.45 * Math.abs(Math.sin(Date.now() / 75))) : 0;
+  }
+
+  posterInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files.item(0);
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => { posterImg = img; };
+    img.src = URL.createObjectURL(file);
+  });
+
+  musicInput.addEventListener('change', (e) => {
+    const file = e.target.files && e.target.files.item(0);
+    if (!file) return;
+    bgAudio.src = URL.createObjectURL(file);
+    bgAudio.loop = false;
+    bgAudio.volume = 1.0;
+    exportStatus.textContent = '✓ Sample voice loaded! Click Poster Speak or Record & Download MP4.';
+  });
+
+  document.getElementById('tbPlayMusicBtn').onclick = () => {
+    if (bgAudio.src) {
+      ensureAudioAnalyzer();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      bgAudio.currentTime = 0;
+      bgAudio.play();
+    }
+  };
+  document.getElementById('tbStopMusicBtn').onclick = () => {
+    bgAudio.pause();
+    bgAudio.currentTime = 0;
+    isSpeaking = false;
+  };
+
+  async function translateText(text, targetLang) {
+    try {
+      const res = await fetch(`https://googleapis.com{targetLang}&dt=t&q=${encodeURIComponent(text)}`);
+      const data = await res.json();
+      const rows = Array.isArray(data) ? data.at(0) : null;
+      return Array.isArray(rows) ? rows.map(r => (Array.isArray(r) ? r.at(0) : '')).join('') || text : text;
+    } catch {
+      return text;
+    }
+  }
+
+  document.getElementById('tbBuildBtn').onclick = async () => {
+    const raw = scriptInput.value.trim();
+    if (!raw) return;
+    middleScript = raw;
+    exportStatus.textContent = 'Building 3-language marquee & middle poster script…';
+    const [enText, hiText, regText] = await Promise.all([
+      translateText(raw, 'en'),
+      translateText(raw, 'hi'),
+      translateText(raw, thirdLang.value)
+    ]);
+    marqueeText = `[EN] ${enText}   ✦   [हिन्दी / Hinglish] ${hiText}   ✦   [${thirdLang.value.toUpperCase()}] ${regText}   ✦`;
+    marqueeX = canvas.width;
+    exportStatus.textContent = '✓ Ready! Text placed in open middle space of poster.';
+  };
+
+  document.getElementById('tbToggleScrollBtn').onclick = () => {
+    isScrolling = !isScrolling;
+  };
+
+  function playNarration(onDone) {
+    const raw = scriptInput.value.trim();
+    if (raw) middleScript = raw;
+
+    // Priority 1: Use uploaded sample voice audio file if provided
+    if (bgAudio.src) {
+      ensureAudioAnalyzer();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+      window.speechSynthesis?.cancel();
+      bgAudio.currentTime = 0;
+      isSpeaking = true;
+      bgAudio.onended = () => {
+        isSpeaking = false;
+        if (onDone) onDone();
+      };
+      bgAudio.play();
+      return;
+    }
+
+    // Priority 2: Built-in speech synthesis fallback if no voice sample file was uploaded
+    if (!raw || !('speechSynthesis' in window)) {
+      if (onDone) onDone();
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(raw);
+    const voices = window.speechSynthesis.getVoices();
+    const hindiVoice = voices.find(v => v.lang.toLowerCase().includes('hi-in')) || voices.find(v => v.lang.toLowerCase().includes('en-in'));
+    if (hindiVoice) utter.voice = hindiVoice;
+    utter.lang = 'hi-IN';
+    utter.rate = 0.96;
+    utter.onstart = () => { isSpeaking = true; };
+    utter.onend = () => { isSpeaking = false; if (onDone) onDone(); };
+    utter.onerror = () => { isSpeaking = false; if (onDone) onDone(); };
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById('tbSpeakPosterBtn').onclick = () => playNarration();
+  document.getElementById('tbStopSpeakBtn').onclick = () => {
+    window.speechSynthesis?.cancel();
+    bgAudio.pause();
+    bgAudio.currentTime = 0;
+    isSpeaking = false;
+  };
+
+  // Continuous 30fps Canvas Renderer: Full Poster + Text in Open Middle Space + Speaking Portrait Glow (NO bottom box)
+  function renderLoop() {
+    ctx.fillStyle = '#071329';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Top Brand Strip
+    ctx.fillStyle = '#0b1c3d';
+    ctx.fillRect(0, 0, canvas.width, 84);
+    ctx.fillStyle = '#f5b82e';
+    ctx.font = '800 28px system-ui, Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SAAHIRIDES • SAFERIDE @ SAAHIPRICE', canvas.width / 2, 52);
+
+    const energy = getVoiceEnergy();
+    const activeVoice = energy > 0.04;
+
+    // Full Poster Frame (y = 100 to 1110 — zero bottom caption obstruction!)
+    const boxX = 36, boxY = 100, boxW = canvas.width - 72, boxH = 1010;
+    ctx.save();
+    ctx.strokeStyle = activeVoice ? '#38bdf8' : '#f5b82e';
+    ctx.lineWidth = activeVoice ? (4 + energy * 6) : 3;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    if (posterImg && posterImg.complete && posterImg.naturalWidth > 0) {
+      const ratio = Math.min(boxW / posterImg.naturalWidth, boxH / posterImg.naturalHeight);
+      const drawW = posterImg.naturalWidth * ratio;
+      const drawH = posterImg.naturalHeight * ratio;
+      const imgX = boxX + (boxW - drawW) / 2;
+      const imgY = boxY + (boxH - drawH) / 2;
+      ctx.drawImage(posterImg, imgX, imgY, drawW, drawH);
+
+      // Animated Speaking Voice Aura & Soundwave Indicator around the Speaker in the Poster
+      if (activeVoice) {
+        const speakerX = canvas.width / 2;
+        const speakerY = imgY + drawH * 0.66;
+        ctx.beginPath();
+        ctx.arc(speakerX, speakerY, 88 + energy * 26, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(56, 189, 248, ${0.35 + energy * 0.55})`;
+        ctx.lineWidth = 3 + energy * 4;
+        ctx.stroke();
+
+        // Live Voice Waveform Bars beside Speaker
+        for (let b = -4; b <= 4; b++) {
+          const barH = 10 + energy * (36 - Math.abs(b) * 5) * Math.abs(Math.cos(Date.now() / 65 + b));
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(speakerX + b * 11 - 3, speakerY + 95 - barH / 2, 6, barH);
+        }
+      }
+    }
+    ctx.restore();
+
+    // Render Narration Text Cleanly Inside the Open Black Space in the Middle (y = 325 to 520)
+    const displayMsg = (scriptInput.value.trim() || middleScript || '').trim();
+    if (displayMsg) {
+      ctx.save();
+      ctx.fillStyle = '#ffe27a';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 8;
+      ctx.font = '700 25px system-ui, Arial, sans-serif';
+      ctx.textAlign = 'center';
+
+      const words = displayMsg.split(/\s+/);
+      let line = '', y = 335, lineCount = 0;
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        if (ctx.measureText(testLine).width > canvas.width - 175 && n > 0) {
+          ctx.fillText(line.trim(), canvas.width / 2, y);
+          line = words[n] + ' ';
+          y += 33;
+          lineCount++;
+          if (lineCount >= 6) break;
+        } else {
+          line = testLine;
+        }
+      }
+      if (lineCount < 6 && line.trim()) {
+        ctx.fillText(line.trim(), canvas.width / 2, y);
+      }
+      ctx.restore();
+    }
+
+    // Bottom 3-Language Scrolling Marquee Strip
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(0, 1135, canvas.width, 95);
+    ctx.fillStyle = '#06122e';
+    ctx.font = '900 34px system-ui, Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(marqueeText, marqueeX, 1195);
+
+    const textWidth = ctx.measureText(marqueeText).width;
+    if (isScrolling) {
+      marqueeX -= parseFloat(speedSelect.value || '3.8');
+      if (marqueeX < -textWidth) marqueeX = canvas.width;
+    }
+
+    requestAnimationFrame(renderLoop);
+  }
+  requestAnimationFrame(renderLoop);
+
+  // Direct MP4 / WebM Reel Recorder (Captures Both Canvas Video + Your Uploaded Sample Voice Audio!)
+  let mediaRecorder = null;
+  let recordedChunks = [];
+
+  recordBtn.onclick = () => {
+    try {
+      const canvasStream = canvas.captureStream(30);
+      const tracks = [...canvasStream.getVideoTracks()];
+      if (bgAudio.src) {
+        ensureAudioAnalyzer();
+
+</main>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+ const $=id=>document.getElementById(id); let client=null, session=null, admin=false, owner=false, hr=false, governanceRoles=[], category='HR', notificationChannel=null, notificationPollTimer=null;
+ const say=(s)=>{$('notice').textContent=s;$('notice').classList.remove('hidden')};
+ const show=(id,on=true)=>$(id).classList.toggle('hidden',!on);
+ const pitchCategories=['Investor','Corporate','Government','Institutional','Partner','General'];
+ const pitchBucket='pitch-decks';
+ const pitchSafeName=name=>String(name||'deck').normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-120);
+ async function loadPitchDecks(){
+  const host=$('pitchDeckLists');if(!host||!client||!admin)return;
+  host.textContent='Loading private pitch decks…';
+  const visible=owner?pitchCategories:pitchCategories.filter(x=>x!=='Investor');host.innerHTML='';
+  for(const categoryName of visible){
+   const details=document.createElement('details');details.className='pitch-category';if(categoryName==='Investor')details.open=true;
+   const summary=document.createElement('summary');summary.textContent=categoryName==='Investor'?'Investor · Owner locked':categoryName+' Decks';details.appendChild(summary);
+   const list=document.createElement('div');list.className='small';list.textContent='Loading…';details.appendChild(list);host.appendChild(details);
+   const {data,error}=await client.storage.from(pitchBucket).list(categoryName,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+   list.innerHTML='';
+   if(error){list.textContent='Could not load: '+error.message;continue;}
+   const files=(data||[]).filter(file=>file.name&&!file.name.startsWith('.'));
+   if(!files.length){list.textContent='No file stored yet.';continue;}
+   files.forEach(file=>{
+    const path=categoryName+'/'+file.name,row=document.createElement('div');row.className='pitch-file';
+    const name=document.createElement('span');name.textContent=file.name;row.appendChild(name);
+    const open=document.createElement('button');open.type='button';open.className='secondary';open.textContent='Open securely';
+    open.addEventListener('click',async()=>{open.disabled=true;try{const {data:signed,error:signError}=await client.storage.from(pitchBucket).createSignedUrl(path,300);if(signError)throw signError;window.open(signed.signedUrl,'_blank','noopener');}catch(err){$('pitchDeckStatus').textContent='Secure download failed: '+(err?.message||String(err));}finally{open.disabled=false;}});
+    row.appendChild(open);list.appendChild(row);
+   });
+  }
+ }
+ $('pitchDeckUpload').addEventListener('click',async()=>{
+  const file=$('pitchDeckFiles').files?.[0],categoryName=$('pitchDeckCategory').value;
+  if(!client||!admin||!session?.user){$('pitchDeckStatus').textContent='Sign in with an active Admin account first.';return;}
+  if(categoryName==='Investor'&&!owner){$('pitchDeckStatus').textContent='Investor deck access is restricted to the Owner account.';return;}
+  if(!file){$('pitchDeckStatus').textContent='Choose a PPTX or PDF file first.';return;}
+  const ext=file.name.toLowerCase().split('.').pop();if(!['pptx','ppt','pdf'].includes(ext)){$('pitchDeckStatus').textContent='Only PPTX, PPT and PDF files are accepted.';return;}
+  if(file.size>100*1024*1024){$('pitchDeckStatus').textContent='File exceeds the 100 MB limit.';return;}
+  const path=categoryName+'/'+Date.now()+'-'+crypto.randomUUID()+'-'+pitchSafeName(file.name),btn=$('pitchDeckUpload');btn.disabled=true;btn.textContent='Uploading…';
+  try{const {error}=await client.storage.from(pitchBucket).upload(path,file,{contentType:file.type|| (ext==='pdf'?'application/pdf':ext==='ppt'?'application/vnd.ms-powerpoint':'application/vnd.openxmlformats-officedocument.presentationml.presentation'),upsert:false});if(error)throw error;$('pitchDeckStatus').textContent='Uploaded to the private '+categoryName+' folder. Existing files were preserved.';$('pitchDeckFiles').value='';await loadPitchDecks();}
+  catch(err){$('pitchDeckStatus').textContent='Upload failed: '+(err?.message||String(err));}
+  finally{btn.disabled=false;btn.textContent='Upload to private library';}
+ });
+ $('pitchDeckRefresh').addEventListener('click',loadPitchDecks);
+
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'<','>':'>','"':'&quot;',"'":'&#39;'}[c]));
+ const config=(url,key)=>{if(!window.supabase?.createClient)throw Error('Supabase client library did not load. Check internet access and reload.');if(!url.startsWith('https://')||!key.trim())throw Error('Admin connection configuration is invalid.');client=window.supabase.createClient(url.trim(),key.trim(),{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});show('auth');say('Checking your existing browser session…');return client.auth.getSession().then(async({data,error})=>{if(error)throw error;if(data.session){session=data.session;if(data.session.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('Please complete the required password change.');return;}show('forcePassword',false);await checkAccess();}else{show('workspace',false);show('forcePassword',false);show('auth',true);say('No active browser session. Please sign in.');}});};
+
+ $('togglePassword').onclick=()=>{const input=$('password');const reveal=input.type==='password';input.type=reveal?'text':'password';$('togglePassword').textContent=reveal?'Hide':'Show';$('togglePassword').setAttribute('aria-pressed',String(reveal));};
+ $('signIn').onclick=async()=>{if(!client)return say('Connect the project first.');const {data,error}=await client.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)return say('Sign-in failed: '+error.message);session=data.session;if(data.user?.user_metadata?.must_change_password===true){show('auth',false);show('forcePassword',true);show('workspace',false);say('For security, change your initial password before continuing.');return}show('forcePassword',false);await checkAccess();};
+ $('changePassword').onclick=async()=>{const btn=$('changePassword');const p=$('newPassword').value,c=$('confirmPassword').value;if(!client||!session)return say('Your sign-in session has expired. Please sign in again.');if(p.length<12)return say('Choose a password of at least 12 characters.');if(p!==c)return say('The passwords do not match.');btn.disabled=true;btn.textContent='Updating password…';say('Updating your password securely with Supabase…');try{const {data,error}=await client.auth.updateUser({password:p,data:{...(session?.user?.user_metadata||{}),must_change_password:false}});if(error)throw error;if(!data?.user)throw Error('Supabase did not confirm the password update.');session={...session,user:data.user};$('newPassword').value='';$('confirmPassword').value='';say('Password updated. Checking your Admin permissions…');await checkAccess();if(!$('workspace').classList.contains('hidden')){show('forcePassword',false);show('auth',false);say('Password updated. Admin access verified.');}else{say('Password updated, but Admin access could not be verified. Check the message above and confirm the account is active in Supabase.');}}catch(e){say('Password change did not complete: '+(e?.message||'Unexpected error')+'. Your password may be unchanged; try again or use Send password reset.');}finally{btn.disabled=false;btn.textContent='Change password and continue';}};
+ $('reset').onclick=async()=>{if(!client)return say('Connect the project first.');const email=$('email').value.trim();if(!email)return say('Enter your account email first.');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});say(error?'Reset request failed: '+error.message:'If the account exists and email delivery is configured, a password-reset email will be sent.');};
+ $('logout').onclick=async()=>{if(notificationChannel&&client){await client.removeChannel(notificationChannel).catch(()=>{});notificationChannel=null;}if(client)await client.auth.signOut();session=null;admin=false;owner=false;hr=false;governanceRoles=[];show('pitchDeckLibrary',false);show('superAdminPanel',false);show('workspace',false);show('forcePassword',false);show('auth',true);say('Signed out.');};
+ async function checkAccess(){const {data:{user}}=await client.auth.getUser();
+  if(!user){say('No authenticated user returned.');
+  return}session={user};
+  const [a,h,g]=await Promise.all([client.from('admin_users').select('role,active').eq('user_id',user.id).maybeSingle(),client.from('hr_publishers').select('active').eq('user_id',user.id).maybeSingle(),client.from('governance_approvers').select('approval_role,active').eq('user_id',user.id).eq('active',true)]);
+  admin=!!(a.data&&a.data.active);
+  owner=!!(a.data&&a.data.active&&a.data.role==='owner');
+  hr=!!(h.data&&h.data.active);
+  governanceRoles=(g.data||[]).map(x=>x.approval_role);
+  if(a.error||h.error||g.error){say('Could not verify access: '+[a.error?.message,h.error?.message,g.error?.message].filter(Boolean).join(' | ')+'. Confirm the base schema and governance migration are installed.');
+  return}
+  if(!admin&&!hr&&!governanceRoles.length){say('Signed in, but this account has no active Admin/Owner, HR publisher, or governance approver permission. No policy controls are enabled.');
+  return}show('auth',false);
+  show('workspace',true);
+  show('pitchDeckLibrary',admin);show('superAdminPanel',admin||hr||governanceRoles.length>0);$('superAdminSummary').textContent=owner?'Super Admin · Company Control Panel':admin?'Admin Office · Workspace':hr?'HR Office · Workspace':'Governance Office';$('superAdminPanel').querySelectorAll('.role-dropdown').forEach(group=>{const label=group.querySelector('summary')?.textContent?.trim();group.classList.toggle('hidden',!admin&&label!=='HR'&&!(governanceRoles.length&&label==='Admin Office'));});if(admin){$('pitchDeckCategory').querySelector('option[value="Investor"]').disabled=!owner;await loadPitchDecks();}
+  show('pricingHistory',false);show('policyCentre',false);show('approvalNote',false);show('socialStudio',false);show('socialCampaign',false);show('talkBack',false);show('commandCenter',false);
+  $('adminNav').querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('active',b.dataset.panel==='overview'));
+  $('welcome').textContent='Welcome';
+  $('roleText').textContent=(owner?'Owner access':admin?'Admin access':'')+(admin&&hr?' · ':'')+(hr?'HR publishing access':'')+(governanceRoles.length?' · Governance approver: '+governanceRoles.map(r=>r.replace('_',' ')).join(', '):'');
+  $('tabs').querySelectorAll('button').forEach(b=>{b.disabled=(b.dataset.category==='Admin Governance'&&!owner)||(b.dataset.category!=='HR'&&!admin&&!governanceRoles.length);
+  });
+  if(!admin&&!owner){category='HR';
+  $('tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.category==='HR'));
+  }await loadPolicies(category);
+  if(admin)startNotificationChannel();
+  say('Signed in. Permissions checked against Supabase database records.');if(admin)await loadSocialAudio();
+  }
+ $('adminNav').onclick=e=>{const b=e.target.closest('button[data-panel]');if(!b)return;const target=b.dataset.panel;if(target==='pricingHistory'||target==='socialStudio'||target==='socialCampaign'||target==='talkBack'||target==='commandCenter'){if(!admin)return}if(target==='approvalNote'&&!owner&&!governanceRoles.length)return;if(target==='policyCentre'&&!admin&&!hr&&!governanceRoles.length)return;
+  ['pricingHistory','policyCentre','approvalNote','socialStudio','socialCampaign','talkBack','commandCenter'].forEach(id=>show(id,id===target));
+  $('adminNav').querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));
+  if(target==='policyCentre')show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));
+  if(target==='commandCenter')loadCommandCentre();
+ };
+ $('ssLoadCampaignTop').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
+$('openSocialComposer').onclick=()=>{const b=$('adminNav').querySelector('[data-panel="socialStudio"]');if(b)b.click();const c=$('socialNav').querySelector('[data-social-target="ssPublishingArea"]');if(c)c.click();$('ssLoadCampaign').click();};
+ $('ssLoadCampaign').onclick=()=>{
+  const caption="THE JOURNEY MATTERS. PLAN IT WITH CONFIDENCE. 🦅\n\nSaahiRides — SafeRide @ SaahiPrice\n\nYour next memorable journey starts with a good plan.\n\nFrom family getaways and scenic road trips to pilgrimage journeys, explore travel possibilities with Team SaahiRides.\n\n✨ Plan your journey with confidence\n🚘 Comfortable travel options\n👨‍👩‍👧‍👦 Family-friendly travel planning\n📍 Destinations across India\n💙 Travel with Team SaahiRides\n\nTell us where you want to go. We'll help you plan the journey.\n\n📲 Enquire on WhatsApp: +91 93479 46026\n🌐 https://saahirides.co.in";
+  const hashtags="#SaahiRides #SafeRideAtSaahiPrice #IndiaTravel #FamilyTravel #PilgrimageTravel #RoadTripIndia #TravelWithConfidence #ExploreIndia #TravelPlanning #TeamSaahiRides";
+  $('ssCaption').value=caption;
+  $('ssHashtags').value=hashtags;
+  document.querySelectorAll('input[name="ssPlatform"]').forEach(x=>{x.checked=(x.value==='facebook'||x.value==='instagram');});
+  $('ssCampaignStatus').textContent='Caption and hashtags loaded; Facebook and Instagram selected. Choose your connected profile, attach the finished Reel/video or photos, and review the licensed music note. Nothing has been published.';
+  $('ssPublishingArea').classList.remove('hidden');
+  $('ssContentArea').classList.add('hidden');
+  $('ssMusicArea').classList.add('hidden');
+  $('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x.dataset.socialTarget==='ssPublishingArea'));
+  $('ssCaption').focus();
+ };
+ $('ssLoadCampaign').onclick();
+ $('socialNav').onclick=e=>{const b=e.target.closest('button[data-social-target]');if(!b)return;['ssContentArea','ssVideoUploadArea','ssMusicArea','ssPublishingArea','ssImageLibraryArea'].forEach(id=>show(id,id===b.dataset.socialTarget));$('socialNav').querySelectorAll('[data-social-target]').forEach(x=>x.classList.toggle('active',x===b));if(b.dataset.socialTarget==='ssImageLibraryArea')loadSocialImageLibrary('raw');};
+ $('ccRefresh').onclick=loadCommandCentre;
+ const reportDate=$('ccReportDate');
+ if(reportDate&&!reportDate.value){const now=new Date();const ist=new Date(now.getTime()+330*60000);reportDate.value=ist.toISOString().slice(0,10);}
+ $('ccGenerateReport').onclick=async()=>{
+  const btn=$('ccGenerateReport');btn.disabled=true;ccStatus('ccReportStatus','Generating report from recorded agent activity…');
+  try{
+   const data=await callCommandCentre('daily_report',{report_date:$('ccReportDate').value});
+   const r=data.report||{},entries=r.entries||[];
+   $('ccDailyReport').innerHTML='<div class="tile"><strong>'+esc(r.report_date)+'</strong><p>Total recorded entries: '+r.total_entries+'</p><p>By workstream: '+esc(JSON.stringify(r.by_module||{}))+'</p></div>'+entries.map(x=>'<div class="tile"><strong>'+esc(x.title)+'</strong><p>'+esc(x.summary)+'</p><div class="small">'+esc(x.module_key||'General')+' · '+esc(x.status)+' · '+esc(x.risk_level)+' · '+new Date(x.created_at).toLocaleString()+'</div></div>').join('');
+   ccStatus('ccReportStatus','Daily report generated and archived. '+entries.length+' recorded entries included.');
+  }catch(error){ccStatus('ccReportStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+
+ async function loadNotifications(){
+  if(!admin||!session)return;
+  const data=await callCommandCentre('notifications_list');
+  const items=data.notifications||[];
+  renderTalkbackAlert(items);
+  $('ccUnreadCount').textContent=(data.unread||0)+' unread';
+  const host=$('ccNotificationList');
+  host.innerHTML=items.length?items.map(n=>'<div class="tile" style="margin-top:8px"><strong>'+esc(n.title)+'</strong><p>'+esc(n.body)+'</p><div class="small">'+esc(n.severity).toUpperCase()+' · '+esc(n.status)+' · '+new Date(n.created_at).toLocaleString()+'</div>'+(n.status!=='acknowledged'?'<button type="button" class="secondary" data-notification-ack="'+esc(n.id)+'">Acknowledge</button>':'<span class="small">Acknowledged</span>')+'</div>').join(''):'No notifications yet.';
+  host.querySelectorAll('[data-notification-ack]').forEach(btn=>btn.addEventListener('click',async()=>{btn.disabled=true;try{await callCommandCentre('notification_mark',{id:btn.dataset.notificationAck,status:'acknowledged'});await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);btn.disabled=false;}}));
+  ccStatus('ccNotificationStatus','Secure notification inbox connected. '+items.length+' recent alert(s) loaded.');
+ }
+ function renderTalkbackAlert(items){
+  const root=$('ccTalkbackAlert');
+  if(!root)return;
+  const pending=(items||[]).find(n=>n.category==='talkback'&&n.status!=='acknowledged');
+  if(!pending){root.hidden=true;root.dataset.notificationId='';return;}
+  const isNew=root.hidden||root.dataset.notificationId!==pending.id;
+  root.dataset.notificationId=pending.id;
+  $('ccTalkbackAlertTitle').textContent=pending.title||'New TalkBack feedback';
+  $('ccTalkbackAlertBody').textContent=pending.body||'A new TalkBack submission needs review.';
+  $('ccTalkbackAlertTime').textContent='Received '+new Date(pending.created_at).toLocaleString();
+  root.hidden=false;
+  if(isNew){const ack=$('ccTalkbackAcknowledge');if(ack)ack.focus();}
+ }
+ document.addEventListener('click',async event=>{
+  if(!event.target||event.target.id!=='ccTalkbackAcknowledge')return;
+  const root=$('ccTalkbackAlert'),btn=event.target,id=root?.dataset.notificationId;
+  if(!id)return;
+  btn.disabled=true;
+  try{await callCommandCentre('notification_mark',{id,status:'acknowledged'});await loadNotifications();}
+  catch(e){ccStatus('ccNotificationStatus','TalkBack acknowledgement failed: '+e.message,true);}
+  finally{btn.disabled=false;}
+ });
+ function showPhoneNotification(n){
+  if(!('Notification' in window)||Notification.permission!=='granted'||document.visibilityState==='visible')return;
+  try{new Notification(String(n.title||'SaahiRides alert'),{body:String(n.body||'A new Command Centre alert needs attention.'),tag:'saahirides-'+String(n.id||Date.now())});}catch(e){console.warn('Browser notification could not be shown',e);}
+ }
+ async function startNotificationChannel(){
+  if(!admin||!client||!session)return;
+  try{await loadNotifications();}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
+  if(notificationChannel)await client.removeChannel(notificationChannel).catch(()=>{});
+  notificationChannel=client.channel('saahirides:admin-notifications:'+session.user.id,{config:{private:true}})
+   .on('broadcast',{event:'notification'},message=>{const n=message.payload||message;showPhoneNotification(n);loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));})
+   .subscribe((status,error)=>{if(status==='SUBSCRIBED')ccStatus('ccNotificationStatus','Private live alerts connected. Backup inbox refresh is active.');else if(error)ccStatus('ccNotificationStatus','Live alert connection: '+(error.message||status)+' · Backup inbox refresh is active.',true);});
+  // Realtime broadcasts are immediate, but a lightweight inbox poll recovers alerts
+  // after mobile sleep, dropped WebSocket connections, or missed broadcasts.
+  if(notificationPollTimer)clearInterval(notificationPollTimer);
+  notificationPollTimer=setInterval(()=>{if(admin&&session&&document.visibilityState!=='hidden')loadNotifications().catch(e=>ccStatus('ccNotificationStatus','Alert inbox refresh failed: '+e.message,true));},15000);
+ }
+ $('ccEnablePhoneAlerts').onclick=async()=>{
+  if(!('Notification' in window)){ccStatus('ccNotificationStatus','This browser does not support desktop notifications. Use the admin dashboard inbox.',true);return;}
+  try{const permission=await Notification.requestPermission();if(permission==='granted')ccStatus('ccNotificationStatus','Phone notifications enabled for this browser while the admin page is connected.');else ccStatus('ccNotificationStatus','Notification permission was not granted. You can still see alerts in the dashboard.',true);}catch(e){ccStatus('ccNotificationStatus',e.message,true);}
+ };
+ $('ccNotificationRefresh').onclick=()=>loadNotifications().catch(e=>ccStatus('ccNotificationStatus',e.message,true));
+ async function callCommandCentre(action,extra={}) {
+  if(!client||!session) throw new Error('Sign in to SaahiRides Admin first.');
+  const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{action,...extra}});
+  if(error) throw new Error(data?.error||error.message||'Command Centre request failed.');
+  if(data?.error) throw new Error(data.error);
+  return data;
+ }
+ function ccStatus(id,message,isError=false){
+  const el=$(id);el.textContent=message;
+  el.style.border=isError?'1px solid #ef4444':'1px solid #28436d';
+  el.style.background=isError?'#3b1118':'#11294b';
+ }
+ function renderCommandCentre(data){
+  const modules=data.modules||[],activity=data.activity||[],approvals=data.approvals||[];
+  $('ccModules').innerHTML=modules.map(m=>'<div class="tile"><h3>'+esc(m.title)+'</h3><p>'+esc(m.description)+'</p><div class="small"><strong>'+esc(m.status)+'</strong> · '+esc(m.cadence||'Schedule not set')+'</div><div class="small">'+(m.approval_required?'Owner approval required':'Approval not required')+'</div></div>').join('');
+  $('ccApprovals').innerHTML=approvals.length?approvals.map(a=>'<div class="tile"><strong>'+esc(a.change_type)+'</strong> · '+esc(a.target_system)+'<p>'+esc(a.summary)+'</p><div class="small">Risk: '+esc(a.risk_level)+' · '+esc(a.status)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No pending approval requests.';
+  $('ccActivity').innerHTML=activity.length?activity.map(a=>'<div class="tile"><strong>'+esc(a.payload?.agent_name||a.title)+'</strong><p>'+esc(a.summary)+'</p>'+(a.activity_type==='talkback_feedback'?'<div class="tile" style="background:#fff8df;color:#132b4d"><strong>Customer feedback · '+esc(a.payload?.rating||'—')+'/5</strong><p style="white-space:pre-wrap">'+esc(a.payload?.feedback_text||'Feedback text unavailable')+'</p><div class="small">Type: '+esc(a.payload?.feedback_type||'')+' · Booking reference: '+esc(a.payload?.booking_reference||'Not supplied')+'</div></div>':'')+'<div class="small">'+esc(a.module_key||'General')+' · '+esc(a.activity_type||'activity')+' · '+esc(a.status)+' · '+esc(a.risk_level)+' · '+new Date(a.created_at).toLocaleString()+'</div></div>').join(''):'No activity has been recorded yet.';
+  ccStatus('ccModuleStatus','Loaded '+modules.length+' workstreams, '+activity.length+' activity records and '+approvals.length+' pending approvals. Signed in as '+esc(data.role||'Admin')+'.');
+  ccStatus('ccApprovalStatus',approvals.length+' pending approval request(s). No request has been approved or executed.');
+ }
+ async function loadCommandCentre(){
+  const btn=$('ccRefresh');if(btn)btn.disabled=true;
+  ccStatus('ccModuleStatus','Loading secure Command Centre records…');
+  try{const data=await callCommandCentre('overview');renderCommandCentre(data);await loadQaLogs();}
+  catch(error){ccStatus('ccModuleStatus',error.message,true);ccStatus('ccApprovalStatus','Approval queue could not be loaded.',true);}
+  finally{if(btn)btn.disabled=false;}
+ }
+ $('ccRequestApproval').onclick=async()=>{
+  const btn=$('ccRequestApproval');btn.disabled=true;
+  try{
+   const result=await callCommandCentre('request_approval',{change_type:$('ccChangeType').value,target_system:$('ccTarget').value,summary:$('ccSummary').value,risk_level:$('ccRisk').value});
+   $('ccChangeType').value='';$('ccTarget').value='';$('ccSummary').value='';
+   ccStatus('ccApprovalStatus',result.note||'Approval request recorded; no action executed.');
+   await loadCommandCentre();
+  }catch(error){ccStatus('ccApprovalStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+ $('ccSaveNote').onclick=async()=>{
+  const btn=$('ccSaveNote');btn.disabled=true;
+  try{
+   await callCommandCentre('log_activity',{module_key:$('ccModule').value,title:$('ccNoteTitle').value,summary:$('ccNoteSummary').value,risk_level:$('ccNoteRisk').value,activity_type:'admin_note',status:'logged'});
+   $('ccNoteTitle').value='';$('ccNoteSummary').value='';
+   await loadCommandCentre();
+  }catch(error){ccStatus('ccModuleStatus',error.message,true);}
+  finally{btn.disabled=false;}
+ };
+
+ let qaFilter='open';
+ async function loadQaLogs(){
+  const btn=$('qaRefresh');if(btn)btn.disabled=true;
+  ccStatus('qaStatus','Loading QA records from the central Command Centre…');
+  try{
+   const data=await callCommandCentre('qa_overview'),open=data.open||[],closed=data.closed||[];
+   $('qaOpenCount').textContent=open.length;$('qaClosedCount').textContent=closed.length;$('qaTotalCount').textContent=data.total||open.length+closed.length;
+   const rows=qaFilter==='closed'?closed:open,host=$('qaLogList');host.innerHTML='';
+   if(!rows.length)host.innerHTML='<p class="small">No '+qaFilter+' QA records.</p>';
+   rows.forEach(item=>{
+    const card=document.createElement('article');card.className='tile';
+    card.innerHTML='<h3>'+esc(item.category)+'</h3><p>'+esc(item.description)+'</p><div class="small">ID: '+esc(item.id)+' · '+esc(item.severity||'medium').toUpperCase()+' · '+esc(item.status)+' · Seen '+new Date(item.last_seen_at).toLocaleString()+' · Occurrences '+esc(item.occurrence_count)+'</div>';
+    if(item.source_url){const link=document.createElement('a');link.href=item.source_url;link.target='_blank';link.rel='noopener';link.textContent='Open affected page';link.className='btn secondary';card.appendChild(link);}
+    if(qaFilter!=='closed'){
+     const select=document.createElement('select');select.innerHTML='<option value="open">Open</option><option value="in_progress">In progress</option><option value="reopened">Reopened</option>';select.value=['open','in_progress','reopened'].includes(item.status)?item.status:'open';card.appendChild(select);
+     const save=document.createElement('button');save.type='button';save.className='secondary';save.textContent='Update status';save.onclick=async()=>{save.disabled=true;try{await callCommandCentre('qa_transition',{id:item.id,status:select.value});await loadQaLogs();}catch(e){ccStatus('qaStatus',e.message,true);save.disabled=false;}};card.appendChild(save);
+     const resolution=document.createElement('textarea');resolution.rows=2;resolution.placeholder='Resolution summary (required to close)';
+     const verify=document.createElement('label');verify.style.cssText='display:flex;align-items:center;gap:8px';verify.innerHTML='<input type="checkbox" style="width:auto"> Retest passed';
+     const close=document.createElement('button');close.type='button';close.textContent='Close after verified retest';close.onclick=async()=>{close.disabled=true;try{if(!verify.querySelector('input').checked)throw Error('Tick Retest passed only after rerunning the failed test.');if(!resolution.value.trim())throw Error('Enter the repair and verification summary.');await callCommandCentre('qa_transition',{id:item.id,status:'closed',resolution_summary:resolution.value.trim(),verification:{passed:true,verified_at:new Date().toISOString(),verified_by:'Admin UI'}});await loadQaLogs();}catch(e){ccStatus('qaStatus',e.message,true);close.disabled=false;}};card.append(resolution,verify,close);
+    }else{const note=document.createElement('p');note.className='small';note.textContent='Closed '+(item.closed_at?new Date(item.closed_at).toLocaleString():'')+' · '+(item.resolution_summary||'No resolution summary');card.appendChild(note);}
+    host.appendChild(card);
+   });
+   ccStatus('qaStatus','Central QA logs loaded. Open: '+open.length+' · Closed: '+closed.length+'. Only verified retests can be closed.');
+  }catch(e){ccStatus('qaStatus',e.message,true);}
+  finally{if(btn)btn.disabled=false;}
+ }
+ $('qaRefresh').onclick=loadQaLogs;
+ document.querySelectorAll('[data-qa-filter]').forEach(b=>b.onclick=()=>{qaFilter=b.dataset.qaFilter;document.querySelectorAll('[data-qa-filter]').forEach(x=>x.classList.toggle('active',x===b));loadQaLogs();});
+ const socialEsc = value => esc(value ?? '');
+ async function logSocialPublishActivity({status,title,summary,payload,risk_level='low'}) {
+  if(!client||!session) throw new Error('Admin session unavailable for Command Centre logging.');
+  const {data,error}=await client.functions.invoke('saahirides-command-centre',{body:{
+   action:'log_activity',module_key:'social_brand',activity_type:'social_publish',
+   title,summary,status,risk_level,agent_name:'SaahiRides Social Studio',payload
+  }});
+  if(error||!data?.success) throw new Error(data?.error||error?.message||'Command Centre did not confirm the publishing log.');
+  return data.activity;
+ }
+ $('ssGenerateCaption').onclick=async()=>{
+  const btn=$('ssGenerateCaption'),brief=$('ssAiBrief').value.trim(),language=$('ssAiLanguage').value;
+  if(!brief){$('ssAiStatus').textContent='Enter the approved campaign facts first.';return;}
+  if(!client||!session||!admin){$('ssAiStatus').textContent='Sign in with an active Admin account first.';return;}
+  btn.disabled=true;btn.textContent='Generating…';$('ssAiStatus').textContent='Generating a draft with the SaahiRides AI service…';
+  try{
+   const platform=document.querySelector('input[name="ssPlatform"]:checked')?.value||'facebook';
+   const {data,error}=await client.functions.invoke('saahirides-ai-content',{body:{topic:brief,platform,language,tone:'warm, trustworthy and professional'}});
+   if(error||!data?.success||!data.generated_text)throw new Error(data?.error||error?.message||'AI service returned no caption.');
+   const generated=String(data.generated_text).trim();
+   const captionMatch=generated.match(/(?:^|\n)Caption\s*:\s*([\s\S]*?)(?=\n\s*Hashtags\s*:|\n\s*Call to action\s*:|$)/i);
+   const hashtagMatch=generated.match(/(?:^|\n)Hashtags\s*:\s*([\s\S]*?)(?=\n\s*Call to action\s*:|$)/i);
+   const ctaMatch=generated.match(/(?:^|\n)Call to action\s*:\s*([\s\S]*)$/i);
+   $('ssCaption').value=captionMatch?captionMatch[1].trim():generated;
+   $('ssHashtags').value=hashtagMatch?hashtagMatch[1].trim().replace(/\s+/g,' '):'';
+   if(ctaMatch&&ctaMatch[1].trim())$('ssCaption').value+='\n\n'+ctaMatch[1].trim();
+   $('ssAiStatus').textContent='Draft generated ('+language+'). Review and edit it before publishing.';
+   try{
+    const logged=await client.functions.invoke('saahirides-command-centre',{body:{action:'log_activity',module_key:'social_brand',activity_type:'social_caption_generated',title:'AI social caption generated',summary:'A '+language+' draft was generated for '+platform+'. It remains a draft until reviewed and explicitly published.',risk_level:'low',status:'logged',agent_name:'SaahiRides Social Studio',payload:{platform,language,brief_length:brief.length,model:data.model||null}}});
+    if(logged.error||!logged.data?.success)$('ssAiStatus').textContent+=' Command Centre log could not be confirmed.';
+   }catch(logError){$('ssAiStatus').textContent+=' Command Centre log could not be confirmed.';}
+  }catch(error){$('ssAiStatus').textContent='AI caption generation failed: '+(error?.message||String(error));}
+  finally{btn.disabled=false;btn.textContent='Generate caption & hashtags';}
+ };
+ async function callSocial(action, extra={}) {
+  if(!client || !session) throw new Error('Sign in to SaahiRides Admin first.');
+  const {data,error}=await client.functions.invoke('upload-post-social',{body:{action,...extra}});
+  if(error) throw new Error(data?.error || error.message || 'Social account service request failed.');
+  if(data?.error) throw new Error(data.error);
+  return data;
+ }
+ function showSocialStatus(message,isError=false){
+  const el=$('ssAccountStatus');el.textContent=message;
+  el.style.border=isError?'1px solid #ef4444':'1px solid #28436d';
+  el.style.background=isError?'#3b1118':'#11294b';
+ }
+ function renderSocialProfiles(payload){
+  const profiles=Array.isArray(payload?.profiles)?payload.profiles:[];
+  const limit=payload?.limit ?? 'not reported';
+  const plan=payload?.plan ?? payload?.me?.plan ?? 'plan not reported';
+  const email=payload?.me?.email ?? payload?.me?.user?.email ?? 'API key verified';
+  showSocialStatus('Upload-Post connected · '+plan+' plan · '+profiles.length+' / '+limit+' profiles used · '+email);
+  const host=$('ssProfileList');host.innerHTML='';
+  const profileSelect=$('ssPublishProfile');
+  profileSelect.innerHTML=profiles.length?'<option value="">Choose a connected profile</option>':'<option value="">No profiles available</option>';
+  profiles.forEach(profile=>{const option=document.createElement('option');option.value=profile.username;option.textContent=(profile.display_name||profile.username)+' · '+profile.username;profileSelect.appendChild(option);});
+  if(profiles.length && !profileSelect.value) profileSelect.value=profiles[0].username;
+  if(!profiles.length){host.innerHTML='<p class="small">No publishing profiles exist yet. Enter a group name above to create the first one.</p>';return;}
+  profiles.forEach(profile=>{
+   const accounts=profile.social_accounts||{};
+   const labels={facebook:'Facebook',instagram:'Instagram',google_business:'Google Business'};
+   const items=Object.entries(labels).map(([key,label])=>{
+    const account=accounts[key];
+    const connected=!!account && account!=='' && account!==null;
+    const handle=typeof account==='object'?(account.handle||account.display_name||account.username||'Connected'):(connected?'Connected':'Not connected');
+    return '<div class="small">'+socialEsc(label)+': <strong>'+socialEsc(connected?handle:'Not connected')+'</strong></div>';
+   }).join('');
+   const card=document.createElement('div');card.className='tile';
+   card.innerHTML='<h3>'+socialEsc(profile.display_name||profile.username)+'</h3><p class="small">Profile: '+socialEsc(profile.username)+'</p>'+items+
+    '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:10px"><button type="button" class="secondary" data-social-pages="'+socialEsc(profile.username)+'">List Facebook Pages</button><button type="button" class="secondary" data-social-google="'+socialEsc(profile.username)+'">List Google locations</button></div>';
+   host.appendChild(card);
+  });
+ }
+ $('ssRefreshAccounts').onclick=async()=>{
+  const btn=$('ssRefreshAccounts');btn.disabled=true;btn.textContent='Checking…';showSocialStatus('Checking API key, Upload-Post plan and connected profiles…');
+  try{const data=await callSocial('overview');renderSocialProfiles(data);}
+  catch(error){showSocialStatus(error.message,true);}
+  finally{btn.disabled=false;btn.textContent='Check API key, plan & connected accounts';}
+ };
+ $('ssGenerateConnect').onclick=async()=>{
+  const btn=$('ssGenerateConnect');const label=$('ssProfileLabel').value.trim();
+  if(!label){showSocialStatus('Enter a name for this account group first.',true);return;}
+  const username='saahi_'+label.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,42);
+  if(username.length<8){showSocialStatus('Please use a longer account group name.',true);return;}
+  btn.disabled=true;btn.textContent='Preparing secure link…';$('ssConnectLink').innerHTML='';
+  showSocialStatus('Checking the Upload-Post profile limit and preparing a secure connection link…');
+  try{
+   const result=await callSocial('connect_profile',{username});
+   const link=new URL(result.access_url);
+   if(link.protocol!=='https:'||link.hostname!=='app.upload-post.com')throw new Error('Upload-Post returned an unexpected connection URL. It was not opened.');
+   const a=document.createElement('a');a.href=link.href;a.target='_blank';a.rel='noopener noreferrer';a.className='btn';a.textContent='Open secure connection page · valid '+(result.duration||'48h');
+   $('ssConnectLink').appendChild(a);
+   showSocialStatus((result.profile_created?'Publishing profile created: ':'Existing profile ready: ')+username+'. Connect Facebook, Instagram and/or Google on the secure Upload-Post page. No post has been published.');
+   $('ssProfileLabel').value='';
+   const refreshed=await callSocial('overview');renderSocialProfiles(refreshed);
+  }catch(error){showSocialStatus(error.message,true);}
+  finally{btn.disabled=false;btn.textContent='Generate secure connection link';}
+ };
+ $('ssProfileList').addEventListener('click',async e=>{
+  const fb=e.target.closest('button[data-social-pages]'),gb=e.target.closest('button[data-social-google]');
+  if(!fb&&!gb)return;
+  const username=(fb||gb).dataset.socialPages||(gb||{}).dataset?.socialGoogle;
+  if(!username)return;
+  const target=fb?'facebook_pages':'google_business_locations';
+  $('ssDestinationDetails').classList.remove('hidden');$('ssDestinationDetails').textContent='Loading '+(fb?'Facebook Pages':'Google Business locations')+' for '+username+'…';
+  try{
+   const result=await callSocial(target,{username});
+   const rows=fb?(result.pages||[]):(result.locations||[]);
+   $('ssDestinationDetails').textContent=rows.length
+    ? (fb?'Facebook Pages':'Google Business Profile locations')+' for '+username+': '+rows.map(x=>fb?((x.name||x.page_name||'Facebook Page')+' (ID '+(x.id||x.page_id||'not returned')+')'):((x.title||'Google location')+' ('+(x.name||'ID unavailable')+')')).join(' · ')
+    : 'No '+(fb?'Facebook Pages':'Google Business Profile locations')+' were returned for '+username+'. Connect the account or check its permissions.';
+  }catch(error){$('ssDestinationDetails').textContent=error.message;}
+ });
+
+
+ $('tabs').onclick=async e=>{const b=e.target.closest('button[data-category]');if(!b||b.disabled)return;category=b.dataset.category;$('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));show('editor',(owner&&category==='Admin Governance')||(admin&&category!=='Admin Governance')||(hr&&category==='HR'));$('editorTitle').textContent='Create '+category+' policy';await loadPolicies(category)};
+ async function loadPolicies(cat){$('policyList').innerHTML='<p class="hint">Loading policies…</p>';
+  if(!client)return;
+  let q=client.from('policy_documents').select('id,title,category,body,version,effective_date,review_date,status,acknowledgement_required,created_at').eq('category',cat).order('created_at',{ascending:false});
+  const {data,error}=await q;
+  if(error){$('policyList').innerHTML='<p class="hint">Could not load: '+esc(error.message)+'</p>';
+  return}
+  if(!data?.length){$('policyList').innerHTML='<p class="hint">No '+esc(cat)+' policies yet. Add only approved content.</p>';
+  return}$('policyList').innerHTML=data.map(p=>'<article class="policy"><h4>'+esc(p.title)+'</h4><p class="small">Version '+esc(p.version)+' · '+esc(p.status)+' · Effective '+esc(p.effective_date||'not set')+' · Review '+esc(p.review_date||'not set')+'</p><p>'+esc(p.body)+'</p>'+(admin||hr&&cat==='HR'?'<button data-edit="'+esc(p.id)+'">Edit</button>':'')+(governanceRoles.length&&['draft','pending approval'].includes(p.status)?governanceRoles.map(r=>'<button class="secondary" data-approve="'+esc(p.id)+'" data-version="'+esc(p.version)+'" data-role="'+esc(r)+'">Approve as '+esc(r.replace('_',' '))+'</button>').join(''):'')+'</article>').join('');
+  $('policyList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editPolicy(data.find(p=>p.id===b.dataset.edit)));
+  $('policyList').querySelectorAll('[data-approve]').forEach(b=>b.onclick=async()=>{const policyId=b.dataset.approve,version=b.dataset.version,role=b.dataset.role;const {error}=await client.from('policy_approvals').insert({policy_id:policyId,policy_version:version,approver_id:session.user.id,approval_role:role});if(error){say('Approval not recorded: '+error.message);return}say('Your '+role.replace('_',' ')+' approval was recorded for version '+version+'. A distinct Director and Joint Founder approval are both required before publication.');await loadPolicies(category)});
+   }
+ function editPolicy(p){if(!p)return;show('editor',true);$('editorTitle').textContent='Edit '+category+' policy';$('policyId').value=p.id;$('title').value=p.title;$('body').value=p.body;$('version').value=p.version;$('effective').value=p.effective_date||'';$('review').value=p.review_date||'';$('status').value=p.status;$('ackRequired').checked=p.acknowledgement_required;}
+ $('clear').onclick=()=>{['policyId','title','body','effective','review'].forEach(id=>$(id).value='');$('version').value='1.0';$('status').value='draft';$('ackRequired').checked=false;};
+ $('save').onclick=async()=>{if(!client||!session)return say('Sign in first.');
+  if(category==='Admin Governance'&&!owner)return say('Only the Owner can manage Admin Governance policies.');
+  if(category!=='Admin Governance'&&!admin&&!(hr&&category==='HR'))return say('Permission denied.');
+  const payload={title:$('title').value.trim(),body:$('body').value.trim(),category,version:$('version').value.trim(),effective_date:$('effective').value||null,review_date:$('review').value||null,status:$('status').value,acknowledgement_required:$('ackRequired').checked,author_id:session.user.id,updated_at:new Date().toISOString()};
+  if(!payload.title||!payload.body||!payload.version)return say('Title, approved policy text, and version are required.');
+  let result;
+  if($('policyId').value){result=await client.from('policy_documents').update(payload).eq('id',$('policyId').value).select('id').single()}
+  else {result=await client.from('policy_documents').insert(payload).select('id').single()}
+  if(result.error)return say('Save failed: '+result.error.message);
+  $('clear').click();
+  say('Policy saved. Confirm approval and audience before relying on publication.');
+  await loadPolicies(category);
+  };
+  
+  const libraryFiles=$('ssLibraryFiles'), libraryGrid=$('ssLibraryGrid'), libraryStatus=$('ssLibraryStatus');
+ let libraryFilter='raw';
+ const selectedSocialImagePaths=new Set();
+ function updateSocialImageSelection(){const count=selectedSocialImagePaths.size;const btn=$('ssDeleteSelectedImages');if(btn){btn.disabled=!count;btn.textContent='Delete selected permanently ('+count+')';}}
+ async function callLibraryManager(action, extra={}){
+  const {data,error}=await client.functions.invoke('manage-social-image-library',{body:{action,...extra}});
+  if(error)throw new Error(data?.error||error.message);
+  if(!data?.success)throw new Error(data?.error||'Library action was not confirmed.');
+  return data;
+ }
+ async function openSocialImageCrop(file,path,url){
+  const dlg=document.createElement('dialog');
+  dlg.style.cssText='width:min(96vw,760px);max-height:92vh;overflow:auto;border:1px solid #46618b;border-radius:14px;background:#0b1c3d;color:#f8fafc;padding:16px';
+  const heading=document.createElement('h3');heading.textContent='Edit / Crop image';dlg.appendChild(heading);
+  const note=document.createElement('p');note.className='small';note.textContent='Adjust the crop area. Save creates a separate edited RAW copy; the original file is preserved.';dlg.appendChild(note);
+  const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:100%;max-height:48vh;object-fit:contain;background:#06122e;border-radius:8px';dlg.appendChild(canvas);
+  const ctx=canvas.getContext('2d');
+  const response=await fetch(url);if(!response.ok)throw new Error('Could not load original image.');
+  const sourceUrl=URL.createObjectURL(await response.blob()),image=new Image();image.src=sourceUrl;await image.decode();
+  const state={left:0,top:0,width:100,height:100},controls={};
+  const draw=()=>{
+   state.width=Math.max(1,Math.min(state.width,100-state.left));state.height=Math.max(1,Math.min(state.height,100-state.top));
+   controls.width.input.max=String(100-state.left);controls.height.input.max=String(100-state.top);
+   controls.width.input.value=String(state.width);controls.height.input.value=String(state.height);
+   controls.left.value.textContent=Math.round(state.left)+'%';controls.top.value.textContent=Math.round(state.top)+'%';controls.width.value.textContent=Math.round(state.width)+'%';controls.height.value.textContent=Math.round(state.height)+'%';
+   const sx=Math.round(image.naturalWidth*state.left/100),sy=Math.round(image.naturalHeight*state.top/100);
+   const sw=Math.max(1,Math.round(image.naturalWidth*state.width/100)),sh=Math.max(1,Math.round(image.naturalHeight*state.height/100));
+   canvas.width=Math.min(sw,1200);canvas.height=Math.max(1,Math.round(sh*canvas.width/sw));
+   ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+  };
+  const addSlider=(label,key)=>{
+   const wrap=document.createElement('label');wrap.style.cssText='display:block;margin:8px 0;color:#bac7dc';
+   const value=document.createElement('strong');value.textContent=Math.round(state[key])+'%';value.style.marginLeft='6px';
+   const input=document.createElement('input');input.type='range';input.min='0';input.max='100';input.value=String(state[key]);input.style.width='100%';
+   wrap.append(document.createTextNode(label+' '),value,input);dlg.appendChild(wrap);controls[key]={input,value};
+   input.oninput=()=>{state[key]=Number(input.value);draw();};
+  };
+  addSlider('Left','left');addSlider('Top','top');addSlider('Crop width','width');addSlider('Crop height','height');draw();
+  const footer=document.createElement('div');footer.style.cssText='display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px';
+  const cancel=document.createElement('button');cancel.type='button';cancel.className='secondary';cancel.textContent='Cancel';
+  const save=document.createElement('button');save.type='button';save.textContent='Save edited copy';footer.append(cancel,save);dlg.appendChild(footer);document.body.appendChild(dlg);
+  const close=()=>{try{dlg.close();}catch{}dlg.remove();URL.revokeObjectURL(sourceUrl);};
+  cancel.onclick=close;dlg.addEventListener('cancel',close);
+  save.onclick=async()=>{
+   save.disabled=true;save.textContent='Saving…';
+   try{
+    const outputMime=file.mime_type==='image/png'?'image/png':file.mime_type==='image/webp'?'image/webp':'image/jpeg';
+    const ext=outputMime==='image/png'?'png':outputMime==='image/webp'?'webp':'jpg';
+    const sx=Math.round(image.naturalWidth*state.left/100),sy=Math.round(image.naturalHeight*state.top/100);
+    const sw=Math.max(1,Math.round(image.naturalWidth*state.width/100)),sh=Math.max(1,Math.round(image.naturalHeight*state.height/100));
+    const output=document.createElement('canvas');output.width=sw;output.height=sh;output.getContext('2d').drawImage(image,sx,sy,sw,sh,0,0,sw,sh);
+    const blob=await new Promise(resolve=>output.toBlob(resolve,outputMime,0.92));
+    if(!blob)throw new Error('Browser could not export this crop.');
+    if(blob.size>15*1024*1024)throw new Error('Edited image exceeds the 15 MB limit.');
+    const filename=(file.display_filename||file.original_filename||path.split('/').pop()||'image').replace(/\.[^.]+$/,'')+'-edited.'+ext;
+    const editedPath='raw/edited/'+Date.now()+'-'+crypto.randomUUID()+'-'+filename.replace(/[^a-zA-Z0-9._-]/g,'-');
+    const {error:uploadError}=await client.storage.from('social-images').upload(editedPath,blob,{contentType:outputMime,upsert:false});
+    if(uploadError)throw new Error(uploadError.message);
+    try{await callLibraryManager('register_edit',{original_storage_path:path,edited_storage_path:editedPath,filename,mime_type:outputMime,file_size_bytes:blob.size});}
+    catch(error){await client.storage.from('social-images').remove([editedPath]);throw error;}
+    libraryStatus.textContent='Edited copy saved in RAW. Original file preserved and marked superseded; approve the edited copy when ready.';
+    close();await loadSocialImageLibrary('raw');
+   }catch(error){libraryStatus.textContent='Crop/save failed: '+(error?.message||String(error));save.disabled=false;save.textContent='Save edited copy';}
+  };
+  dlg.showModal();
+ }
+ async function loadSocialImageLibrary(filter=libraryFilter){
+  libraryFilter=filter;
+  selectedSocialImagePaths.clear();updateSocialImageSelection();
+  if(!client||!session?.user||!admin){libraryGrid.innerHTML='<p class="small">Sign in with an active Admin account to view images.</p>';return;}
+  libraryGrid.innerHTML='<p class="small">Preparing the central image library…</p>';
+  try{
+   await callLibraryManager('setup');
+   let query=client.from('social_image_library').select('*').order('created_at',{ascending:false});
+   if(filter!=='all')query=query.eq('status',filter);
+   const {data,error}=await query.limit(500);
+   if(error)throw error;
+   const images=(data||[]).filter(x=>x.storage_path&&!x.storage_path.endsWith('/.keep.png'));
+   libraryGrid.innerHTML='';
+   if(!images.length){libraryGrid.innerHTML='<p class="small">'+(filter==='approved'?'No approved images yet. Review RAW images and approve the ones you want to use.':filter==='raw'?'RAW is empty. Upload images or import the existing GitHub library.':'No images have been registered yet.')+'</p>';return;}
+   images.forEach(file=>{
+    const path=file.storage_path, url=client.storage.from('social-images').getPublicUrl(path).data.publicUrl;
+    const card=document.createElement('div');card.className='tile';
+    const pickLabel=document.createElement('label');pickLabel.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:8px;font-weight:700';
+    const pick=document.createElement('input');pick.type='checkbox';pick.dataset.storagePath=path;pick.checked=selectedSocialImagePaths.has(path);pick.addEventListener('change',()=>{if(pick.checked)selectedSocialImagePaths.add(path);else selectedSocialImagePaths.delete(path);updateSocialImageSelection();});
+    pickLabel.append(pick,document.createTextNode('Select for permanent deletion'));card.appendChild(pickLabel);
+    const img=document.createElement('img');img.src=url;img.alt=file.original_filename||path;img.loading='lazy';img.style.cssText='width:100%;height:170px;object-fit:contain;background:#06122e;border-radius:8px';
+    const name=document.createElement('p');name.className='small';name.textContent=(file.display_filename||path.split('/').pop()||file.original_filename||path)+' · '+file.source;
+    const status=document.createElement('p');status.className='small';status.textContent=file.status.toUpperCase()+' · '+path;
+    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener';link.className='btn secondary';link.textContent='Open image';
+    card.append(img,name,status,link);
+    if(file.status==='raw'){
+     const actions=document.createElement('details');actions.style.cssText='margin:10px 0;padding:8px;border:1px solid #46618b;border-radius:8px';
+     const summary=document.createElement('summary');summary.textContent='Image Actions ▾';summary.style.cssText='cursor:pointer;color:#f5b82e;font-weight:800';actions.appendChild(summary);
+     const actionBox=document.createElement('div');actionBox.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-top:10px';actions.appendChild(actionBox);
+     const makeAction=(label,handler)=>{const b=document.createElement('button');b.type='button';b.className='secondary';b.textContent=label;b.onclick=handler;actionBox.appendChild(b);return b;};
+     makeAction('Identify image (OCR)',async ev=>{
+      const b=ev.currentTarget;b.disabled=true;libraryStatus.textContent='Reading visible text in '+(file.original_filename||path.split('/').pop())+'…';
+      try{
+       if(!window.Tesseract){await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';s.onload=resolve;s.onerror=()=>reject(new Error('OCR library could not load.'));document.head.appendChild(s);});}
+       const response=await fetch(url);if(!response.ok)throw new Error('Could not download image for OCR.');const blob=await response.blob();
+       const result=await Tesseract.recognize(blob,'eng');const text=(result.data.text||'').replace(/\s+/g,' ').trim();
+       if(!text){libraryStatus.textContent='No readable English text found. Try visual search from Image Actions.';return;}
+       const candidate=text.split(/[|•·\n]/).map(x=>x.trim()).filter(x=>x.length>2).sort((a,b)=>b.length-a.length)[0].slice(0,100);
+       libraryStatus.textContent='OCR text: '+text.slice(0,500);
+       const current=file.display_filename||path.split('/').pop()||file.original_filename||'image.jpg';
+       const ext=(current.match(/\.[a-z0-9]+$/i)||['.jpg'])[0];
+       const suggested=candidate.normalize('NFKD').replace(/[^A-Za-z0-9_-]+/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'').slice(0,90)||'identified_image';
+       if(window.confirm('Suggested filename from image text:\n'+suggested+ext+'\n\nRename this RAW image?')){const saved=await callLibraryManager('rename',{storage_path:path,new_filename:suggested+ext});libraryStatus.textContent='Renamed from OCR: '+saved.display_filename;await loadSocialImageLibrary(libraryFilter);}
+      }catch(e){libraryStatus.textContent='Image identification failed: '+(e?.message||String(e));}
+      finally{b.disabled=false;}
+     });
+     makeAction('Search image online',()=>{const target='https://www.google.com/searchbyimage?image_url='+encodeURIComponent(url);window.open(target,'_blank','noopener');libraryStatus.textContent='Opened Google visual search in a new tab. Confirm the match before renaming.';});
+     makeAction('Rename manually',async ev=>{const b=ev.currentTarget;const current=file.display_filename||path.split('/').pop()||file.original_filename||'';const proposed=window.prompt('Enter the new filename (include extension):',current);if(proposed===null)return;b.disabled=true;try{const result=await callLibraryManager('rename',{storage_path:path,new_filename:proposed});libraryStatus.textContent=result.unchanged?'Filename unchanged.':'Image renamed to '+result.display_filename+'. Original filename remains recorded.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Rename failed: '+(e?.message||String(e));b.disabled=false;}});
+     card.appendChild(actions); 
+     const crop=document.createElement('button');crop.type='button';crop.className='secondary';crop.textContent='Edit / Crop';
+     crop.onclick=async()=>{crop.disabled=true;try{await openSocialImageCrop(file,path,url);}catch(e){libraryStatus.textContent='Could not open crop editor: '+(e?.message||String(e));}finally{crop.disabled=false;}};
+     card.appendChild(crop);
+     const approve=document.createElement('button');approve.type='button';approve.textContent='Approve → APPROVED';
+     approve.onclick=async()=>{approve.disabled=true;try{await callLibraryManager('approve',{storage_path:path});libraryStatus.textContent='Approved and moved into the APPROVED folder.';await loadSocialImageLibrary(libraryFilter);}catch(e){libraryStatus.textContent='Approval failed: '+(e?.message||String(e));approve.disabled=false;}};
+     card.appendChild(approve);
+    }else if(file.status==='approved'){
+     const use=document.createElement('button');use.type='button';use.className='secondary';use.textContent='Add to publishing composer';
+     use.onclick=async()=>{try{const response=await fetch(url);if(!response.ok)throw new Error('Image could not be loaded.');const blob=await response.blob();const fileObj=new File([blob],file.original_filename||path.split('/').pop(),{type:blob.type||file.mime_type||'image/jpeg'});const transfer=new DataTransfer();Array.from(mediaInput.files||[]).forEach(x=>transfer.items.add(x));if(transfer.files.length>=10)throw new Error('The composer already has 10 media files.');transfer.items.add(fileObj);mediaInput.files=transfer.files;renderSocialMedia();libraryStatus.textContent='Approved image added to the publishing composer.';}catch(e){libraryStatus.textContent='Could not add image: '+(e?.message||String(e));}};
+     card.appendChild(use);
+    }else{
+     const archived=document.createElement('p');archived.className='small';archived.textContent=file.status==='rejected'?'Archived — excluded from publishing.':file.status==='superseded'?'Original retained — edited copy created.':'Not available for publishing.';
+     card.appendChild(archived);
+    }
+    libraryGrid.appendChild(card);
+   });
+  }catch(e){libraryGrid.textContent='Could not load image library: '+(e?.message||String(e));}
+ }
+ if($('ssSelectAllVisible'))$('ssSelectAllVisible').onclick=()=>{libraryGrid.querySelectorAll('input[type="checkbox"][data-storage-path]').forEach(input=>{input.checked=true;selectedSocialImagePaths.add(input.dataset.storagePath);});updateSocialImageSelection();};
+ if($('ssClearImageSelection'))$('ssClearImageSelection').onclick=()=>{selectedSocialImagePaths.clear();libraryGrid.querySelectorAll('input[type="checkbox"]').forEach(input=>input.checked=false);updateSocialImageSelection();};
+ if($('ssDeleteSelectedImages'))$('ssDeleteSelectedImages').onclick=async()=>{
+  const paths=Array.from(selectedSocialImagePaths);
+  if(!paths.length)return;
+  if(!window.confirm('Permanently delete '+paths.length+' selected image(s) from Supabase Storage and the image library? This cannot be undone. GitHub source files are not touched.'))return;
+  const btn=$('ssDeleteSelectedImages');btn.disabled=true;btn.textContent='Deleting…';
+  try{
+   const result=await callLibraryManager('delete_selected',{storage_paths:paths});
+   if(result.deleted_count!==paths.length)throw new Error('Deletion count did not match the selected count. Refresh the library and verify each image.');
+   selectedSocialImagePaths.clear();libraryStatus.textContent=result.deleted_count+' image(s) permanently deleted from Supabase Storage and the library. No archive was created; GitHub originals remain untouched.';
+   await loadSocialImageLibrary(libraryFilter);
+  }catch(e){libraryStatus.textContent='Bulk deletion incomplete: '+(e?.message||String(e));updateSocialImageSelection();}
+  finally{updateSocialImageSelection();}
+ };
+ if($('ssLibraryRefresh'))$('ssLibraryRefresh').onclick=()=>loadSocialImageLibrary(libraryFilter);
+ document.querySelectorAll('[data-library-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x===b));loadSocialImageLibrary(b.dataset.libraryFilter);});
+ if($('ssImportGithub'))$('ssImportGithub').onclick=async()=>{
+  const btn=$('ssImportGithub');btn.disabled=true;btn.textContent='Importing…';libraryStatus.textContent='Scanning the full GitHub repository and copying image files into Supabase RAW. GitHub originals will remain untouched.';
+  try{await callLibraryManager('setup');const result=await callLibraryManager('import_github');libraryStatus.textContent='GitHub scan complete. Found '+result.found+', imported '+result.imported+', already present '+result.skipped+(result.failures?.length?'. Issues: '+result.failures.slice(0,5).join(' | '):'.');await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));}
+  catch(e){libraryStatus.textContent='GitHub import could not complete: '+(e?.message||String(e));}
+  finally{btn.disabled=false;btn.textContent='Import all GitHub images';}
+ };
+ if($('ssImportPuri'))$('ssImportPuri').onclick=async()=>{
+  const btn=$('ssImportPuri');btn.disabled=true;btn.textContent='Importing Puri photos…';libraryStatus.textContent='Copying the Puri review candidates from Wikimedia Commons into RAW/Puri. All will remain unapproved, with creator and licence notes recorded.';
+  try{await callLibraryManager('setup');const result=await callLibraryManager('import_puri');libraryStatus.textContent='Puri import complete. Found '+result.found+', imported '+result.imported+', already present '+result.skipped+(result.failures?.length?'. Issues: '+result.failures.slice(0,5).join(' | '):'.');await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));}
+  catch(e){libraryStatus.textContent='Puri import could not complete: '+(e?.message||String(e));}
+  finally{btn.disabled=false;btn.textContent='Import Puri review photos to RAW';}
+ };
+ if($('ssLibraryUpload'))$('ssLibraryUpload').onclick=async()=>{
+  const files=Array.from(libraryFiles?.files||[]);
+  if(!client||!session?.user||!admin){libraryStatus.textContent='Admin sign-in is required to upload.';return;}
+  if(!files.length){libraryStatus.textContent='Choose at least one image first.';return;}
+  const allowed=['image/jpeg','image/png','image/webp','image/gif'];
+  if(files.some(f=>!allowed.includes(f.type))){libraryStatus.textContent='Only JPG, PNG, WEBP and GIF images are accepted.';return;}
+  if(files.some(f=>f.size>15*1024*1024)){libraryStatus.textContent='Each image must be 15 MB or smaller.';return;}
+  const btn=$('ssLibraryUpload');btn.disabled=true;btn.textContent='Uploading…';let ok=0;
+  try{
+   await callLibraryManager('setup');
+   for(const file of files){
+    const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
+    const path='raw/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+    const {error}=await client.storage.from('social-images').upload(path,file,{contentType:file.type,upsert:false});
+    if(error)throw new Error(file.name+': '+error.message);
+    const {error:metaError}=await client.from('social_image_library').insert({storage_path:path,original_filename:file.name,source:'admin_upload',status:'raw',mime_type:file.type,file_size_bytes:file.size,created_by:session.user.id});
+    if(metaError)throw new Error(file.name+' was stored in RAW, but its library record could not be saved: '+metaError.message);
+    ok++;
+   }
+   libraryStatus.textContent=ok+' image(s) uploaded into Supabase RAW. Nothing was deleted or overwritten.';libraryFiles.value='';await loadSocialImageLibrary('raw');document.querySelectorAll('[data-library-filter]').forEach(x=>x.classList.toggle('active',x.dataset.libraryFilter==='raw'));
+  }catch(e){libraryStatus.textContent=ok+' image(s) registered; upload stopped: '+(e?.message||String(e));await loadSocialImageLibrary('raw');}
+  finally{btn.disabled=false;btn.textContent='Upload to RAW';}
+ };
+ const mediaInput=$('ssMedia'), mediaPreview=$('ssMediaPreview'), musicInput=$('ssMusic'), audioPreview=$('ssAudioPreview');
+ window.addEventListener('message',event=>{if(event.origin!==location.origin||event.data?.type!=='SAAHIRIDES_TALKBACK_EXPORT')return;const frame=document.querySelector('#talkBack iframe');if(!frame||event.source!==frame.contentWindow)return;const blob=event.data.blob,name=String(event.data.name||'SaahiRides_TalkBack.mp4');if(!(blob instanceof Blob)||!blob.type.startsWith('video/'))return;if(blob.size>100*1024*1024){say('Talk Back export exceeds the 100 MB Social Studio upload limit. Use a smaller export.');return;}const file=new File([blob],name,{type:blob.type});const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;renderSocialMedia();$('adminNav').querySelector('[data-panel="socialStudio"]')?.click();$('socialNav').querySelector('[data-social-target="ssPublishingArea"]')?.click();$('ssStatus').textContent='Talk Back export attached. Review caption, platforms and preview before publishing.';});
+ const videoStatus=$('ssVideoUploadStatus'),videoPreviewGrid=$('ssVideoPreviewGrid');
+
+ // Persistent private Supabase video library (TUS resumable uploads).
+ const videoBucket='social-videos',videoProjectRef='uzwubbzlytqqewqibobr';
+ const videoFolders=['reels','youtube-shorts','youtube-long','tours','advertisements','raw-footage'];
+ const videoUploadBtn=$('ssVideoUploadBtn'),videoProgress=$('ssVideoProgress');
+ const videoLibraryStatus=$('ssVideoLibraryStatus'),videoLibraryGrid=$('ssVideoLibraryGrid');
+ const videoSavedChoose=$('ssVideoSavedChoose'),videoSavedUseBtn=$('ssVideoSavedUseBtn');
+ let savedVideoPaths=[];
+ function videoSafeName(name){return name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(-110)||'video';}
+ function videoSetStatus(message){if(videoStatus)videoStatus.textContent=message;}
+ function videoTUSUpload(file,path,onProgress){
+  return new Promise((resolve,reject)=>{
+   if(!window.tus?.Upload){reject(new Error('Resumable upload library did not load. Reload the page and try again.'));return;}
+   const upload=new window.tus.Upload(file,{
+    endpoint:'https://'+videoProjectRef+'.storage.supabase.co/storage/v1/upload/resumable',
+    retryDelays:[0,3000,5000,10000,20000],
+    headers:{authorization:'Bearer '+session.access_token,apikey:client.supabaseKey},
+    uploadDataDuringCreation:true,removeFingerprintOnSuccess:true,chunkSize:6*1024*1024,
+    metadata:{bucketName:videoBucket,objectName:path,contentType:file.type||'video/mp4',cacheControl:'3600'},
+    onError:error=>reject(error),
+    onProgress:(uploaded,total)=>onProgress(total?uploaded/total*100:0),
+    onSuccess:()=>resolve()
+   });
+   upload.findPreviousUploads().then(previous=>{if(previous.length)upload.resumeFromPreviousUpload(previous[0]);upload.start();}).catch(reject);
+  });
+ }
+ async function loadSavedVideos(){
+  if(!client||!session?.user||!admin){videoLibraryStatus.textContent='Sign in with an active Admin account to view saved videos.';return;}
+  const folder=$('ssVideoLibraryCategory').value;
+  videoLibraryStatus.textContent='Loading '+folder+'…';videoLibraryGrid.innerHTML='';savedVideoPaths=[];
+  videoSavedChoose.innerHTML='<option value="">Choose a saved video…</option>';videoSavedChoose.disabled=true;videoSavedUseBtn.disabled=true;
+  const {data,error}=await client.storage.from(videoBucket).list(folder,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+  if(error){videoLibraryStatus.textContent='Could not load videos: '+error.message;return;}
+  const files=(data||[]).filter(item=>item.name&&!item.name.startsWith('.'));
+  if(!files.length){videoLibraryStatus.textContent='No videos saved in '+folder+' yet.';return;}
+  for(const item of files){
+   const path=folder+'/'+item.name; savedVideoPaths.push(path);
+   videoSavedChoose.add(new Option(item.name,path));
+   const card=document.createElement('div');card.className='tile';
+   const name=document.createElement('p');name.className='small';name.textContent=item.name+' · '+((item.metadata?.size||0)/1024/1024).toFixed(1)+' MB';
+   const preview=document.createElement('button');preview.type='button';preview.className='secondary';preview.textContent='Preview video';
+   const player=document.createElement('video');player.controls=true;player.playsInline=true;player.preload='none';player.style.cssText='width:100%;max-height:260px;margin-top:8px;border-radius:8px;background:#06122e';player.classList.add('hidden');
+   preview.addEventListener('click',async()=>{const {data:signed,error:e}=await client.storage.from(videoBucket).createSignedUrl(path,3600);if(e){videoLibraryStatus.textContent='Preview failed: '+e.message;return;}player.src=signed.signedUrl;player.classList.remove('hidden');player.load();});
+   card.append(name,preview,player);videoLibraryGrid.appendChild(card);
+  }
+  videoSavedChoose.disabled=false;videoLibraryStatus.textContent=files.length+' saved video(s) in '+folder+'. Files remain private; previews use temporary signed links.';
+ }
+ if($('ssVideoFiles'))$('ssVideoFiles').addEventListener('change',()=>{
+  const files=Array.from($('ssVideoFiles').files||[]);videoPreviewGrid.innerHTML='';
+  const invalid=files.find(file=>!file.type.startsWith('video/')||file.size>100*1024*1024);
+  if(invalid){videoSetStatus(invalid.size>100*1024*1024?invalid.name+' exceeds the 100 MB per-file limit.':'Choose video files only.');videoUploadBtn.disabled=true;return;}
+  files.forEach(file=>{const card=document.createElement('div');card.className='tile';const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+(file.size/1024/1024).toFixed(1)+' MB';const player=document.createElement('video');player.src=URL.createObjectURL(file);player.controls=true;player.playsInline=true;player.preload='metadata';player.style.cssText='width:100%;max-height:220px;border-radius:8px';card.append(label,player);videoPreviewGrid.appendChild(card);});
+  videoUploadBtn.disabled=!files.length;videoSetStatus(files.length+' video(s) ready. Upload will save them privately to Supabase.');
+ });
+ if(videoUploadBtn)videoUploadBtn.addEventListener('click',async()=>{
+  const files=Array.from($('ssVideoFiles').files||[]);
+  if(!client||!session?.user||!admin){videoSetStatus('Sign in with an active Admin account before uploading.');return;}
+  if(!files.length)return videoSetStatus('Choose at least one video.');
+  videoUploadBtn.disabled=true;videoProgress.style.display='block';videoProgress.value=0;
+  let completed=0;
+  try{
+   for(const file of files){
+    const folder=$('ssVideoCategory').value;
+    if(!videoFolders.includes(folder))throw new Error('Invalid video folder.');
+    const path=folder+'/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+videoSafeName(file.name);
+    videoSetStatus('Uploading '+(completed+1)+'/'+files.length+': '+file.name);
+    await videoTUSUpload(file,path,pct=>{videoProgress.value=((completed+pct/100)/files.length)*100;});
+    completed++;videoProgress.value=completed/files.length*100;
+   }
+   videoSetStatus(completed+' video(s) uploaded successfully to private Supabase Storage.');
+   $('ssVideoFiles').value='';videoPreviewGrid.innerHTML='';await loadSavedVideos();
+  }catch(error){videoSetStatus(completed+' of '+files.length+' uploaded. Upload stopped: '+(error?.message||String(error))+'. Retry the remaining file(s); completed files are preserved.');}
+  finally{videoUploadBtn.disabled=false;}
+ });
+ if($('ssVideoLibraryRefresh'))$('ssVideoLibraryRefresh').addEventListener('click',loadSavedVideos);
+ if($('ssVideoLibraryCategory'))$('ssVideoLibraryCategory').addEventListener('change',loadSavedVideos);
+ if(videoSavedChoose)videoSavedChoose.addEventListener('change',()=>{videoSavedUseBtn.disabled=!videoSavedChoose.value;});
+ if(videoSavedUseBtn)videoSavedUseBtn.addEventListener('click',async()=>{
+  const path=videoSavedChoose.value;if(!path||!mediaInput)return;
+  const {data,error}=await client.storage.from(videoBucket).createSignedUrl(path,3600);
+  if(error){videoLibraryStatus.textContent='Could not prepare saved video: '+error.message;return;}
+  try{
+   const response=await fetch(data.signedUrl);if(!response.ok)throw new Error('Could not retrieve the saved video for the composer.');
+   const blob=await response.blob(),name=path.split('/').pop()||'saahirides-video.mp4';
+   const file=new File([blob],name,{type:blob.type||'video/mp4'});
+   const transfer=new DataTransfer();transfer.items.add(file);mediaInput.files=transfer.files;renderSocialMedia();
+   document.querySelector('[data-social-target="ssPublishingArea"]')?.click();
+   videoLibraryStatus.textContent=name+' is attached to the publishing composer. Review before publishing.';
+  }catch(error){videoLibraryStatus.textContent='Could not attach video: '+(error?.message||String(error));}
+ });
+ 
+ let ssObjectUrls=[];
+ function renderSocialMedia(){
+  if(!mediaPreview)return;
+  ssObjectUrls.forEach(u=>URL.revokeObjectURL(u));ssObjectUrls=[];
+  const files=Array.from(mediaInput?.files||[]);
+  mediaPreview.innerHTML='';
+  if(!files.length){mediaPreview.innerHTML='<p class="hint">No media selected yet.</p>';return}
+  files.forEach((file,i)=>{
+   const url=URL.createObjectURL(file);ssObjectUrls.push(url);
+   const card=document.createElement('div');card.className='tile';
+   const title=document.createElement('div');title.className='small';title.textContent=(i+1)+'. '+file.name+' · '+Math.round(file.size/1024)+' KB';
+   card.appendChild(title);
+   let media;
+   if(file.type.startsWith('image/')){media=document.createElement('img');media.alt=file.name;media.src=url;media.style.cssText='width:100%;max-height:190px;object-fit:contain;margin-top:8px;border-radius:8px'}
+   else if(file.type.startsWith('video/')){media=document.createElement('video');media.src=url;media.controls=true;media.playsInline=true;media.style.cssText='width:100%;max-height:190px;margin-top:8px;border-radius:8px'}
+   if(media)card.appendChild(media);mediaPreview.appendChild(card);
+  });
+  $('ssStatus').textContent=files.length+' media file(s) ready for preview. The composer accepts up to 10 photos or one video.';
+ }
+ if(mediaInput)mediaInput.addEventListener('change',renderSocialMedia);
+ if($('ssPreviewBtn'))$('ssPreviewBtn').addEventListener('click',renderSocialMedia);
+ 
+  $('ssPublishBtn').addEventListener('click',async()=>{
+   const profiles=[$('ssPublishProfile').value].filter(Boolean), platforms=Array.from(document.querySelectorAll('input[name="ssPlatform"]:checked')).map(x=>x.value);
+   const caption=[$('ssCaption').value.trim(),$('ssHashtags').value.trim()].filter(Boolean).join('\n\n'), files=Array.from(mediaInput?.files||[]), result=$('ssPublishResult');
+   if(!profiles.length){result.textContent='Choose one or more connected publishing profiles.';return}
+   if(!platforms.length){result.textContent='Select at least one platform.';return}
+   if(!caption&&!files.length){result.textContent='Add a caption or media.';return}
+   const videos=files.filter(f=>f.type.startsWith('video/'));
+   if(files.length>10||videos.length>1||(videos.length&&files.length>1)||files.some(f=>!f.type.startsWith('image/')&&!f.type.startsWith('video/'))){result.textContent='Choose up to 10 photos OR one video only.';return}
+   if(files.some(f=>f.size>100*1024*1024)){result.textContent='Each media file must be 100 MB or smaller.';return}
+   if(platforms.includes('instagram')&&!files.length){result.textContent='Instagram publishing requires media.';return}
+   const mediaSummary=files.length?files.map((file,index)=>(index+1)+'. '+file.name).join('\n'):'Text-only post';
+   const reviewSummary=[
+    'FINAL PUBLISH APPROVAL',
+    'Profile: '+profiles.join(', '),
+    'Platforms: '+platforms.join(', '),
+    'Media: '+mediaSummary,
+    'Caption: '+(caption.length>500?caption.slice(0,500)+'…':caption),
+    '',
+    'Confirm only if this content and these destinations are correct. Continue to send the post to the publishing provider?'
+   ].join('\n');
+   if(!window.confirm(reviewSummary)){result.textContent='Publishing cancelled. No request was sent.';return;}
+   const btn=$('ssPublishBtn');btn.disabled=true;btn.textContent='Publishing…';result.textContent='Approval confirmed. Sending the post to the selected platforms and waiting for the provider response…';
+   const fb=$('ssFacebookPage').value.trim(),gb=$('ssGoogleLocation').value.trim(),outcomes=[];
+   try{
+    for(const profile of profiles){
+     const requestId=crypto.randomUUID();
+     const form=new FormData();form.append('action','publish');form.append('username',profile);form.append('request_id',requestId);platforms.forEach(p=>form.append('platform[]',p));form.append('description',caption);
+     if(fb)form.append('facebook_page_id',fb);if(gb)form.append('gbp_location_id',gb);
+     files.forEach(file=>form.append(videos.length?'video':'photos[]',file,file.name));
+     const {data,error}=await client.functions.invoke('upload-post-social',{body:form});
+     if(error)throw new Error(profile+': '+(data?.error||error.message));if(data?.error)throw new Error(profile+': '+data.error);
+     let finalData=data;
+     if(data.request_id){
+      result.textContent='Upload accepted by Upload-Post. Checking each platform until it confirms success or failure…';
+      for(let attempt=0;attempt<15;attempt++){
+       const state=String(finalData.status||'').toLowerCase();
+       if(['completed','failed','not_found'].includes(state))break;
+       await new Promise(resolve=>setTimeout(resolve,4000));
+       const polled=await callSocial('status',{request_id:data.request_id});
+       finalData=polled;
+       if(['completed','failed','not_found'].includes(String(finalData.status||'').toLowerCase()))break;
+      }
+      if(String(finalData.status||'').toLowerCase()==='failed')throw new Error(profile+': Upload-Post reports the upload failed.');
+      if(String(finalData.status||'').toLowerCase()==='not_found')throw new Error(profile+': Upload-Post could not find request '+data.request_id+'.');
+     }
+     const platformResults=finalData.results||{};
+     for(const platform of platforms){
+      const item=platformResults[platform];
+      if(item?.success===true && (item.url||item.post_url)){outcomes.push({profile,platform,url:item.url||item.post_url,status:'published'});}
+      else if(item?.success===true && (item.post_id||item.platform_post_id)){outcomes.push({profile,platform,url:'',postId:item.post_id||item.platform_post_id,status:'published'});}
+      else if(item?.status==='completed' && (item.url||item.post_url)){outcomes.push({profile,platform,url:item.url||item.post_url,status:'published'});}
+      else if(item?.skipped===true || item?.success===false || item?.status==='failed'){throw new Error(profile+' · '+platform+': '+(item.error||item.skip_reason||'platform did not publish'));}
+      else if(data.request_id){outcomes.push({profile,platform,url:'',requestId:data.request_id,status:'pending'});}
+      else {throw new Error(profile+' · '+platform+': provider returned no confirmed publication result');}
+     }
+    }
+    result.textContent='';
+    const published=outcomes.filter(x=>x.status==='published'),pending=outcomes.filter(x=>x.status==='pending');
+    result.appendChild(document.createTextNode(published.length?'Platform confirmed publication: ':'No live publication confirmation received. '));
+    outcomes.forEach(item=>{
+     const line=document.createElement('div');line.style.marginTop='8px';
+     line.textContent=item.profile+' · '+item.platform+' · '+(item.status==='published'?'PUBLISHED':'PENDING · request '+item.requestId);
+     result.appendChild(line);
+     if(item.url){const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Open live post';link.style.display='inline-block';link.style.margin='4px 0 0 8px';result.appendChild(link);}
+     else if(item.postId){const id=document.createElement('span');id.textContent=' · Post ID '+item.postId;result.appendChild(id);}
+    });
+    if(!published.length && pending.length)result.appendChild(document.createTextNode(' Background processing has started; this is not yet a confirmed live post.'));
+    if(published.length && pending.length)result.appendChild(document.createTextNode(' Some selected platforms are still processing.'));
+    const logStatus=pending.length?'needs_review':'logged';
+    const logSummary='Publishing response received for profile '+profiles.join(', ')+'. Confirmed: '+published.map(x=>x.platform).join(', ')+(pending.length?'; pending: '+pending.map(x=>x.platform).join(', '):'')+'.';
+    try {
+     await logSocialPublishActivity({status:logStatus,title:pending.length?'Social post accepted; platform confirmation pending':'Social post publication confirmed',summary:logSummary,risk_level:pending.length?'medium':'low',payload:{profiles,platforms,confirmed:published.map(x=>({platform:x.platform,url:x.url||null,post_id:x.postId||null})),pending:pending.map(x=>({platform:x.platform,request_id:x.requestId||null}))}});
+     result.appendChild(document.createTextNode(' Command Centre log saved.'));
+    } catch(logError) {
+     result.appendChild(document.createTextNode(' WARNING: Command Centre log was not saved: '+(logError?.message||String(logError))));
+    }
+   }catch(error){
+    result.textContent='Publishing failed: '+(error?.message||String(error));
+    try {
+     await logSocialPublishActivity({status:'blocked',title:'Social publishing failed',summary:'Publishing attempt failed for '+profiles.join(', ')+' on '+platforms.join(', ')+': '+String(error?.message||error).slice(0,1500),risk_level:'medium',payload:{profiles,platforms,media_count:files.length,error:String(error?.message||error).slice(0,1500)}});
+     result.appendChild(document.createTextNode(' Failure recorded in Command Centre.'));
+    } catch(logError) {
+     result.appendChild(document.createTextNode(' Command Centre logging also failed: '+(logError?.message||String(logError))));
+    }
+    console.error('SaahiRides social publish error:',error);
+   }
+   finally{btn.disabled=false;btn.textContent='Publish now'}
+  });
+
+  const musicStatus=$('ssMusicStatus'),musicLibrary=$('ssMusicLibrary'),musicUpload=$('ssMusicUpload');
+ async function loadSocialAudio(){
+  if(!client||!session?.user||!admin){musicLibrary.innerHTML='<p class="small">Sign in with an active Admin account to view saved audio.</p>';return;}
+  musicLibrary.innerHTML='<p class="small">Loading saved audio…</p>';
+  musicLibrary.innerHTML='';
+  let total=0;
+  for(const folder of ['master','music']){
+   const {data,error}=await client.storage.from('social-audio').list(folder,{limit:100,sortBy:{column:'created_at',order:'desc'}});
+   if(error){musicLibrary.textContent='Could not load '+folder+' audio: '+error.message;return;}
+   const files=(data||[]).filter(x=>x.name&&!x.name.startsWith('.'));
+   const heading=document.createElement('h4');heading.textContent=folder==='master'?'Master voice narration':'Background music';musicLibrary.appendChild(heading);
+   if(!files.length){const empty=document.createElement('p');empty.className='small';empty.textContent='No files saved in this category.';musicLibrary.appendChild(empty);continue;}
+   total+=files.length;
+   for(const file of files){
+    const path=folder+'/'+file.name,card=document.createElement('div');card.className='tile';
+    const label=document.createElement('p');label.className='small';label.textContent=file.name+' · '+Math.round((file.metadata?.size||0)/1024)+' KB';
+    const play=document.createElement('button');play.type='button';play.className='secondary';play.textContent='Preview audio';
+    play.addEventListener('click',async()=>{const {data,error}=await client.storage.from('social-audio').createSignedUrl(path,3600);if(error){musicStatus.textContent='Could not open audio: '+error.message;return;}audioPreview.src=data.signedUrl;audioPreview.classList.remove('hidden');musicStatus.textContent='Previewing '+folder+': '+file.name+'. Original preserved.';});
+    card.append(label,play);musicLibrary.appendChild(card);
+   }
+  }
+  if(!total)musicLibrary.innerHTML='<p class="small">No audio files saved yet.</p>';
+ }
+ if(musicInput)musicInput.addEventListener('change',()=>{
+  if(audioPreview.src)URL.revokeObjectURL(audioPreview.src);
+  const file=musicInput.files?.[0];
+  if(file){audioPreview.src=URL.createObjectURL(file);audioPreview.classList.remove('hidden');musicStatus.textContent='Local preview ready. Select Upload and save audio to persist it in Supabase.'}
+  else{audioPreview.removeAttribute('src');audioPreview.classList.add('hidden');musicStatus.textContent='No new audio selected.'}
+ });
+ if(musicUpload)musicUpload.addEventListener('click',async()=>{
+  const file=musicInput.files?.[0];
+  if(!client||!session?.user||!admin){musicStatus.textContent='Sign in with an active Admin account before uploading.';return;}
+  if(!file){musicStatus.textContent='Choose an audio file first.';return;}
+  if(!file.type.startsWith('audio/')){musicStatus.textContent='This file is not recognized as audio.';return;}
+  if(file.size>50*1024*1024){musicStatus.textContent='Audio must be 50 MB or smaller.';return;}
+  musicUpload.disabled=true;musicUpload.textContent='Uploading…';
+  try{
+   const clean=file.name.normalize('NFKD').replace(/[^a-zA-Z0-9._-]+/g,'-').replace(/-+/g,'-').slice(-110);
+   const folder=$('ssMusicCategory')?.value==='music'?'music':'master';
+   const path=folder+'/'+new Date().toISOString().slice(0,10)+'-'+Date.now()+'-'+crypto.randomUUID()+'-'+clean;
+   const {error}=await client.storage.from('social-audio').upload(path,file,{contentType:file.type,upsert:false});
+   if(error)throw error;
+   musicStatus.textContent='Saved securely as '+(folder==='music'?'background music':'master narration')+': '+file.name+'. Original preserved. Refreshing audio library…';
+   musicInput.value='';await loadSocialAudio();
+  }catch(error){musicStatus.textContent='Audio upload failed: '+(error?.message||String(error));}
+  finally{musicUpload.disabled=false;musicUpload.textContent='Upload and save audio';}
+ });
+ if($('ssMusicRefresh'))$('ssMusicRefresh').addEventListener('click',loadSocialAudio);
+ loadSocialAudio();
+
+ try { config('https://uzwubbzlytqqewqibobr.supabase.co','sb_publishable_AKz39xiMSvpcrkowSFJ1EQ_6yo5cCOq').catch(e=>{show('workspace',false);show('auth',true);say('Session restore failed: '+(e?.message||'Please sign in again.'));}); } catch(e) { say(e.message); }
+})();
+</script>
+<script src="saahi-promotions.js?v=20261031" defer></script>
+<div id="ccTalkbackAlert" hidden role="alertdialog" aria-modal="true" aria-labelledby="ccTalkbackAlertTitle" aria-describedby="ccTalkbackAlertBody">
+ <section class="talkback-alert-panel">
+  <h2 id="ccTalkbackAlertTitle">New TalkBack feedback</h2>
+  <p class="talkback-alert-meta" id="ccTalkbackAlertTime"></p>
+  <div class="talkback-alert-body" id="ccTalkbackAlertBody"></div>
+  <p class="small" style="color:#52647e;margin:12px 0 0">This alert remains pending until you explicitly acknowledge that you have reviewed it. Leaving or refreshing this page does not clear it.</p>
+  <button type="button" id="ccTalkbackAcknowledge">I have reviewed this feedback · Acknowledge</button>
+ </section>
+</div>
+</body></html>
