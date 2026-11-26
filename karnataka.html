@@ -128,4 +128,14 @@
     <a href="travel-tours.html" class="common-card"><h3>🗺️ Common Pilgrimage &amp; 20 Destinations</h3><p>Pan-India temple circuits, family combos &amp; 20 curated destinations across India.</p></a>
     <a href="ceo-blog.html" class="common-card"><h3>✍️ CEO's Blogs &amp; State News</h3><p>Founder stories, smarter package planning tips &amp; live state announcements.</p></a>
   </section>
+  const commonGrid = document.querySelector('.common-grid');
+  if (commonGrid && !commonGrid.querySelector('a[href="premium-privilege.html"]')) {
+    const priceCard = commonGrid.querySelector('a[href="index.html#fare-chart"]');
+    if (priceCard) priceCard.setAttribute('href', 'tariff-guide.html');
+    const vehCard = commonGrid.querySelector('a[href="index.html#vehicle-lists"]');
+    if (vehCard) vehCard.setAttribute('href', '#saahiStateFleetAndCharters');
+    commonGrid.insertAdjacentHTML('afterbegin', `
+      <a href="premium-privilege.html" class="common-card" style="border-color:#00F0FF"><h3 style="color:#00F0FF">👑 Premium Protocol &amp; Privilege Card</h3><p>≤12-month-old luxury fleet (₹41–₹63/km), ₹10K 50/50 rolling card, 3-hr TAT &amp; Luxury Caravan.</p></a>
+    `);
+  }
 
