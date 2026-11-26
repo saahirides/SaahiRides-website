@@ -379,7 +379,8 @@
           <strong>Sedan:</strong> ₹18/km (1-way) | ₹16/km (Round)<br>
           <strong>SUV / Ertiga:</strong> ₹22/km (1-way) | ₹20/km (Round)<br>
           <strong>Innova / Crysta:</strong> ₹25/km (1-way) | ₹24/km (Round)<br>
-          <strong>Rules:</strong> 300 km min, 50% advance, 5% GST extra, all-inclusive • <strong>Core Split:</strong> 75% Driver / 25% SaahiRides (₹0 joining fee).
+          <strong>Rules:</strong> 300 km min (both ways) &amp; 350 km min (single way), 50% advance, 5% GST extra, all-inclusive, garage-to-garage • <strong>Core Split:</strong> 75% Driver / 25% SaahiRides (₹0 joining fee).
+
         </p>
       </div>
     </div>
