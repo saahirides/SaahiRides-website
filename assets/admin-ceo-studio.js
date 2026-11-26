@@ -339,4 +339,73 @@
       : '✅ Saved as "' + finalFileName + '" & live on ceo-blog.html!';
     if (!dbErr) mobFileEl.value = '';
   };
+    // --- PART D: INTERNAL MASTER PRICING & PREMIUM CARD RECORD (ADMIN INTERNAL ONLY) ---
+  const pricingRefCard = document.createElement('section');
+  pricingRefCard.className = 'card';
+  pricingRefCard.style.cssText = 'border:1.5px solid #D4AF37;background:linear-gradient(145deg,#091d3e,#06122e)';
+  pricingRefCard.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <div class="brand" style="font-size:.82rem;color:#FFE27A">INTERNAL CONTROL RECORD • UPDATED 26 NOV 2026</div>
+        <h2 style="margin:2px 0;color:#fff">Master Pricing &amp; Premium Privilege Card Reference (Admin Internal)</h2>
+      </div>
+      <span class="small" style="color:#00F0FF">For GBP &amp; Internal Alignment • Public Tariff Unchanged</span>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="tile">
+        <div class="small" style="color:#6ee7b7">APPROVED • CITY ON-DEMAND (02 NOV 2026)</div>
+        <p class="small" style="margin-top:6px;line-height:1.55">
+          <strong>Bike:</strong> ₹10 / ₹12 / ₹13 &nbsp;|&nbsp; <strong>Scooty:</strong> ₹12 / ₹13.50 / ₹15<br>
+          <strong>Scooty EV:</strong> ₹16 &nbsp;|&nbsp; <strong>Auto:</strong> ₹16.50 / ₹17.50 / ₹19<br>
+          <strong>Electric Auto:</strong> ₹19 &nbsp;|&nbsp; <strong>Non-AC Cab:</strong> ₹19.50 / ₹21 / ₹22<br>
+          <strong>AC Cab:</strong> ₹22.50 / ₹24 / ₹25 (Standard / Express / Super Fast)
+        </p>
+      </div>
+
+      <div class="tile">
+        <div class="small" style="color:#6ee7b7">APPROVED • PROGRESSIVE SLABS (0–30 KM)</div>
+        <p class="small" style="margin-top:6px;line-height:1.55">
+          <strong>0–3 km:</strong> 1.00× &nbsp;|&nbsp; <strong>3–5 km:</strong> 1.15× &nbsp;|&nbsp; <strong>5–10 km:</strong> 1.25×<br>
+          <strong>10–15 km:</strong> 1.50× &nbsp;|&nbsp; <strong>15–20 km:</strong> 1.75×<br>
+          <strong>20–25 km:</strong> 2.00× &nbsp;|&nbsp; <strong>25–30 km:</strong> 2.25×<br>
+          <em>Segment-only multipliers up to 30 km; zero surge pricing.</em>
+        </p>
+      </div>
+
+      <div class="tile">
+        <div class="small" style="color:#6ee7b7">APPROVED • OUTSTATION &amp; CORE SPLIT</div>
+        <p class="small" style="margin-top:6px;line-height:1.55">
+          <strong>Sedan:</strong> ₹18/km (1-way) | ₹16/km (Round)<br>
+          <strong>SUV / Ertiga:</strong> ₹22/km (1-way) | ₹20/km (Round)<br>
+          <strong>Innova / Crysta:</strong> ₹25/km (1-way) | ₹24/km (Round)<br>
+          <strong>Rules:</strong> 300 km min, 50% advance, 5% GST extra, all-inclusive • <strong>Core Split:</strong> 75% Driver / 25% SaahiRides (₹0 joining fee).
+        </p>
+      </div>
+    </div>
+
+    <div class="tile" style="margin-top:12px;border-color:#00F0FF">
+      <div class="small" style="color:#00F0FF;font-weight:800">APPROVED • PREMIUM LUXURY / PROTOCOL &amp; PRIVILEGE CARD (≤ 12 MONTHS OLD FLEET • +15% UPLIFT)</div>
+      <p class="small" style="margin-top:6px;line-height:1.65">
+        <strong>1. Premium Executive Sedan</strong> (Camry Hybrid / Superb / C-Class / 3 Series): <strong>₹63/km</strong> &nbsp;|&nbsp;
+        <strong>2. Premium Luxury MPV / SUV</strong> (Innova Hycross ZX / Fortuner / Kia Carnival): <strong>₹48/km</strong> &nbsp;|&nbsp;
+        <strong>3. Executive Group Van</strong> (Force Urbania 10–17 Seater): <strong>₹41/km</strong><br>
+        <strong>4. Luxury Caravan (Special Request):</strong> Available on request with at least <strong>1-month advance notice</strong> • Governed by <strong>entirely separate bespoke billing</strong>.<br>
+        <strong>Commercial &amp; Night Rules:</strong> On-call partner fleet with <strong>60% Partner / 40% SaahiRides</strong> split (until internal fleet induction) • <strong>No night travel</strong> unless exclusively requested at <strong>flat ₹200/hr</strong>.<br>
+        <strong>Premium Card Deposit &amp; 50/50 Rule:</strong> Request raised in system • <strong>₹10,000 security deposit</strong> per card/month • Rides deducted conditionally: <strong>50% retained by company</strong> &amp; <strong>50% for customer ride use</strong> • Unutilized balance rolls over minus <strong>3% monthly maintenance</strong> • <strong>Final bill sent monthly</strong> • If <strong>no service used in 6 months</strong>, <strong>50% balance refunded &amp; account closed</strong>.<br>
+        <strong>Turnaround &amp; Perks:</strong> <strong>Advance booking window always open</strong> • <strong>3-hour turnaround time</strong> required to confirm status • Includes <strong>Divine Pilgrimage Pass</strong> (redeemable <strong>2× per year</strong>) + complimentary goodies on <strong>birthdays, anniversaries &amp; life milestones</strong>.
+      </p>
+    </div>
+
+    <div class="policy" style="margin-top:12px;border-bottom:0;padding-bottom:0">
+      <div class="small" style="color:#fbbf24;font-weight:800">⚠️ DRAFT / PENDING RECONCILIATION (DO NOT PUBLISH AS FINAL PUBLIC TARIFF):</div>
+      <p class="small" style="margin-top:4px;color:#cbd5e1">
+        • <strong>Core Night Window:</strong> 9:00 PM – 6:00 AM recorded; flat core night-charge amounts (incl. EV) remain DRAFT.<br>
+        • <strong>Subscriptions:</strong> 1-Way (Fare×30+₹199), Both-Way (Fare×60+₹299), Hybrid 2d (16×Fare+₹299), Hybrid 3d (24×Fare+₹299) for HITEC City / Gachibowli / Financial District — included km/ride pending.<br>
+        • <strong>Extended City (>30 km):</strong> Revised 30.1–50 / 50.1–70 / 70.1–100 km formulas &amp; rounding rule pending reconciliation.
+      </p>
+    </div>
+  `;
+  wrapper.appendChild(pricingRefCard);
+
 })();
