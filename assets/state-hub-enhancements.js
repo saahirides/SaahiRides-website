@@ -70,3 +70,12 @@
     <h2 style="text-align:center;margin:0 0 12px;color:#6ee7b7">🔧 Free Vehicle Know-How &amp; Safe DIY Home Care Charter</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
       <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">1. Automobile &amp; EV Basics (Free)</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Free guides on Petrol vs. EV drivetrains, CVT gearless systems, regenerative braking &amp; battery health for learners and partners.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">2. Safe DIY Checks at Home</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Tyre PSI &amp; tread checks, windshield washer &amp; coolant top-ups, air filter dust cleaning, 12V terminal care &amp; cabin fuse replacement.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">3. Workshop Safety Guardrails</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Clear safety rules on high-voltage orange EV cables &amp; brake hydraulics that strictly require a certified workshop. <a href="https://wa.me" target="_blank" rel="noopener" style="color:#FFE27A;font-weight:800">Register Interest →</a></p></article>
+    </div>
+  </section>`;
+
+  const flashBarEl = containerEl.querySelector('.flash-bar') || containerEl.querySelector('footer');
+  if (flashBarEl) containerEl.insertBefore(bundle, flashBarEl);
+  else containerEl.appendChild(bundle);
+})();
