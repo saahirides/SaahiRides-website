@@ -75,3 +75,23 @@
   <section class="panel" style="background:#071931;border:1px solid rgba(212,175,55,.42);border-radius:16px;padding:24px;margin:20px 24px">
     <h2 style="text-align:center;margin:0 0 14px;color:#FFE27A">SaahiRides Passenger Promise (Pillar #4) &amp; Brand Ambassador Driver Charter</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px"><h3 style="margin:0 0 6px;color:#FFE27A;font-size:16.5px">🤝 Brand Ambassador Dignity &amp; Zero-Tipping</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Drivers are our brand ambassadors—treat every partner with full dignity. Tipping is not expected; misconduct or harassment is not acceptable.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px"><h3 style="margin:0 0 6px;color:#FFE27A;font-size:16.5px">🛡️ Zero-Argument Support (+91 93479 46026)</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Neither passengers nor drivers should argue over routes or billing. Pause calmly and call SaahiRides Support immediately on <strong>+91 93479 46026</strong>.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px"><h3 style="margin:0 0 6px;color:#FFE27A;font-size:16.5px">💼 75% Partner Split &amp; 24-Hour KYC</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Drivers retain <strong>75% fare share</strong> with <strong>₹0 joining fee</strong>. Both passengers (new/outstation/rental) and drivers undergo <strong>24-hour KYC/DL/RC verification</strong>.</p></article>
+    </div>
+  </section>
+
+  <section class="panel" style="background:#071931;border:1.5px solid rgba(110,231,183,.45);border-radius:16px;padding:24px;margin:20px 24px">
+    <h2 style="text-align:center;margin:0 0 12px;color:#6ee7b7">🔧 Free Vehicle Know-How &amp; Safe DIY Home Care Charter</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">1. Automobile &amp; EV Basics (Free)</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Free educational guides on Petrol vs. EV drivetrains, CVT gearless systems, regenerative braking &amp; battery health for learners and partners.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">2. Safe DIY Checks at Home</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Tyre PSI &amp; tread checks, windshield washer &amp; coolant top-ups, air filter dust cleaning, 12V terminal care &amp; cabin fuse replacement.</p></article>
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:16px"><h3 style="margin:0 0 6px;color:#6ee7b7;font-size:16px">3. Workshop Safety Guardrails</h3><p style="margin:0;font-size:14px;color:#dbe4f4">Clear safety rules on high-voltage orange EV cables &amp; brake hydraulics that strictly require a certified workshop. <a href="https://wa.me" target="_blank" rel="noopener" style="color:#FFE27A;font-weight:800">Register Interest →</a></p></article>
+    </div>
+  </section>
+  `;
+
+  const flashBarEl = containerEl.querySelector('.flash-bar') || containerEl.querySelector('footer');
+  if (flashBarEl) containerEl.insertBefore(bundle, flashBarEl);
+  else containerEl.appendChild(bundle);
+})();
