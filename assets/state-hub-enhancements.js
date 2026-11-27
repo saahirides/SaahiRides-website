@@ -177,4 +177,54 @@
       fleetCards.forEach(card => { card.style.display = (cat === 'all' || card.dataset.vcat === cat) ? 'flex' : 'none'; });
     });
   });
+    });
+
+  // 4. Auto-discover all .img / .jpg / .png / .webp vehicle photos inside GitHub assets/ folder
+  const ASSET_KEYWORDS = {
+    'bike-std': ['bike-std', 'splendor', 'platina', 'sport', 'bike1', 'std-bike'],
+    'bike-express': ['bike-express', 'shine', 'pulsar-125', 'raider', 'bike2', 'exp-bike'],
+    'bike-superfast': ['bike-superfast', 'ns160', 'apache', 'fz', 'bike3', 'sf-bike'],
+    'scooty-std': ['scooty-std', 'pep', 'pleasure', 'dio', 'scooty1'],
+    'scooty-express': ['scooty-express', 'activa', 'jupiter', 'scooty2'],
+    'scooty-superfast': ['scooty-superfast', 'access', 'ntorq', 'rayzr', 'scooty3'],
+    'scooty-ev': ['scooty-ev', 'ather', 'iqube', 'ola', 'ev-scooty', 'electric-scooty'],
+    'auto-std': ['auto-std', 'bajaj-re', 'ape-city', 'auto1'],
+    'auto-express': ['auto-express', 'maxima', 'tvs-king', 'auto2'],
+    'auto-superfast': ['auto-superfast', 'optima', 'ape-xtra', 'auto3'],
+    'e-auto': ['e-auto', 'treo', 'e-city', 'electric-auto', 'ev-auto'],
+    'cab-nonac': ['cab-nonac', 'wagonr', 'tiago', 'santro', 'non-ac', 'nonac'],
+    'cab-ac': ['cab-ac', 'dzire-tour', 'aura', 'amaze', 'ac-cab'],
+    'outstation-sedan': ['outstation-sedan', 'etios', 'dzire', 'sedan'],
+    'outstation-suv': ['outstation-suv', 'ertiga', 'carens', 'suv'],
+    'outstation-innova': ['outstation-innova', 'innova', 'crysta'],
+    'premium-sedan': ['premium-sedan', 'camry', 'superb', 'c-class', 'mercedes', 'bmw'],
+    'premium-mpv': ['premium-mpv', 'hycross', 'fortuner', 'carnival'],
+    'premium-van': ['premium-van', 'urbania', 'traveller', 'tempo'],
+    'luxury-caravan': ['luxury-caravan', 'caravan', 'motorhome']
+  };
+
+  fetch('https://github.com')
+    .then(r => r.ok ? r.json() : [])
+    .then(files => {
+      if (!Array.isArray(files)) return;
+      const imgFiles = files
+        .filter(f => f.type === 'file' && /\.(img|jpg|jpeg|png|webp)$/i.test(f.name))
+        .map(f => f.name);
+
+      fleetSection.querySelectorAll('#saahiFleetCardsGrid a').forEach(card => {
+        const imgEl = card.querySelector('img');
+        if (!imgEl) return;
+        const slug = (imgEl.getAttribute('src') || '').replace(/^vehicles\/|\.jpg$/g, '');
+        const words = ASSET_KEYWORDS[slug] || [slug];
+        const match = imgFiles.find(fn => words.some(w => fn.toLowerCase().includes(w)));
+        if (match) {
+          imgEl.src = 'assets/' + encodeURIComponent(match);
+          imgEl.style.display = 'block';
+          if (imgEl.nextElementSibling) imgEl.nextElementSibling.style.display = 'none';
+        }
+      });
+    })
+    .catch(() => {});
+})();
+
 })();
