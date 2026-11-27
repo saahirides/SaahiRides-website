@@ -209,3 +209,131 @@
     mainEl.appendChild(bundle);
   }
 })();
+      svg: `<svg viewBox="0 0 180 76" width="160" height="68" aria-label="Premium Executive"><circle cx="42" cy="55" r="14" fill="none" stroke="#00F0FF" stroke-width="4"/><circle cx="138" cy="55" r="14" fill="none" stroke="#00F0FF" stroke-width="4"/><path d="M18 50 L22 20 L150 20 L162 36 L162 50 Z" fill="none" stroke="#FFE27A" stroke-width="3.5" stroke-linejoin="round"/><polygon points="90,4 94,12 103,12 96,17 98,25 90,20 82,25 84,17 77,12 86,12" fill="#D4AF37"/></svg>`
+    }
+  ];
+
+  const bundle = document.createElement('div');
+  bundle.id = 'saahiStateFleetAndCharters';
+  bundle.innerHTML = `
+  <section class="panel" style="background:#071931;border:1px solid rgba(212,175,55,.42);border-radius:16px;padding:24px;margin:20px 24px">
+    <div style="text-align:center;max-width:880px;margin:0 auto">
+      <span style="display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid #6ee7b7;color:#6ee7b7;font-size:11.5px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase">Know Your Ride • EV vs. Petrol &amp; Fleet Guide</span>
+      <h2 style="margin:8px 0;color:#FFE27A">Visual Vehicle Guide: Choose the Exact Ride That Fits Your Journey</h2>
+      <p style="margin:0;color:#dbe4f4;font-size:14.5px">Compare standard petrol vehicles against whisper-quiet, zero-emission <strong>EV</strong> options, city cabs, all-inclusive outstation MUVs, and <strong>≤12-month-old Premium Protocol</strong> vehicles.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px">
+      ${FLEET_VISUALS.map(v => `
+        <article style="background:linear-gradient(145deg,#10284d,#0b1c3d);border:1px solid rgba(212,175,55,.38);border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:space-between">
+          <div>
+            <span style="font-size:10.5px;font-weight:900;letter-spacing:1px;color:${v.badgeColor};display:block;margin-bottom:6px">${v.badge}</span>
+            <div style="text-align:center;background:#06122E;border-radius:10px;padding:8px;margin-bottom:10px;border:1px solid rgba(0,240,255,.22)">${v.svg}</div>
+            <h3 style="margin:0 0 4px;color:#fff;font-size:16.5px">${v.name}</h3>
+            <div style="display:inline-block;padding:3px 9px;border-radius:6px;background:#D4AF37;color:#06122E;font-weight:900;font-size:12.5px;margin-bottom:8px">${v.rate}</div>
+            <p style="margin:0;font-size:13.5px;color:#cbd5e1;line-height:1.5">${v.diff}</p>
+          </div>
+        </article>
+      `).join('')}
+    </div>
+
+    <div style="text-align:center;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <a href="tariff-guide.html" style="padding:10px 16px;border-radius:9px;background:#D4AF37;color:#06122E;font-weight:900;text-decoration:none;font-size:13.5px">📋 Open Full City &amp; Outstation Tariff Calculator →</a>
+      <a href="premium-privilege.html" style="padding:10px 16px;border-radius:9px;border:1px solid #00F0FF;background:#0b1c3d;color:#00F0FF;font-weight:900;text-decoration:none;font-size:13.5px">👑 Explore Premium Protocol &amp; Privilege Card →</a>
+    </div>
+  </section>
+
+  <section class="panel" style="background:#071931;border:1px solid rgba(212,175,55,.42);border-radius:16px;padding:24px;margin:20px 24px">
+    <div style="text-align:center;max-width:860px;margin:0 auto">
+      <h2 style="margin:0 0 6px;color:#FFE27A">SaahiRides Passenger Promise &amp; Ride Charter — Pillar #4</h2>
+      <p style="margin:0;color:#dbe4f4">Brand Ambassador Dignity, Zero-Tipping &amp; 24-Hour Customer KYC Verification</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px">
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🤝</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">Brand Ambassador Dignity &amp; Zero-Tipping</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Our drivers are our brand ambassadors. Kindly treat every SaahiRides partner with full dignity and respect. Tipping is not expected; misconduct, harassment or inhumane treatment is not acceptable.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🛡️</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">Zero-Argument Support Policy</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Please do not argue with drivers. For any trip or billing concern, contact SaahiRides Support immediately on <strong>+91 93479 46026</strong> so the matter can be handled calmly through the official support process.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🪪</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">24-Hour Customer KYC Validation Window</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Kindly allow SaahiRides up to 24 hours to verify your profile and service eligibility—especially for new accounts, subscriptions, outstation trips, and self-drive/rental bookings. Valid ID proof may be requested before boarding or during your journey.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel" style="background:#071931;border:1.5px solid rgba(0,240,255,.45);border-radius:16px;padding:24px;margin:20px 24px">
+    <div style="text-align:center;max-width:860px;margin:0 auto">
+      <h2 style="margin:0 0 6px;color:#FFE27A">SaahiRides Brand Ambassador &amp; Driver Charter — Partner Policy</h2>
+      <p style="margin:0;color:#dbe4f4">75% Fair Partner Earnings, Zero-Argument Escalation &amp; 24-Hour Fleet Verification</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px">
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">💼</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">75% Partner Split &amp; ₹0 Joining Fee</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Every SaahiRides Brand Ambassador retains <strong>75% of the fare</strong> with <strong>25% platform share</strong>—with <strong>₹0 joining fee</strong>, zero hidden deductions, and zero forced surge targets. Tipping is never solicited from passengers.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🛡️</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">Zero-Argument &amp; Safe Conduct Policy</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Drivers must never argue with passengers over routes, tolls, or billing. In case of any dispute, safety concern, or unverified passenger request, pause calmly and call <strong>SaahiRides Partner Desk on +91 93479 46026</strong> immediately.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🪪</div>
+        <h3 style="margin:0 0 6px;color:#FFE27A;font-size:17px">24-Hour KYC, Fleet Hygiene &amp; Punctuality</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">All new driver-partners undergo a mandatory <strong>24-hour KYC, DL, RC &amp; insurance verification</strong> before activation. Clean vehicle interiors, courteous etiquette, and punctual pickup reporting are required on every trip.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel" style="background:#071931;border:1.5px solid rgba(110,231,183,.45);border-radius:16px;padding:24px;margin:20px 24px">
+    <div style="text-align:center;max-width:860px;margin:0 auto">
+      <span style="display:inline-block;padding:4px 12px;border-radius:999px;border:1px solid #6ee7b7;color:#6ee7b7;font-size:11px;font-weight:900;letter-spacing:1.3px;text-transform:uppercase">Free Community &amp; Partner Learning Initiative</span>
+      <h2 style="margin:6px 0;color:#FFE27A">SaahiRides Vehicle Know-How &amp; DIY Home Care Charter</h2>
+      <p style="margin:0;color:#dbe4f4">Free automobile awareness &amp; safe at-home basic maintenance guides for interested learners, commuters &amp; driver-partners</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:16px">
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">⚙️</div>
+        <h3 style="margin:0 0 6px;color:#6ee7b7;font-size:17px">1. Automobile &amp; EV Engineering Basics (Free)</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Understand how internal combustion engines, gearless CVT transmissions, regenerative braking, and lithium-ion EV drivetrains work—so you choose and drive every vehicle smarter.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">🧰</div>
+        <h3 style="margin:0 0 6px;color:#6ee7b7;font-size:17px">2. Safe DIY Basic Repairs &amp; Checks at Home</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Step-by-step home care: checking tyre PSI &amp; tread depth, topping up windshield washer &amp; coolant levels, cleaning air filters, checking 12V battery terminals, and replacing blown cabin fuses.</p>
+      </article>
+
+      <article style="background:#0b1c3d;border:1px solid rgba(110,231,183,.38);border-radius:14px;padding:18px">
+        <div style="font-size:24px;margin-bottom:6px">⚡</div>
+        <h3 style="margin:0 0 6px;color:#6ee7b7;font-size:17px">3. Safety Guardrails: DIY vs. Certified Workshop</h3>
+        <p style="margin:0;font-size:14.5px;color:#dbe4f4">Learn what <strong>never</strong> to touch at home—high-voltage orange EV cables, brake hydraulics, and airbag wiring—ensuring zero injury and long vehicle life. Free session registration open on WhatsApp.</p>
+      </article>
+    </div>
+
+    <div style="text-align:center;margin-top:16px">
+      <a href="https://wa.me" target="_blank" rel="noopener" style="display:inline-block;padding:10px 18px;border-radius:9px;background:#10b981;color:#04130d;font-weight:900;text-decoration:none;font-size:13.5px">🔧 Register Interest for Free Vehicle Know-How Sessions (WhatsApp)</a>
+    </div>
+  </section>
+  `;
+
+  const flashBarEl = containerEl.querySelector('.flash-bar') || containerEl.querySelector('footer');
+  if (flashBarEl) {
+    containerEl.insertBefore(bundle, flashBarEl);
+  } else {
+    containerEl.appendChild(bundle);
+  }
+})();
