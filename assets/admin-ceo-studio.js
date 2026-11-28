@@ -454,7 +454,7 @@
     for (let n = 1; n <= 450; n++) candidates.push(`IMG-20261127-WA${String(n).padStart(4, '0')}.jpg`);
     for (let n = 1; n <= 200; n++) candidates.push(`IMG-20261128-WA${String(n).padStart(4, '0')}.jpg`);
 
-    candidates.forEach(fn => {
+   candidates.forEach(fn => {
       const probe = new Image();
       probe.onload = () => {
         grid.insertAdjacentHTML('beforeend', `
@@ -463,7 +463,7 @@
             <div style="font-size:11px;color:#FFE27A;font-family:monospace;margin-bottom:6px">${fn}</div>
             <select data-wa-file="${fn}" style="width:100%;padding:7px;border-radius:7px;background:#06122E;color:#fff;border:1px solid #46618b;font-size:12px">
               <option value="">-- Select Vehicle Card --</option>
-              ${SLOTS.map(([slug, label]) => `<option value="${slug}" ${fn === 'IMG-20261127-WA0189.jpg' && slug === 'premium-mpv' ? 'selected' : ''}>${label}</option>`).join('')}
+              ${SLOTS.map(([slug, label]) => `<option value="${slug}" ${(fn.startsWith(slug + '.') || (fn === 'IMG-20261127-WA0189.jpg' && slug === 'premium-mpv')) ? 'selected' : ''}>${label}</option>`).join('')}
             </select>
           </div>
         `);
