@@ -449,14 +449,13 @@
     `;
     adminHost.appendChild(mapper);
 
-    fetch('https://github.com')
-      .then(r => r.json())
-      .then(files => {
-        const waImgs = (Array.isArray(files) ? files : [])
-          .filter(f => f.type === 'file' && /^IMG-.*\.(jpg|jpeg|png|webp)$/i.test(f.name))
-          .map(f => f.name);
-        const grid = document.getElementById('vehMapperGrid');
-        grid.innerHTML = waImgs.map(fn => `
+     const grid = document.getElementById('vehMapperGrid');
+    grid.innerHTML = '';
+    for (let n = 170; n <= 215; n++) {
+      const fn = `IMG-20261127-WA0${n}.jpg`;
+      const probe = new Image();
+      probe.onload = () => {
+        grid.insertAdjacentHTML('beforeend', `
           <div style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:11px;padding:10px">
             <img src="assets/${fn}" alt="${fn}" style="width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:6px">
             <div style="font-size:11px;color:#FFE27A;font-family:monospace;margin-bottom:6px">${fn}</div>
@@ -465,8 +464,10 @@
               ${SLOTS.map(([slug, label]) => `<option value="${slug}" ${fn === 'IMG-20261127-WA0189.jpg' && slug === 'premium-mpv' ? 'selected' : ''}>${label}</option>`).join('')}
             </select>
           </div>
-        `).join('');
-      });
+        `);
+      };
+      probe.src = `assets/${fn}`;
+    }
 
     document.getElementById('buildVehMapBtn').onclick = () => {
       const map = { 'premium-mpv': 'IMG-20261127-WA0189.jpg' };
