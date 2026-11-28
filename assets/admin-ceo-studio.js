@@ -408,5 +408,75 @@
     </div>
   `;
   wrapper.appendChild(pricingRefCard);
+  
+  // 6. Visual Vehicle Banner Mapper (Maps IMG-20261127-WA*.jpg in assets/ to the 20 Vehicle Cards)
+  if (adminHost && !document.getElementById('saahiVehicleBannerMapper')) {
+    const SLOTS = [
+      ['bike-std', '1. Bike Standard (₹10/km)'],
+      ['bike-express', '2. Bike Express (₹12/km)'],
+      ['bike-superfast', '3. Bike Super Fast (₹13/km)'],
+      ['scooty-std', '4. Scooty Standard (₹12/km)'],
+      ['scooty-express', '5. Scooty Express (₹13.50/km)'],
+      ['scooty-superfast', '6. Scooty Super Fast (₹15/km)'],
+      ['scooty-ev', '7. Scooty EV (₹16/km)'],
+      ['auto-std', '8. Auto Standard (₹16.50/km)'],
+      ['auto-express', '9. Auto Express (₹17.50/km)'],
+      ['auto-superfast', '10. Auto Super Fast (₹19/km)'],
+      ['e-auto', '11. Electric Auto (₹19/km)'],
+      ['cab-nonac', '12. Non-AC City Cab (₹19.50–₹22/km)'],
+      ['cab-ac', '13. AC City Cab (₹22.50–₹25/km)'],
+      ['outstation-sedan', '14. Outstation Sedan (₹16/₹18/km)'],
+      ['outstation-suv', '15. Outstation SUV / Ertiga (₹20/₹22/km)'],
+      ['outstation-innova', '16. Outstation Innova / Crysta (₹24/₹25/km)'],
+      ['premium-sedan', '17. Premium Executive Sedan (₹63/km)'],
+      ['premium-mpv', '18. Premium Luxury MPV / SUV (₹48/km)'],
+      ['premium-van', '19. Executive Group Van (₹41/km)'],
+      ['luxury-caravan', '20. Luxury Caravan (1-Mo Advance)']
+    ];
+
+    const mapper = document.createElement('section');
+    mapper.id = 'saahiVehicleBannerMapper';
+    mapper.style.cssText = 'max-width:1120px;margin:20px auto;padding:22px;background:#071931;border:1.5px solid #6ee7b7;border-radius:16px;color:#fff';
+    mapper.innerHTML = `
+      <h2 style="margin:0 0 6px;color:#6ee7b7;font-size:21px">🚘 Visual Vehicle Banner Mapper (assets/IMG-20261127-WA*.jpg)</h2>
+      <p style="margin:0 0 14px;color:#cbd5e1;font-size:13.5px">Select the matching vehicle tier below each uploaded banner—then click <strong>Generate Live Mapping Code</strong> and paste it into <code>assets/state-hub-enhancements.js</code>!</p>
+      <div id="vehMapperGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">Loading images from assets/…</div>
+      <div style="margin-top:14px">
+        <button type="button" id="buildVehMapBtn" style="padding:10px 16px;border-radius:9px;border:0;background:#D4AF37;color:#06122E;font-weight:900;cursor:pointer">✨ Generate Live Mapping Code</button>
+        <textarea id="vehMapOutput" rows="4" readonly style="width:100%;margin-top:10px;background:#06122E;color:#00F0FF;border:1px solid #46618b;border-radius:9px;padding:10px;font-family:monospace;font-size:12.5px" placeholder="Generated WA_VEHICLE_MAP will appear here..."></textarea>
+      </div>
+    `;
+    adminHost.appendChild(mapper);
+
+    fetch('https://github.com')
+      .then(r => r.json())
+      .then(files => {
+        const waImgs = (Array.isArray(files) ? files : [])
+          .filter(f => f.type === 'file' && /^IMG-.*\.(jpg|jpeg|png|webp)$/i.test(f.name))
+          .map(f => f.name);
+        const grid = document.getElementById('vehMapperGrid');
+        grid.innerHTML = waImgs.map(fn => `
+          <div style="background:#0b1c3d;border:1px solid rgba(212,175,55,.4);border-radius:11px;padding:10px">
+            <img src="assets/${fn}" alt="${fn}" style="width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:6px">
+            <div style="font-size:11px;color:#FFE27A;font-family:monospace;margin-bottom:6px">${fn}</div>
+            <select data-wa-file="${fn}" style="width:100%;padding:7px;border-radius:7px;background:#06122E;color:#fff;border:1px solid #46618b;font-size:12px">
+              <option value="">-- Select Vehicle Card --</option>
+              ${SLOTS.map(([slug, label]) => `<option value="${slug}" ${fn === 'IMG-20261127-WA0189.jpg' && slug === 'premium-mpv' ? 'selected' : ''}>${label}</option>`).join('')}
+            </select>
+          </div>
+        `).join('');
+      });
+
+    document.getElementById('buildVehMapBtn').onclick = () => {
+      const map = { 'premium-mpv': 'IMG-20261127-WA0189.jpg' };
+      mapper.querySelectorAll('select[data-wa-file]').forEach(sel => {
+        if (sel.value) map[sel.value] = sel.dataset.waFile;
+      });
+      const codeStr = `const WA_VEHICLE_MAP = ${JSON.stringify(map)};`;
+      const out = document.getElementById('vehMapOutput');
+      out.value = codeStr;
+      navigator.clipboard?.writeText(codeStr);
+    };
+  }
 
 })();
