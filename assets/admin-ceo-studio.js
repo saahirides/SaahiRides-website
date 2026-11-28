@@ -410,7 +410,7 @@
  wrapper.appendChild(pricingRefCard);
   const adminHost = document.querySelector('main') || document.body;
 
-  // 6. Visual Vehicle Banner Mapper (Maps IMG-20261127-WA*.jpg in assets/ to the 20 Vehicle Cards)
+   // 6. Visual Vehicle Banner Mapper (Maps IMG-20261127-WA*.jpg in assets/ to the 20 Vehicle Cards)
   if (adminHost && !document.getElementById('saahiVehicleBannerMapper')) {
     const SLOTS = [
       ['bike-std', '1. Bike Standard (₹10/km)'],
@@ -441,7 +441,7 @@
     mapper.innerHTML = `
       <h2 style="margin:0 0 6px;color:#6ee7b7;font-size:21px">🚘 Visual Vehicle Banner Mapper (assets/IMG-20261127-WA*.jpg)</h2>
       <p style="margin:0 0 14px;color:#cbd5e1;font-size:13.5px">Select the matching vehicle tier below each uploaded banner—then click <strong>Generate Live Mapping Code</strong> and paste it into <code>assets/state-hub-enhancements.js</code>!</p>
-      <div id="vehMapperGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">Loading images from assets/…</div>
+      <div id="vehMapperGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px"></div>
       <div style="margin-top:14px">
         <button type="button" id="buildVehMapBtn" style="padding:10px 16px;border-radius:9px;border:0;background:#D4AF37;color:#06122E;font-weight:900;cursor:pointer">✨ Generate Live Mapping Code</button>
         <textarea id="vehMapOutput" rows="4" readonly style="width:100%;margin-top:10px;background:#06122E;color:#00F0FF;border:1px solid #46618b;border-radius:9px;padding:10px;font-family:monospace;font-size:12.5px" placeholder="Generated WA_VEHICLE_MAP will appear here..."></textarea>
@@ -450,7 +450,6 @@
     adminHost.appendChild(mapper);
 
     const grid = document.getElementById('vehMapperGrid');
-    grid.innerHTML = '';
     const candidates = [];
     for (let n = 1; n <= 450; n++) candidates.push(`IMG-20261127-WA${String(n).padStart(4, '0')}.jpg`);
     for (let n = 1; n <= 200; n++) candidates.push(`IMG-20261128-WA${String(n).padStart(4, '0')}.jpg`);
@@ -471,7 +470,6 @@
       };
       probe.src = `assets/${fn}`;
     });
-    }
 
     document.getElementById('buildVehMapBtn').onclick = () => {
       const map = { 'premium-mpv': 'IMG-20261127-WA0189.jpg' };
@@ -484,5 +482,4 @@
       navigator.clipboard?.writeText(codeStr);
     };
   }
-
 })();
