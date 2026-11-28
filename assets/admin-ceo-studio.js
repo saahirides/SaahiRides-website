@@ -449,10 +449,13 @@
     `;
     adminHost.appendChild(mapper);
 
-     const grid = document.getElementById('vehMapperGrid');
+    const grid = document.getElementById('vehMapperGrid');
     grid.innerHTML = '';
-    for (let n = 170; n <= 215; n++) {
-      const fn = `IMG-20261127-WA0${n}.jpg`;
+    const candidates = [];
+    for (let n = 1; n <= 450; n++) candidates.push(`IMG-20261127-WA${String(n).padStart(4, '0')}.jpg`);
+    for (let n = 1; n <= 200; n++) candidates.push(`IMG-20261128-WA${String(n).padStart(4, '0')}.jpg`);
+
+    candidates.forEach(fn => {
       const probe = new Image();
       probe.onload = () => {
         grid.insertAdjacentHTML('beforeend', `
@@ -467,6 +470,7 @@
         `);
       };
       probe.src = `assets/${fn}`;
+    });
     }
 
     document.getElementById('buildVehMapBtn').onclick = () => {
