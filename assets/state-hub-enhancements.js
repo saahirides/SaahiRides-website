@@ -119,22 +119,16 @@
     });
   });
 
-  fetch('https://github.com')
-    .then(r => r.ok ? r.json() : [])
-    .then(files => {
-      if (!Array.isArray(files)) return;
-      const imgFiles = files.filter(f => f.type === 'file' && /\.(img|jpg|jpeg|png|webp)$/i.test(f.name)).map(f => f.name);
-      fleetSection.querySelectorAll('#saahiFleetCardsGrid a').forEach(card => {
-        const slug = card.dataset.slug;
-        const row = VEHICLES_20.find(v => v[5] === slug);
-        const words = row ? row[9] : [slug];
-        const match = imgFiles.find(fn => words.some(w => fn.toLowerCase().includes(w)));
-        const imgEl = card.querySelector('img');
-        if (match && imgEl) {
-          imgEl.src = 'assets/' + encodeURIComponent(match);
-          imgEl.style.display = 'block';
-          if (imgEl.nextElementSibling) imgEl.nextElementSibling.style.display = 'none';
-        }
-      });
+  const WA_VEHICLE_MAP = {"premium-mpv":"IMG-20261127-WA0189.jpg","bike-express":"IMG-20261127-WA0341.jpg"};
+
+  fleetSection.querySelectorAll('#saahiFleetCardsGrid a').forEach(card => {
+    const fn = WA_VEHICLE_MAP[card.dataset.slug];
+    const imgEl = card.querySelector('img');
+    if (fn && imgEl) {
+      imgEl.src = 'assets/' + encodeURIComponent(fn);
+      imgEl.style.display = 'block';
+      if (imgEl.nextElementSibling) imgEl.nextElementSibling.style.display = 'none';
+    }
+  });
     }).catch(() => {});
 })();
