@@ -407,8 +407,9 @@
       </p>
     </div>
   `;
-  wrapper.appendChild(pricingRefCard);
-  
+ wrapper.appendChild(pricingRefCard);
+  const adminHost = document.querySelector('main') || document.body;
+
   // 6. Visual Vehicle Banner Mapper (Maps IMG-20261127-WA*.jpg in assets/ to the 20 Vehicle Cards)
   if (adminHost && !document.getElementById('saahiVehicleBannerMapper')) {
     const SLOTS = [
