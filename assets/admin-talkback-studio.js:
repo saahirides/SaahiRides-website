@@ -218,4 +218,222 @@
     ctx.strokeStyle = activeVoice ? '#38bdf8' : '#f5b82e';
     ctx.lineWidth = activeVoice ? (4 + energy * 6) : 3;
     ctx.strokeRect(boxX, boxY, boxW, boxH);
+    
+     if (posterImg && posterImg.complete && posterImg.naturalWidth > 0) {
+      const scale = Math.min(boxW / posterImg.naturalWidth, boxH / posterImg.naturalHeight);
+      const dw = posterImg.naturalWidth * scale;
+      const dh = posterImg.naturalHeight * scale;
+      ctx.drawImage(posterImg, boxX + (boxW - dw) / 2, boxY + (boxH - dh) / 2, dw, dh);
+    }
 
+    const rawOverlay = scriptInput.value.trim();
+    if (rawOverlay) {
+      ctx.fillStyle = 'rgba(6, 18, 46, 0.80)';
+      ctx.fillRect(boxX + 24, boxY + 340, boxW - 48, 330);
+      ctx.strokeStyle = activeVoice ? '#00f0ff' : 'rgba(245,184,46,0.75)';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(boxX + 24, boxY + 340, boxW - 48, 330);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 30px system-ui, Arial, sans-serif';
+      ctx.textAlign = 'center';
+      const words = rawOverlay.split(/\s+/);
+      let line = '', lineY = boxY + 392;
+      for (let i = 0; i < words.length; i++) {
+        const test = line + words[i] + ' ';
+        if (ctx.measureText(test).width > boxW - 96 && i > 0) {
+          ctx.fillText(line.trim(), canvas.width / 2, lineY);
+          line = words[i] + ' ';
+          lineY += 40;
+          if (lineY > boxY + 635) break;
+        } else { line = test; }
+      }
+      if (lineY <= boxY + 635) ctx.fillText(line.trim(), canvas.width / 2, lineY);
+    }
+    ctx.restore();
+
+    ctx.fillStyle = '#030817';
+    ctx.fillRect(0, 1135, canvas.width, 145);
+    ctx.fillStyle = '#ffe27a';
+    ctx.font = '800 34px system-ui, Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(marqueeText, marqueeX, 1218);
+
+    if (isScrolling) {
+      marqueeX -= parseFloat(speedSelect.value || '3.8');
+      const totalW = ctx.measureText(marqueeText).width;
+      if (marqueeX < -totalW) marqueeX = canvas.width;
+    }
+    requestAnimationFrame(renderLoop);
+  }
+  requestAnimationFrame(renderLoop);
+
+  let mediaRecorder = null, recordedChunks = [];
+  recordBtn.onclick = () => {
+    try {
+      const videoStream = canvas.captureStream(30);
+      if (bgAudio.src) {
+        ensureAudioAnalyzer();
+        if (voiceDest) voiceDest.stream.getAudioTracks().forEach(t => videoStream.addTrack(t));
+      }
+      recordedChunks = [];
+      mediaRecorder = new MediaRecorder(videoStream, { mimeType: 'video/webm' });
+      mediaRecorder.ondataavailable = (e) => { if (e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'SaahiRides-Talking-Poster-' + Date.now() + '.mp4';
+        a.click();
+        exportStatus.textContent = '✓ MP4 video saved! Ready to share on IG Reels, FB & YouTube Shorts.';
+        recordBtn.disabled = false;
+        stopExportBtn.disabled = true;
+      };
+      mediaRecorder.start();
+      recordBtn.disabled = true;
+      stopExportBtn.disabled = false;
+      exportStatus.textContent = '🔴 Recording 9:16 video…';
+      playNarration(() => { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); });
+    } catch (err) { exportStatus.textContent = '⚠️ Recorder error: ' + err.message; }
+  };
+
+  stopExportBtn.onclick = () => {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    bgAudio.pause();
+    isSpeaking = false;
+    if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+  };
+    
+    
+      // 2. Omni-Channel Social Media Clean-Up & 1-Click Cross-Post Studio (IG • FB • YouTube Shorts)
+  const talkHost = document.querySelector('main') || document.body;
+  if (talkHost && !document.getElementById('saahiOmniSocialStudio')) {
+    const CAMPAIGN_PRESETS = {
+      'zero-surge': {
+        hook: 'Zero Surge. Zero Cancellation. Pure SaahiPrice across Hyderabad, Secunderabad & Telangana!',
+        body: 'Bike from ₹10/km • Scooty EV ₹16/km • Auto ₹16.50/km • Electric Auto ₹19/km • Non-AC Cab ₹19.50/km • AC Cab ₹22.50/km (0–30 km progressive slabs).',
+        url: 'https://saahirides.co.in',
+        tags: '#SaahiRides #ZeroSurge #HyderabadTaxi #Secunderabad #BikeTaxi #ElectricAuto #SaahiPrice #TelanganaTransit'
+      },
+      'premium-card': {
+        hook: 'Introducing the SaahiRides Premium Privilege Card & ≤12-Month-Old Luxury Fleet!',
+        body: 'Exclusively vehicles ≤12 months old: Executive Sedan (Camry/C-Class) ₹63/km • Luxury MPV/SUV (Hycross ZX/Carnival) ₹48/km • Force Urbania Group Van ₹41/km. Includes 2× annual Divine Pilgrimage Pass & 3-Hr Dispatch TAT.',
+        url: 'https://saahirides.co.in',
+        tags: '#SaahiRidesPremium #CorporateProtocol #HyderabadAirport #LuxuryChauffeur #InnovaHycross #ForceUrbania #VIPTravel'
+      },
+      'outstation-pilgrim': {
+        hook: 'All-Inclusive Outstation & Divine Pilgrimage Cabs from Hyderabad — Zero Hidden Tolls!',
+        body: 'Toll, parking, fuel & driver bata included: Sedan ₹16/km round-trip (300 km min = ₹4,800) | SUV/Ertiga ₹20/km | Innova Crysta ₹24/km (+5% GST). Tirupati, Srisailam, Yadadri, Shirdi, Puri, Hampi & Jaisalmer!',
+        url: 'https://saahirides.co.in',
+        tags: '#SaahiRidesOutstation #TirupatiCabs #Srisailam #PilgrimageTour #HyderabadOutstation #InnovaCrysta #RoadTripIndia'
+      },
+      'jaisalmer-08': {
+        hook: 'From Hyderabad Deccan to the Golden Sands of Jaisalmer (#08 CEO Expedition)!',
+        body: 'Sonar Quila Living Fort, Sam Sand Dunes desert camp, Gadisar Lake & Royal Heritage Circuit curated by SaahiRides Transit Pvt. Ltd.',
+        url: 'https://saahirides.co.in',
+        tags: '#Jaisalmer #SonarQuila #SaahiRides #CEOExpedition #RajasthanTourism #TharDesert #PanIndiaTravel'
+      },
+      'driver-charter': {
+        hook: 'Drive with Dignity: Retain 75% of Every Fare with ₹0 Joining Fee at SaahiRides!',
+        body: 'Our drivers are Brand Ambassadors: 75% partner split, 25% platform share, zero joining fee, zero forced surge targets & 24-hour KYC verification.',
+        url: 'https://saahirides.co.in',
+        tags: '#SaahiRidesPartner #DriverDignity #HyderabadDrivers #ZeroJoiningFee #75PercentSplit #BrandAmbassador'
+      }
+    };
+
+    const studio = document.createElement('section');
+    studio.id = 'saahiOmniSocialStudio';
+    studio.style.cssText = 'max-width:1120px;margin:20px auto;padding:22px;background:#071931;border:1.5px solid #00F0FF;border-radius:16px;color:#fff';
+    studio.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px">
+        <div>
+          <span style="font-size:11px;font-weight:900;color:#6ee7b7;letter-spacing:1.2px;text-transform:uppercase">Clean Omni-Channel Publisher • IG • FB • YouTube Shorts</span>
+          <h2 style="margin:4px 0 0;color:#FFE27A;font-size:21px">📲 Social Media Clean-Up &amp; 1-Click Cross-Post Packager</h2>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://instagram.com" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:8px;background:#E1306C;color:#fff;font-weight:800;text-decoration:none;font-size:12.5px">Instagram ↗</a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:8px;background:#1877F2;color:#fff;font-weight:800;text-decoration:none;font-size:12.5px">Facebook ↗</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" style="padding:8px 12px;border-radius:8px;background:#FF0000;color:#fff;font-weight:800;text-decoration:none;font-size:12.5px">YouTube Studio ↗</a>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:800;color:#FFE27A;margin-bottom:4px">1. Select Campaign Preset</label>
+          <select id="omniPresetSel" style="width:100%;padding:10px;border-radius:9px;border:1px solid #46618b;background:#0b1c3d;color:#fff;font-weight:700">
+            <option value="zero-surge">⚡ Zero-Surge City Tariff (₹10–₹25/km)</option>
+            <option value="premium-card">👑 Premium Privilege Card &amp; ≤12-Mo Fleet</option>
+            <option value="outstation-pilgrim">🛕 All-Inclusive Outstation &amp; Pilgrimage Cabs</option>
+            <option value="jaisalmer-08">🏜️ #08 Jaisalmer Golden Fort CEO Guide</option>
+            <option value="driver-charter">🤝 75% Driver Partner Split &amp; ₹0 Joining Fee</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:800;color:#FFE27A;margin-bottom:4px">2. Optional Custom Hook / Offer Line</label>
+          <input id="omniCustomHook" placeholder="Leave blank to use preset hook or type custom line..." style="width:100%;padding:10px;border-radius:9px;border:1px solid #46618b;background:#0b1c3d;color:#fff">
+        </div>
+        <div style="display:flex;align-items:end">
+          <button type="button" id="omniBuildBtn" style="width:100%;padding:10px 14px;border-radius:9px;border:0;background:#D4AF37;color:#06122E;font-weight:900;cursor:pointer">✨ Generate IG + FB + YT Copy</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px">
+        <div style="background:#0b1c3d;border:1px solid rgba(225,48,108,.5);border-radius:12px;padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="color:#ff85b3;font-size:14px">📸 Instagram Reel / Carousel</strong>
+            <button type="button" data-copy="omniIgBox" style="padding:5px 10px;border-radius:7px;border:0;background:#E1306C;color:#fff;font-weight:800;font-size:11.5px;cursor:pointer">Copy IG</button>
+          </div>
+          <textarea id="omniIgBox" rows="7" style="width:100%;background:#06122E;color:#eaf1fb;border:1px solid #334a73;border-radius:8px;padding:8px;font-size:12.5px;line-height:1.45"></textarea>
+        </div>
+
+        <div style="background:#0b1c3d;border:1px solid rgba(24,119,242,.5);border-radius:12px;padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="color:#7cc0ff;font-size:14px">📘 Facebook Page &amp; Groups</strong>
+            <button type="button" data-copy="omniFbBox" style="padding:5px 10px;border-radius:7px;border:0;background:#1877F2;color:#fff;font-weight:800;font-size:11.5px;cursor:pointer">Copy FB</button>
+          </div>
+          <textarea id="omniFbBox" rows="7" style="width:100%;background:#06122E;color:#eaf1fb;border:1px solid #334a73;border-radius:8px;padding:8px;font-size:12.5px;line-height:1.45"></textarea>
+        </div>
+
+        <div style="background:#0b1c3d;border:1px solid rgba(255,0,0,.5);border-radius:12px;padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <strong style="color:#ff8a8a;font-size:14px">▶️ YouTube Shorts Title &amp; Tags</strong>
+            <button type="button" data-copy="omniYtBox" style="padding:5px 10px;border-radius:7px;border:0;background:#FF0000;color:#fff;font-weight:800;font-size:11.5px;cursor:pointer">Copy YT</button>
+          </div>
+          <textarea id="omniYtBox" rows="7" style="width:100%;background:#06122E;color:#eaf1fb;border:1px solid #334a73;border-radius:8px;padding:8px;font-size:12.5px;line-height:1.45"></textarea>
+        </div>
+      </div>
+    `;
+    talkHost.appendChild(studio);
+
+    const buildOmniCopy = () => {
+      const key = document.getElementById('omniPresetSel').value;
+      const p = CAMPAIGN_PRESETS[key] || CAMPAIGN_PRESETS['zero-surge'];
+      const custom = (document.getElementById('omniCustomHook').value || '').trim();
+      const hook = custom || p.hook;
+
+      document.getElementById('omniIgBox').value =
+        `🚖 ${hook}\n\n${p.body}\n\n📲 Book Direct on WhatsApp: +91 93479 46026\n🔗 Link in Bio: saahirides.co.in\n\nSafeRide - SaafeRide @ SaahiPrice\n.\n.\n${p.tags}`;
+
+      document.getElementById('omniFbBox').value =
+        `🚖 ${hook}\n\n${p.body}\n\n✅ Transparent, Approved Tariffs — Zero Surge & Zero Hidden Charges.\n👉 Explore & Calculate Fare: ${p.url}\n💬 Instant WhatsApp Booking: https://wa.me\n\nSaahiRides Transit Pvt. Ltd. • SafeRide - SaafeRide @ SaahiPrice\n${p.tags}`;
+
+      document.getElementById('omniYtBox').value =
+        `TITLE: ${hook.slice(0, 92)} #Shorts\n\nDESCRIPTION:\n${p.body}\n\nBook Now: ${p.url}\nWhatsApp Dispatch (+91 93479 46026): https://wa.me\nSafeRide - SaafeRide @ SaahiPrice | SaahiRides Transit Pvt. Ltd.\n\nTAGS: ${p.tags.replace(/#/g, '').split(' ').join(', ')}`;
+    };
+
+    document.getElementById('omniBuildBtn').onclick = buildOmniCopy;
+    document.getElementById('omniPresetSel').onchange = buildOmniCopy;
+    studio.querySelectorAll('button[data-copy]').forEach(btn => {
+      btn.onclick = () => {
+        const el = document.getElementById(btn.dataset.copy);
+        if (!el) return;
+        navigator.clipboard?.writeText(el.value);
+        const orig = btn.textContent;
+        btn.textContent = 'Copied ✓';
+       setTimeout(() => { btn.textContent = orig; }, 1400);
+      };
+    });
+    buildOmniCopy();
+  }
+})();
